@@ -324,5 +324,6 @@ const main = async () => {
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(1);
+  // exitCode (bukan process.exit) supaya koneksi jaringan sempat ditutup; process.exit bisa crash di Node Windows
+  process.exitCode = 1;
 });

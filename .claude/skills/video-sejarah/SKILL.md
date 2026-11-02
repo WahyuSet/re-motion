@@ -68,7 +68,8 @@ node scripts/cari-foto.mjs "<kata kunci>" --slug <slug>
 
 - Jalankan **3–6 kali** dengan kata kunci berbeda (slug sama). Butuh ±2–4 foto per scene.
 - Kata kunci bahasa Inggris/Belanda lebih banyak hasil. Arsip kolonial: tambahkan `KITLV`, `Tropenmuseum`, `Nationaal Archief`. Tokoh: `"<nama> portrait"`. Peta: `"map of Java 1817"`.
-- Foto lama: tambah `--pd-only`. Hasil 0: coba kata kunci lain, `--min-width 800`, atau `--source openverse`.
+- Foto lama: tambah `--pd-only`. Hasil 0: coba kata kunci lain (Inggris/Belanda, nama daerah sekitar, nama arsip) atau `--min-width 800`. Jangan pakai `--source openverse`: sejak 2026 menolak request tanpa akun (HTTP 401).
+- Tidak ada foto yang memotret langsung peristiwanya? Pakai foto **proksi** (peristiwa/tempat serupa dari era yang sama) dengan `tag` yang jujur, misalnya `'Pembukaan jalan di Jawa · KITLV'`, dan sebutkan scene proksi itu ke user saat mengirim storyboard.
 - "dibatasi server, tunggu N detik" = normal, biarkan berjalan.
 - **Lihat `public/photos/<slug>/_contact-sheet.jpg` dengan Read.** Hapus file JPG yang tidak relevan, ber-watermark, buram, atau salah objek (entri `credits.json` biarkan).
 
@@ -106,8 +107,12 @@ Boleh langsung cek tampilan sebelum ada audio: `node scripts/cek-frame.mjs <slug
 
 Props = ilustrasi benda (kompas, naskah kuno, kapal) digenerate AI. Lewati langkah ini kalau tidak perlu.
 
-1. Cek bridge: `curl http://127.0.0.1:8001/health` → harus `"extension_connected": true`.
-   🛑 Kalau gagal/false: bilang ke user "Flow Bridge belum jalan (jalankan `D:\Learning\ai-content\tools\flow_bridge\run_bridge.ps1` dan buka tab Google Flow di Chrome)". **Lewati props**, lanjut langkah 6.
+1. Cek bridge (jalan di PowerShell maupun Bash; jangan pakai `curl`, di PowerShell itu alias yang bisa menggantung):
+   ```bash
+   node scripts/generate-props.mjs --cek
+   ```
+   - `SIAP` → lanjut ke poin 2. Bridge tidak bisa mendeteksi apakah tab Google Flow sudah terbuka; itu baru ketahuan saat generate.
+   - `TIDAK SIAP` → **jangan berhenti menunggu**. Catat untuk laporan ke user: "Flow Bridge belum jalan (jalankan `D:\Learning\ai-content\tools\flow_bridge\run_bridge.ps1` dan buka tab Google Flow di Chrome), props dilewati." Lewati sisa langkah 5 dan langsung kerjakan langkah 6.
 2. Isi `src/data/<slug>.props.json`: `[{"name": "kompas-kuno", "prompt": "an antique brass navigation compass"}]` (objek saja, bahasa Inggris, tanpa gaya; gaya ditambahkan otomatis).
 3. `node scripts/generate-props.mjs --file src/data/<slug>.props.json` (objek berwarna hijau: tambah `--bg magenta`).
 4. Lihat setiap `public/props/<name>.png` dengan Read. Ulang yang jelek: `node scripts/generate-props.mjs --name <name> --prompt "<objek>"`.
@@ -259,9 +264,11 @@ Render ±5–10 menit; jalankan di background. Kirim ke user:
 | Gejala | Solusi |
 |--------|--------|
 | `cek-naskah`: "tidak bisa dibaca" | Salah ketik di `.ts` (koma, kurung, kutip). Jalankan `npx tsc` untuk lihat barisnya |
-| `cari-foto`: 0 lolos filter | Ganti kata kunci (Inggris/Belanda), `--min-width 800`, atau `--source openverse` |
-| `generate-props`: tidak bisa dihubungi / 503 | Bridge belum jalan atau tab Google Flow belum terbuka. Lewati props |
-| `generate-props`: HTTP 502 | Prompt kena filter. Ubah kata (hindari kekerasan, nama tokoh nyata) |
+| `cari-foto`: 0 lolos filter | Ganti kata kunci (Inggris/Belanda, daerah sekitar) atau `--min-width 800`. Openverse tidak bisa dipakai (HTTP 401) |
+| `generate-props --cek`: TIDAK SIAP | Bridge belum jalan atau extension belum terhubung. Beri tahu user, lewati props |
+| `generate-props`: "Tab Google Flow belum terbuka" | Bridge jalan tapi tab Google Flow belum dibuka di Chrome. Beri tahu user; script otomatis berhenti mencoba props lain |
+| `generate-props`: "Google Flow menolak/error" | Biasanya prompt kena filter konten. Ubah kata (hindari kekerasan, nama tokoh nyata), ulangi props itu saja |
+| `generate-props`: timeout | Render Flow terlalu lama. Ulangi, atau `--concurrency 2` |
 | `potong-narasi`: kecocokan rendah / ⚠ | Audio tidak sesuai naskah terbaru. Minta TTS ulang dari `naskah-full.txt` |
 | `potong-narasi`: "Python + faster-whisper tidak ditemukan" | Pemotongan pakai jeda (kurang akurat). Beri tahu user; minta jeda ±1,5 dtk antar paragraf di TTS |
 | Subtitle/hitungan angka tidak sinkron | `kata.json` usang → ulangi langkah 7 |

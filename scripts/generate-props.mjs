@@ -5,6 +5,8 @@
 //   node scripts/generate-props.mjs --file props/majapahit.json
 //   node scripts/generate-props.mjs --remove-bg-only            (proses ulang semua file di public/props/_raw)
 //
+//   node scripts/generate-props.mjs --cek                       (cek Flow Bridge saja, tanpa generate)
+//
 // File JSON: [{"name": "kompas", "prompt": "ancient bronze compass"}, ...]
 // Opsi: --style "<gaya>"  --bg green|magenta  --concurrency 4
 
@@ -35,8 +37,24 @@ const {values} = parseArgs({
     bg: {type: 'string', default: 'green'},
     concurrency: {type: 'string', default: '4'},
     'remove-bg-only': {type: 'boolean', default: false},
+    cek: {type: 'boolean', default: false},
   },
 });
+
+class FatalBridgeError extends Error {}
+
+// Terjemahkan error relay jadi penjelasan + langkah perbaikan. HTTP 502 dari relay bisa berarti
+// tab Google Flow belum dibuka ATAU prompt ditolak Flow, jadi baca isi pesannya.
+const explainError = (status, body) => {
+  if (/No Google Flow tab/i.test(body)) {
+    return new FatalBridgeError('Tab Google Flow belum terbuka di Chrome. Buka Google Flow di Chrome (tab yang terhubung ke extension), lalu ulangi.');
+  }
+  if (status === 401) return new FatalBridgeError('Token Flow Bridge salah/kosong. Set env FLOW_BRIDGE_TOKEN sesuai relay.');
+  if (status === 503) return new FatalBridgeError('Chrome Extension Flow Bridge belum terhubung. Buka Chrome dengan extension aktif.');
+  if (status === 504) return new Error('Render di Google Flow terlalu lama (timeout). Ulangi, atau kurangi --concurrency.');
+  if (status === 502) return new Error(`Google Flow menolak/error (sering karena prompt kena filter konten; ubah kata-katanya). Pesan relay: ${body.slice(0, 200)}`);
+  return new Error(`HTTP ${status}: ${body.slice(0, 300)}`);
+};
 
 const buildPrompt = (subject, style, bg) =>
   [
@@ -64,6 +82,7 @@ const checkBridge = async () => {
   if (!health.extension_connected) {
     throw new Error('Flow Bridge jalan, tapi Chrome Extension belum terhubung. Buka tab Google Flow di Chrome.');
   }
+  return health;
 };
 
 const generateOne = async ({name, prompt}, style, bg) => {
@@ -75,7 +94,7 @@ const generateOne = async ({name, prompt}, style, bg) => {
     signal: AbortSignal.timeout(200_000),
   });
   if (!res.ok) {
-    throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    throw explainError(res.status, await res.text());
   }
   const json = await res.json();
   const b64 = json.data?.[0]?.b64_json;
@@ -92,8 +111,9 @@ const generateOne = async ({name, prompt}, style, bg) => {
 const runPool = async (items, limit, worker) => {
   const results = [];
   let next = 0;
+  let fatal = null;
   const lanes = Array.from({length: Math.min(limit, items.length)}, async () => {
-    while (next < items.length) {
+    while (next < items.length && !fatal) {
       const item = items[next++];
       try {
         results.push({item, ok: true, out: await worker(item)});
@@ -101,6 +121,8 @@ const runPool = async (items, limit, worker) => {
       } catch (err) {
         results.push({item, ok: false, error: err.message});
         console.log(`  ✗ ${item.name}: ${err.message}`);
+        // Masalah koneksi/tab berlaku untuk semua props: hentikan sisanya, jangan ulangi kegagalan yang sama
+        if (err instanceof FatalBridgeError) fatal = err;
       }
     }
   });
@@ -109,6 +131,18 @@ const runPool = async (items, limit, worker) => {
 };
 
 const main = async () => {
+  if (values.cek) {
+    try {
+      await checkBridge();
+      console.log(`SIAP: Flow Bridge jalan di ${BRIDGE_URL} dan extension terhubung.`);
+      console.log('Catatan: tab Google Flow di Chrome juga harus terbuka; kalau belum, generate akan gagal dengan pesan "Tab Google Flow belum terbuka".');
+    } catch (err) {
+      console.log(`TIDAK SIAP: ${err.message}`);
+      process.exitCode = 1;
+    }
+    return;
+  }
+
   await fs.mkdir(RAW_DIR, {recursive: true});
 
   if (values['remove-bg-only']) {
@@ -134,12 +168,14 @@ const main = async () => {
   const results = await runPool(items, Number(values.concurrency), (item) => generateOne(item, values.style, values.bg));
 
   const failed = results.filter((r) => !r.ok);
-  console.log(`\nSelesai: ${results.length - failed.length} berhasil, ${failed.length} gagal.`);
+  const skipped = items.length - results.length;
+  console.log(`\nSelesai: ${results.length - failed.length} berhasil, ${failed.length} gagal${skipped ? `, ${skipped} dilewati` : ''}.`);
   console.log(`PNG transparan: public/props/<name>.png   |   gambar asli: public/props/_raw/`);
   if (failed.length) process.exitCode = 1;
 };
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(1);
+  // exitCode (bukan process.exit) supaya koneksi jaringan sempat ditutup; process.exit bisa crash di Node Windows
+  process.exitCode = 1;
 });

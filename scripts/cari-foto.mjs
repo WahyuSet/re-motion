@@ -7,7 +7,7 @@
 //
 // Hasil: public/photos/<slug>/NN-judul.jpg + credits.json (sumber & lisensi tiap foto)
 //        + _contact-sheet.jpg (semua kandidat bernomor, buat dipilih cepat).
-// Opsi: --limit 8  --min-width 1200  --pd-only  --source commons|openverse
+// Opsi: --limit 8  --min-width 1200  --pd-only  --source commons|openverse (openverse sering tidak bisa dipakai)
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -133,7 +133,14 @@ const searchOpenverse = async () => {
     license: values['pd-only'] ? 'pdm,cc0' : 'pdm,cc0,by,by-sa',
     page_size: '40',
   });
-  const json = await getJson(`https://api.openverse.org/v1/images/?${params}`);
+  let json;
+  try {
+    json = await getJson(`https://api.openverse.org/v1/images/?${params}`);
+  } catch (err) {
+    throw new Error(
+      `Openverse tidak bisa dipakai (${err.message}; sejak 2026 sering menolak request tanpa akun API atau timeout). Pakai sumber default Wikimedia Commons dengan kata kunci lain.`,
+    );
+  }
   const licenseName = (r) =>
     r.license === 'pdm' ? 'Public domain' : r.license === 'cc0' ? 'CC0' : `CC ${r.license.toUpperCase()} ${r.license_version ?? ''}`.trim();
 
@@ -232,5 +239,6 @@ const main = async () => {
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
-  process.exit(1);
+  // exitCode (bukan process.exit) supaya koneksi jaringan sempat ditutup; process.exit bisa crash di Node Windows
+  process.exitCode = 1;
 });
