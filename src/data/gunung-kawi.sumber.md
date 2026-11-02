@@ -1,0 +1,49 @@
+# Sumber fakta: Gunung Kawi (Malang)
+
+Topik: Gunung Kawi dan Pesarean Gunung Kawi di Kabupaten Malang, Jawa Timur (dikonfirmasi user; bukan Candi Gunung Kawi di Bali).
+
+- Gunung Kawi: gunung api stratovolcano di Jawa Timur, bersebelahan dengan Gunung Butak; tidak ada catatan sejarah letusan
+  - https://en.wikipedia.org/wiki/Mount_Kawi
+  - https://volcanolive.com/kawi.html (data GVP: kompleks Kawi-Butak 2.651 m, "no historical eruptions")
+- Puncak Gunung Kawi sekitar 2.551 mdpl (kompleks Kawi-Butak 2.651 m menurut GVP → di narasi pakai "sekitar")
+  - https://en.wikipedia.org/wiki/Mount_Kawi
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+- Pesarean berada di Desa Wonosari, Kecamatan Wonosari, Kabupaten Malang, di lereng selatan Gunung Kawi
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.metrotvnews.com/read/NgxCagd1-bantah-mitos-pesugihan-dan-tumbal-ini-klarifikasi-pengelola-pesarean-gunung-kawi
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/
+- Makam Eyang Djoego (Kanjeng Kyai Zakaria II) dan Eyang Raden Mas Iman Soedjono
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.metrotvnews.com/read/NgxCagd1-bantah-mitos-pesugihan-dan-tumbal-ini-klarifikasi-pengelola-pesarean-gunung-kawi
+- Keduanya bagian dari pasukan/pengikut Pangeran Diponegoro dalam Perang Jawa 1825–1830; Diponegoro ditangkap 1830
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/
+  - https://www.rctiplus.com/news/detail/infografis/4638761/kisah-2-anggota-laskar-pangeran-diponegoro-dimakamkan-di-gunung-kawi-malang
+  - Catatan: studi akademik 2021 menyebut Babad Diponegoro tidak menyebut tokoh-tokoh ini secara langsung → di narasi pakai "dikisahkan"
+- Eyang Djoego keturunan bangsawan Kartasura dan ulama; setelah perang mengembara ke timur, menetap di Jugo, Kesamben, Blitar (sekitar 1840), mengajar agama, bertani, dan mengobati
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/
+- Eyang Djoego wafat 22 Januari 1871, dimakamkan di lereng selatan Gunung Kawi sesuai wasiatnya
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/
+  - https://www.metrotvnews.com/read/NgxCagd1-bantah-mitos-pesugihan-dan-tumbal-ini-klarifikasi-pengelola-pesarean-gunung-kawi (dimakamkan 1871)
+- RM Iman Soedjono keturunan keraton Yogyakarta, murid & pewaris Eyang Djoego, membuka padepokan di Wonosari; wafat 8 Februari 1876, dimakamkan satu liang dengan Eyang Djoego
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/
+- Masyarakat Tionghoa menghormati keduanya (Twa Low She & Djie Low She); Tan Kie Lam / Ta Kie Yam murid Tionghoa awal; di kompleks ada Klenteng Dewi Kwan Im, Tiekong, ciamsi, dan masjid gaya Demak
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/
+  - https://www.metrotvnews.com/read/NgxCagd1-bantah-mitos-pesugihan-dan-tumbal-ini-klarifikasi-pengelola-pesarean-gunung-kawi
+- Pohon dewandaru: ditanam Eyang Djoego sebagai lambang keselamatan; peziarah menunggu daun/buahnya jatuh karena dipercaya membawa rezeki (kepercayaan, bukan fakta)
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.detik.com/jatim/budaya/d-6980597/mitos-jimat-keberuntungan-pohon-dewandaru-gunung-kawi
+  - https://www.goodnewsfromindonesia.id/2023/01/13/mitos-azimat-pohon-dewandaru-konon-berasal-dari-tongkat-pengawal-diponegoro
+- Kisah populer pendiri rokok Bentoel (Ong Hok Liong, nama merek berganti 1954) setelah berziarah: cerita yang beredar, tidak terbukti
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/ (disebut "kisah populer")
+- Ritual: tahlil setiap malam Jumat Legi; peringatan 1 Suro meriah (wayang kulit, barongsai, kirab tumpeng sejak 2000)
+  - https://www.budaya-tionghoa.net/2012/08/eyang-djoego-dan-eyang-rm-iman-soedjono-dua-bangsawan-jawa-yang-dihormati-masyarakat-tionghoa/
+  - https://id.wikipedia.org/wiki/Pesarean_Gunung_Kawi
+- Pengelola membantah pesarean sebagai tempat pesugihan/tumbal; pengunjung berdoa kepada Tuhan untuk keselamatan, kesehatan, dan kelancaran usaha
+  - https://www.metrotvnews.com/read/NgxCagd1-bantah-mitos-pesugihan-dan-tumbal-ini-klarifikasi-pengelola-pesarean-gunung-kawi
+  - https://www.detik.com/jatim/wisata/d-6978268/ini-2-tempat-sakral-di-gunung-kawi-yang-kerap-dikaitkan-dengan-pesugihan

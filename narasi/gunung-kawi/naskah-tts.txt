@@ -1,0 +1,67 @@
+PANDUAN TTS: gunung-kawi
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs gunung-kawi <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±8.8 detik
+Di lereng sebuah gunung di Kabupaten Malang, ada tempat yang selalu ramai peziarah dari berbagai suku dan agama. Inilah Gunung Kawi.
+
+[02] (photo) ±7.9 detik
+Gunung Kawi adalah gunung api yang berdiri bersebelahan dengan Gunung Butak. Hingga kini, tidak ada catatan sejarah tentang letusannya.
+
+[03] (fact) ±7.9 detik
+Puncaknya menjulang sekitar dua ribu lima ratus lima puluh satu meter di atas permukaan laut, diselimuti hutan dan kabut.
+
+[04] (photo) ±8.3 detik
+Namun Gunung Kawi terkenal bukan karena puncaknya, melainkan karena sebuah kompleks makam di Desa Wonosari, di lereng selatan gunung ini.
+
+[05] (photo) ±7.5 detik
+Kisahnya berawal dari Perang Jawa, perlawanan besar yang dipimpin Pangeran Diponegoro melawan pemerintah kolonial Belanda selama lima tahun.
+
+[06] (fact) ±7.5 detik
+Pada tahun seribu delapan ratus tiga puluh, Diponegoro ditangkap. Para pengikutnya tercerai-berai, sebagian memilih mengembara ke arah timur.
+
+[07] (photo) ±7.9 detik
+Salah satunya dikisahkan bernama Kanjeng Kyai Zakaria Kedua, keturunan bangsawan Kartasura sekaligus ulama, yang kemudian dikenal sebagai Eyang Djoego.
+
+[08] (photo) ±9.2 detik
+Ia menetap di Desa Jugo, Kesamben, Blitar. Di sana ia mengajar agama, mengajari warga bercocok tanam, dan dikenal pandai mengobati orang sakit.
+
+[09] (fact) ±8.3 detik
+Eyang Djoego wafat pada tahun seribu delapan ratus tujuh puluh satu. Sesuai wasiatnya, ia dimakamkan di lereng selatan Gunung Kawi.
+
+[10] (photo) ±8.3 detik
+Pemakamannya dipimpin muridnya, Raden Mas Iman Soedjono, keturunan Keraton Yogyakarta. Ia membuka padepokan di Wonosari untuk merawat makam sang guru.
+
+[11] (fact) ±7.9 detik
+Iman Soedjono wafat pada tahun seribu delapan ratus tujuh puluh enam, lalu dimakamkan satu liang bersama gurunya, Eyang Djoego.
+
+[12] (photo) ±8.3 detik
+Keduanya juga dihormati masyarakat Tionghoa, yang menyebut mereka Twa Low She dan Djie Low She, guru besar pertama dan kedua.
+
+[13] (photo) ±9.2 detik
+Karena itu, di kompleks ini masjid bergaya Demak berdiri tak jauh dari Klenteng Dewi Kwan Im, tempat peziarah Jawa dan Tionghoa berdoa.
+
+[14] (photo) ±7.1 detik
+Di depan makam tumbuh pohon dewandaru. Banyak peziarah menunggu daun atau buahnya jatuh, karena dipercaya membawa keberuntungan.
+
+[15] (photo) ±8.8 detik
+Cerita paling terkenal menyebut pendiri pabrik rokok Bentoel sukses setelah berziarah ke sini. Kisah ini terus beredar, meski tidak pernah terbukti.
+
+[16] (photo) ±8.3 detik
+Setiap malam Jumat Legi digelar tahlil bersama. Pada satu Suro, suasananya lebih meriah, dengan wayang kulit, barongsai, dan kirab tumpeng.
+
+[17] (photo) ±8.8 detik
+Gunung Kawi sering dikaitkan dengan pesugihan. Namun pengelola menegaskan, peziarah datang untuk berdoa kepada Tuhan, memohon keselamatan, kesehatan, dan kelancaran usaha.
+
+[18] (outro) ±8.3 detik
+Di lereng Gunung Kawi, sejarah, kepercayaan, dan tradisi bertemu dalam satu tempat. Ikuti channel ini untuk kisah sejarah Nusantara lainnya.
+
+Perkiraan total narasi: ±148 detik (belum termasuk jeda)

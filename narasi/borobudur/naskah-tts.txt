@@ -1,0 +1,34 @@
+PANDUAN TTS: borobudur
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs borobudur <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±7.5 detik
+Di jantung Pulau Jawa, berdiri sebuah monumen yang membuat dunia terpukau. Inilah Borobudur, candi Buddha terbesar di dunia.
+
+[02] (photo) ±8.3 detik
+Candi ini dibangun sekitar abad kesembilan Masehi, pada masa Wangsa Syailendra, di wilayah yang kini menjadi Kabupaten Magelang, Jawa Tengah.
+
+[03] (fact) ±10.0 detik
+Dindingnya dihiasi dua ribu enam ratus tujuh puluh dua panel relief. Sebagian besar menceritakan kisah dan ajaran Buddha, sekaligus merekam kehidupan masyarakat Jawa kuno.
+
+[04] (fact) ±8.3 detik
+Ada juga lima ratus empat arca Buddha. Sebagian di antaranya duduk tersembunyi di dalam stupa berlubang di teras paling atas.
+
+[05] (photo) ±6.3 detik
+Namun selama ratusan tahun, Borobudur sempat terlupakan. Lapisan abu vulkanik dan hutan lebat menutupi bangunannya.
+
+[06] (fact) ±9.2 detik
+Pada tahun seribu delapan ratus empat belas, di masa pemerintahan Thomas Stamford Raffles, candi ini mulai dibersihkan dan dikenal kembali oleh dunia.
+
+[07] (outro) ±9.6 detik
+Sejak tahun seribu sembilan ratus sembilan puluh satu, Borobudur diakui UNESCO sebagai Situs Warisan Dunia. Ikuti channel ini untuk kisah sejarah Nusantara lainnya.
+
+Perkiraan total narasi: ±59 detik (belum termasuk jeda)

@@ -1,0 +1,38 @@
+{
+  "name": "video-sejarah",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Template video edukasi & sejarah dengan Remotion",
+  "scripts": {
+    "dev": "remotion studio",
+    "render": "remotion render Borobudur out/borobudur.mp4",
+    "still": "remotion still Borobudur out/preview.png --frame=60",
+    "typecheck": "tsc",
+    "foto": "node scripts/cari-foto.mjs",
+    "props": "node scripts/generate-props.mjs",
+    "kredit": "node scripts/kredit.mjs",
+    "narasi": "node scripts/narasi.mjs",
+    "potong-narasi": "node scripts/potong-narasi.mjs",
+    "baru": "node scripts/buat-video.mjs",
+    "cek": "node scripts/cek-naskah.mjs",
+    "cek-frame": "node scripts/cek-frame.mjs",
+    "grid-foto": "node scripts/grid-foto.mjs",
+    "storyboard": "node scripts/storyboard.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.539",
+    "@remotion/cli": "4.0.539",
+    "@remotion/google-fonts": "4.0.539",
+    "@remotion/renderer": "4.0.539",
+    "@remotion/transitions": "4.0.539",
+    "mediabunny": "1.62.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "4.0.539"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "sharp": "^0.35.5",
+    "typescript": "^7.0.2"
+  }
+}
