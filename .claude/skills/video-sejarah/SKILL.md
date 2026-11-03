@@ -294,6 +294,8 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 },
 ```
 
+**Watermark**: nama channel (`src/channel.ts`, sekarang "jejakala") otomatis tampil di kanan atas semua video, landscape maupun short. Jangan menambah watermark/logo sendiri. Hanya kalau user meminta: `watermark: false` (tanpa watermark) atau `watermark: 'teks lain'` di naskah.
+
 **Transisi** (`transition` di scene ke-2 dan seterusnya): selang-seling `dorong` dan `kartu`; `none` antar dua scene fact berturut-turut; `zoom` atau `whip` paling banyak sekali per video.
 
 **Batas**: judul ≤5 kata · tag ≤40 huruf · label anotasi ≤24 huruf · stempel ≤2 per video · 2–4 shot per scene.

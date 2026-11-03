@@ -4,7 +4,9 @@ import {linearTiming, springTiming, TransitionSeries} from '@remotion/transition
 import {fade} from '@remotion/transitions/fade';
 import {slide} from '@remotion/transitions/slide';
 import {wipe} from '@remotion/transitions/wipe';
+import {CHANNEL} from './channel';
 import {FilmOverlay} from './components/FilmOverlay';
+import {Watermark} from './components/Watermark';
 import {dorong, kartu, whip, zoom} from './components/transitions';
 import {TRANSITION_FRAMES, transitionFrames} from './lib/kata';
 import {applyNarasi, NARASI_DELAY, narasiFile} from './lib/narasi';
@@ -124,6 +126,7 @@ export const HistoryVideo: React.FC<{script: VideoScript}> = ({script}) => {
     <AbsoluteFill style={{backgroundColor: theme.bg}}>
       <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
       <FilmOverlay />
+      {script.watermark === false ? null : <Watermark text={script.watermark ?? CHANNEL.nama} />}
       {script.music ? (
         <Audio
           src={staticFile(script.music)}

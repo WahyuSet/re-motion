@@ -21,6 +21,8 @@ const LANDSCAPE = {
   stempel: {x: 70, y: 42, fontSize: 64},
   anotasiLabelSize: 30,
   photoText: {left: 110, right: 110, bottom: 110, maxWidth: 1400, fontSize: 76},
+  /** Di landscape tepat di atas baris tag per shot (top 80) */
+  watermark: {top: 26, right: 110, fontSize: 30},
 };
 
 export type LayoutTokens = typeof LANDSCAPE;
@@ -45,6 +47,8 @@ const VERTICAL: LayoutTokens = {
   stempel: {x: 50, y: 40, fontSize: 56},
   anotasiLabelSize: 34,
   photoText: {left: S.left, right: S.right, bottom: S.bottom + 20, maxWidth: SAFE_WIDTH, fontSize: 68},
+  // Sebaris dengan tag scene (kiri), di dalam area aman kanan
+  watermark: {top: S.top + 14, right: S.right, fontSize: 30},
 };
 
 export const useLayout = (): LayoutTokens => {

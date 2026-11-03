@@ -29,6 +29,10 @@ Panduan langkah demi langkah (juga dipakai AI agent sebagai skill, ditulis supay
 
 `npm run cek` memeriksa semua aturan (jumlah shot, judul ≤5 kata, angka di narasi, tanda bintang di scene fakta, file foto/audio ada, kredit, kecocokan `kata.json`) dan menulis cara memperbaikinya.
 
+## Watermark channel
+
+Nama channel di `src/channel.ts` (sekarang **jejakala**) tampil halus di kanan atas semua video. Ganti nama di file itu untuk semua video sekaligus, atau per video di naskah: `watermark: 'teks lain'` / `watermark: false`.
+
 ## Mode short (9:16): YouTube Shorts, TikTok, Reels
 
 ```bash
