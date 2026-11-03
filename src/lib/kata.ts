@@ -79,11 +79,12 @@ export const narasiDuration = (minDuration: number, seconds: number, fps: number
 
 export const normalizeWord = (word: string) => word.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
 
-/** Indeks kata pertama yang cocok dengan `target` (kata pertamanya saja), mulai dari indeks `from` */
+/** Indeks kata pertama yang cocok dengan `target` (1 kata atau frasa berurutan), mulai dari indeks `from` */
 export const indexOfWord = (words: {word: string}[], target: string, from = 0) => {
-  const key = normalizeWord(target.trim().split(/\s+/)[0] ?? '');
-  for (let i = from; i < words.length; i++) {
-    if (normalizeWord(words[i].word) === key) return i;
+  const keys = target.trim().split(/\s+/).map(normalizeWord).filter(Boolean);
+  if (!keys.length) return -1;
+  for (let i = from; i <= words.length - keys.length; i++) {
+    if (keys.every((k, j) => normalizeWord(words[i + j].word) === k)) return i;
   }
   return -1;
 };

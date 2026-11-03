@@ -1,0 +1,109 @@
+PANDUAN TTS: kode-plat-kendaraan
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs kode-plat-kendaraan <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±9.2 detik
+Kenapa mobil di Jakarta berplat B, dan di Bandung berplat D? Jawabannya ternyata berakar dari zaman kolonial. Inilah kisah kode plat kendaraan.
+
+[02] (photo) ±9.6 detik
+Setiap hari kita melihat ribuan plat nomor di jalan. Tapi jarang yang tahu, huruf kecil di depannya menyimpan cerita lebih dari seratus tahun.
+
+[03] (photo) ±8.3 detik
+Setiap plat terdiri dari tiga bagian: huruf kode wilayah di depan, nomor urut di tengah, dan huruf seri di belakang.
+
+[04] (photo) ±9.2 detik
+Huruf paling depan menunjukkan wilayah tempat kendaraan didaftarkan, bukan tempat tinggal pemiliknya sekarang. Mobil berplat B bisa saja dipakai warga kota lain.
+
+[05] (photo) ±7.1 detik
+Satu kode juga bisa dipakai beberapa kota sekaligus. Kode B misalnya, dipakai Jakarta, Depok, Tangerang, dan Bekasi.
+
+[06] (photo) ±8.3 detik
+Huruf di belakang juga punya arti. Huruf pertamanya menunjukkan kota atau kabupaten tempat kendaraan terdaftar, di dalam wilayah kode itu.
+
+[07] (photo) ±9.6 detik
+Nomor di tengah berisi satu sampai empat angka, tanpa angka nol di depan. Nomor yang paling istimewa adalah RI satu, untuk mobil presiden.
+
+[08] (photo) ±7.5 detik
+Lalu dari mana asal huruf-huruf itu? Di internet beredar cerita populer: kode ini berasal dari batalion tentara Inggris.
+
+[09] (photo) ±10.8 detik
+Inggris memang pernah menyerbu Jawa pada tahun seribu delapan ratus sebelas. Pasukannya mendarat di Cilincing, merebut Batavia, dan berkuasa hingga tahun seribu delapan ratus enam belas.
+
+[10] (photo) ±9.2 detik
+Menurut cerita itu, setiap batalion diberi huruf, dan batalion yang menguasai Batavia memakai huruf B. Kedengarannya masuk akal, tapi ada masalah besar.
+
+[11] (fact) ±9.2 detik
+Mobil pertama baru tiba di Hindia Belanda pada tahun seribu delapan ratus sembilan puluh empat, hampir delapan puluh tahun setelah Inggris pergi.
+
+[12] (photo) ±7.5 detik
+Pemiliknya adalah Pakubuwono Kesepuluh, raja Surakarta. Mobil Benz Victoria itu dipesan dari Eropa, lalu tiba lewat pelabuhan Semarang.
+
+[13] (photo) ±7.9 detik
+Karena bisa berjalan tanpa ditarik kuda, masyarakat menjulukinya kereta setan. Kini mobil bersejarah itu disimpan di Museum Louwman, Belanda.
+
+[14] (photo) ±7.9 detik
+Artinya, saat tentara Inggris datang, kendaraan bermotor belum ada. Cerita batalion itu juga tidak didukung dokumen sejarah yang jelas.
+
+[15] (photo) ±8.8 detik
+Sebelum mobil datang, jalanan Batavia dipenuhi kereta kuda seperti sado dan delman. Belum ada plat nomor seperti yang kita kenal sekarang.
+
+[16] (fact) ±7.9 detik
+Plat kendaraan bermotor mulai diperkenalkan di Hindia Belanda sekitar tahun seribu sembilan ratus, seiring makin banyaknya mobil di Jawa.
+
+[17] (photo) ±7.9 detik
+Awalnya belum ada aturan bentuk, ukuran, dan warna plat. Bahannya pun macam-macam, mulai dari kayu, kulit, karet, sampai kain.
+
+[18] (photo) ±7.9 detik
+Kodenya pun ditulis sebagai singkatan nama daerah. Misalnya CH untuk Cirebon, dan SB untuk Surabaya, kota pelabuhan yang sibuk.
+
+[19] (fact) ±7.1 detik
+Sekitar tahun seribu sembilan ratus tujuh belas, pemerintah kolonial menata ulang plat berdasarkan wilayah karesidenan di Jawa.
+
+[20] (photo) ±7.9 detik
+Karesidenan adalah wilayah administrasi yang dipimpin seorang residen. Setiap karesidenan mendapat kode hurufnya sendiri, dan pemilik kendaraan wajib mendaftar.
+
+[21] (photo) ±9.2 detik
+Di Jawa Barat misalnya, D dipakai Bandung, F dipakai Bogor dan Sukabumi, dan Z dipakai Garut dan Tasikmalaya, mengikuti bekas wilayah karesidenan.
+
+[22] (photo) ±9.2 detik
+Di Jawa Tengah dan Jawa Timur, jejaknya lebih jelas lagi: AA untuk bekas Karesidenan Kedu, AE untuk Madiun, dan AG untuk Kediri.
+
+[23] (photo) ±7.1 detik
+Itulah kenapa kode AG sampai sekarang dipakai Kediri, Blitar, Tulungagung, Nganjuk, dan Trenggalek, bekas wilayah Karesidenan Kediri.
+
+[24] (fact) ±10.4 detik
+Ada sembilan huruf yang tidak dipakai sebagai kode wilayah satu huruf: C, I, J, O, Q, U, V, X, dan Y. Alasannya tidak tercatat jelas.
+
+[25] (fact) ±7.9 detik
+Pada tahun seribu sembilan ratus dua puluh, sistem ini diperluas ke luar Jawa, seperti Sumatra, Kalimantan, Sulawesi, dan Maluku.
+
+[26] (photo) ±8.8 detik
+Di luar Jawa kodenya dua huruf. Huruf pertama sering menandai pulau: B untuk Sumatra, K untuk Kalimantan, dan P untuk Papua.
+
+[27] (photo) ±7.5 detik
+Setelah Indonesia merdeka, pola kode ini tetap dipakai. Kode-kode warisan karesidenan itu masih bisa kita lihat sampai sekarang.
+
+[28] (photo) ±8.3 detik
+Warna plat juga punya arti. Kuning untuk angkutan umum, merah untuk kendaraan dinas pemerintah, dan hijau untuk kawasan perdagangan bebas.
+
+[29] (photo) ±7.9 detik
+Ada pula plat khusus. Mobil kedutaan memakai kode CD, singkatan dari Corps Diplomatique, dan kendaraan listrik diberi bingkai biru.
+
+[30] (photo) ±11.3 detik
+Sejak tahun dua ribu dua puluh dua, plat kendaraan pribadi diganti menjadi putih dengan tulisan hitam, sesuai Peraturan Polri nomor tujuh tahun dua ribu dua puluh satu.
+
+[31] (photo) ±8.3 detik
+Alasannya, kamera tilang elektronik sulit membaca plat hitam. Angka lima bisa terbaca huruf S, dan angka satu terbaca huruf I.
+
+[32] (outro) ±7.9 detik
+Jadi, huruf di plat kendaraanmu adalah jejak wilayah karesidenan zaman kolonial. Ikuti channel ini untuk kisah sejarah Nusantara lainnya.
+
+Perkiraan total narasi: ±272 detik (belum termasuk jeda)

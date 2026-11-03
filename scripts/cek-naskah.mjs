@@ -146,13 +146,25 @@ for (const [i, scene] of scenes.entries()) {
       err(sw, 'rute hanya bisa dipasang pada shot foto peta.', "Pakai foto peta (...foto('peta.jpg')) dengan layout: 'print' untuk menggambar rute.");
     }
     if (shot.di) {
-      const key = normalize(shot.di.split(' ')[0]);
-      const idx = wordsOf(narasi).findIndex((w, wi) => wi >= lastDiIndex && normalize(w) === key);
+      const keys = shot.di.trim().split(/\s+/).map(normalize).filter(Boolean);
+      const normWords = wordsOf(narasi).map(normalize);
+      const matches = [];
+      for (let wi = lastDiIndex; wi <= normWords.length - keys.length; wi++) {
+        if (keys.every((key, j) => normWords[wi + j] === key)) matches.push(wi);
+      }
+      const idx = matches[0] ?? -1;
       if (k === 0) {
         warn(sw, 'di di shot pertama diabaikan (shot pertama selalu mulai di awal scene).', 'Hapus di dari shot pertama.');
       } else if (idx < 0) {
-        err(sw, `di "${shot.di}" tidak ada di narasi, atau letaknya sebelum di shot sebelumnya.`, 'Isi di dengan satu kata dari narasi scene ini; urutan di harus sama dengan urutan shot.');
+        err(sw, `di "${shot.di}" tidak ada di narasi, atau letaknya sebelum di shot sebelumnya.`, 'Isi di dengan kata/frasa dari narasi scene ini; urutan di harus sama dengan urutan shot.');
       } else {
+        if (matches.length > 1) {
+          warn(
+            sw,
+            `di "${shot.di}" muncul ${matches.length} kali di sisa narasi (dipakai kemunculan pertama, kata ke-${idx + 1}).`,
+            'Jika maksudnya kemunculan berikutnya, tulis 2 kata berurutan (contoh di: "angka satu").',
+          );
+        }
         lastDiIndex = idx + 1;
       }
     }

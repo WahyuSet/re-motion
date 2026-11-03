@@ -1,0 +1,67 @@
+PANDUAN TTS: alas-roban
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs alas-roban <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±8.3 detik
+Di pesisir utara Jawa Tengah, terbentang jalur hutan perbukitan yang menyimpan sejarah panjang perjalanan darat Pulau Jawa. Inilah Alas Roban.
+
+[02] (photo) ±8.8 detik
+Dalam bahasa Jawa, alas berarti hutan. Kawasan hutan jati milik Perhutani ini melintasi Kecamatan Banyuputih, Gringsing, dan Subah di Kabupaten Batang.
+
+[03] (fact) ±10.4 detik
+Kisah besarnya sebagai jalur raya dimulai pada tahun seribu delapan ratus delapan, ketika Gubernur Jenderal Herman Willem Daendels tiba untuk mempertahankan Jawa dari ancaman Inggris.
+
+[04] (fact) ±10.0 detik
+Mulai Mei tahun itu, Daendels memerintahkan pembangunan Jalan Raya Pos sepanjang sekitar seribu kilometer dari Anyer hingga Panarukan, dan merampungkannya dalam waktu sekitar setahun.
+
+[05] (photo) ±8.3 detik
+Jalan ini dirancang agar pasukan kolonial dapat bergerak cepat antarkota, sekaligus mempercepat pengiriman surat dinas melalui pos-pos pergantian kereta kuda.
+
+[06] (fact) ±9.2 detik
+Hasilnya drastis. Perjalanan darat dari Batavia menuju Surabaya yang semula memakan waktu sekitar empat puluh hari dipangkas menjadi sekitar enam hari saja.
+
+[07] (photo) ±9.6 detik
+Di banyak tempat, proyek ini hanya memperlebar jalan lama. Namun di Alas Roban, pekerja harus membelah hutan lebat serta perbukitan batu yang curam.
+
+[08] (photo) ±8.3 detik
+Ruas tertua yang menembus rimbunnya hutan perbukitan Alas Roban itu masih bertahan hingga kini, dan dikenal warga sebagai Jalur Poncowati.
+
+[09] (photo) ±7.9 detik
+Untuk mengejar target waktu, pemerintah kolonial mewajibkan para bupati di sepanjang pesisir Jawa mengerahkan ribuan rakyat dari desa-desa sekitar.
+
+[10] (photo) ±10.4 detik
+Awalnya ada anggaran upah dan beras. Namun ketika kas kolonial menipis dan terjadi penyelewengan, pengerjaan berubah menjadi kerja paksa atau rodi di bawah pengawasan militer.
+
+[11] (photo) ±9.2 detik
+Dengan alat sederhana, para pekerja menebang pohon besar dan memecah batu tebing. Banyak yang tumbang akibat kelelahan, kekurangan pangan, serta wabah malaria.
+
+[12] (photo) ±9.6 detik
+Perwira Inggris William Thorn mencatat diperkirakan dua belas ribu pekerja tewas di seluruh Jalan Raya Pos, tetapi sejarawan menilai angka pastinya masih diperdebatkan.
+
+[13] (photo) ±9.6 detik
+Pemerintah kolonial tidak meninggalkan arsip jumlah korban pekerja pribumi di tiap ruas, termasuk di Alas Roban, sementara sumber Inggris dinilai menyimpan bias politik.
+
+[14] (photo) ±8.8 detik
+Memasuki masa kemerdekaan, jalan warisan kolonial di Alas Roban tumbuh menjadi bagian utama Jalur Pantura yang menghubungkan Jakarta, Semarang, hingga Surabaya.
+
+[15] (photo) ±9.2 detik
+Tanjakan curam, tikungan tajam, dan hutan yang dulu gelap membuat truk serta bus kerap mengalami gagal rem, hingga muncul julukan jalur tengkorak.
+
+[16] (photo) ±9.6 detik
+Ingatan tentang kerja paksa, kecelakaan, serta kabar pembuangan jenazah pada dekade seribu sembilan ratus delapan puluhan melahirkan berbagai cerita mistis di tengah masyarakat.
+
+[17] (fact) ±9.6 detik
+Pemerintah memecah Alas Roban menjadi tiga jalur, sebelum Jalan Tol Batang Semarang resmi beroperasi pada Desember dua ribu delapan belas dan mengurai kepadatan.
+
+[18] (outro) ±10.0 detik
+Meski kini lebih lengang, Alas Roban tetap dilalui truk logistik, pemudik, dan menghidupi warung warga sekitar. Ikuti channel ini untuk kisah sejarah Nusantara lainnya.
+
+Perkiraan total narasi: ±167 detik (belum termasuk jeda)
