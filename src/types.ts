@@ -145,6 +145,8 @@ export type OutroScene = BaseScene & {
 export type Scene = TitleScene | PhotoScene | FactScene | OutroScene;
 
 export type VideoScript = {
+  /** 'landscape' = 1920×1080 (default), 'short' = 1080×1920 untuk YouTube Shorts / TikTok / Reels */
+  format?: 'landscape' | 'short';
   scenes: Scene[];
   /** Musik latar di public/, contoh 'audio/musik.mp3' */
   music?: string;

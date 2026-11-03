@@ -24,11 +24,9 @@ const id = slug
   .map((w) => w[0].toUpperCase() + w.slice(1))
   .join('');
 const FPS = 30;
-// Sama dengan TRANSITION_FRAMES di src/HistoryVideo.tsx
-const TRANSITION_FRAMES = 18;
 const SCENES_PER_PAGE = 4;
 
-const {sceneWords, shotStarts, SHOT_OVERLAP} = await importTs('src/lib/kata.ts');
+const {sceneWords, shotStarts, SHOT_OVERLAP, transitionFrames} = await importTs('src/lib/kata.ts');
 
 const outDir = path.resolve('out/storyboard');
 const frameDir = path.join(outDir, 'frame');
@@ -66,13 +64,15 @@ const serveUrl = await bundle({entryPoint: path.resolve('src/index.ts')});
 const browser = await openBrowser('chrome');
 
 const board = [];
+let vertical = false;
 try {
   const composition = await selectComposition({serveUrl, id, inputProps: {}, puppeteerInstance: browser});
+  vertical = composition.height > composition.width;
   const scenes = composition.props.script.scenes;
 
   let sceneStart = 0;
   for (const [i, scene] of scenes.entries()) {
-    if (i > 0) sceneStart -= scene.transition === 'none' ? 0 : TRANSITION_FRAMES;
+    if (i > 0) sceneStart -= transitionFrames(scene.transition);
     const words = sceneWords(scene, FPS);
     const shots = scene.shots ?? (scene.photo ? [{photo: scene.photo, credit: scene.credit}] : []);
     const starts = shotStarts(shots, words, scene.duration);
@@ -102,8 +102,11 @@ try {
 
 // ---- Halaman gambar ----
 const W = 1900;
-const THUMB_W = 456;
-const THUMB_H = 256;
+// Ukuran cuplikan mengikuti orientasi video (short: tegak, sampai 6 shot per baris)
+const THUMB_W = vertical ? 270 : 456;
+const THUMB_H = vertical ? 480 : 256;
+const MAX_THUMBS = vertical ? 6 : 4;
+const CAPTION_CHARS = vertical ? 24 : 44;
 const GAP = 12;
 const PAD = 20;
 
@@ -116,7 +119,7 @@ const renderBlock = async (b) => {
   const narasi = wrap(`“${plain(s.narasi ?? '')}”`, 120, 3);
   const top = 46 + (sub ? 30 : 0) + narasi.length * 32 + 12;
   const captionLines = b.shots.map((x) =>
-    wrap(`“${x.spoken.join(' ')}”`, 44, 3),
+    wrap(`“${x.spoken.join(' ')}”`, CAPTION_CHARS, vertical ? 4 : 3),
   );
   const captionH = 30 + Math.max(...captionLines.map((l) => l.length), 1) * 26 + 26;
   const H = top + THUMB_H + captionH + PAD;
@@ -138,12 +141,12 @@ const renderBlock = async (b) => {
       svg += `<text x="${left}" y="${cy + 26 + li * 26}" font-family="Arial" font-size="19" fill="#f3ead7">${xml(line)}</text>`;
     });
     const name = x.shot.photo.split('/').pop().replace(/\.jpg$/, '');
-    svg += `<text x="${left}" y="${cy + 26 + captionLines[k].length * 26}" font-family="Arial" font-size="16" fill="#8f8473">${xml(name.slice(0, 52))}</text>`;
+    svg += `<text x="${left}" y="${cy + 26 + captionLines[k].length * 26}" font-family="Arial" font-size="16" fill="#8f8473">${xml(name.slice(0, vertical ? 30 : 52))}</text>`;
   });
   svg += '</svg>';
 
   const thumbs = await Promise.all(
-    b.shots.slice(0, 4).map(async (x, k) => ({
+    b.shots.slice(0, MAX_THUMBS).map(async (x, k) => ({
       input: await sharp(x.file).resize(THUMB_W, THUMB_H).toBuffer(),
       left: PAD + k * (THUMB_W + GAP),
       top,

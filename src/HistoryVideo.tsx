@@ -6,6 +6,7 @@ import {slide} from '@remotion/transitions/slide';
 import {wipe} from '@remotion/transitions/wipe';
 import {FilmOverlay} from './components/FilmOverlay';
 import {dorong, kartu, whip, zoom} from './components/transitions';
+import {TRANSITION_FRAMES, transitionFrames} from './lib/kata';
 import {applyNarasi, NARASI_DELAY, narasiFile} from './lib/narasi';
 import {FactScene} from './scenes/FactScene';
 import {OutroScene} from './scenes/OutroScene';
@@ -13,10 +14,6 @@ import {PhotoScene} from './scenes/PhotoScene';
 import {TitleScene} from './scenes/TitleScene';
 import {theme} from './theme';
 import type {Scene, TransitionType, VideoScript} from './types';
-
-const TRANSITION_FRAMES = 18;
-
-const transitionFrames = (type: TransitionType | undefined) => (type === 'none' ? 0 : TRANSITION_FRAMES);
 
 // Total durasi = jumlah semua scene dikurangi bagian yang tumpang tindih saat transisi.
 export const getTotalDuration = (script: VideoScript) =>

@@ -5,7 +5,7 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {loadScript} from './lib/load-script.mjs';
+import {importTs, loadScript} from './lib/load-script.mjs';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -45,7 +45,14 @@ if (!daftar.includes(`'./${slug}'`)) {
 }
 
 const scenes = script.scenes ?? [];
-if (scenes.length < 3) err('naskah', `Hanya ${scenes.length} scene.`, 'Buat minimal 6 scene: title, beberapa photo/fact, outro.');
+// Short (9:16) punya batas lebih ketat: lebih sedikit kata, judul lebih pendek, layar lebih sempit
+const short = script.format === 'short';
+const R = short
+  ? {narasiMin: 6, narasiMax: 26, narasiIdeal: '12–20 kata (±5–8 detik)', judulMax: 4, tagMax: 26}
+  : {narasiMin: 8, narasiMax: 40, narasiIdeal: '15–25 kata (±6–10 detik)', judulMax: 5, tagMax: 40};
+
+if (scenes.length < 3) err('naskah', `Hanya ${scenes.length} scene.`, short ? 'Buat 4–8 scene: title (hook), beberapa photo/fact, outro.' : 'Buat minimal 6 scene: title, beberapa photo/fact, outro.');
+if (short && (scenes.length < 4 || scenes.length > 8)) warn('naskah', `Short berisi ${scenes.length} scene.`, 'Short 30–60 detik idealnya 4–8 scene.');
 if (scenes[0]?.type !== 'title') warn('scene 1', 'Scene pertama bukan type "title".', 'Mulai video dengan scene title.');
 if (scenes.at(-1)?.type !== 'outro') warn(`scene ${scenes.length}`, 'Scene terakhir bukan type "outro".', 'Tutup video dengan scene outro.');
 
@@ -56,6 +63,17 @@ for (const t of ['zoom', 'whip']) {
 }
 const stempelCount = scenes.filter((s) => s.stempel).length;
 if (stempelCount > 2) warn('stempel', `Stempel dipakai ${stempelCount} kali.`, 'Maksimal 2 per video, hanya untuk momen paling penting.');
+
+// Area aman short dalam persen layar 1080×1920 (lihat src/lib/safe.ts)
+const {SAFE_SHORT, FORMAT_SIZE} = await importTs('src/lib/safe.ts');
+const SW = FORMAT_SIZE.short.width;
+const SH = FORMAT_SIZE.short.height;
+const inSafeZone = (x, y) =>
+  x >= (SAFE_SHORT.left / SW) * 100 &&
+  x <= 100 - (SAFE_SHORT.right / SW) * 100 &&
+  y >= (SAFE_SHORT.top / SH) * 100 &&
+  y <= 100 - (SAFE_SHORT.bottom / SH) * 100;
+const SAFE_HINT = `Taruh di x ${Math.ceil((SAFE_SHORT.left / SW) * 100)}–${Math.floor(100 - (SAFE_SHORT.right / SW) * 100)}%, y ${Math.ceil((SAFE_SHORT.top / SH) * 100)}–${Math.floor(100 - (SAFE_SHORT.bottom / SH) * 100)}% (di luar itu tertutup tombol & caption aplikasi).`;
 
 let kataJson = null;
 if (script.narasiAudio) {
@@ -78,7 +96,7 @@ for (const [i, scene] of scenes.entries()) {
     err(where, 'Tidak punya narasi.', 'Tulis narasi 15–25 kata. Setiap scene wajib punya narasi (1 paragraf audio = 1 scene).');
   } else {
     const n = wordsOf(narasi).length;
-    if (n < 8 || n > 40) warn(where, `Narasi ${n} kata.`, 'Idealnya 15–25 kata (±6–10 detik).');
+    if (n < R.narasiMin || n > R.narasiMax) warn(where, `Narasi ${n} kata.`, `Idealnya ${R.narasiIdeal}.`);
     if (/\d/.test(plain(narasi))) err(where, 'Narasi berisi angka (digit).', 'Tulis angka dengan huruf, contoh 1814 -> "seribu delapan ratus empat belas".');
     if (/\b(dll|dsb|yg|thn|abd|M)\./.test(narasi)) err(where, 'Narasi berisi singkatan.', 'Tulis lengkap, contoh "M." -> "Masehi".');
     if (/[()]/.test(narasi)) warn(where, 'Narasi berisi tanda kurung.', 'TTS membacanya janggal; ubah jadi kalimat biasa.');
@@ -88,7 +106,7 @@ for (const [i, scene] of scenes.entries()) {
   // --- Shot ---
   const shots = scene.shots ?? (scene.photo ? [{photo: scene.photo, credit: scene.credit}] : []);
   if (shots.length === 0) {
-    err(where, 'Tidak ada foto (shots kosong).', `Isi 2–4 shot dengan {...foto('NN-nama.jpg')} dari public/photos/${slug}/.`);
+    err(where, 'Tidak ada foto (shots kosong).', "Isi 2–4 shot dengan {...foto('NN-nama.jpg')} dari folder foto yang dipakai fotoDari(...) di atas naskah.");
   } else if (shots.length === 1) {
     warn(where, 'Hanya 1 shot, akan terlihat seperti slideshow.', 'Tambah jadi 2–4 shot (1 foto per ±3 detik narasi).');
   } else if (shots.length > 5) {
@@ -119,17 +137,25 @@ for (const [i, scene] of scenes.entries()) {
       if ([a.x, a.y, a.w ?? 10, a.h ?? 10].some((v) => typeof v !== 'number' || v < 0 || v > 100)) {
         err(sw, 'Koordinat anotasi di luar 0–100.', 'x, y, w, h dalam persen gambar (0–100). Cari dengan node scripts/grid-foto.mjs.');
       }
-      if ((shot.layout ?? 'full') === 'full') warn(sw, 'Anotasi di shot layout full.', "Foto full terpotong sesuai layar, anotasi bisa meleset. Lebih akurat pakai layout: 'print'.");
+      if ((shot.layout ?? 'full') === 'full') {
+        warn(
+          sw,
+          'Anotasi di shot layout full.',
+          short
+            ? "Di short, foto full digeser (pan) melintasi layar, jadi anotasi PASTI meleset. Wajib pakai layout: 'print' untuk shot beranotasi."
+            : "Foto full terpotong sesuai layar, anotasi bisa meleset. Lebih akurat pakai layout: 'print'.",
+        );
+      }
       if (a.label && a.label.length > 24) warn(sw, `Label anotasi "${a.label}" terlalu panjang.`, 'Maksimal ±24 huruf.');
     }
-    if (shot.tag && shot.tag.length > 40) warn(sw, `Tag "${shot.tag}" terlalu panjang.`, 'Maksimal ±40 huruf.');
+    if (shot.tag && shot.tag.length > R.tagMax) warn(sw, `Tag "${shot.tag}" terlalu panjang.`, `Maksimal ±${R.tagMax} huruf.`);
   }
 
   // --- Lapisan layout ---
-  if (scene.tag && scene.tag.length > 40) warn(where, `Tag "${scene.tag}" terlalu panjang.`, 'Maksimal ±40 huruf.');
+  if (scene.tag && scene.tag.length > R.tagMax) warn(where, `Tag "${scene.tag}" terlalu panjang.`, `Maksimal ±${R.tagMax} huruf.`);
   if (scene.judul) {
     const n = wordsOf(plain(scene.judul)).length;
-    if (n > 5) err(where, `Judul ${n} kata.`, 'Judul maksimal 5 kata. Ringkas, sisanya biar dibawa narasi/subtitle.');
+    if (n > R.judulMax) err(where, `Judul ${n} kata.`, `Judul maksimal ${R.judulMax} kata. Ringkas, sisanya biar dibawa narasi/subtitle.`);
     if (!scene.judul.includes('*')) warn(where, 'Judul tanpa *stabilo*.', 'Tandai 1 frasa kunci: "Dibangun *abad ke-9*".');
     if (scene.type !== 'photo') warn(where, 'Judul dipakai di luar scene photo.', 'Judul hanya untuk scene photo (fact sudah ada angka, title sudah ada judul besar).');
   }
@@ -144,6 +170,10 @@ for (const [i, scene] of scenes.entries()) {
   }
 
   // --- Aturan per jenis scene ---
+  if (short && scene.type === 'title' && i === 0 && narasi) {
+    const hook = wordsOf(plain(narasi).split(/[.!?]/)[0] ?? '').length;
+    if (hook > 12) warn(where, `Kalimat pertama (hook) ${hook} kata.`, 'Penonton short memutuskan lanjut atau skip dalam 2 detik: buka dengan kalimat ≤12 kata (pertanyaan/fakta mengejutkan).');
+  }
   if (scene.type === 'title' && narasi && !narasi.includes('*')) {
     err(where, 'Narasi title tanpa *bintang*.', `Judul besar muncul saat kata berbintang diucapkan. Bungkus nama judul: "Inilah *${scene.title}*."`);
   }
@@ -155,8 +185,12 @@ for (const [i, scene] of scenes.entries()) {
     if (scene.ulang && !(await exists(scene.ulang.photo))) err(where, `ulang.photo public/${scene.ulang.photo} tidak ada.`, 'Salin path persis dari public/photos/<slug>/.');
   }
 
+  if (short && scene.stempel && !inSafeZone(scene.stempel.x ?? 50, scene.stempel.y ?? 40)) {
+    warn(where, 'Stempel di luar area aman short.', SAFE_HINT);
+  }
   for (const p of scene.props ?? []) {
     if (!(await exists(p.src))) err(where, `Props public/${p.src} tidak ada.`, 'Generate dulu (scripts/generate-props.mjs) atau perbaiki nama file.');
+    if (short && !inSafeZone(p.x, p.y)) warn(where, `Props ${p.src} di luar area aman short.`, SAFE_HINT);
     if (p.di && !wordsOf(narasi).some((w) => normalize(w) === normalize(p.di.split(' ')[0]))) {
       err(where, `Props di "${p.di}" tidak ada di narasi.`, 'Isi di dengan kata dari narasi scene ini yang menyebut benda itu.');
     }
@@ -181,6 +215,18 @@ for (const [label, list, icon] of [['ERROR', errors, '✗'], ['PERINGATAN', warn
   }
 }
 
+// Perkiraan durasi total: panjang narasi (kata.json kalau ada, kalau tidak ±2,4 kata/detik) + jeda per scene
+const estSeconds = scenes.reduce((sum, scene, i) => {
+  const words = wordsOf(scene.narasi ?? '').length;
+  const spoken = kataJson?.[String(i)]?.at(-1)?.[1] ?? words / 2.4;
+  return sum + spoken + 0.7;
+}, 0);
+if (short) {
+  if (estSeconds > 180) err('durasi', `Perkiraan durasi ±${Math.round(estSeconds)} detik.`, 'Batas YouTube Shorts 3 menit. Kurangi scene atau perpendek narasi.');
+  else if (estSeconds > 60) warn('durasi', `Perkiraan durasi ±${Math.round(estSeconds)} detik.`, 'Target short 30–60 detik. Perpendek narasi atau kurangi scene.');
+  else if (estSeconds < 25) warn('durasi', `Perkiraan durasi ±${Math.round(estSeconds)} detik.`, 'Target short 30–60 detik. Tambah satu scene isi.');
+}
+
 if (tanpaDi.length) {
   console.log(
     `\nSaran: scene ${tanpaDi.join(', ')} belum mengikat shot ke narasi. Tambahkan di: '<kata>' pada shot ke-2 dst. supaya foto muncul saat isinya diucapkan, lalu cek dengan node scripts/storyboard.mjs ${slug}.`,
@@ -188,6 +234,6 @@ if (tanpaDi.length) {
 }
 
 console.log(
-  `\n${errors.length ? '✗ GAGAL' : '✓ LULUS'}: ${scenes.length} scene, ${errors.length} error, ${warnings.length} peringatan.`,
+  `\n${errors.length ? '✗ GAGAL' : '✓ LULUS'}: ${short ? 'short 9:16, ' : ''}${scenes.length} scene, ±${Math.round(estSeconds)} detik, ${errors.length} error, ${warnings.length} peringatan.`,
 );
 if (errors.length) process.exitCode = 1;

@@ -4,6 +4,9 @@ import type {Scene, WordTiming} from '../types';
 
 /** Jeda sebelum suara mulai di tiap scene (frame) */
 export const NARASI_DELAY = 8;
+/** Lama transisi antar scene (frame); 0 untuk transisi 'none' */
+export const TRANSITION_FRAMES = 18;
+export const transitionFrames = (type: string | undefined) => (type === 'none' ? 0 : TRANSITION_FRAMES);
 /** Lama foto berikutnya muncul menimpa foto sebelumnya (frame) */
 export const SHOT_OVERLAP = 8;
 /** Durasi minimal satu shot (frame) */

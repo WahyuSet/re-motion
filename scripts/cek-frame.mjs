@@ -10,6 +10,7 @@ import path from 'node:path';
 import {bundle} from '@remotion/bundler';
 import {openBrowser, renderStill, selectComposition} from '@remotion/renderer';
 import sharp from 'sharp';
+import {importTs} from './lib/load-script.mjs';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -22,8 +23,8 @@ const id = slug
   .map((w) => w[0].toUpperCase() + w.slice(1))
   .join('');
 
-// Sama dengan TRANSITION_FRAMES di src/HistoryVideo.tsx
-const TRANSITION_FRAMES = 18;
+const {transitionFrames} = await importTs('src/lib/kata.ts');
+const {SAFE_SHORT} = await importTs('src/lib/safe.ts');
 const POINTS = [0.35, 0.85];
 
 const outDir = path.resolve('out/cek');
@@ -40,7 +41,7 @@ try {
   let start = 0;
   const shots = [];
   for (const [i, scene] of scenes.entries()) {
-    if (i > 0) start -= scene.transition === 'none' ? 0 : TRANSITION_FRAMES;
+    if (i > 0) start -= transitionFrames(scene.transition);
     for (const p of POINTS) {
       shots.push({scene: i + 1, type: scene.type, percent: Math.round(p * 100), frame: start + Math.round(scene.duration * p)});
     }
@@ -53,15 +54,24 @@ try {
     await renderStill({composition, serveUrl, output: s.file, frame: s.frame, inputProps: {}, puppeteerInstance: browser});
   }
 
-  const W = 640;
-  const H = 360;
-  const cols = 2;
+  // Ukuran kotak mengikuti orientasi video. Video short: garis merah = area yang tertutup tombol/caption aplikasi.
+  const vertical = composition.height > composition.width;
+  const W = vertical ? 360 : 640;
+  const H = vertical ? 640 : 360;
+  const cols = vertical ? 4 : 2;
+  const k = W / composition.width;
+  const safeOverlay = vertical
+    ? `<rect x="0" y="0" width="${W}" height="${SAFE_SHORT.top * k}" fill="rgba(255,40,40,0.22)"/>` +
+      `<rect x="0" y="${H - SAFE_SHORT.bottom * k}" width="${W}" height="${SAFE_SHORT.bottom * k}" fill="rgba(255,40,40,0.22)"/>` +
+      `<rect x="${W - SAFE_SHORT.right * k}" y="0" width="${SAFE_SHORT.right * k}" height="${H}" fill="rgba(255,40,40,0.22)"/>` +
+      `<rect x="0" y="0" width="${SAFE_SHORT.left * k}" height="${H}" fill="rgba(255,40,40,0.22)"/>`
+    : '';
   const rows = Math.ceil(shots.length / cols);
   const tiles = await Promise.all(
     shots.map(async (s, n) => {
       const label = Buffer.from(
-        `<svg width="${W}" height="${H}"><rect width="${W}" height="34" fill="rgba(0,0,0,0.75)"/>` +
-          `<text x="10" y="24" font-family="Arial" font-size="20" fill="#ffd54a">Scene ${s.scene} (${s.type}) · ${s.percent}% · frame ${s.frame}</text></svg>`,
+        `<svg width="${W}" height="${H}">${safeOverlay}<rect width="${W}" height="34" fill="rgba(0,0,0,0.75)"/>` +
+          `<text x="10" y="24" font-family="Arial" font-size="${vertical ? 17 : 20}" fill="#ffd54a">Scene ${s.scene} (${s.type}) · ${s.percent}% · frame ${s.frame}</text></svg>`,
       );
       const img = await sharp(s.file).resize(W, H).composite([{input: label}]).toBuffer();
       return {input: img, left: (n % cols) * (W + 8), top: Math.floor(n / cols) * (H + 8)};
@@ -75,6 +85,7 @@ try {
 
   console.log(`\nLembar kontak: out/cek/${slug}-lembar.jpg`);
   console.log('Cek tiap kotak: subtitle terbaca? tag/judul tidak tertutup? anotasi menunjuk objek yang benar? tidak ada layar hitam/kosong?');
+  if (vertical) console.log('Video short: tidak boleh ada teks/objek penting di area merah (tertutup tombol & caption aplikasi).');
 } finally {
   await browser.close({silent: true});
 }

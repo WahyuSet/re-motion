@@ -7,6 +7,7 @@ import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
 import {highlightRange, sceneWords} from '../lib/kata';
 import {shake} from '../lib/motion';
+import {useLayout} from '../lib/layout';
 import {theme} from '../theme';
 import type {FactScene as FactSceneData} from '../types';
 
@@ -17,6 +18,7 @@ const SETTLE_AFTER = 28;
 // lalu mengecil jadi badge di kiri atas supaya foto & anotasi di belakangnya terlihat.
 export const FactScene: React.FC<{scene: FactSceneData}> = ({scene}) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const {fps} = useVideoConfig();
   const words = sceneWords(scene, fps);
 
@@ -71,9 +73,9 @@ export const FactScene: React.FC<{scene: FactSceneData}> = ({scene}) => {
       <div
         style={{
           position: 'absolute',
-          left: interpolate(settle, [0, 1], [960, 300]),
-          top: interpolate(settle, [0, 1], [490, 175]),
-          transform: `translate(-50%, -50%) translate(${jolt.x * 0.6}px, ${jolt.y * 0.6}px) scale(${1 - settle * 0.56})`,
+          left: interpolate(settle, [0, 1], [L.fact.centerX, L.fact.badgeX]),
+          top: interpolate(settle, [0, 1], [L.fact.centerY, L.fact.badgeY]),
+          transform: `translate(-50%, -50%) translate(${jolt.x * 0.6}px, ${jolt.y * 0.6}px) scale(${1 - settle * L.fact.badgeShrink})`,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -85,7 +87,7 @@ export const FactScene: React.FC<{scene: FactSceneData}> = ({scene}) => {
           style={{
             fontFamily: theme.fontTitle,
             fontWeight: 900,
-            fontSize: 300,
+            fontSize: L.fact.numberSize,
             lineHeight: 1,
             color: theme.gold,
             fontVariantNumeric: 'lining-nums tabular-nums',
@@ -103,7 +105,7 @@ export const FactScene: React.FC<{scene: FactSceneData}> = ({scene}) => {
             alignSelf: 'stretch',
             fontFamily: theme.fontYear,
             fontWeight: 800,
-            fontSize: 64,
+            fontSize: L.fact.labelSize,
             letterSpacing: 8 + (1 - label) * 30,
             textTransform: 'uppercase',
             color: theme.paper,
@@ -121,7 +123,7 @@ export const FactScene: React.FC<{scene: FactSceneData}> = ({scene}) => {
             text={scene.sub}
             delay={countEnd + 10}
             stagger={3}
-            style={{justifyContent: 'center', maxWidth: 1200, marginTop: 24, fontFamily: theme.fontBody, fontSize: 40, color: theme.muted}}
+            style={{justifyContent: 'center', maxWidth: L.fact.textMaxWidth, marginTop: 24, fontFamily: theme.fontBody, fontSize: 40, color: theme.muted}}
           />
         ) : null}
       </div>

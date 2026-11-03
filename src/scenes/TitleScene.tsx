@@ -7,11 +7,13 @@ import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
 import {frameOfWord, highlightRange, sceneWords} from '../lib/kata';
 import {shake} from '../lib/motion';
+import {fitTitleSize, useLayout} from '../lib/layout';
 import {theme} from '../theme';
 import type {TitleScene as TitleSceneData} from '../types';
 
 export const TitleScene: React.FC<{scene: TitleSceneData}> = ({scene}) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const {fps} = useVideoConfig();
   const words = sceneWords(scene, fps);
   const letters = scene.title.split('');
@@ -38,7 +40,7 @@ export const TitleScene: React.FC<{scene: TitleSceneData}> = ({scene}) => {
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          transform: `translate(${jolt.x * 0.5}px, ${jolt.y * 0.5 - 40}px)`,
+          transform: `translate(${jolt.x * 0.5}px, ${jolt.y * 0.5 + L.title.offsetY}px)`,
         }}
       >
         <div style={{display: 'flex', alignItems: 'center', gap: 28, opacity: kicker}}>
@@ -47,8 +49,8 @@ export const TitleScene: React.FC<{scene: TitleSceneData}> = ({scene}) => {
             style={{
               fontFamily: theme.fontBody,
               fontWeight: 600,
-              fontSize: 34,
-              letterSpacing: 12,
+              fontSize: L.title.kickerSize,
+              letterSpacing: L.title.kickerSpacing,
               textTransform: 'uppercase',
               color: theme.gold,
             }}
@@ -68,7 +70,7 @@ export const TitleScene: React.FC<{scene: TitleSceneData}> = ({scene}) => {
                   display: 'inline-block',
                   fontFamily: theme.fontTitle,
                   fontWeight: 900,
-                  fontSize: 220,
+                  fontSize: fitTitleSize(scene.title, L),
                   lineHeight: 1.05,
                   color: theme.paper,
                   opacity: Math.min(1, s * 1.5),
@@ -88,7 +90,7 @@ export const TitleScene: React.FC<{scene: TitleSceneData}> = ({scene}) => {
           <AnimatedText
             text={scene.subtitle}
             delay={titleAt + letters.length * 2 + 8}
-            style={{justifyContent: 'center', fontFamily: theme.fontBody, fontSize: 48, color: theme.muted, marginTop: 10}}
+            style={{justifyContent: 'center', fontFamily: theme.fontBody, fontSize: L.title.subtitleSize, color: theme.muted, marginTop: 10, maxWidth: L.vertical ? L.title.maxWidth : undefined}}
           />
         ) : null}
       </AbsoluteFill>

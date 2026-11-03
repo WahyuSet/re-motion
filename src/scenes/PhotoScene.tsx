@@ -6,11 +6,13 @@ import {Props} from '../components/Prop';
 import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
 import {sceneWords} from '../lib/kata';
+import {useLayout} from '../lib/layout';
 import {theme} from '../theme';
 import type {PhotoScene as PhotoSceneData} from '../types';
 
 export const PhotoScene: React.FC<{scene: PhotoSceneData}> = ({scene}) => {
   const {fps} = useVideoConfig();
+  const L = useLayout();
   const words = sceneWords(scene, fps);
 
   return (
@@ -35,13 +37,13 @@ export const PhotoScene: React.FC<{scene: PhotoSceneData}> = ({scene}) => {
           delay={12}
           style={{
             position: 'absolute',
-            left: 110,
-            right: 110,
-            bottom: 110,
-            maxWidth: 1400,
+            left: L.photoText.left,
+            right: L.photoText.right,
+            bottom: L.photoText.bottom,
+            maxWidth: L.photoText.maxWidth,
             fontFamily: theme.fontTitle,
             fontWeight: 700,
-            fontSize: 76,
+            fontSize: L.photoText.fontSize,
             lineHeight: 1.2,
             color: theme.paper,
             textShadow: '0 4px 24px rgba(0,0,0,0.7)',

@@ -29,6 +29,15 @@ Panduan langkah demi langkah (juga dipakai AI agent sebagai skill, ditulis supay
 
 `npm run cek` memeriksa semua aturan (jumlah shot, judul ≤5 kata, angka di narasi, tanda bintang di scene fakta, file foto/audio ada, kredit, kecocokan `kata.json`) dan menulis cara memperbaikinya.
 
+## Mode short (9:16): YouTube Shorts, TikTok, Reels
+
+```bash
+npm run baru -- borobudur-short --short --dari borobudur   # short turunan dari video panjang (foto & sumber sama)
+npm run baru -- keris-short --short                         # short topik baru
+```
+
+Naskah short berisi `format: 'short'` → 1080×1920, 30–60 detik, 4–8 scene. Tag, judul, subtitle (2–3 kata besar), badge angka, dan kredit otomatis menyesuaikan layar tegak dan tetap di dalam area aman Shorts/TikTok/Reels. Foto landscape digeser (pan) menyusuri lebarnya. `npm run cek` memakai aturan short (durasi, hook, panjang judul, area aman), dan `npm run cek-frame` menandai area yang tertutup tombol aplikasi dengan warna merah. Contoh: `src/data/borobudur-short.ts`.
+
 ## Jenis scene
 
 | `type`  | Isi | Cocok untuk |

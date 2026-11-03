@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {SHOT_OVERLAP as OVERLAP, shotStarts, type TimedWord} from '../lib/kata';
+import {useLayout} from '../lib/layout';
 import type {CameraMove, Shot} from '../types';
 import {Credit} from './Caption';
 import {AnotasiLayer, Tag} from './Layout';
@@ -8,6 +9,12 @@ import {AnotasiLayer, Tag} from './Layout';
 const ANOTASI_AT = 22;
 
 const AUTO_MOVES: CameraMove[] = ['push-in', 'pan-left', 'pull-out', 'pan-right', 'tilt-up', 'push-in', 'tilt-down'];
+// Layar vertikal memotong foto landscape jadi pita sempit: utamakan pan yang menyusuri lebar foto.
+const AUTO_MOVES_VERTICAL: CameraMove[] = ['pan-right', 'push-in', 'pan-left', 'pull-out'];
+
+// Pan di layar vertikal: geser titik crop (objectPosition) melintasi foto, 15% -> 85% lebar foto.
+const verticalPanX = (move: CameraMove, p: number) =>
+  move === 'pan-right' ? 15 + 70 * p : move === 'pan-left' ? 85 - 70 * p : null;
 
 // Transform kamera untuk progres 0..1. Pan/tilt dalam persen ukuran foto.
 const camera = (move: CameraMove, p: number) => {
@@ -37,7 +44,9 @@ const ShotView: React.FC<{
 }> = ({shot, index, duration, dim, blur, fadeIn}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const move = shot.move ?? AUTO_MOVES[index % AUTO_MOVES.length];
+  const L = useLayout();
+  const autoMoves = L.vertical ? AUTO_MOVES_VERTICAL : AUTO_MOVES;
+  const move = shot.move ?? autoMoves[index % autoMoves.length];
   const p = interpolate(frame, [0, duration], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
@@ -45,20 +54,31 @@ const ShotView: React.FC<{
   });
   const cam = camera(move, p);
   const origin = shot.focus ? `${shot.focus.x}% ${shot.focus.y}%` : 'center';
+  // Vertikal: pan lewat titik crop, zoom berpusat di focus (crop diarahkan ke focus)
+  const panX = L.vertical ? verticalPanX(move, p) : null;
+  const fullCam = panX === null ? cam : {scale: 1.06 + 0.04 * p, x: 0, y: 0};
+  const objectPosition = !L.vertical
+    ? undefined
+    : `${panX ?? shot.focus?.x ?? 50}% ${shot.focus?.y ?? 50}%`;
 
   // Foto baru masuk cepat dengan sedikit zoom & blur, terasa seperti "cut" bukan slide.
   const enter = fadeIn ? interpolate(frame, [0, OVERLAP], [0, 1], {extrapolateRight: 'clamp'}) : 1;
   const enterScale = 1 + (1 - enter) * 0.08;
   const enterBlur = (1 - enter) * 12;
 
-  const tag = shot.tag ? <Tag text={shot.tag} at={OVERLAP + 4} side="right" /> : null;
+  const tag = shot.tag ? (
+    <Tag text={shot.tag} at={OVERLAP + 4} side={L.shotTag.side} top={L.shotTag.top} bottom={L.shotTag.bottom} />
+  ) : null;
 
   if ((shot.layout ?? 'full') === 'full') {
     return (
       <AbsoluteFill style={{overflow: 'hidden', opacity: enter}}>
         {/* Anotasi ada di dalam wadah yang sama dengan foto, jadi ikut bergerak bersama kamera */}
         <AbsoluteFill
-          style={{transformOrigin: origin, transform: `scale(${cam.scale * enterScale}) translate(${cam.x}%, ${cam.y}%)`}}
+          style={{
+            transformOrigin: L.vertical ? 'center' : origin,
+            transform: `scale(${fullCam.scale * enterScale}) translate(${fullCam.x}%, ${fullCam.y}%)`,
+          }}
         >
           <Img
             src={staticFile(shot.photo)}
@@ -66,6 +86,7 @@ const ShotView: React.FC<{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
+              objectPosition,
               filter: `sepia(0.15) contrast(1.08) brightness(${1 - dim}) blur(${blur + enterBlur}px)`,
             }}
           />
@@ -106,7 +127,7 @@ const ShotView: React.FC<{
             {/* Ukuran mengikuti rasio asli foto (peta lebar tidak terpotong) */}
             <Img
               src={staticFile(shot.photo)}
-              style={{display: 'block', maxHeight: 740, maxWidth: 1560, filter: `sepia(0.2) contrast(1.05)`}}
+              style={{display: 'block', maxHeight: L.print.maxHeight, maxWidth: L.print.maxWidth, filter: `sepia(0.2) contrast(1.05)`}}
             />
             <AnotasiLayer items={shot.anotasi} at={ANOTASI_AT} />
           </div>

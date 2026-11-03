@@ -6,11 +6,13 @@ import {Props} from '../components/Prop';
 import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
 import {sceneWords} from '../lib/kata';
+import {useLayout} from '../lib/layout';
 import {theme} from '../theme';
 import type {OutroScene as OutroSceneData} from '../types';
 
 export const OutroScene: React.FC<{scene: OutroSceneData}> = ({scene}) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const {fps} = useVideoConfig();
   const words = sceneWords(scene, fps);
 
@@ -27,16 +29,16 @@ export const OutroScene: React.FC<{scene: OutroSceneData}> = ({scene}) => {
         style={{background: 'radial-gradient(ellipse at center, rgba(20,17,13,0.85) 0%, rgba(20,17,13,0.45) 75%)'}}
       />
 
-      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: 60, marginTop: -60}}>
+      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: 60, marginTop: L.outro.offsetY}}>
         <AnimatedText
           text={scene.title}
           delay={5}
           style={{
             justifyContent: 'center',
-            maxWidth: 1500,
+            maxWidth: L.outro.maxWidth,
             fontFamily: theme.fontTitle,
             fontWeight: 900,
-            fontSize: 110,
+            fontSize: L.outro.titleSize,
             lineHeight: 1.1,
             color: theme.paper,
           }}
@@ -45,7 +47,7 @@ export const OutroScene: React.FC<{scene: OutroSceneData}> = ({scene}) => {
           style={{
             fontFamily: theme.fontBody,
             fontWeight: 800,
-            fontSize: 44,
+            fontSize: L.outro.ctaSize,
             color: theme.ink,
             background: theme.gold,
             padding: '24px 56px',

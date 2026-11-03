@@ -28,6 +28,8 @@ Istilah: **slug** = nama video huruf kecil-minus (`perang-diponegoro`). **Id** =
 
 Durasi → jumlah scene: 1 menit ≈ 6–8 scene, 2 menit ≈ 12 scene, 3 menit ≈ 16–18 scene (±25 kata narasi per scene).
 
+🛑 **Video panjang atau short?** Kalau user menyebut "short", "Shorts", "Reels", "TikTok", "vertikal", atau "9:16" → ikuti juga bagian **Mode Short (9:16)** di bawah. Kalau short tapi tidak jelas *turunan dari video panjang yang sudah ada* atau *topik baru*, tanya user.
+
 ```bash
 node scripts/buat-video.mjs <slug>
 ```
@@ -199,6 +201,45 @@ Render ±5–10 menit; jalankan di background. Kirim ke user:
 
 ---
 
+## Mode Short (9:16): YouTube Shorts, TikTok, Reels
+
+Langkah 0–9 tetap sama, dengan perbedaan di bawah. Video short memakai `format: 'short'` (otomatis 1080×1920); semua elemen (tag, judul, subtitle, badge angka, kredit) sudah menyesuaikan sendiri. Jangan ubah komponen.
+
+**Langkah 0, buat short:**
+```bash
+node scripts/buat-video.mjs <slug>-short --short --dari <slug-video-panjang>   # turunan: foto, kredit & sumber dari video panjang
+node scripts/buat-video.mjs <slug> --short                                     # topik baru khusus short
+```
+- Turunan: Langkah 1 cukup memakai `<slug-panjang>.sumber.md` yang sudah disalin; Langkah 3 cukup memilih dari `public/photos/<slug-panjang>/_contact-sheet.jpg` (foto tambahan: `cari-foto ... --slug <slug-panjang>`). Narasi & TTS **tetap baru** (versi ringkas), jangan memotong audio video panjang.
+- Topik baru: semua langkah seperti biasa.
+
+**Aturan short** (dicek otomatis oleh `cek-naskah`):
+
+| | Video panjang | Short |
+|---|---|---|
+| Durasi | 1–3 menit | **30–60 detik** (batas Shorts 3 menit) |
+| Jumlah scene | 6–18 | **4–8** (template: 5) |
+| Narasi per scene | 15–25 kata | **12–20 kata** |
+| Judul | ≤5 kata | **≤4 kata** |
+| Tag | ≤40 huruf | **≤26 huruf** |
+| Scene pertama | pembuka | **hook ≤12 kata dalam 2 detik pertama**: pertanyaan atau fakta mengejutkan, lalu nama topik (`Inilah *Borobudur*.`) |
+| Outro | ajakan follow | ajakan follow; turunan: "Tonton versi lengkapnya di channel ini" |
+
+**Visual short:**
+- Foto landscape di layar tegak terpotong jadi pita sempit. Gerak `pan-left`/`pan-right` **menyusuri lebar foto** (default otomatis di short), jadi pilih foto yang isinya menyebar horizontal untuk pan. Untuk foto yang harus terlihat utuh (peta, foto arsip, dokumen) pakai `layout: 'print'`.
+- `focus: {x, y}` di short menentukan bagian foto yang dipotong untuk `push-in`/`pull-out` (misal `focus: {x: 30, y: 50}` = fokus ke sepertiga kiri).
+- Anotasi **hanya** di shot `layout: 'print'` (foto full digeser pan, anotasi pasti meleset).
+- **Area aman**: bagian atas 240 px, bawah 420 px, kanan 150 px, dan kiri 70 px tertutup tombol & caption aplikasi. Props dan stempel harus di dalam **x 7–86%, y 13–78%**. Di `cek-frame` area tertutup diberi warna merah. Tidak boleh ada teks atau objek penting di sana.
+- Subtitle short otomatis 2–3 kata besar di tengah-bawah; tag per shot pindah ke kiri bawah (di atas kredit).
+
+**Langkah 8–9:** `cek-frame` & `storyboard` otomatis tegak. Storyboard & persetujuan user tetap wajib. Render:
+```bash
+npx remotion render <Id> out/<slug>.mp4
+```
+File 1080×1920 siap diunggah ke Shorts, TikTok, dan Reels.
+
+Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
+
 ## Resep scene (salin, lalu ganti isinya)
 
 **Title**: tanpa tag (sudah ada kicker), 2–3 shot `full`.
@@ -272,6 +313,8 @@ Render ±5–10 menit; jalankan di background. Kirim ke user:
 | `potong-narasi`: kecocokan rendah / ⚠ | Audio tidak sesuai naskah terbaru. Minta TTS ulang dari `naskah-full.txt` |
 | `potong-narasi`: "Python + faster-whisper tidak ditemukan" | Pemotongan pakai jeda (kurang akurat). Beri tahu user; minta jeda ±1,5 dtk antar paragraf di TTS |
 | Subtitle/hitungan angka tidak sinkron | `kata.json` usang → ulangi langkah 7 |
+| Short: teks/props kena area merah di `cek-frame` | Pindahkan props/stempel ke x 7–86%, y 13–78%; perpendek tag/judul |
+| Short: foto hanya menampilkan bagian tidak penting | Atur `focus: {x, y}`, pakai `pan-left`/`pan-right`, atau `layout: 'print'` |
 | Foto muncul tidak pas dengan kata yang diucapkan | Tambah `di: '<kata>'` di shot itu; cek di storyboard |
 | `cek-naskah`: "di ... tidak ada di narasi" | Kata salah ketik, tidak ada di narasi scene itu, atau urutan `di` terbalik dengan urutan shot |
 | Layar hitam di lembar kontak | Scene tanpa shot atau nama file foto salah → `cek-naskah` |
