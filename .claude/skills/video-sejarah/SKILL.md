@@ -9,10 +9,10 @@ Ikuti langkah 0–9 **berurutan**. Setiap langkah punya perintah persis dan syar
 
 ## Aturan keras
 
-1. **Hanya edit file milik video itu**: `src/data/<slug>.ts`, `src/data/<slug>.props.json`, `src/data/<slug>.sumber.md`, dan isi `public/photos/<slug>/`, `public/audio/<slug>/`, `public/music/<slug>/`. Jangan ubah `src/components/`, `src/scenes/`, `src/lib/`, `src/Root.tsx`, atau `scripts/` kecuali user memintanya.
+1. **Hanya edit file milik video itu**: `src/data/<slug>.ts`, `src/data/<slug>.props.json`, `src/data/<slug>.sumber.md`, dan isi `public/photos/<slug>/`, `public/videos/<slug>/`, `public/audio/<slug>/`, `public/music/<slug>/`. Jangan ubah `src/components/`, `src/scenes/`, `src/lib/`, `src/Root.tsx`, atau `scripts/` kecuali user memintanya.
 2. **Setelah setiap edit naskah**, jalankan `node scripts/cek-naskah.mjs <slug>` dan perbaiki semua `✗ ERROR` sesuai baris "Perbaiki:". Lanjut hanya kalau hasilnya `✓ LULUS`.
 3. **Fakta**: hanya tulis fakta yang ada di `src/data/<slug>.sumber.md` dengan sumbernya. Ragu → tulis "sekitar"/"diperkirakan", atau buang.
-4. **Foto**: hanya dari `scripts/cari-foto.mjs`, selalu lewat `...foto('nama.jpg')`. Jangan pakai gambar dari Google Images, Pinterest, situs berita, atau gambar AI sebagai "foto sejarah".
+4. **Foto & video arsip**: hanya dari `scripts/cari-foto.mjs` dan `scripts/cari-video.mjs`, selalu lewat `...foto('nama.jpg')` atau `...video('nama.mp4')`. Jangan pakai gambar/video dari Google Images, Pinterest, situs berita, atau gambar AI sebagai "foto/video sejarah".
 5. **Berhenti & tanya user** di titik yang ditandai 🛑. Jangan menunggu diam-diam, jangan melanjutkan dengan tebakan.
 6. Selalu sebut ke user: apa yang sudah selesai, apa yang belum dicek, dan file mana yang dihasilkan.
 7. **Visual harus sesuai narasi yang sedang dibacakan.** Pilih foto/props berdasarkan apa yang diucapkan di bagian itu, urutkan shot mengikuti urutan kalimat, dan ikat shot ke kata yang menyebut isinya dengan `di: '<kata>'` (shot/props muncul tepat saat kata itu diucapkan). Contoh: narasi "masjid … berdiri tak jauh dari klenteng" → shot masjid `di: 'masjid'`, lalu shot klenteng `di: 'Klenteng'`.
@@ -76,14 +76,19 @@ node scripts/cari-foto.mjs "<kata kunci>" --slug <slug>
 - Tidak ada foto yang memotret langsung peristiwanya? Pakai foto **proksi** (peristiwa/tempat serupa dari era yang sama) dengan `tag` yang jujur, misalnya `'Pembukaan jalan di Jawa · KITLV'`, dan sebutkan scene proksi itu ke user saat mengirim storyboard.
 - "dibatasi server, tunggu N detik" = normal, biarkan berjalan.
 - **Lihat `public/photos/<slug>/_contact-sheet.jpg` dengan Read.** Hapus file JPG yang tidak relevan, ber-watermark, buram, atau salah objek (entri `credits.json` biarkan).
+- **Footage video arsip (opsional):** Wikimedia Commons punya film berita sejarah bebas lisensi (mis. koleksi *Nieuws uit Indonesië* / Open Beelden):
+  ```bash
+  node scripts/cari-video.mjs "Nieuws uit Indonesie Batavia" --slug <slug>
+  ```
+  Lihat `public/videos/<slug>/_contact-sheet.jpg` dengan Read untuk memastikan klip relevan dan tidak berwatermark.
 
-**Selesai jika:** ada cukup foto relevan untuk semua scene (±2–4 per scene) dan sudah dilihat di contact sheet.
+**Selesai jika:** ada cukup foto (dan opsional klip video) relevan untuk semua scene (±2–4 per scene) dan sudah dilihat di contact sheet.
 
 ## Langkah 4 — Isi shot & lapisan layout
 
 Isi `shots` setiap scene dengan 2–4 foto, lalu tambahkan lapisan sesuai **Resep scene**.
 
-- Shot: `{...foto('NN-nama.jpg')}`. Nama file **disalin persis** dari folder foto.
+- Shot: `{...foto('NN-nama.jpg')}` atau untuk footage video arsip `{...video('NN-nama.mp4'), mulai: 4}` (dengan `import videoCredits from '../../public/videos/<slug>/credits.json'` dan `const video = videoDari('<slug>', videoCredits)` dari `../lib/foto`). Nama file **disalin persis** dari folder `photos/` atau `videos/`. `mulai` = detik awal klip yang dipakai (pastikan `mulai` + durasi tampil shot ≤ durasi klip di `credits.json`).
 - **Ikat shot ke narasi**: untuk shot ke-2 dan seterusnya, tambahkan `di: '<kata>'` = satu kata dari narasi scene itu yang menyebut isi foto. Shot mulai tepat saat kata itu diucapkan. Urutan `di` harus sama dengan urutan kata di narasi. Shot pertama selalu mulai di awal scene (tanpa `di`). Shot tanpa `di` dibagi rata di sela-selanya.
   ```ts
   narasi: 'Karena itu, di kompleks ini masjid bergaya Demak berdiri tak jauh dari *Klenteng Dewi Kwan Im*.',
@@ -419,6 +424,8 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 | `cek-naskah`: "rute hanya tampil di shot layout 'print'" | Tambahkan `layout: 'print'` pada shot peta yang memakai `rute` |
 | `cek-naskah`: "File public/sfx/... tidak ada" | Jalankan `node scripts/buat-sfx.mjs` |
 | `cek-naskah`: "Musik ... belum punya data kredit" | Unduh musik lewat `node scripts/cari-musik.mjs "<kata kunci>" --slug <slug>` supaya lisensi tercatat di `credits.json` |
+| `cek-naskah`: "Pemakaian video ... melebihi durasi klip" | Kurangi angka `mulai` (detik), perpendek durasi tampil shot dengan `di`, atau pilih klip video yang lebih panjang |
+| `cek-naskah`: "Video ... belum punya data di credits.json" | Unduh klip lewat `node scripts/cari-video.mjs "<kata kunci>" --slug <slug>` dan pasang dengan `...video('NN-nama.mp4')` |
 
 Alasan desain (kenapa 2–4 shot, kenapa transisi tertentu, ukuran teks, dsb.): `referensi/desain.md`.
 

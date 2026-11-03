@@ -24,7 +24,11 @@ export type CameraMove = 'push-in' | 'pull-out' | 'pan-left' | 'pan-right' | 'ti
 
 export type Shot = {
   /** Path foto di public/. Biasanya diisi lewat ...foto('nama.jpg') */
-  photo: string;
+  photo?: string;
+  /** Path footage video di public/. Biasanya diisi lewat ...video('nama.mp4') */
+  video?: string;
+  /** Detik awal pemutaran klip video, default 0 */
+  mulai?: number;
   credit?: string;
   /**
    * 'full' = foto memenuhi layar dengan gerak kamera.

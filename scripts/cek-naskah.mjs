@@ -31,9 +31,9 @@ try {
   script = await loadScript(slug);
 } catch (e) {
   console.error(`✗ src/data/${slug}.ts tidak bisa dibaca: ${e.message}`);
-  if (/^Foto ".*" tidak ada/.test(e.message)) {
+  if (/^(Foto|Video) ".*" tidak ada/.test(e.message)) {
     console.error(
-      `  Perbaiki: nama file di foto('...') salah atau fotonya sudah dihapus. Lihat daftar file yang ada: ls public/photos/${slug}/ lalu salin namanya persis (termasuk nomor di depan).`,
+      `  Perbaiki: nama file di foto('...') / video('...') salah atau filenya sudah dihapus. Lihat daftar file di public/photos/${slug}/ atau public/videos/${slug}/ lalu salin namanya persis.`,
     );
   } else {
     console.error('  Perbaiki: cek salah ketik (koma, kurung, tanda kutip). Jalankan npx tsc untuk melihat baris yang salah.');
@@ -133,11 +133,18 @@ for (const [i, scene] of scenes.entries()) {
   if (narasi && shots.length > 1 && !shots.slice(1).some((x) => x.di)) tanpaDi.push(i + 1);
   for (const [k, shot] of shots.entries()) {
     const sw = `${where}, shot ${k + 1}`;
-    if (!shot.photo) {
-      err(sw, 'Shot tanpa foto.', "Tulis shot sebagai {...foto('NN-nama.jpg')}.");
+    const media = shot.video ?? shot.photo;
+    if (!media) {
+      err(sw, 'Shot tanpa foto/video.', "Tulis shot sebagai {...foto('NN-nama.jpg')} atau {...video('NN-nama.mp4')}.");
       continue;
     }
-    if (!(await exists(shot.photo))) err(sw, `File public/${shot.photo} tidak ada.`, 'Cek nama file di folder foto (ls public/photos/<slug>/), salin persis.');
+    if (!(await exists(media))) err(sw, `File public/${media} tidak ada.`, 'Cek nama file di folder photos/ atau videos/ (ls public/photos/<slug>/), salin persis.');
+    if (shot.mulai !== undefined && (typeof shot.mulai !== 'number' || shot.mulai < 0)) {
+      err(sw, `mulai (${shot.mulai}) harus berupa angka ≥ 0.`, 'Isi mulai dalam detik (contoh mulai: 4), atau hapus field mulai.');
+    }
+    if (shot.rute && shot.video && !shot.photo) {
+      err(sw, 'rute hanya bisa dipasang pada shot foto peta.', "Pakai foto peta (...foto('peta.jpg')) dengan layout: 'print' untuk menggambar rute.");
+    }
     if (shot.di) {
       const key = normalize(shot.di.split(' ')[0]);
       const idx = wordsOf(narasi).findIndex((w, wi) => wi >= lastDiIndex && normalize(w) === key);
@@ -149,7 +156,7 @@ for (const [i, scene] of scenes.entries()) {
         lastDiIndex = idx + 1;
       }
     }
-    if (!shot.credit) err(sw, 'Shot tanpa kredit foto.', "Selalu pakai ...foto('nama.jpg'), jangan tulis path foto manual.");
+    if (!shot.credit) err(sw, 'Shot tanpa kredit.', "Selalu pakai ...foto('nama.jpg') atau ...video('nama.mp4'), jangan tulis path manual.");
     for (const a of shot.anotasi ?? []) {
       if (a.bentuk && a.bentuk !== 'lingkaran' && a.bentuk !== 'pin') {
         err(sw, `bentuk anotasi "${a.bentuk}" tidak dikenal.`, "Pakai 'lingkaran' (default) atau 'pin'.");
@@ -339,7 +346,7 @@ const urutan = [];
 /** Frame mulai & durasi tiap scene di video (untuk chapter) */
 const waktuScene = [];
 for (const [i, scene] of scenes.entries()) {
-  const shots = (scene.shots ?? (scene.photo ? [{photo: scene.photo}] : [])).filter((s) => s.photo);
+  const shots = (scene.shots ?? (scene.photo ? [{photo: scene.photo}] : [])).filter((s) => s.photo || s.video);
   let duration = scene.duration;
   let words = [];
   if (scene.narasi) {
@@ -359,11 +366,46 @@ for (const [i, scene] of scenes.entries()) {
       sceneType: scene.type,
       where: `scene ${i + 1} (${scene.type}), shot ${k + 1}`,
       shot,
+      media: shot.video ?? shot.photo,
       layout: shot.layout ?? 'full',
       move: shotMove(shot, k, short),
       detik: (to - starts[k]) / FPS,
     });
   });
+}
+
+// --- Validasi footage video arsip (durasi klip vs durasi shot + mulai, kredit) ---
+const videoCreditsCache = new Map();
+let adaVideo = false;
+for (const x of urutan) {
+  if (!x.shot.video) continue;
+  adaVideo = true;
+  if (!(await exists(x.shot.video))) continue;
+  const folder = path.posix.dirname(x.shot.video);
+  if (!videoCreditsCache.has(folder)) {
+    const cFile = path.resolve('public', folder, 'credits.json');
+    videoCreditsCache.set(folder, JSON.parse(await fs.readFile(cFile, 'utf8').catch(() => '{}')));
+  }
+  const entry = videoCreditsCache.get(folder)[path.posix.basename(x.shot.video)];
+  if (!entry) {
+    err(x.where, `Video ${x.shot.video} belum punya data di credits.json.`, `Unduh lewat node scripts/cari-video.mjs "<kata kunci>" --slug ${slug}.`);
+  }
+  const durasiKlip = (await audioSeconds(x.shot.video)) ?? entry?.durasi ?? null;
+  if (durasiKlip === null) {
+    err(x.where, `Durasi video public/${x.shot.video} tidak bisa dibaca.`, 'Pastikan file MP4 valid.');
+  } else {
+    const mulai = x.shot.mulai ?? 0;
+    if (mulai + x.detik > durasiKlip + 0.1) {
+      err(
+        x.where,
+        `Pemakaian video (${fmt(mulai + x.detik)} dtk: mulai ${fmt(mulai)} dtk + tampil ${fmt(x.detik)} dtk) melebihi durasi klip (${fmt(durasiKlip)} dtk).`,
+        'Kurangi mulai, perpendek durasi tampil shot dengan di, atau pilih klip yang lebih panjang.',
+      );
+    }
+  }
+}
+if (adaVideo) {
+  warn('video', 'Naskah memakai footage video arsip.', 'Pastikan sudah cek _contact-sheet.jpg di public/videos/ bahwa klip tidak berwatermark stasiun TV/arsip.');
 }
 
 for (const x of urutan) {
@@ -375,7 +417,7 @@ for (const x of urutan) {
 }
 
 const pemakaian = new Map();
-for (const x of urutan) pemakaian.set(x.shot.photo, [...(pemakaian.get(x.shot.photo) ?? []), x.scene]);
+for (const x of urutan) pemakaian.set(x.media, [...(pemakaian.get(x.media) ?? []), x.scene]);
 for (const [photo, list] of pemakaian) {
   if (list.length > 3) {
     rit('video', `Foto ${namaFoto(photo)} dipakai ${list.length} kali (scene ${[...new Set(list)].join(', ')}).`, 'Maksimal 3 kali per video. Ganti sebagian dengan foto lain (cari-foto dengan kata kunci baru).');

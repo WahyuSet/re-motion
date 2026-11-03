@@ -84,8 +84,8 @@ try {
   }
 
   // ---- Teks ----
-  const {entries, musik, missing, baris: kredit} = await kreditFoto(script);
-  if (missing.length) peringatan.push(`${missing.length} foto/musik tanpa data kredit: ${missing.join(', ')}`);
+  const {entries, videoEntries, musik, missing, baris: kredit} = await kreditFoto(script);
+  if (missing.length) peringatan.push(`${missing.length} foto/video/musik tanpa data kredit: ${missing.join(', ')}`);
   const tags = script.youtube.tags ?? [];
   const hashtag = tags
     .slice(0, 3)
@@ -114,7 +114,7 @@ try {
   await fs.writeFile(path.join(outDir, 'tags.txt'), tagsTxt);
   hasil.push(
     `judul.txt (${judul.length} huruf)`,
-    `deskripsi.txt (${chapter.length} chapter, ${entries.length} kredit foto${musik ? ', 1 kredit musik' : ''})`,
+    `deskripsi.txt (${chapter.length} chapter, ${entries.length} kredit foto${videoEntries.length ? `, ${videoEntries.length} kredit video` : ''}${musik ? ', 1 kredit musik' : ''})`,
     `tags.txt (${tags.length} tag)`,
   );
 

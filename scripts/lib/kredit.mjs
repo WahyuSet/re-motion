@@ -1,5 +1,5 @@
-// Kredit foto & musik yang benar-benar dipakai naskah (dipakai kredit.mjs & paket-youtube.mjs).
-// Foto/musik boleh berasal dari folder video lain (short turunan memakai aset video panjangnya).
+// Kredit foto, video, & musik yang benar-benar dipakai naskah (dipakai kredit.mjs & paket-youtube.mjs).
+// Aset boleh berasal dari folder video lain (short turunan memakai aset video panjangnya).
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -8,7 +8,9 @@ import path from 'node:path';
 export const fotoDipakai = (script) => {
   const used = new Set();
   for (const scene of script.scenes) {
-    for (const shot of scene.shots ?? []) used.add(shot.photo);
+    for (const shot of scene.shots ?? []) {
+      if (shot.photo) used.add(shot.photo);
+    }
     if (scene.photo) used.add(scene.photo);
     if (scene.ulang?.photo) used.add(scene.ulang.photo);
   }
@@ -16,12 +18,23 @@ export const fotoDipakai = (script) => {
   return [...used].filter(Boolean).sort();
 };
 
+/** Semua path footage video yang tampil di shot */
+export const videoDipakai = (script) => {
+  const used = new Set();
+  for (const scene of script.scenes) {
+    for (const shot of scene.shots ?? []) {
+      if (shot.video) used.add(shot.video);
+    }
+  }
+  return [...used].filter(Boolean).sort();
+};
+
 /** Ada props hasil generate AI di naskah? */
 export const adaProps = (script) => script.scenes.some((s) => s.props?.length);
 
 /**
-* Daftar kredit: {entries: [{title, author, license, sourceUrl}], musik: {...}|null, missing: [path tanpa data], baris: [teks siap tempel]}
-*/
+ * Daftar kredit: {entries, videoEntries, musik, missing, baris}
+ */
 export const kreditFoto = async (script) => {
   const cache = new Map();
   const creditsOf = async (folder) => {
@@ -33,11 +46,17 @@ export const kreditFoto = async (script) => {
   };
 
   const entries = [];
+  const videoEntries = [];
   const missing = [];
   for (const photo of fotoDipakai(script)) {
     const c = (await creditsOf(path.posix.dirname(photo)))[path.posix.basename(photo)];
     if (c) entries.push(c);
     else missing.push(photo);
+  }
+  for (const video of videoDipakai(script)) {
+    const c = (await creditsOf(path.posix.dirname(video)))[path.posix.basename(video)];
+    if (c) videoEntries.push(c);
+    else missing.push(video);
   }
 
   let musik = null;
@@ -48,9 +67,12 @@ export const kreditFoto = async (script) => {
   }
 
   const baris = ['Sumber foto:', ...entries.map((c) => `- ${c.title} oleh ${c.author} (${c.license}) ${c.sourceUrl}`)];
+  if (videoEntries.length) {
+    baris.push('', 'Sumber video:', ...videoEntries.map((c) => `- ${c.title} oleh ${c.author} (${c.license}) ${c.sourceUrl}`));
+  }
   if (musik) {
     baris.push('', 'Musik latar:', `- ${musik.title} oleh ${musik.author} (${musik.license}) ${musik.sourceUrl}`);
   }
   if (adaProps(script)) baris.push('', 'Ilustrasi props dibuat dengan AI.');
-  return {entries, musik, missing, baris};
+  return {entries, videoEntries, musik, missing, baris};
 };

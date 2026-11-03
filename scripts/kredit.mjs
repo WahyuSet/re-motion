@@ -1,5 +1,5 @@
-// Buat daftar kredit foto & musik untuk deskripsi YouTube, hanya yang benar-benar dipakai di naskah.
-// Foto/musik boleh berasal dari folder video lain (short turunan memakai aset video panjangnya).
+// Buat daftar kredit foto, video, & musik untuk deskripsi YouTube, hanya yang benar-benar dipakai di naskah.
+// Aset boleh berasal dari folder video lain (short turunan memakai aset video panjangnya).
 // Paket upload lengkap (thumbnail, chapter, subtitle): node scripts/paket-youtube.mjs <slug>
 //
 // Pakai: node scripts/kredit.mjs borobudur   -> out/borobudur-kredit.txt
@@ -16,12 +16,13 @@ if (!slug) {
 }
 
 const script = await loadScript(slug);
-const {entries, musik, missing, baris} = await kreditFoto(script);
+const {entries, videoEntries, musik, missing, baris} = await kreditFoto(script);
 
 await fs.mkdir('out', {recursive: true});
 await fs.writeFile(path.join('out', `${slug}-kredit.txt`), baris.join('\n'));
 console.log(baris.join('\n'));
-console.log(`\nTersimpan di out/${slug}-kredit.txt (${entries.length} foto${musik ? ', 1 musik' : ''})`);
+const info = [`${entries.length} foto`, videoEntries.length && `${videoEntries.length} video`, musik && '1 musik'].filter(Boolean).join(', ');
+console.log(`\nTersimpan di out/${slug}-kredit.txt (${info})`);
 if (missing.length) {
-  console.log(`⚠ ${missing.length} aset tanpa data kredit (bukan dari cari-foto/cari-musik?): ${missing.join(', ')}`);
+  console.log(`⚠ ${missing.length} aset tanpa data kredit (bukan dari cari-foto/cari-video/cari-musik?): ${missing.join(', ')}`);
 }

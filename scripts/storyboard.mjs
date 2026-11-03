@@ -101,6 +101,7 @@ const infoShot = (shot) => {
   const pin = (shot.anotasi ?? []).filter((a) => a.bentuk === 'pin').length;
   const ling = (shot.anotasi ?? []).length - pin;
   return [
+    shot.video && `video${shot.mulai ? ` @${shot.mulai}s` : ''}`,
     shot.di && `di "${shot.di}"`,
     shot.layout === 'print' && 'print',
     pin && `${pin} pin`,
@@ -150,7 +151,8 @@ const renderBlock = async (b) => {
     captionLines[k].forEach((line, li) => {
       svg += `<text x="${left}" y="${cy + 26 + li * 26}" font-family="Arial" font-size="19" fill="#f3ead7">${xml(line)}</text>`;
     });
-    const name = x.shot.photo.split('/').pop().replace(/\.jpg$/, '');
+    const media = x.shot.video ?? x.shot.photo ?? '';
+    const name = media.split('/').pop().replace(/\.(jpg|mp4)$/, '');
     const nameY = cy + 26 + captionLines[k].length * 26;
     svg += `<text x="${left}" y="${nameY}" font-family="Arial" font-size="16" fill="#8f8473">${xml(name.slice(0, vertical ? 30 : 52))}</text>`;
     if (info) {
@@ -200,7 +202,8 @@ for (const b of board) {
   md.push(`- Narasi: ${s.narasi ? plain(s.narasi) : '(tanpa narasi)'}`);
   for (const x of b.shots) {
     const info = infoShot(x.shot);
-    md.push(`  - Shot ${x.k} (${time(x.from)}, ${detik(x)}${info ? `, ${info}` : ''}): ${x.shot.photo.split('/').pop()} — kata: "${x.spoken.join(' ')}"`);
+    const media = x.shot.video ?? x.shot.photo ?? '';
+    md.push(`  - Shot ${x.k} (${time(x.from)}, ${detik(x)}${info ? `, ${info}` : ''}): ${media.split('/').pop()} — kata: "${x.spoken.join(' ')}"`);
   }
   md.push('');
 }

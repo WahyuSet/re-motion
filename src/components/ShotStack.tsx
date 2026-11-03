@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Easing, Img, interpolate, OffthreadVideo, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {frameOfWord, SHOT_OVERLAP as OVERLAP, shotStarts, type TimedWord} from '../lib/kata';
 import {useLayout} from '../lib/layout';
 import {shotMove} from '../lib/motion';
@@ -65,12 +65,20 @@ const ShotView: React.FC<{
   const enter = fadeIn ? interpolate(frame, [0, OVERLAP], [0, 1], {extrapolateRight: 'clamp'}) : 1;
   const enterScale = 1 + (1 - enter) * 0.08;
   const enterBlur = (1 - enter) * 12;
+  const startFrom = Math.round((shot.mulai ?? 0) * fps);
 
   const tag = shot.tag && !hanyaFoto ? (
     <Tag text={shot.tag} at={OVERLAP + 4} side={L.shotTag.side} top={L.shotTag.top} bottom={L.shotTag.bottom} />
   ) : null;
 
   if ((shot.layout ?? 'full') === 'full' || hanyaFoto) {
+    const fullStyle: React.CSSProperties = {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      objectPosition,
+      filter: `sepia(0.15) contrast(1.08) brightness(${1 - dim}) blur(${blur + enterBlur}px)`,
+    };
     return (
       <AbsoluteFill style={{overflow: 'hidden', opacity: enter}}>
         {/* Anotasi ada di dalam wadah yang sama dengan foto, jadi ikut bergerak bersama kamera */}
@@ -80,16 +88,11 @@ const ShotView: React.FC<{
             transform: `scale(${fullCam.scale * enterScale}) translate(${fullCam.x}%, ${fullCam.y}%)`,
           }}
         >
-          <Img
-            src={staticFile(shot.photo)}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition,
-              filter: `sepia(0.15) contrast(1.08) brightness(${1 - dim}) blur(${blur + enterBlur}px)`,
-            }}
-          />
+          {shot.video ? (
+            <OffthreadVideo src={staticFile(shot.video)} muted startFrom={startFrom} style={fullStyle} />
+          ) : (
+            <Img src={staticFile(shot.photo!)} style={fullStyle} />
+          )}
           {hanyaFoto ? null : <AnotasiLayer items={shot.anotasi} at={ANOTASI_AT} />}
         </AbsoluteFill>
         {tag}
@@ -101,18 +104,26 @@ const ShotView: React.FC<{
   // Layout cetakan: latar blur bergerak ke satu arah, foto cetak ke arah lain (efek kedalaman).
   const drop = spring({frame, fps, config: {damping: 14, mass: 0.7}});
   const tilt = index % 2 === 0 ? -2.2 : 1.8;
+  const bgStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    transform: `scale(${1.35 + 0.1 * p}) translate(${-cam.x * 0.6}%, ${-cam.y * 0.6}%)`,
+    filter: 'blur(28px) brightness(0.35) sepia(0.4)',
+  };
+  const printStyle: React.CSSProperties = {
+    display: 'block',
+    maxHeight: L.print.maxHeight,
+    maxWidth: L.print.maxWidth,
+    filter: `sepia(0.2) contrast(1.05)`,
+  };
   return (
     <AbsoluteFill style={{overflow: 'hidden', opacity: enter, backgroundColor: '#14110d'}}>
-      <Img
-        src={staticFile(shot.photo)}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transform: `scale(${1.35 + 0.1 * p}) translate(${-cam.x * 0.6}%, ${-cam.y * 0.6}%)`,
-          filter: 'blur(28px) brightness(0.35) sepia(0.4)',
-        }}
-      />
+      {shot.video ? (
+        <OffthreadVideo src={staticFile(shot.video)} muted startFrom={startFrom} style={bgStyle} />
+      ) : (
+        <Img src={staticFile(shot.photo!)} style={bgStyle} />
+      )}
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center'}}>
         <div
           style={{
@@ -124,13 +135,14 @@ const ShotView: React.FC<{
           }}
         >
           <div style={{position: 'relative'}}>
-            {/* Ukuran mengikuti rasio asli foto (peta lebar tidak terpotong) */}
-            <Img
-              src={staticFile(shot.photo)}
-              style={{display: 'block', maxHeight: L.print.maxHeight, maxWidth: L.print.maxWidth, filter: `sepia(0.2) contrast(1.05)`}}
-            />
+            {/* Ukuran mengikuti rasio asli foto/video (peta lebar tidak terpotong) */}
+            {shot.video ? (
+              <OffthreadVideo src={staticFile(shot.video)} muted startFrom={startFrom} style={printStyle} />
+            ) : (
+              <Img src={staticFile(shot.photo!)} style={printStyle} />
+            )}
             <AnotasiLayer items={shot.anotasi} at={ANOTASI_AT} />
-            {shot.rute ? <RuteLayer rute={shot.rute} photo={shot.photo} at={ruteAt} /> : null}
+            {shot.rute && shot.photo ? <RuteLayer rute={shot.rute} photo={shot.photo} at={ruteAt} /> : null}
           </div>
         </div>
       </AbsoluteFill>
@@ -146,7 +158,7 @@ const ruteAt = (shot: Shot, words: TimedWord[], from: number) => {
   return at === null ? ANOTASI_AT + 10 : Math.max(0, at - from);
 };
 
-// Beberapa foto bergantian sepanjang scene, masing-masing dengan gerak kamera sendiri.
+// Beberapa foto/video bergantian sepanjang scene, masing-masing dengan gerak kamera sendiri.
 // Waktu pergantian mengikuti `di` (kata narasi) tiap shot; tanpa `di` dibagi rata.
 export const ShotStack: React.FC<{
   shots: Shot[];

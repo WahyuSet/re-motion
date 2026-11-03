@@ -29,14 +29,14 @@ Panduan langkah demi langkah (juga dipakai AI agent sebagai skill, ditulis supay
 |---|---|---|
 | 0. Siapkan | `npm run baru -- majapahit` | `src/data/majapahit.ts` (template), `.props.json`, `.sumber.md`, terdaftar sebagai `Majapahit` |
 | 1–2. Riset & naskah | edit `src/data/majapahit.ts` + `.sumber.md` | |
-| 3. Foto | `npm run foto -- "majapahit temple" --slug majapahit` | `public/photos/majapahit/` + `credits.json` + `_contact-sheet.jpg` |
-| 4. Shot & layout | `npm run grid-foto -- public/photos/majapahit/09-peta.jpg` | grid koordinat untuk anotasi |
+| 3. Foto & video | `npm run foto -- "majapahit temple" --slug majapahit` (`npm run video -- ...` untuk footage arsip) | `public/photos/majapahit/` (dan `public/videos/`) + `credits.json` + `_contact-sheet.jpg` |
+| 4. Shot & layout | `npm run grid-foto -- public/photos/majapahit/09-peta.jpg` | grid koordinat untuk anotasi/pin/rute |
 | 5. Props | `npm run props -- --file src/data/majapahit.props.json` | PNG transparan di `public/props/` |
 | 6. Naskah TTS | `npm run narasi -- majapahit` | `narasi/majapahit/naskah-full.txt` |
-| 7. Audio | `npm run potong-narasi -- majapahit "D:\path\tts.wav"` | `public/audio/majapahit/` + `kata.json` |
+| 7. Audio & musik | `npm run potong-narasi -- majapahit "D:\path\tts.wav"` (`npm run musik -- ...` untuk musik latar) | `public/audio/majapahit/` + `kata.json` |
 | 8. Cek | `npm run cek -- majapahit` lalu `npm run cek-frame -- majapahit` | daftar error + cara memperbaiki; `out/cek/majapahit-lembar.jpg` |
 | 8b. Storyboard | `npm run storyboard -- majapahit` | `out/storyboard/majapahit-N.jpg`: cuplikan tiap shot + kata yang diucapkan saat shot tampil. **Wajib disetujui sebelum render** |
-| 9. Render & paket | `npx remotion render Majapahit out/majapahit.mp4` lalu `npm run paket -- majapahit` | MP4 + `out/youtube/majapahit/`: thumbnail, judul, deskripsi (chapter + kredit), tags, subtitle SRT |
+| 9. Render & paket | `npm run render:final -- majapahit` (`render:preview` untuk cek cepat) lalu `npm run paket -- majapahit` | `out/majapahit.mp4` (-14 LUFS) + `out/majapahit-720p.mp4` (≤28 MB) + `out/youtube/majapahit/` |
 
 `npm run cek` memeriksa semua aturan (jumlah shot, judul ≤5 kata, angka di narasi, tanda bintang di scene fakta, file foto/audio ada, kredit, kecocokan `kata.json`) dan menulis cara memperbaikinya. Bagian **RITME** (hanya peringatan) memeriksa tempo visual: lama tiap shot (1,5–7 dtk, short 1–5 dtk), foto yang dipakai berulang, gerak kamera sama berturut-turut, shot `print` beruntun, dan jenis scene yang monoton, lalu menulis ringkasan jumlah shot, rata-rata durasi, dan foto unik. Durasi dihitung dari audio narasi dengan rumus yang sama dengan render.
 
@@ -73,6 +73,9 @@ Naskah short berisi `format: 'short'` → 1080×1920, 30–60 detik, 4–8 scene
 | `title` | Judul menghentak muncul saat namanya diucapkan + kicker + subjudul | Pembuka |
 | `photo` | Beberapa shot + subtitle sinkron + label lokasi | Inti cerita |
 | `fact`  | Angka besar menghitung saat angkanya diucapkan + label | Statistik, tahun |
+| `chapter` | Kartu bab ("BAB 2" + judul di atas foto buram-gelap, otomatis jadi chapter YouTube) | Pembatas bagian cerita |
+| `timeline` | Garis waktu 2–6 titik tahun naik, tiap titik menyala mengikuti kata `di` (short: garis tegak) | Kronologi tahun |
+| `kutipan` | Teks kutipan besar muncul per kata mengikuti narasi + sumber + bingkai foto | Kutipan tokoh/prasasti |
 | `outro` | Kalimat penutup + tombol ajakan follow di kalimat terakhir narasi | Penutup |
 
 Setiap scene punya `shots` (2–4 foto bergantian) dan `narasi` (teks yang dibacakan, sekaligus subtitle):
@@ -143,12 +146,19 @@ props: [
 
 Durasi tiap scene otomatis diperpanjang sampai narasinya selesai, dan subtitle menyala per kata sesuai `kata.json`.
 
-### Musik
+### Musik & Efek Suara (SFX)
 
-```ts
-music: 'audio/musik.mp3',
-musicVolume: 0.2,   // default 0.25, atau 0.12 kalau ada narasi
+Efek suara (`public/sfx/`: `whoosh`, `dum`, `tik`, `pop`, `swell`, dibuat dengan `node scripts/buat-sfx.mjs`) aktif otomatis di semua video (`sfx: false` di naskah untuk mematikan).
+
+Untuk musik latar bebas lisensi dari Wikimedia Commons:
+```bash
+npm run musik -- "javanese gamelan" --slug borobudur
 ```
+Lalu pasang di naskah:
+```ts
+music: 'music/borobudur/01-gamelan.mp3',
+```
+Volume musik otomatis meredup (ducking `0.22` → `0.07`) saat narator berbicara, fade-in/fade-out di ujung video, berulang (`loop`) jika lebih pendek dari video, dan kreditnya otomatis masuk ke `kredit.mjs` & `paket-youtube.mjs`.
 
 Kalau narasinya cuma satu file utuh, pakai `voiceover: 'audio/narasi.mp3'` dan atur `duration` tiap scene manual.
 
@@ -157,27 +167,33 @@ Kalau narasinya cuma satu file utuh, pakai `voiceover: 'audio/narasi.mp3'` dan a
 ```
 scripts/
   cari-foto.mjs       cari & unduh foto bebas lisensi + kredit
+  cari-video.mjs      cari & unduh footage video arsip bebas lisensi + poster + kredit
+  cari-musik.mjs      cari & unduh musik instrumental bebas lisensi + kredit
+  buat-sfx.mjs        sintesis efek suara WAV deterministik ke public/sfx/
+  render.mjs          render --preview (<30% waktu) dan --final (-14 LUFS + versi kirim 720p ≤28 MB)
   generate-props.mjs  generate props via Flow Bridge + hapus background
   kredit.mjs          daftar kredit untuk deskripsi YouTube
   paket-youtube.mjs   paket upload: thumbnail, judul, deskripsi + chapter, tags, subtitle SRT
   narasi.mjs          ekspor naskah narasi untuk TTS
-  potong-narasi.mjs   potong narasi utuh jadi audio per scene
+  potong-narasi.mjs   potong narasi utuh jadi audio per scene (dinormalisasi loudnorm)
   buat-video.mjs      siapkan video baru dari template + daftarkan
-  cek-naskah.mjs      validasi naskah terhadap semua aturan
+  cek-naskah.mjs      validasi naskah terhadap semua aturan + ritme visual
   cek-frame.mjs       lembar kontak frame kunci tiap scene
-  grid-foto.mjs       pratinjau foto ber-grid untuk koordinat anotasi
+  grid-foto.mjs       pratinjau foto ber-grid untuk koordinat anotasi/pin/rute
   storyboard.mjs      storyboard per scene untuk persetujuan sebelum render
   uji-regresi.mjs     uji regresi pixel: video lama tetap identik setelah engine diubah
-  lib/komposisi.mjs   buka komposisi + waktu tiap scene (dipakai cek-frame, storyboard, uji-regresi)
+  lib/komposisi.mjs   buka komposisi + waktu tiap scene (dipakai cek-frame, storyboard, render, uji-regresi)
+  lib/kredit.mjs      kredit foto, video, & musik yang dipakai naskah
 narasi/          naskah TTS hasil ekspor
 src/
   data/          naskah video (yang paling sering kamu edit)
-  scenes/        tampilan tiap jenis scene
-  components/    KenBurns, Prop, AnimatedText, Caption, FilmOverlay
-  HistoryVideo.tsx   menyusun scene + transisi + audio
+  scenes/        tampilan tiap jenis scene (Title, Photo, Fact, Chapter, Timeline, Kutipan, Outro)
+  components/    ShotStack, Layout, Subtitle, Prop, Sfx, Caption, FilmOverlay, Watermark
+  HistoryVideo.tsx   menyusun scene + transisi + audio + ducking musik
+  Thumbnail.tsx      thumbnail 1280×720 (short: cover 1080×1920)
   theme.ts       warna & font
 public/
-  photos/ props/ audio/
+  photos/ videos/ music/ sfx/ props/ audio/
 ```
 
 Catatan: props `.svg` di `public/props/` cuma contoh, ganti dengan hasil generate. `scripts/cari-foto.mjs` hanya mengambil foto domain publik, CC0, CC BY, dan CC BY-SA, dan kreditnya otomatis tampil di layar lewat `foto()`.

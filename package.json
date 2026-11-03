@@ -11,6 +11,8 @@
     "still": "remotion still Borobudur out/preview.png --frame=60",
     "typecheck": "tsc",
     "foto": "node scripts/cari-foto.mjs",
+    "video": "node scripts/cari-video.mjs",
+    "musik": "node scripts/cari-musik.mjs",
     "props": "node scripts/generate-props.mjs",
     "kredit": "node scripts/kredit.mjs",
     "paket": "node scripts/paket-youtube.mjs",
