@@ -1,7 +1,7 @@
 // Potong satu file narasi TTS utuh menjadi audio per scene.
 //
 // Pakai: node scripts/potong-narasi.mjs borobudur "D:\Downloads\narasi borobudur.mp3"
-// Hasil: public/audio/<slug>/01.wav, 02.wav, ... (satu per scene yang punya narasi)
+// Hasil: public/audio/<slug>/01.wav, 02.wav, ... (satu per scene yang punya narasi, dinormalisasi loudnorm)
 // Opsi:  --metode whisper|jeda   (default whisper, otomatis jatuh ke jeda kalau Whisper tidak tersedia)
 //        --model small           (model faster-whisper)
 //        --noise -35             (dB, batas dianggap hening)   --min-silence 0.25   (detik)
@@ -288,7 +288,22 @@ const main = async () => {
   console.log(`Scene  Mulai   Durasi  Cocok  ${heardText ? 'Terdengar di awal potongan' : 'Awal narasi'}`);
   for (const s of segments) {
     const no = String(s.i + 1).padStart(2, '0');
-    await ffmpeg(['-y', '-i', input, '-ss', s.start.toFixed(3), '-to', s.end.toFixed(3), '-c:a', 'pcm_s16le', path.join(outDir, `${no}.wav`)]);
+    await ffmpeg([
+      '-y',
+      '-i',
+      input,
+      '-ss',
+      s.start.toFixed(3),
+      '-to',
+      s.end.toFixed(3),
+      '-af',
+      'loudnorm=I=-18:TP=-2',
+      '-ar',
+      '44100',
+      '-c:a',
+      'pcm_s16le',
+      path.join(outDir, `${no}.wav`),
+    ]);
 
     // Bandingkan porsi durasi dengan porsi jumlah kata. Selisih besar = kemungkinan salah potong.
     const expected = s.narasi.split(/\s+/).length / totalWords;

@@ -1,14 +1,15 @@
 import React from 'react';
-import {AbsoluteFill, Audio, Sequence, staticFile} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, staticFile, useVideoConfig} from 'remotion';
 import {linearTiming, springTiming, TransitionSeries} from '@remotion/transitions';
 import {fade} from '@remotion/transitions/fade';
 import {slide} from '@remotion/transitions/slide';
 import {wipe} from '@remotion/transitions/wipe';
 import {CHANNEL} from './channel';
 import {FilmOverlay} from './components/FilmOverlay';
+import {Sfx, SfxContext} from './components/Sfx';
 import {Watermark} from './components/Watermark';
 import {dorong, kartu, whip, zoom} from './components/transitions';
-import {TRANSITION_FRAMES, transitionFrames} from './lib/kata';
+import {rentangSuara, TRANSITION_FRAMES, transitionFrames, volumeMusik} from './lib/kata';
 import {applyNarasi, NARASI_DELAY, narasiFile} from './lib/narasi';
 import {ChapterScene} from './scenes/ChapterScene';
 import {FactScene} from './scenes/FactScene';
@@ -116,12 +117,15 @@ const renderTransition = (type: TransitionType = 'dorong', key: string) => {
 };
 
 export const HistoryVideo: React.FC<{script: VideoScript}> = ({script}) => {
+  const {fps, durationInFrames} = useVideoConfig();
+  const suara = rentangSuara(script.scenes, fps);
   const children = script.scenes.flatMap((scene, i) => {
     const narasi = narasiFile(script, i);
     return [
       i === 0 ? null : renderTransition(scene.transition, `t-${i}`),
       <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={scene.duration}>
         {renderScene(scene)}
+        {i > 0 && scene.transition !== 'none' ? <Sfx name="whoosh" at={0} /> : null}
         {narasi ? (
           <Sequence from={NARASI_DELAY} layout="none">
             <Audio src={staticFile(narasi)} />
@@ -132,17 +136,20 @@ export const HistoryVideo: React.FC<{script: VideoScript}> = ({script}) => {
   });
 
   return (
-    <AbsoluteFill style={{backgroundColor: theme.bg}}>
-      <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
-      <FilmOverlay />
-      {script.watermark === false ? null : <Watermark text={script.watermark ?? CHANNEL.nama} />}
-      {script.music ? (
-        <Audio
-          src={staticFile(script.music)}
-          volume={script.musicVolume ?? (script.narasiAudio || script.voiceover ? 0.12 : 0.25)}
-        />
-      ) : null}
-      {script.voiceover ? <Audio src={staticFile(script.voiceover)} /> : null}
-    </AbsoluteFill>
+    <SfxContext.Provider value={script.sfx !== false}>
+      <AbsoluteFill style={{backgroundColor: theme.bg}}>
+        <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
+        <FilmOverlay />
+        {script.watermark === false ? null : <Watermark text={script.watermark ?? CHANNEL.nama} />}
+        {script.music ? (
+          <Audio
+            src={staticFile(script.music)}
+            loop
+            volume={(f) => volumeMusik(f, durationInFrames, fps, suara, script.musicVolume, Boolean(script.voiceover))}
+          />
+        ) : null}
+        {script.voiceover ? <Audio src={staticFile(script.voiceover)} /> : null}
+      </AbsoluteFill>
+    </SfxContext.Provider>
   );
 };

@@ -2,9 +2,10 @@ import React from 'react';
 import {AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {GhostYear, SceneLayers} from '../components/Layout';
 import {Props} from '../components/Prop';
+import {Sfx} from '../components/Sfx';
 import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
-import {highlightRange, parseWords, sceneWords} from '../lib/kata';
+import {parseWords, sceneWords, waktuBab} from '../lib/kata';
 import {useLayout} from '../lib/layout';
 import {theme} from '../theme';
 import type {ChapterScene as ChapterSceneData} from '../types';
@@ -20,7 +21,7 @@ export const ChapterScene: React.FC<{scene: ChapterSceneData}> = ({scene}) => {
   const L = useLayout();
   const C = L.chapter;
   const words = sceneWords(scene, fps);
-  const judulAt = highlightRange(words)?.start ?? 16;
+  const judulAt = waktuBab(words);
 
   const label = spring({frame: frame - 4, fps, config: {damping: 200}, durationInFrames: 22});
   const line = interpolate(frame, [8, 26], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
@@ -28,6 +29,7 @@ export const ChapterScene: React.FC<{scene: ChapterSceneData}> = ({scene}) => {
 
   return (
     <AbsoluteFill style={{backgroundColor: theme.bg}}>
+      <Sfx name="swell" at={judulAt} />
       <ShotStack shots={shotsOf(scene)} duration={scene.duration} words={words} dim={0.55} blur={10} />
       <AbsoluteFill style={{opacity: 0.8}}>
         <GhostYear year={scene.nomor} duration={scene.duration} />

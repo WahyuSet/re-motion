@@ -17,10 +17,11 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import {frameOfWord, parseWords, type TimedWord} from '../lib/kata';
+import {frameOfWord, parseWords, waktuStempel, type TimedWord} from '../lib/kata';
 import {useLayout} from '../lib/layout';
 import {theme} from '../theme';
 import type {Anotasi, Rute, Scene, Stempel as StempelData} from '../types';
+import {Sfx} from './Sfx';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
@@ -200,7 +201,14 @@ export const AnotasiLayer: React.FC<{items?: Anotasi[]; at: number}> = ({items, 
           );
         })}
       </svg>
-      {items.map((a, i) => (isPin(a) ? <Pin key={`pin-${i}`} x={a.x} y={a.y} at={at + i * 14} size={L.pin.size} frame={frame} fps={fps} /> : null))}
+      {items.map((a, i) =>
+        isPin(a) ? (
+          <React.Fragment key={`pin-${i}`}>
+            <Sfx name="pop" at={at + i * 14} />
+            <Pin x={a.x} y={a.y} at={at + i * 14} size={L.pin.size} frame={frame} fps={fps} />
+          </React.Fragment>
+        ) : null,
+      )}
       {items.map((a, i) => {
         if (!a.label) return null;
         const reveal = interpolate(frame - at - i * 14 - 16, [0, 8], [0, 100], clamp);
@@ -494,16 +502,18 @@ export const SceneLayers: React.FC<{
   stempelPalingCepat = 0,
 }) => {
   const L = useLayout();
-  const judulAt =(scene.judulDi ? frameOfWord(words, scene.judulDi) : null) ?? words[0]?.start ?? 10;
-  const stempelAt = Math.max(
-    stempelPalingCepat,
-    (scene.stempel?.di ? frameOfWord(words, scene.stempel.di) : null) ?? Math.round(scene.duration * 0.5),
-  );
+  const judulAt = (scene.judulDi ? frameOfWord(words, scene.judulDi) : null) ?? words[0]?.start ?? 10;
+  const stempelAt = waktuStempel(scene, words, stempelPalingCepat);
   return (
     <>
       {scene.tag ? <Tag text={scene.tag} at={4} /> : null}
       {scene.judul ? <Judul text={scene.judul} at={judulAt} top={scene.tag ? L.judul.top : L.judul.topNoTag} /> : null}
-      {scene.stempel ? <Stempel data={scene.stempel} at={stempelAt} /> : null}
+      {scene.stempel ? (
+        <>
+          <Sfx name="dum" at={stempelAt} />
+          <Stempel data={scene.stempel} at={stempelAt} />
+        </>
+      ) : null}
     </>
   );
 };

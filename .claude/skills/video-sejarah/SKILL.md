@@ -9,7 +9,7 @@ Ikuti langkah 0–9 **berurutan**. Setiap langkah punya perintah persis dan syar
 
 ## Aturan keras
 
-1. **Hanya edit file milik video itu**: `src/data/<slug>.ts`, `src/data/<slug>.props.json`, `src/data/<slug>.sumber.md`, dan isi `public/photos/<slug>/`, `public/audio/<slug>/`. Jangan ubah `src/components/`, `src/scenes/`, `src/lib/`, `src/Root.tsx`, atau `scripts/` kecuali user memintanya.
+1. **Hanya edit file milik video itu**: `src/data/<slug>.ts`, `src/data/<slug>.props.json`, `src/data/<slug>.sumber.md`, dan isi `public/photos/<slug>/`, `public/audio/<slug>/`, `public/music/<slug>/`. Jangan ubah `src/components/`, `src/scenes/`, `src/lib/`, `src/Root.tsx`, atau `scripts/` kecuali user memintanya.
 2. **Setelah setiap edit naskah**, jalankan `node scripts/cek-naskah.mjs <slug>` dan perbaiki semua `✗ ERROR` sesuai baris "Perbaiki:". Lanjut hanya kalau hasilnya `✓ LULUS`.
 3. **Fakta**: hanya tulis fakta yang ada di `src/data/<slug>.sumber.md` dengan sumbernya. Ragu → tulis "sekitar"/"diperkirakan", atau buang.
 4. **Foto**: hanya dari `scripts/cari-foto.mjs`, selalu lewat `...foto('nama.jpg')`. Jangan pakai gambar dari Google Images, Pinterest, situs berita, atau gambar AI sebagai "foto sejarah".
@@ -157,6 +157,14 @@ Lalu di `src/data/<slug>.ts`, aktifkan dua baris di atas `scenes`:
   narasiAudio: 'audio/<slug>',
   narasiExt: 'wav',
 ```
+
+**Musik latar & efek suara (SFX):**
+- Efek suara (`public/sfx/`: transisi, stempel, hitungan angka, judul besar, kartu bab, props, pin, titik timeline) **aktif otomatis** di semua video. Hanya kalau user meminta tanpa SFX, tambahkan `sfx: false` di atas `scenes`.
+- Musik latar (opsional): cari & unduh musik instrumental bebas lisensi dari Wikimedia Commons:
+  ```bash
+  node scripts/cari-musik.mjs "javanese gamelan" --slug <slug>
+  ```
+  Lalu pasang di `src/data/<slug>.ts` (di atas `scenes`): `music: 'music/<slug>/NN-nama.mp3'`. Musik otomatis meredup (ducking) saat narator bicara, berulang (`loop`) jika lebih pendek dari video, dan kreditnya otomatis masuk ke `kredit.mjs` & `paket-youtube.mjs`.
 
 **Selesai jika:** `cek-naskah` → `✓ LULUS` (cek ini juga memastikan file audio & `kata.json` cocok).
 
@@ -411,6 +419,8 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 | RITME: "N scene photo berturut-turut" | Ubah satu scene di tengahnya jadi `fact` (angka/tahun), `timeline` (urutan tahun), `kutipan`, atau sisipkan `chapter` di pergantian bagian cerita |
 | `cek-naskah`: "Tahun ... tidak naik dari titik sebelumnya" | Urutkan `titik` di scene `timeline` dari tahun paling tua ke paling muda (2–6 titik) |
 | `cek-naskah`: "rute hanya tampil di shot layout 'print'" | Tambahkan `layout: 'print'` pada shot peta yang memakai `rute` |
+| `cek-naskah`: "File public/sfx/... tidak ada" | Jalankan `node scripts/buat-sfx.mjs` |
+| `cek-naskah`: "Musik ... belum punya data kredit" | Unduh musik lewat `node scripts/cari-musik.mjs "<kata kunci>" --slug <slug>` supaya lisensi tercatat di `credits.json` |
 
 Alasan desain (kenapa 2–4 shot, kenapa transisi tertentu, ukuran teks, dsb.): `referensi/desain.md`.
 

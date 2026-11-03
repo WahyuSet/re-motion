@@ -3,16 +3,14 @@ import {AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConf
 import {AnimatedText} from '../components/AnimatedText';
 import {GhostYear, SceneLayers, UlangGrid} from '../components/Layout';
 import {Props} from '../components/Prop';
+import {Sfx} from '../components/Sfx';
 import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
-import {highlightRange, sceneWords} from '../lib/kata';
+import {sceneWords, waktuFakta} from '../lib/kata';
 import {shake} from '../lib/motion';
 import {useLayout} from '../lib/layout';
 import {theme} from '../theme';
 import type {FactScene as FactSceneData} from '../types';
-
-/** Jeda setelah angka selesai sebelum mengecil jadi badge di pojok (frame) */
-const SETTLE_AFTER = 28;
 
 // Angka besar yang menghitung tepat saat narator menyebut angkanya (kata *bertanda bintang*),
 // lalu mengecil jadi badge di kiri atas supaya foto & anotasi di belakangnya terlihat.
@@ -22,10 +20,7 @@ export const FactScene: React.FC<{scene: FactSceneData}> = ({scene}) => {
   const {fps} = useVideoConfig();
   const words = sceneWords(scene, fps);
 
-  const range = highlightRange(words);
-  const countStart = range?.start ?? 8;
-  const countEnd = Math.max(countStart + 20, range?.end ?? 55);
-  const settleAt = countEnd + SETTLE_AFTER;
+  const {countStart, countEnd, settleAt} = waktuFakta(words);
 
   // Tahun berputar seperti odometer dari 120 tahun sebelumnya, bukan dari 0
   const countFrom = scene.format === 'year' ? scene.value - 120 : 0;
@@ -48,6 +43,7 @@ export const FactScene: React.FC<{scene: FactSceneData}> = ({scene}) => {
 
   return (
     <AbsoluteFill style={{backgroundColor: theme.bg}}>
+      <Sfx name="tik" at={countEnd} />
       <AbsoluteFill style={{transform: `translate(${jolt.x}px, ${jolt.y}px) scale(1.03)`}}>
         <ShotStack shots={shotsOf(scene)} duration={scene.duration} words={words} />
         <AbsoluteFill style={{backgroundColor: `rgba(14,11,8,${dim})`}} />

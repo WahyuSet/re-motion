@@ -2,6 +2,7 @@ import React from 'react';
 import {AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {SceneLayers} from '../components/Layout';
 import {Props} from '../components/Prop';
+import {Sfx} from '../components/Sfx';
 import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
 import {momenUrut, sceneWords} from '../lib/kata';
@@ -54,6 +55,9 @@ export const TimelineScene: React.FC<{scene: TimelineSceneData}> = ({scene}) => 
 
   return (
     <AbsoluteFill style={{backgroundColor: theme.bg}}>
+      {muncul.map((t, k) => (
+        <Sfx key={`sfx-${k}`} name="pop" at={t} />
+      ))}
       <ShotStack shots={shotsOf(scene)} duration={scene.duration} words={words} dim={0.62} blur={6} />
       <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(14,11,8,0.55) 0%, rgba(14,11,8,0.2) 45%, rgba(14,11,8,0.75) 100%)'}} />
 

@@ -1,5 +1,5 @@
-// Kredit foto yang benar-benar dipakai naskah (dipakai kredit.mjs & paket-youtube.mjs).
-// Foto boleh berasal dari folder video lain (short turunan memakai foto video panjangnya).
+// Kredit foto & musik yang benar-benar dipakai naskah (dipakai kredit.mjs & paket-youtube.mjs).
+// Foto/musik boleh berasal dari folder video lain (short turunan memakai aset video panjangnya).
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -20,8 +20,8 @@ export const fotoDipakai = (script) => {
 export const adaProps = (script) => script.scenes.some((s) => s.props?.length);
 
 /**
- * Daftar kredit: {entries: [{title, author, license, sourceUrl}], missing: [path foto tanpa data], baris: [teks siap tempel]}
- */
+* Daftar kredit: {entries: [{title, author, license, sourceUrl}], musik: {...}|null, missing: [path tanpa data], baris: [teks siap tempel]}
+*/
 export const kreditFoto = async (script) => {
   const cache = new Map();
   const creditsOf = async (folder) => {
@@ -40,7 +40,17 @@ export const kreditFoto = async (script) => {
     else missing.push(photo);
   }
 
+  let musik = null;
+  if (script.music) {
+    const c = (await creditsOf(path.posix.dirname(script.music)))[path.posix.basename(script.music)];
+    if (c) musik = c;
+    else missing.push(script.music);
+  }
+
   const baris = ['Sumber foto:', ...entries.map((c) => `- ${c.title} oleh ${c.author} (${c.license}) ${c.sourceUrl}`)];
+  if (musik) {
+    baris.push('', 'Musik latar:', `- ${musik.title} oleh ${musik.author} (${musik.license}) ${musik.sourceUrl}`);
+  }
   if (adaProps(script)) baris.push('', 'Ilustrasi props dibuat dengan AI.');
-  return {entries, missing, baris};
+  return {entries, musik, missing, baris};
 };

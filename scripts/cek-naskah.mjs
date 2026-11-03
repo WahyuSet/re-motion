@@ -66,6 +66,16 @@ for (const t of ['zoom', 'whip']) {
 const stempelCount = scenes.filter((s) => s.stempel).length;
 if (stempelCount > 2) warn('stempel', `Stempel dipakai ${stempelCount} kali.`, 'Maksimal 2 per video, hanya untuk momen paling penting.');
 
+// --- SFX ---
+if (script.sfx !== false) {
+  for (const sfxName of ['whoosh', 'dum', 'tik', 'pop', 'swell']) {
+    const sfxPath = `sfx/${sfxName}.wav`;
+    if (!(await exists(sfxPath))) {
+      err('sfx', `File public/${sfxPath} tidak ada.`, 'Jalankan node scripts/buat-sfx.mjs untuk membuat file efek suara.');
+    }
+  }
+}
+
 // Area aman short dalam persen layar 1080×1920 (lihat src/lib/safe.ts)
 const {SAFE_SHORT, FORMAT_SIZE} = await importTs('src/lib/safe.ts');
 const SW = FORMAT_SIZE.short.width;
@@ -299,6 +309,27 @@ const audioSeconds = async (file) => {
     input.dispose();
   }
 };
+
+// --- Musik latar ---
+if (script.music) {
+  if (!(await exists(script.music))) {
+    err('music', `File public/${script.music} tidak ada.`, `Unduh musik dengan node scripts/cari-musik.mjs "<kata kunci>" --slug ${slug}, atau perbaiki path music.`);
+  } else {
+    const durasiMusik = await audioSeconds(script.music);
+    if (durasiMusik === null) {
+      err('music', `File musik public/${script.music} tidak bisa dibaca durasinya.`, 'Pastikan file musik valid (MP3/WAV/OGG).');
+    }
+    const creditsFile = path.resolve('public', path.posix.dirname(script.music), 'credits.json');
+    const credits = JSON.parse(await fs.readFile(creditsFile, 'utf8').catch(() => '{}'));
+    if (!credits[path.posix.basename(script.music)]) {
+      warn(
+        'music',
+        `Musik ${script.music} belum punya data kredit di credits.json.`,
+        `Unduh musik lewat node scripts/cari-musik.mjs "<kata kunci>" --slug ${slug} supaya lisensi & kredit ikut masuk deskripsi YouTube.`,
+      );
+    }
+  }
+}
 
 // Semua shot berurutan sepanjang video
 const urutan = [];

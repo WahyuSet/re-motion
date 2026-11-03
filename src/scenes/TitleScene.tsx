@@ -3,9 +3,10 @@ import {AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig} from
 import {AnimatedText} from '../components/AnimatedText';
 import {SceneLayers} from '../components/Layout';
 import {Props} from '../components/Prop';
+import {Sfx} from '../components/Sfx';
 import {ShotStack, shotsOf} from '../components/ShotStack';
 import {Subtitle} from '../components/Subtitle';
-import {frameOfWord, highlightRange, sceneWords} from '../lib/kata';
+import {sceneWords, waktuJudulBesar} from '../lib/kata';
 import {shake} from '../lib/motion';
 import {fitTitleSize, useLayout} from '../lib/layout';
 import {theme} from '../theme';
@@ -20,7 +21,7 @@ export const TitleScene: React.FC<{scene: TitleSceneData}> = ({scene}) => {
 
   // Judul menghentak muncul tepat saat namanya diucapkan narator: kata *bertanda bintang* pertama,
   // atau kata pertama judul kalau tidak ada bintang.
-  const titleAt = highlightRange(words)?.start ?? frameOfWord(words, scene.title.split(' ')[0]) ?? 20;
+  const titleAt = waktuJudulBesar(scene.title, words);
   const kicker = spring({frame: frame - (titleAt - 12), fps, config: {damping: 200}});
   const lineWidth = interpolate(kicker, [0, 1], [0, 120]);
   const flash = interpolate(frame - titleAt, [0, 2, 10], [0, 0.35, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -29,6 +30,7 @@ export const TitleScene: React.FC<{scene: TitleSceneData}> = ({scene}) => {
 
   return (
     <AbsoluteFill style={{backgroundColor: theme.bg}}>
+      <Sfx name="swell" at={titleAt} />
       <AbsoluteFill style={{transform: `translate(${jolt.x}px, ${jolt.y}px) scale(1.03)`}}>
         <ShotStack shots={shotsOf(scene)} duration={scene.duration} words={words} />
         <AbsoluteFill style={{backgroundColor: `rgba(20,17,13,${dim})`}} />

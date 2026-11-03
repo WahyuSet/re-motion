@@ -84,8 +84,8 @@ try {
   }
 
   // ---- Teks ----
-  const {entries, missing, baris: kredit} = await kreditFoto(script);
-  if (missing.length) peringatan.push(`${missing.length} foto tanpa data kredit: ${missing.join(', ')}`);
+  const {entries, musik, missing, baris: kredit} = await kreditFoto(script);
+  if (missing.length) peringatan.push(`${missing.length} foto/musik tanpa data kredit: ${missing.join(', ')}`);
   const tags = script.youtube.tags ?? [];
   const hashtag = tags
     .slice(0, 3)
@@ -112,7 +112,11 @@ try {
   await fs.writeFile(path.join(outDir, 'judul.txt'), judul);
   await fs.writeFile(path.join(outDir, 'deskripsi.txt'), deskripsi);
   await fs.writeFile(path.join(outDir, 'tags.txt'), tagsTxt);
-  hasil.push(`judul.txt (${judul.length} huruf)`, `deskripsi.txt (${chapter.length} chapter, ${entries.length} kredit foto)`, `tags.txt (${tags.length} tag)`);
+  hasil.push(
+    `judul.txt (${judul.length} huruf)`,
+    `deskripsi.txt (${chapter.length} chapter, ${entries.length} kredit foto${musik ? ', 1 kredit musik' : ''})`,
+    `tags.txt (${tags.length} tag)`,
+  );
 
   // ---- Subtitle: teks naskah (bukan transkrip), dipotong per ≤6 kata / ≤42 huruf, pecah di akhir kalimat ----
   const kataJsonAda = script.narasiAudio

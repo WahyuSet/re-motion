@@ -204,9 +204,11 @@ export type VideoScript = {
   /** Teks watermark kanan atas. Default nama channel di src/channel.ts; false = tanpa watermark */
   watermark?: string | false;
   scenes: Scene[];
-  /** Musik latar di public/, contoh 'audio/musik.mp3' */
+  /** Musik latar di public/, contoh 'music/borobudur/01-gamelan.mp3' */
   music?: string;
   musicVolume?: number;
+  /** Efek suara otomatis (transisi, stempel, angka, judul, props, timeline). Default true; false = matikan */
+  sfx?: boolean;
   /** Rekaman narasi satu file utuh di public/ (kalau tidak dipotong per scene) */
   voiceover?: string;
   /**

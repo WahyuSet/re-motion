@@ -13,6 +13,12 @@ export const transitionFrames = (type: string | undefined) => (type === 'none' ?
 export const SHOT_OVERLAP = 8;
 /** Durasi minimal satu shot (frame) */
 const MIN_SHOT = 24;
+/** Jeda setelah angka fakta selesai menghitung sebelum mengecil jadi badge di pojok (frame) */
+export const SETTLE_AFTER = 28;
+/** Lama perubahan volume musik (ducking) saat narasi mulai/berhenti (frame) */
+export const DUCK_RAMP = 10;
+export const MUSIC_VOL_HENING = 0.22;
+export const MUSIC_VOL_BICARA = 0.07;
 
 type Word = {word: string; highlight: boolean};
 
@@ -177,4 +183,88 @@ export const momenUrut = (items: {di?: string}[], words: TimedWord[], duration: 
     i = j;
   }
   return out.slice(1, n + 1);
+};
+
+// ---- Timing animasi & SFX (dipakai komponen scene dan pengujian audio) ----
+
+/** Frame mulai & selesai hitungan angka di FactScene */
+export const waktuFakta = (words: TimedWord[]) => {
+  const range = highlightRange(words);
+  const countStart = range?.start ?? 8;
+  const countEnd = Math.max(countStart + 20, range?.end ?? 55);
+  return {countStart, countEnd, settleAt: countEnd + SETTLE_AFTER};
+};
+
+/** Frame munculnya judul besar di TitleScene */
+export const waktuJudulBesar = (title: string, words: TimedWord[]) =>
+  highlightRange(words)?.start ?? frameOfWord(words, title.split(' ')[0]) ?? 20;
+
+/** Frame munculnya judul bab di ChapterScene */
+export const waktuBab = (words: TimedWord[]) => highlightRange(words)?.start ?? 16;
+
+/** Frame munculnya satu item Props */
+export const waktuProp = (item: {di?: string; delay?: number}, words: TimedWord[]) =>
+  (item.di ? frameOfWord(words, item.di) : null) ?? item.delay ?? 0;
+
+/** Frame menghentaknya Stempel di SceneLayers */
+export const waktuStempel = (
+  scene: {stempel?: {di?: string}; duration: number},
+  words: TimedWord[],
+  stempelPalingCepat = 0,
+) =>
+  Math.max(
+    stempelPalingCepat,
+    (scene.stempel?.di ? frameOfWord(words, scene.stempel.di) : null) ?? Math.round(scene.duration * 0.5),
+  );
+
+/**
+ * Daftar rentang frame [mulai, selesai] saat narasi sedang diucapkan di sepanjang video.
+ * Kata-kata yang jedanya ≤ 15 frame (0,5 dtk) digabung supaya musik tidak naik-turun di tengah kalimat.
+ */
+export const rentangSuara = (scenes: Scene[], fps: number): [number, number][] => {
+  const raw: [number, number][] = [];
+  let start = 0;
+  scenes.forEach((scene, i) => {
+    if (i > 0) start -= transitionFrames(scene.transition);
+    for (const w of sceneWords(scene, fps)) {
+      if (w.end > w.start) raw.push([start + w.start, start + w.end]);
+    }
+    start += scene.duration;
+  });
+  const merged: [number, number][] = [];
+  for (const [a, b] of raw) {
+    const last = merged[merged.length - 1];
+    if (last && a - last[1] <= 15) last[1] = Math.max(last[1], b);
+    else merged.push([a, b]);
+  }
+  return merged;
+};
+
+/**
+ * Kurva volume musik latar pada frame `f`:
+ * - ±0,22 saat hening, turun ke ±0,07 saat ada kata narasi (ramp 10 frame)
+ * - fade-in 1 detik di awal video, fade-out 2 detik di akhir video
+ */
+export const volumeMusik = (
+  f: number,
+  totalFrames: number,
+  fps: number,
+  suara: [number, number][],
+  baseHening = MUSIC_VOL_HENING,
+  adaVoiceoverUtuh = false,
+) => {
+  const baseBicara = baseHening * (MUSIC_VOL_BICARA / MUSIC_VOL_HENING);
+  let duck = adaVoiceoverUtuh && !suara.length ? 1 : 0;
+  for (const [a, b] of suara) {
+    if (f >= a && f <= b) {
+      duck = 1;
+      break;
+    }
+    if (f >= a - DUCK_RAMP && f < a) duck = Math.max(duck, (f - (a - DUCK_RAMP)) / DUCK_RAMP);
+    else if (f > b && f <= b + DUCK_RAMP) duck = Math.max(duck, (b + DUCK_RAMP - f) / DUCK_RAMP);
+  }
+  const vol = baseHening - (baseHening - baseBicara) * duck;
+  const fadeIn = Math.min(1, Math.max(0, f / fps));
+  const fadeOut = Math.min(1, Math.max(0, (totalFrames - f) / (2 * fps)));
+  return vol * fadeIn * fadeOut;
 };

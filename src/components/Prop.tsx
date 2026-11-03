@@ -1,7 +1,8 @@
 import React from 'react';
 import {Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import {frameOfWord, type TimedWord} from '../lib/kata';
+import {waktuProp, type TimedWord} from '../lib/kata';
 import type {PropItem} from '../types';
+import {Sfx} from './Sfx';
 
 // Props visual (gambar hasil generate, idealnya PNG transparan) yang muncul dengan animasi.
 export const Prop: React.FC<{item: PropItem}> = ({item}) => {
@@ -70,8 +71,13 @@ export const Props: React.FC<{items?: PropItem[]; words?: TimedWord[]}> = ({item
   return (
     <>
       {items.map((item, i) => {
-        const at = item.di ? frameOfWord(words, item.di) : null;
-        return <Prop key={i} item={at === null ? item : {...item, delay: at}} />;
+        const at = waktuProp(item, words);
+        return (
+          <React.Fragment key={i}>
+            <Sfx name="pop" at={at} />
+            <Prop item={{...item, delay: at}} />
+          </React.Fragment>
+        );
       })}
     </>
   );
