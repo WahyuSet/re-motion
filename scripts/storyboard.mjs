@@ -8,10 +8,8 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {bundle} from '@remotion/bundler';
-import {openBrowser, renderStill, selectComposition} from '@remotion/renderer';
 import sharp from 'sharp';
-import {importTs} from './lib/load-script.mjs';
+import {bukaKomposisi, idDari, modulKata, tutup, waktuScene} from './lib/komposisi.mjs';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -19,14 +17,11 @@ if (!slug) {
   process.exit(1);
 }
 
-const id = slug
-  .split('-')
-  .map((w) => w[0].toUpperCase() + w.slice(1))
-  .join('');
+const id = idDari(slug);
 const FPS = 30;
 const SCENES_PER_PAGE = 4;
 
-const {sceneWords, shotStarts, SHOT_OVERLAP, transitionFrames} = await importTs('src/lib/kata.ts');
+const {SHOT_OVERLAP} = await modulKata();
 
 const outDir = path.resolve('out/storyboard');
 const frameDir = path.join(outDir, 'frame');
@@ -59,23 +54,13 @@ const wrap = (text, maxChars, maxLines) => {
   return lines;
 };
 
-console.log('Bundle project ...');
-const serveUrl = await bundle({entryPoint: path.resolve('src/index.ts')});
-const browser = await openBrowser('chrome');
-
 const board = [];
 let vertical = false;
 try {
-  const composition = await selectComposition({serveUrl, id, inputProps: {}, puppeteerInstance: browser});
+  const {composition, renderFrame} = await bukaKomposisi(slug);
   vertical = composition.height > composition.width;
-  const scenes = composition.props.script.scenes;
 
-  let sceneStart = 0;
-  for (const [i, scene] of scenes.entries()) {
-    if (i > 0) sceneStart -= transitionFrames(scene.transition);
-    const words = sceneWords(scene, FPS);
-    const shots = scene.shots ?? (scene.photo ? [{photo: scene.photo, credit: scene.credit}] : []);
-    const starts = shotStarts(shots, words, scene.duration);
+  for (const {index, start: sceneStart, end, scene, shots, words, shotStarts: starts} of await waktuScene(composition)) {
     const shotInfo = shots.map((shot, k) => {
       const from = starts[k];
       const to = k === shots.length - 1 ? scene.duration : starts[k + 1];
@@ -84,8 +69,7 @@ try {
       const frame = sceneStart + from + Math.round(Math.max(SHOT_OVERLAP + 8, (to - from) * 0.55));
       return {k: k + 1, shot, from: sceneStart + from, to: sceneStart + to, frame, spoken};
     });
-    board.push({n: i + 1, scene, start: sceneStart, end: sceneStart + scene.duration, shots: shotInfo});
-    sceneStart += scene.duration;
+    board.push({n: index + 1, scene, start: sceneStart, end, shots: shotInfo});
   }
 
   const total = board.reduce((n, b) => n + b.shots.length, 0);
@@ -93,11 +77,11 @@ try {
   for (const b of board) {
     for (const s of b.shots) {
       s.file = path.join(frameDir, `${slug}-${String(b.n).padStart(2, '0')}-${s.k}.png`);
-      await renderStill({composition, serveUrl, output: s.file, frame: s.frame, inputProps: {}, puppeteerInstance: browser});
+      await renderFrame(s.frame, s.file);
     }
   }
 } finally {
-  await browser.close({silent: true});
+  await tutup();
 }
 
 // ---- Halaman gambar ----

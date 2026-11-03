@@ -10,6 +10,17 @@ npm run render     # render jadi out/borobudur.mp4
 npm run still      # render 1 frame ke out/preview.png
 ```
 
+### Uji regresi (wajib saat mengubah engine)
+
+Sebelum mengubah `src/components/`, `src/scenes/`, `src/lib/`, atau `HistoryVideo.tsx`, simpan frame acuan video yang sudah ada, lalu bandingkan setelah perubahan:
+
+```bash
+npm run uji -- --simpan   # SEBELUM mengubah engine: 5 frame acuan per video ke out/baseline/
+npm run uji               # SETELAH mengubah: render ulang & bandingkan pixel, harus "0 pixel beda"
+```
+
+Yang diuji: semua video di `src/data/daftar.ts` yang naskahnya sudah di-commit (video yang masih dikerjakan otomatis dilewati), atau sebut id/slug-nya: `npm run uji -- Borobudur`. Kalau ada beda, gambar penandanya (merah = pixel beda) ada di `out/uji/*-beda.png`.
+
 ## Alur kerja bikin video baru
 
 Panduan langkah demi langkah (juga dipakai AI agent sebagai skill, ditulis supaya bisa diikuti model ringan): [.claude/skills/video-sejarah/SKILL.md](.claude/skills/video-sejarah/SKILL.md). Alasan desain: [referensi/desain.md](.claude/skills/video-sejarah/referensi/desain.md).
@@ -142,6 +153,8 @@ scripts/
   cek-frame.mjs       lembar kontak frame kunci tiap scene
   grid-foto.mjs       pratinjau foto ber-grid untuk koordinat anotasi
   storyboard.mjs      storyboard per scene untuk persetujuan sebelum render
+  uji-regresi.mjs     uji regresi pixel: video lama tetap identik setelah engine diubah
+  lib/komposisi.mjs   buka komposisi + waktu tiap scene (dipakai cek-frame, storyboard, uji-regresi)
 narasi/          naskah TTS hasil ekspor
 src/
   data/          naskah video (yang paling sering kamu edit)

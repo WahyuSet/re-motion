@@ -7,9 +7,8 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {bundle} from '@remotion/bundler';
-import {openBrowser, renderStill, selectComposition} from '@remotion/renderer';
 import sharp from 'sharp';
+import {bukaKomposisi, tutup, waktuScene} from './lib/komposisi.mjs';
 import {importTs} from './lib/load-script.mjs';
 
 const slug = process.argv[2];
@@ -18,40 +17,24 @@ if (!slug) {
   process.exit(1);
 }
 
-const id = slug
-  .split('-')
-  .map((w) => w[0].toUpperCase() + w.slice(1))
-  .join('');
-
-const {transitionFrames} = await importTs('src/lib/kata.ts');
 const {SAFE_SHORT} = await importTs('src/lib/safe.ts');
 const POINTS = [0.35, 0.85];
 
 const outDir = path.resolve('out/cek');
 await fs.mkdir(outDir, {recursive: true});
 
-console.log('Bundle project ...');
-const serveUrl = await bundle({entryPoint: path.resolve('src/index.ts')});
-const browser = await openBrowser('chrome');
-
 try {
-  const composition = await selectComposition({serveUrl, id, inputProps: {}, puppeteerInstance: browser});
-  const scenes = composition.props.script.scenes;
+  const {composition, renderFrame} = await bukaKomposisi(slug);
+  const waktu = await waktuScene(composition);
 
-  let start = 0;
-  const shots = [];
-  for (const [i, scene] of scenes.entries()) {
-    if (i > 0) start -= transitionFrames(scene.transition);
-    for (const p of POINTS) {
-      shots.push({scene: i + 1, type: scene.type, percent: Math.round(p * 100), frame: start + Math.round(scene.duration * p)});
-    }
-    start += scene.duration;
-  }
+  const shots = waktu.flatMap(({index, start, scene}) =>
+    POINTS.map((p) => ({scene: index + 1, type: scene.type, percent: Math.round(p * 100), frame: start + Math.round(scene.duration * p)})),
+  );
 
-  console.log(`${scenes.length} scene, ${composition.durationInFrames} frame. Render ${shots.length} frame ...`);
+  console.log(`${waktu.length} scene, ${composition.durationInFrames} frame. Render ${shots.length} frame ...`);
   for (const s of shots) {
     s.file = path.join(outDir, `${slug}-${String(s.scene).padStart(2, '0')}-${s.percent}.png`);
-    await renderStill({composition, serveUrl, output: s.file, frame: s.frame, inputProps: {}, puppeteerInstance: browser});
+    await renderFrame(s.frame, s.file);
   }
 
   // Ukuran kotak mengikuti orientasi video. Video short: garis merah = area yang tertutup tombol/caption aplikasi.
@@ -87,5 +70,5 @@ try {
   console.log('Cek tiap kotak: subtitle terbaca? tag/judul tidak tertutup? anotasi menunjuk objek yang benar? tidak ada layar hitam/kosong?');
   if (vertical) console.log('Video short: tidak boleh ada teks/objek penting di area merah (tertutup tombol & caption aplikasi).');
 } finally {
-  await browser.close({silent: true});
+  await tutup();
 }

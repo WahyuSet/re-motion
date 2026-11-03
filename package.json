@@ -17,7 +17,8 @@
     "cek": "node scripts/cek-naskah.mjs",
     "cek-frame": "node scripts/cek-frame.mjs",
     "grid-foto": "node scripts/grid-foto.mjs",
-    "storyboard": "node scripts/storyboard.mjs"
+    "storyboard": "node scripts/storyboard.mjs",
+    "uji": "node scripts/uji-regresi.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.539",
