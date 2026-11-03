@@ -35,7 +35,7 @@ const main = async () => {
     '',
     'Cara pakai:',
     `- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.`,
-    '- Setiap paragraf = satu scene. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:',
+    '- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:',
     '  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.',
     '  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.',
     '- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.',
@@ -51,8 +51,12 @@ const main = async () => {
   for (const [i, scene] of script.scenes.entries()) {
     const no = String(i + 1).padStart(2, '0');
     if (!scene.narasi) {
-      console.log(`  ⚠ scene ${no} (${scene.type}) tidak punya narasi. Mode audio utuh butuh narasi di SETIAP scene.`);
-      problems++;
+      if (scene.type === 'chapter') {
+        lines.push(`[${no}] (chapter — tanpa narasi, dilewati TTS)`, '');
+      } else {
+        console.log(`  ⚠ scene ${no} (${scene.type}) tidak punya narasi. Mode audio utuh butuh narasi di SETIAP scene.`);
+        problems++;
+      }
       continue;
     }
     // Tanda *bintang* hanya untuk penanda visual di video, tidak ikut dibacakan.

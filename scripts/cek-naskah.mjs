@@ -95,10 +95,12 @@ for (const [i, scene] of scenes.entries()) {
 
   // --- Narasi ---
   if (!narasi.trim()) {
-    err(where, 'Tidak punya narasi.', 'Tulis narasi 15–25 kata. Setiap scene wajib punya narasi (1 paragraf audio = 1 scene).');
+    if (scene.type !== 'chapter') {
+      err(where, 'Tidak punya narasi.', 'Tulis narasi 15–25 kata. Setiap scene wajib punya narasi (kecuali kartu chapter).');
+    }
   } else {
     const n = wordsOf(narasi).length;
-    if (n < R.narasiMin || n > R.narasiMax) warn(where, `Narasi ${n} kata.`, `Idealnya ${R.narasiIdeal}.`);
+    if ((scene.type !== 'chapter' && n < R.narasiMin) || n > R.narasiMax) warn(where, `Narasi ${n} kata.`, `Idealnya ${R.narasiIdeal}.`);
     if (/\d/.test(plain(narasi))) err(where, 'Narasi berisi angka (digit).', 'Tulis angka dengan huruf, contoh 1814 -> "seribu delapan ratus empat belas".');
     if (/\b(dll|dsb|yg|thn|abd|M)\./.test(narasi)) err(where, 'Narasi berisi singkatan.', 'Tulis lengkap, contoh "M." -> "Masehi".');
     if (/[()]/.test(narasi)) warn(where, 'Narasi berisi tanda kurung.', 'TTS membacanya janggal; ubah jadi kalimat biasa.');
@@ -109,13 +111,13 @@ for (const [i, scene] of scenes.entries()) {
   const shots = scene.shots ?? (scene.photo ? [{photo: scene.photo, credit: scene.credit}] : []);
   if (shots.length === 0) {
     err(where, 'Tidak ada foto (shots kosong).', "Isi 2–4 shot dengan {...foto('NN-nama.jpg')} dari folder foto yang dipakai fotoDari(...) di atas naskah.");
-  } else if (shots.length === 1) {
+  } else if (shots.length === 1 && !['chapter', 'timeline', 'outro'].includes(scene.type) && !shots[0].rute) {
     warn(where, 'Hanya 1 shot, akan terlihat seperti slideshow.', 'Tambah jadi 2–4 shot (1 foto per ±3 detik narasi).');
   } else if (shots.length > 5) {
     warn(where, `${shots.length} shot, terlalu cepat berganti.`, 'Maksimal 4 shot per scene.');
   }
   let lastDiIndex = 0;
-  if (shots.length > 1 && !shots.slice(1).some((x) => x.di)) tanpaDi.push(i + 1);
+  if (narasi && shots.length > 1 && !shots.slice(1).some((x) => x.di)) tanpaDi.push(i + 1);
   for (const [k, shot] of shots.entries()) {
     const sw = `${where}, shot ${k + 1}`;
     if (!shot.photo) {
@@ -136,6 +138,9 @@ for (const [i, scene] of scenes.entries()) {
     }
     if (!shot.credit) err(sw, 'Shot tanpa kredit foto.', "Selalu pakai ...foto('nama.jpg'), jangan tulis path foto manual.");
     for (const a of shot.anotasi ?? []) {
+      if (a.bentuk && a.bentuk !== 'lingkaran' && a.bentuk !== 'pin') {
+        err(sw, `bentuk anotasi "${a.bentuk}" tidak dikenal.`, "Pakai 'lingkaran' (default) atau 'pin'.");
+      }
       if ([a.x, a.y, a.w ?? 10, a.h ?? 10].some((v) => typeof v !== 'number' || v < 0 || v > 100)) {
         err(sw, 'Koordinat anotasi di luar 0–100.', 'x, y, w, h dalam persen gambar (0–100). Cari dengan node scripts/grid-foto.mjs.');
       }
@@ -150,16 +155,34 @@ for (const [i, scene] of scenes.entries()) {
       }
       if (a.label && a.label.length > 24) warn(sw, `Label anotasi "${a.label}" terlalu panjang.`, 'Maksimal ±24 huruf.');
     }
+    if (shot.rute) {
+      const r = shot.rute;
+      if ((shot.layout ?? 'full') !== 'print') {
+        err(sw, "rute hanya tampil di shot layout 'print'.", "Tambahkan layout: 'print' pada shot peta ini.");
+      }
+      const titik = r.titik ?? [];
+      if (titik.length < 2 || titik.length > 8) {
+        err(sw, `rute.titik berisi ${titik.length} titik.`, 'Isi 2–8 titik dari awal sampai ujung rute (persen gambar, cari dengan grid-foto.mjs).');
+      }
+      if (titik.some((p) => [p?.x, p?.y].some((v) => typeof v !== 'number' || v < 0 || v > 100))) {
+        err(sw, 'Koordinat rute.titik di luar 0–100.', 'x dan y tiap titik dalam persen gambar (0–100). Cari dengan node scripts/grid-foto.mjs.');
+      }
+      if (r.di && !wordsOf(narasi).some((w) => normalize(w) === normalize(r.di.split(' ')[0]))) {
+        err(sw, `rute.di "${r.di}" tidak ada di narasi.`, 'Isi rute.di dengan satu kata dari narasi scene ini.');
+      }
+      if (r.label && r.label.length > 24) warn(sw, `Label rute "${r.label}" terlalu panjang.`, 'Maksimal ±24 huruf.');
+    }
     if (shot.tag && shot.tag.length > R.tagMax) warn(sw, `Tag "${shot.tag}" terlalu panjang.`, `Maksimal ±${R.tagMax} huruf.`);
   }
 
   // --- Lapisan layout ---
   if (scene.tag && scene.tag.length > R.tagMax) warn(where, `Tag "${scene.tag}" terlalu panjang.`, `Maksimal ±${R.tagMax} huruf.`);
   if (scene.judul) {
-    const n = wordsOf(plain(scene.judul)).length;
+    const n = wordsOf(plain(scene.judul)).filter(Boolean).length;
     if (n > R.judulMax) err(where, `Judul ${n} kata.`, `Judul maksimal ${R.judulMax} kata. Ringkas, sisanya biar dibawa narasi/subtitle.`);
-    if (!scene.judul.includes('*')) warn(where, 'Judul tanpa *stabilo*.', 'Tandai 1 frasa kunci: "Dibangun *abad ke-9*".');
-    if (scene.type !== 'photo') warn(where, 'Judul dipakai di luar scene photo.', 'Judul hanya untuk scene photo (fact sudah ada angka, title sudah ada judul besar).');
+    if ((scene.judul.match(/\*/g) ?? []).length % 2 !== 0) err(where, 'Jumlah tanda * di judul ganjil.', 'Setiap *bintang* harus berpasangan.');
+    else if (!scene.judul.includes('*')) warn(where, 'Judul tanpa *stabilo*.', 'Tandai 1 frasa kunci: "Dibangun *abad ke-9*".');
+    if (scene.type !== 'photo' && scene.type !== 'chapter') warn(where, 'Judul dipakai di luar scene photo/chapter.', 'Judul hanya untuk scene photo atau chapter.');
   }
   if (scene.judulDi && !wordsOf(narasi).some((w) => normalize(w) === normalize(scene.judulDi))) {
     err(where, `judulDi "${scene.judulDi}" tidak ada di narasi.`, 'Isi judulDi dengan satu kata yang persis ada di narasi scene ini.');
@@ -167,8 +190,8 @@ for (const [i, scene] of scenes.entries()) {
   if (scene.stempel?.di && !wordsOf(narasi).some((w) => normalize(w) === normalize(scene.stempel.di))) {
     err(where, `stempel.di "${scene.stempel.di}" tidak ada di narasi.`, 'Isi stempel.di dengan satu kata yang persis ada di narasi scene ini.');
   }
-  if (scene.type === 'photo' && !scene.tag && !scene.judul && !shots.some((s) => s.tag || s.anotasi?.length)) {
-    warn(where, 'Scene photo tanpa lapisan (tag/judul/anotasi).', 'Tambah minimal tag atau judul supaya tidak terlihat seperti slideshow.');
+  if (scene.type === 'photo' && !scene.tag && !scene.judul && !shots.some((s) => s.tag || s.anotasi?.length || s.rute)) {
+    warn(where, 'Scene photo tanpa lapisan (tag/judul/anotasi/rute).', 'Tambah minimal tag atau judul supaya tidak terlihat seperti slideshow.');
   }
 
   // --- Aturan per jenis scene ---
@@ -185,6 +208,45 @@ for (const [i, scene] of scenes.entries()) {
     if (scene.tag) warn(where, 'Tag scene di scene fact bertabrakan dengan badge angka di kiri atas.', 'Pindahkan ke tag per shot (kanan atas).');
     if (scene.value >= 1000 && scene.value <= 2100 && scene.format !== 'year') warn(where, `${scene.value} terlihat seperti tahun.`, "Kalau tahun, tambahkan format: 'year' (supaya tidak jadi 1.814).");
     if (scene.ulang && !(await exists(scene.ulang.photo))) err(where, `ulang.photo public/${scene.ulang.photo} tidak ada.`, 'Salin path persis dari public/photos/<slug>/.');
+  }
+  if (scene.type === 'chapter') {
+    if (typeof scene.nomor !== 'number' || scene.nomor < 1) err(where, 'nomor bab wajib angka ≥ 1.', 'Isi nomor: 1, 2, dst.');
+    if (!plain(scene.judul ?? '').trim()) err(where, 'chapter tanpa judul.', "Isi judul bab pendek (maks. 5 kata), contoh judul: 'Mitos *batalion Inggris*'.");
+    if (narasi && !narasi.includes('*')) warn(where, 'Narasi chapter tanpa *bintang*.', 'Bungkus kata yang memicu munculnya judul bab dengan *bintang*, atau kosongkan narasi untuk kartu bab singkat.');
+    if (short) warn(where, 'Scene chapter dipakai di video short.', 'Short 30–60 detik tidak perlu kartu bab; langsung masuk ke isi.');
+  }
+  if (scene.type === 'timeline') {
+    const titik = scene.titik ?? [];
+    if (titik.length < 2 || titik.length > 6) {
+      err(where, `Timeline berisi ${titik.length} titik.`, 'Isi 2–6 titik supaya garis waktu terbaca jelas.');
+    }
+    let lastTahun = -Infinity;
+    let lastTitikDi = 0;
+    for (const [k, t] of titik.entries()) {
+      const tw = `${where}, titik ${k + 1}`;
+      if (typeof t.tahun !== 'number') err(tw, 'tahun wajib berupa angka.', 'Isi tahun sebagai angka, contoh tahun: 1811.');
+      else if (t.tahun <= lastTahun) err(tw, `Tahun ${t.tahun} tidak naik dari titik sebelumnya (${lastTahun}).`, 'Urutkan titik dari tahun paling tua ke paling muda (tahun naik).');
+      else lastTahun = t.tahun;
+      if (!t.label?.trim()) err(tw, 'label titik kosong.', "Isi keterangan pendek, contoh label: 'Inggris menyerbu Jawa'.");
+      else if (t.label.length > 28) warn(tw, `Label titik "${t.label}" terlalu panjang (${t.label.length} huruf).`, 'Maksimal ±28 huruf supaya tidak bertabrakan dengan titik sebelah.');
+      if (t.di) {
+        const key = normalize(t.di.split(' ')[0]);
+        const idx = wordsOf(narasi).findIndex((w, wi) => wi >= lastTitikDi && normalize(w) === key);
+        if (idx < 0) {
+          err(tw, `di "${t.di}" tidak ada di narasi, atau letaknya sebelum di titik sebelumnya.`, 'Isi di dengan satu kata dari narasi scene ini; urutan di harus sesuai urutan titik.');
+        } else {
+          lastTitikDi = idx + 1;
+        }
+      }
+    }
+  }
+  if (scene.type === 'kutipan') {
+    const teks = plain(scene.teks ?? '').trim();
+    const maksKata = short ? 20 : 30;
+    if (!teks) err(where, 'teks kutipan kosong.', 'Isi teks kutipan tanpa tanda kutip.');
+    else if (wordsOf(teks).length > maksKata) err(where, `Teks kutipan ${wordsOf(teks).length} kata.`, `Maksimal ${maksKata} kata supaya muat di layar.`);
+    if (((scene.teks ?? '').match(/\*/g) ?? []).length % 2 !== 0) err(where, 'Jumlah tanda * di teks kutipan ganjil.', 'Setiap *bintang* harus berpasangan.');
+    if (!scene.sumber?.trim()) err(where, 'sumber kutipan kosong.', "Wajib sebutkan siapa & kapan, contoh sumber: 'Raffles, 1817'.");
   }
 
   if (short && scene.stempel && !inSafeZone(scene.stempel.x ?? 50, scene.stempel.y ?? 40)) {
@@ -260,6 +322,7 @@ for (const [i, scene] of scenes.entries()) {
     const to = k === shots.length - 1 ? duration : starts[k + 1];
     urutan.push({
       scene: i + 1,
+      sceneType: scene.type,
       where: `scene ${i + 1} (${scene.type}), shot ${k + 1}`,
       shot,
       layout: shot.layout ?? 'full',
@@ -272,7 +335,7 @@ for (const [i, scene] of scenes.entries()) {
 for (const x of urutan) {
   if (x.detik < RITME.min) {
     rit(x.where, `Shot hanya tampil ${fmt(x.detik)} dtk, terlalu cepat.`, `Minimal ±${fmt(RITME.min)} dtk. Hapus shot ini, atau pindahkan di ke kata yang lebih jauh dari di shot sebelumnya/berikutnya.`);
-  } else if (x.detik > RITME.max) {
+  } else if (x.detik > RITME.max && x.sceneType !== 'timeline') {
     rit(x.where, `Shot diam ${fmt(x.detik)} dtk, terlalu lama.`, `Maksimal ±${RITME.max} dtk. Tambah shot baru dengan di: '<kata>' di tengah bagian narasi ini (1 foto per ±3 detik).`);
   }
 }
@@ -310,7 +373,7 @@ for (let k = 0; k < scenes.length; ) {
   let j = k;
   while (j < scenes.length && scenes[j].type === scenes[k].type) j++;
   if (j - k >= 5) {
-    rit(`scene ${k + 1}–${j}`, `${j - k} scene ${scenes[k].type} berturut-turut.`, 'Terasa monoton. Sisipkan scene fact (angka/tahun) di tengahnya.');
+    rit(`scene ${k + 1}–${j}`, `${j - k} scene ${scenes[k].type} berturut-turut.`, 'Terasa monoton. Sisipkan scene fact (angka/tahun), chapter (kartu bab), timeline (garis waktu), atau kutipan di tengahnya.');
   }
   k = j;
 }
@@ -339,14 +402,15 @@ if (script.thumbnail) {
   else if (!t.credit) err('thumbnail', 'Foto thumbnail tanpa kredit.', "Selalu pakai ...foto('nama.jpg'), jangan tulis path foto manual.");
   if (t.sub && t.sub.length > R.tagMax) warn('thumbnail', `thumbnail.sub "${t.sub}" terlalu panjang.`, `Maksimal ±${R.tagMax} huruf.`);
 }
-const bab = scenes.map((s, i) => (s.bab ? i : -1)).filter((i) => i >= 0);
+const judulBab = (s) => s.bab ?? (s.type === 'chapter' ? plain(s.judul ?? '').trim() : undefined);
+const bab = scenes.map((s, i) => (judulBab(s) ? i : -1)).filter((i) => i >= 0);
 if (bab.length && !short) {
   if (bab[0] !== 0) err(`scene ${bab[0] + 1}`, 'Bab pertama tidak di scene 1.', "YouTube hanya menampilkan chapter kalau chapter pertama di 0:00. Tambahkan bab: '<judul>' di scene 1.");
-  if (bab.length < 3) err('bab', `Hanya ${bab.length} bab.`, 'YouTube butuh minimal 3 chapter. Tambah bab di scene yang memulai bagian cerita baru.');
+  if (bab.length < 3) err('bab', `Hanya ${bab.length} bab.`, 'YouTube butuh minimal 3 chapter. Tambah bab atau scene chapter di bagian cerita baru.');
   const akhir = waktuScene.length ? waktuScene.at(-1).start + waktuScene.at(-1).duration : 0;
   bab.forEach((i, k) => {
     const detik = ((k + 1 < bab.length ? waktuScene[bab[k + 1]].start : akhir) - waktuScene[i].start) / FPS;
-    if (detik < 10) err(`scene ${i + 1}`, `Bab "${scenes[i].bab}" hanya ${fmt(detik)} detik.`, 'Setiap chapter YouTube minimal 10 detik. Pindahkan bab berikutnya ke scene yang lebih jauh, atau gabungkan.');
+    if (detik < 10) err(`scene ${i + 1}`, `Bab "${judulBab(scenes[i])}" hanya ${fmt(detik)} detik.`, 'Setiap chapter YouTube minimal 10 detik. Pindahkan bab berikutnya ke scene yang lebih jauh, atau gabungkan.');
   });
 }
 
@@ -365,7 +429,8 @@ for (const [label, list, icon] of [['ERROR', errors, '✗'], ['PERINGATAN', warn
 
 // Perkiraan durasi total: panjang narasi (kata.json kalau ada, kalau tidak ±2,4 kata/detik) + jeda per scene
 const estSeconds = scenes.reduce((sum, scene, i) => {
-  const words = wordsOf(scene.narasi ?? '').length;
+  if (!scene.narasi?.trim()) return sum + scene.duration / FPS;
+  const words = wordsOf(scene.narasi).length;
   const spoken = kataJson?.[String(i)]?.at(-1)?.[1] ?? words / 2.4;
   return sum + spoken + 0.7;
 }, 0);

@@ -139,3 +139,42 @@ export const shotStarts = (shots: {di?: string}[], words: TimedWord[], duration:
   }
   return starts;
 };
+
+/**
+ * Frame muncul tiap item berurutan (titik garis waktu, dsb., relatif awal scene).
+ * Item dengan `di: 'kata'` muncul saat kata itu diucapkan (dicari berurutan); sisanya dibagi rata
+ * di antara item yang sudah ditentukan, sepanjang narasi (atau sepanjang scene kalau tanpa narasi).
+ */
+export const momenUrut = (items: {di?: string}[], words: TimedWord[], duration: number): number[] => {
+  const n = items.length;
+  if (!n) return [];
+  const awal = words.length ? words[0].start : 15;
+  const akhir = words.length ? words[words.length - 1].start : Math.max(awal + 1, duration - 30);
+  const anchors: (number | null)[] = items.map(() => null);
+  let from = 0;
+  items.forEach((item, i) => {
+    if (!item.di) return;
+    const idx = indexOfWord(words, item.di, from);
+    if (idx < 0) return;
+    anchors[i] = words[idx].start;
+    from = idx + 1;
+  });
+  // Ujung virtual supaya celah di awal/akhir juga dibagi rata
+  const ext = [awal - (n > 1 ? (akhir - awal) / (n - 1) : 0), ...anchors, akhir + (n > 1 ? (akhir - awal) / (n - 1) : 0)];
+  if (ext[1] === null) ext[1] = awal;
+  if (ext[n] === null) ext[n] = akhir;
+  const out = [...ext] as number[];
+  let i = 1;
+  while (i <= n) {
+    if (ext[i] !== null) {
+      i++;
+      continue;
+    }
+    let j = i;
+    while (ext[j] === null) j++;
+    const step = (out[j] - out[i - 1]) / (j - i + 1);
+    for (let k = i; k < j; k++) out[k] = Math.round(out[i - 1] + step * (k - i + 1));
+    i = j;
+  }
+  return out.slice(1, n + 1);
+};

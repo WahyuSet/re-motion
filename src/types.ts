@@ -44,6 +44,20 @@ export type Shot = {
   tag?: string;
   /** Lingkaran merah yang tergambar di titik penting foto */
   anotasi?: Anotasi[];
+  /**
+   * Garis rute putus-putus yang tergambar di atas foto (layout 'print', cocok untuk peta), panah di ujung.
+   * Koordinat titik dalam persen gambar, cari dengan scripts/grid-foto.mjs.
+   */
+  rute?: Rute;
+};
+
+export type Rute = {
+  /** 2–8 titik berurutan dari awal ke ujung rute, persen gambar */
+  titik: {x: number; y: number}[];
+  /** Rute mulai tergambar saat kata ini diucapkan, default setelah foto mapan */
+  di?: string;
+  /** Keterangan pendek di tengah rute, contoh 'Jalan Raya Pos' */
+  label?: string;
 };
 
 export type Anotasi = {
@@ -55,6 +69,8 @@ export type Anotasi = {
   h?: number;
   /** Keterangan pendek di samping lingkaran */
   label?: string;
+  /** 'lingkaran' (default) = elips coretan tangan; 'pin' = pin lokasi yang jatuh lalu berdenyut di titik x, y */
+  bentuk?: 'lingkaran' | 'pin';
 };
 
 export type Stempel = {
@@ -147,7 +163,40 @@ export type OutroScene = BaseScene & {
   cta: string;
 };
 
-export type Scene = TitleScene | PhotoScene | FactScene | OutroScene;
+/** Kartu bab: "BAB 2" + judul bab di atas foto gelap-buram. Otomatis jadi chapter YouTube. */
+export type ChapterScene = BaseScene & {
+  type: 'chapter';
+  /** Nomor bab, tampil sebagai "BAB 2" */
+  nomor: number;
+  /** Judul bab (maks. 5 kata), juga jadi judul chapter YouTube. Frasa *bintang* jadi emas */
+  judul: string;
+};
+
+export type TimelineTitik = {
+  tahun: number;
+  /** Keterangan pendek (maks. ±28 huruf) */
+  label: string;
+  /** Titik muncul saat kata ini diucapkan, default dibagi rata sepanjang narasi */
+  di?: string;
+};
+
+/** Garis waktu: titik-titik tahun muncul satu per satu mengikuti narasi (short: garis tegak) */
+export type TimelineScene = BaseScene & {
+  type: 'timeline';
+  /** 2–6 titik, tahun berurutan naik */
+  titik: TimelineTitik[];
+};
+
+/** Kutipan: teks kutipan besar muncul mengikuti narasi, sumber di bawah, foto di sisi */
+export type KutipanScene = BaseScene & {
+  type: 'kutipan';
+  /** Isi kutipan (maks. 30 kata, short 20), tanpa tanda kutip */
+  teks: string;
+  /** Wajib: siapa & kapan, contoh 'Raffles, 1817' */
+  sumber: string;
+};
+
+export type Scene = TitleScene | PhotoScene | FactScene | OutroScene | ChapterScene | TimelineScene | KutipanScene;
 
 export type VideoScript = {
   /** 'landscape' = 1920×1080 (default), 'short' = 1080×1920 untuk YouTube Shorts / TikTok / Reels */

@@ -10,9 +10,12 @@ import {Watermark} from './components/Watermark';
 import {dorong, kartu, whip, zoom} from './components/transitions';
 import {TRANSITION_FRAMES, transitionFrames} from './lib/kata';
 import {applyNarasi, NARASI_DELAY, narasiFile} from './lib/narasi';
+import {ChapterScene} from './scenes/ChapterScene';
 import {FactScene} from './scenes/FactScene';
+import {KutipanScene} from './scenes/KutipanScene';
 import {OutroScene} from './scenes/OutroScene';
 import {PhotoScene} from './scenes/PhotoScene';
+import {TimelineScene} from './scenes/TimelineScene';
 import {TitleScene} from './scenes/TitleScene';
 import {theme} from './theme';
 import type {Scene, TransitionType, VideoScript} from './types';
@@ -40,6 +43,12 @@ const renderScene = (scene: Scene) => {
       return <FactScene scene={scene} />;
     case 'outro':
       return <OutroScene scene={scene} />;
+    case 'chapter':
+      return <ChapterScene scene={scene} />;
+    case 'timeline':
+      return <TimelineScene scene={scene} />;
+    case 'kutipan':
+      return <KutipanScene scene={scene} />;
   }
 };
 

@@ -48,10 +48,10 @@ Membuat `src/data/<slug>.ts` (template berisi TODO), `<slug>.props.json`, `<slug
 
 ## Langkah 2 — Tulis naskah & narasi
 
-Edit `src/data/<slug>.ts`. Susun jumlah scene sesuai durasi (lihat langkah 0): `title` → beberapa `photo`/`fact` → `outro`. Template berisi 4 scene; salin blok dari **Resep scene** untuk menambah.
+Edit `src/data/<slug>.ts`. Susun jumlah scene sesuai durasi (lihat langkah 0): `title` → beberapa `photo`/`fact` (dan opsional `chapter`, `timeline`, `kutipan`) → `outro`. Template berisi 4 scene; salin blok dari **Resep scene** untuk menambah.
 
 Aturan `narasi` (teks yang dibacakan TTS dan sekaligus subtitle):
-- **Setiap scene wajib punya narasi**, 15–25 kata (1–2 kalimat).
+- **Setiap scene wajib punya narasi** (kecuali kartu `chapter` singkat), 15–25 kata (1–2 kalimat).
 - Angka & tahun **ditulis dengan huruf**: `seribu delapan ratus empat belas`, `abad kesembilan`.
 - Tanpa singkatan (`Masehi`, bukan `M.`), tanpa tanda kurung.
 - Kata kunci dibungkus `*bintang*` (tidak ikut dibacakan). Wajib:
@@ -60,7 +60,7 @@ Aturan `narasi` (teks yang dibacakan TTS dan sekaligus subtitle):
 
 Isi field lain mengikuti **Resep scene** di bawah. Biarkan `shots: []` dulu (diisi di langkah 4).
 
-**Bab (chapter YouTube)**, hanya video panjang ≥2 menit (short: jangan pakai): bagi cerita jadi 3–7 bagian. Tambahkan `bab: '<judul bab pendek>'` di scene yang **memulai** tiap bagian. Bab pertama wajib di scene 1, setiap bab minimal 10 detik (±2 scene). Contoh di `src/data/gunung-kawi.ts`: scene 1 `bab: 'Gunung Kawi'`, scene 4 `bab: 'Asal-usul pesarean'`, dst.
+**Bab (chapter YouTube)**, hanya video panjang ≥2 menit (short: jangan pakai): bagi cerita jadi 3–7 bagian. Tambahkan `bab: '<judul bab pendek>'` di scene yang **memulai** tiap bagian, atau sisipkan scene `type: 'chapter'` (kartu bab visual, otomatis jadi chapter YouTube). Bab pertama wajib di scene 1, setiap bab minimal 10 detik (±2 scene). Contoh di `src/data/gunung-kawi.ts`: scene 1 `bab: 'Gunung Kawi'`, scene 4 `bab: 'Asal-usul pesarean'`, dst.
 
 **Selesai jika:** `cek-naskah` tidak lagi menampilkan error tentang narasi/TODO/judul (error "shots kosong" masih wajar sampai langkah 4).
 
@@ -97,11 +97,11 @@ Isi `shots` setiap scene dengan 2–4 foto, lalu tambahkan lapisan sesuai **Rese
 - Props juga bisa `di: '<kata>'` (menggantikan `delay`).
 - Foto arsip hitam-putih, potret, peta, dokumen → tambah `layout: 'print'`.
 - Gerak kamera: biarkan kosong (otomatis bergantian) atau isi `move`: `push-in`, `pull-out`, `pan-left`, `pan-right`, `tilt-up`, `tilt-down`.
-- Anotasi (lingkaran merah) hanya di shot `print`. Cari koordinatnya:
+- Anotasi (lingkaran merah atau pin lokasi) dan rute peta hanya di shot `print`. Cari koordinatnya:
   ```bash
   node scripts/grid-foto.mjs public/photos/<slug>/NN-nama.jpg
   ```
-  Lihat `out/grid/NN-nama.jpg` dengan Read, baca posisi objek pada garis `x..` dan `y..` → `anotasi: [{x: 53, y: 56, w: 8, h: 8, label: 'Nama tempat'}]`.
+  Lihat `out/grid/NN-nama.jpg` dengan Read, baca posisi objek pada garis `x..` dan `y..` → `anotasi: [{x: 53, y: 56, w: 8, h: 8, label: 'Nama tempat'}]` (atau `bentuk: 'pin'` untuk pin lokasi), dan untuk jalur di peta → `rute: {titik: [{x: 20, y: 40}, {x: 53, y: 56}], di: 'menuju', label: 'Jalur pos'}`.
 
 **Selesai jika:** `node scripts/cek-naskah.mjs <slug>` → `✓ LULUS`.
 
@@ -295,6 +295,52 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 },
 ```
 
+**Chapter** (kartu bab, video panjang; otomatis jadi chapter YouTube, boleh tanpa `narasi`):
+```ts
+{
+  type: 'chapter', duration: 75, transition: 'kartu',
+  nomor: 2,
+  judul: 'Runtuhnya *Majapahit*',              // maks. 5 kata (short 4), 1 frasa *bintang*
+  // narasi opsional; kalau diisi, bungkus kata pemicu judul dengan *bintang*
+  shots: [{...foto('10-candi-brahu.jpg')}],
+},
+```
+
+**Timeline** (garis waktu 2–6 titik tahun naik, tiap titik muncul saat kata `di` diucapkan; short otomatis garis tegak):
+```ts
+{
+  type: 'timeline', duration: 90, transition: 'kartu',
+  tag: 'Jawa · abad ke-13–15',
+  narasi: 'Kerajaan berdiri tahun seribu dua ratus sembilan puluh tiga, mencapai puncak di masa Hayam Wuruk, lalu melemah setelah Perang Paregreg.',
+  titik: [
+    {tahun: 1293, label: 'Raden Wijaya naik takhta', di: 'berdiri'},
+    {tahun: 1350, label: 'Puncak Hayam Wuruk', di: 'puncak'},
+    {tahun: 1404, label: 'Perang Paregreg', di: 'Perang'},
+  ],
+  shots: [{...foto('11-trowulan.jpg')}],
+},
+```
+
+**Kutipan** (teks kutipan ≤30 kata, short ≤20 kata; `sumber` wajib):
+```ts
+{
+  type: 'kutipan', duration: 90, transition: 'kartu',
+  teks: 'Sumpah Palapa diikrarkan sampai seluruh Nusantara bersatu.',
+  sumber: 'Pararaton, abad ke-15',
+  narasi: 'Kitab Pararaton mencatat: Sumpah Palapa diikrarkan sampai seluruh Nusantara bersatu.',
+  shots: [{...foto('12-gajah-mada.jpg')}],
+},
+```
+
+**Pin & rute di peta** (di dalam shot `layout: 'print'`, koordinat persen gambar dari `grid-foto.mjs`):
+```ts
+{
+  ...foto('09-peta-jawa.jpg'), layout: 'print',
+  anotasi: [{x: 70, y: 55, bentuk: 'pin', label: 'Trowulan'}],
+  rute: {titik: [{x: 45, y: 48}, {x: 58, y: 52}, {x: 70, y: 55}], di: 'menuju', label: 'Jalur ekspedisi'},
+}
+```
+
 **Outro**: tag + kalimat penutup; kalimat terakhir narasi = ajakan follow (tombol CTA muncul di situ).
 ```ts
 {
@@ -362,7 +408,9 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 | RITME: "Foto ... dipakai N kali" / "dipakai di dua scene berturut-turut" | Ganti foto itu di sebagian scene dengan foto lain dari contact sheet. Kurang foto → `cari-foto` dengan kata kunci baru (slug sama) |
 | RITME: "Gerak kamera ... sama dengan shot sebelumnya" | Ganti `move` salah satu shot, atau hapus `move` supaya dipilih bergantian otomatis. Shot sebelumnya bisa shot terakhir scene sebelumnya |
 | RITME: "N shot print berturut-turut" | Ubah salah satu shot di tengahnya jadi full (hapus `layout: 'print'`), atau sisipkan shot foto berwarna |
-| RITME: "N scene photo berturut-turut" | Ubah satu scene di tengahnya jadi `fact` (angka/tahun yang memang disebut narasi), atau pindahkan scene fact yang ada ke tengah deretan itu |
+| RITME: "N scene photo berturut-turut" | Ubah satu scene di tengahnya jadi `fact` (angka/tahun), `timeline` (urutan tahun), `kutipan`, atau sisipkan `chapter` di pergantian bagian cerita |
+| `cek-naskah`: "Tahun ... tidak naik dari titik sebelumnya" | Urutkan `titik` di scene `timeline` dari tahun paling tua ke paling muda (2–6 titik) |
+| `cek-naskah`: "rute hanya tampil di shot layout 'print'" | Tambahkan `layout: 'print'` pada shot peta yang memakai `rute` |
 
 Alasan desain (kenapa 2–4 shot, kenapa transisi tertentu, ukuran teks, dsb.): `referensi/desain.md`.
 

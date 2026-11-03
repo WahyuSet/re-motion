@@ -1,11 +1,11 @@
 import React from 'react';
 import {AbsoluteFill, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import {SHOT_OVERLAP as OVERLAP, shotStarts, type TimedWord} from '../lib/kata';
+import {frameOfWord, SHOT_OVERLAP as OVERLAP, shotStarts, type TimedWord} from '../lib/kata';
 import {useLayout} from '../lib/layout';
 import {shotMove} from '../lib/motion';
 import type {CameraMove, Shot} from '../types';
 import {Credit} from './Caption';
-import {AnotasiLayer, Tag} from './Layout';
+import {AnotasiLayer, RuteLayer, Tag} from './Layout';
 /** Anotasi mulai tergambar setelah foto mapan (frame sejak shot mulai) */
 const ANOTASI_AT = 22;
 
@@ -38,7 +38,11 @@ const ShotView: React.FC<{
   dim: number;
   blur: number;
   fadeIn: boolean;
-}> = ({shot, index, duration, dim, blur, fadeIn}) => {
+  /** Frame (sejak shot mulai) rute mulai tergambar */
+  ruteAt: number;
+  /** Hanya foto bergerak: tanpa tag, kredit, anotasi, rute; layout print diperlakukan full */
+  hanyaFoto: boolean;
+}> = ({shot, index, duration, dim, blur, fadeIn, ruteAt, hanyaFoto}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const L = useLayout();
@@ -62,11 +66,11 @@ const ShotView: React.FC<{
   const enterScale = 1 + (1 - enter) * 0.08;
   const enterBlur = (1 - enter) * 12;
 
-  const tag = shot.tag ? (
+  const tag = shot.tag && !hanyaFoto ? (
     <Tag text={shot.tag} at={OVERLAP + 4} side={L.shotTag.side} top={L.shotTag.top} bottom={L.shotTag.bottom} />
   ) : null;
 
-  if ((shot.layout ?? 'full') === 'full') {
+  if ((shot.layout ?? 'full') === 'full' || hanyaFoto) {
     return (
       <AbsoluteFill style={{overflow: 'hidden', opacity: enter}}>
         {/* Anotasi ada di dalam wadah yang sama dengan foto, jadi ikut bergerak bersama kamera */}
@@ -86,10 +90,10 @@ const ShotView: React.FC<{
               filter: `sepia(0.15) contrast(1.08) brightness(${1 - dim}) blur(${blur + enterBlur}px)`,
             }}
           />
-          <AnotasiLayer items={shot.anotasi} at={ANOTASI_AT} />
+          {hanyaFoto ? null : <AnotasiLayer items={shot.anotasi} at={ANOTASI_AT} />}
         </AbsoluteFill>
         {tag}
-        {shot.credit ? <Credit text={shot.credit} /> : null}
+        {shot.credit && !hanyaFoto ? <Credit text={shot.credit} /> : null}
       </AbsoluteFill>
     );
   }
@@ -126,6 +130,7 @@ const ShotView: React.FC<{
               style={{display: 'block', maxHeight: L.print.maxHeight, maxWidth: L.print.maxWidth, filter: `sepia(0.2) contrast(1.05)`}}
             />
             <AnotasiLayer items={shot.anotasi} at={ANOTASI_AT} />
+            {shot.rute ? <RuteLayer rute={shot.rute} photo={shot.photo} at={ruteAt} /> : null}
           </div>
         </div>
       </AbsoluteFill>
@@ -135,14 +140,29 @@ const ShotView: React.FC<{
   );
 };
 
+/** Frame (sejak shot mulai) rute mulai tergambar: saat kata `rute.di` diucapkan, default setelah anotasi */
+const ruteAt = (shot: Shot, words: TimedWord[], from: number) => {
+  const at = shot.rute?.di ? frameOfWord(words, shot.rute.di) : null;
+  return at === null ? ANOTASI_AT + 10 : Math.max(0, at - from);
+};
+
 // Beberapa foto bergantian sepanjang scene, masing-masing dengan gerak kamera sendiri.
 // Waktu pergantian mengikuti `di` (kata narasi) tiap shot; tanpa `di` dibagi rata.
-export const ShotStack: React.FC<{shots: Shot[]; duration: number; words?: TimedWord[]; dim?: number; blur?: number}> = ({
+export const ShotStack: React.FC<{
+  shots: Shot[];
+  duration: number;
+  words?: TimedWord[];
+  dim?: number;
+  blur?: number;
+  /** Hanya foto (dipakai bingkai foto scene kutipan; tag & kredit tampil dari ShotStack latar) */
+  hanyaFoto?: boolean;
+}> = ({
   shots,
   duration,
   words = [],
   dim = 0,
   blur = 0,
+  hanyaFoto = false,
 }) => {
   const starts = shotStarts(shots, words, duration);
   return (
@@ -152,7 +172,16 @@ export const ShotStack: React.FC<{shots: Shot[]; duration: number; words?: Timed
         const to = i === shots.length - 1 ? duration : starts[i + 1] + OVERLAP;
         return (
           <Sequence key={i} from={from} durationInFrames={Math.max(1, to - from)}>
-            <ShotView shot={shot} index={i} duration={to - from} dim={dim} blur={blur} fadeIn={i > 0} />
+            <ShotView
+              shot={shot}
+              index={i}
+              duration={to - from}
+              dim={dim}
+              blur={blur}
+              fadeIn={i > 0}
+              ruteAt={ruteAt(shot, words, from)}
+              hanyaFoto={hanyaFoto}
+            />
           </Sequence>
         );
       })}

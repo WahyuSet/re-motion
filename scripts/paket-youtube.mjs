@@ -63,7 +63,10 @@ try {
   const waktu = await waktuScene(composition);
 
   // ---- Chapter ----
-  const bab = waktu.filter((w) => w.scene.bab).map((w) => ({judul: w.scene.bab, detik: Math.max(0, w.start) / fps, scene: w.index + 1}));
+  const judulBab = (s) => s.bab ?? (s.type === 'chapter' ? s.judul?.replace(/\*/g, '').trim() : undefined);
+  const bab = waktu
+    .map((w) => ({judul: judulBab(w.scene), detik: Math.max(0, w.start) / fps, scene: w.index + 1}))
+    .filter((b) => b.judul);
   let chapter = [];
   if (bab.length) {
     const durasiBab = bab.map((b, i) => (i + 1 < bab.length ? bab[i + 1].detik : composition.durationInFrames / fps) - b.detik);

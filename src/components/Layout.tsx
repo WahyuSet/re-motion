@@ -2,12 +2,25 @@
 // bang-motion (MIT, https://github.com/bangtutorial/bang-motion): tag mono, judul pendek berstabilo,
 // stempel, anotasi lingkaran yang tergambar, tahun hantu, dan grid foto berulang.
 
-import React from 'react';
-import {AbsoluteFill, Easing, Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import React, {useEffect, useState} from 'react';
+import {
+  AbsoluteFill,
+  cancelRender,
+  continueRender,
+  delayRender,
+  Easing,
+  Img,
+  interpolate,
+  random,
+  spring,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from 'remotion';
 import {frameOfWord, parseWords, type TimedWord} from '../lib/kata';
 import {useLayout} from '../lib/layout';
 import {theme} from '../theme';
-import type {Anotasi, Scene, Stempel as StempelData} from '../types';
+import type {Anotasi, Rute, Scene, Stempel as StempelData} from '../types';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
@@ -160,12 +173,15 @@ const handDrawnEllipse = (a: Anotasi, seed: number) => {
 // Lingkaran merah tergambar di atas foto, lalu labelnya tersingkap. Koordinat dalam persen container.
 export const AnotasiLayer: React.FC<{items?: Anotasi[]; at: number}> = ({items, at}) => {
   const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
   const L = useLayout();
   if (!items?.length) return null;
+  const isPin = (a: Anotasi) => a.bentuk === 'pin';
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{position: 'absolute', width: '100%', height: '100%', overflow: 'visible'}}>
         {items.map((a, i) => {
+          if (isPin(a)) return null;
           const draw = interpolate(frame - at - i * 14, [0, 18], [0, 1], {...clamp, easing: Easing.inOut(Easing.quad)});
           return (
             <path
@@ -184,6 +200,7 @@ export const AnotasiLayer: React.FC<{items?: Anotasi[]; at: number}> = ({items, 
           );
         })}
       </svg>
+      {items.map((a, i) => (isPin(a) ? <Pin key={`pin-${i}`} x={a.x} y={a.y} at={at + i * 14} size={L.pin.size} frame={frame} fps={fps} /> : null))}
       {items.map((a, i) => {
         if (!a.label) return null;
         const reveal = interpolate(frame - at - i * 14 - 16, [0, 8], [0, 100], clamp);
@@ -192,8 +209,9 @@ export const AnotasiLayer: React.FC<{items?: Anotasi[]; at: number}> = ({items, 
             key={i}
             style={{
               position: 'absolute',
-              left: `${a.x + (a.w ?? 10) / 2 + 1}%`,
-              top: `${a.y - (a.h ?? a.w ?? 10) / 2}%`,
+              ...(isPin(a)
+                ? {left: `calc(${a.x}% + ${L.pin.size * 0.75}px)`, top: `calc(${a.y}% - ${L.pin.size * 1.25}px)`}
+                : {left: `${a.x + (a.w ?? 10) / 2 + 1}%`, top: `${a.y - (a.h ?? a.w ?? 10) / 2}%`}),
               transform: 'translateY(-50%)',
               clipPath: `inset(0 ${100 - reveal}% 0 0)`,
               background: theme.red,
@@ -211,6 +229,174 @@ export const AnotasiLayer: React.FC<{items?: Anotasi[]; at: number}> = ({items, 
           </div>
         );
       })}
+    </AbsoluteFill>
+  );
+};
+
+// Pin lokasi: jatuh dari atas lalu memantul, riak di tanah berdenyut. Ujung pin tepat di (x, y) persen.
+const Pin: React.FC<{x: number; y: number; at: number; size: number; frame: number; fps: number}> = ({x, y, at, size, frame, fps}) => {
+  if (frame < at) return null;
+  const s = spring({frame: frame - at, fps, config: {damping: 9, mass: 0.6}});
+  const t = Math.max(0, frame - at - 12) % 40;
+  return (
+    <div style={{position: 'absolute', left: `${x}%`, top: `${y}%`, width: 0, height: 0}}>
+      <div
+        style={{
+          position: 'absolute',
+          left: -size,
+          top: -size * 0.35,
+          width: size * 2,
+          height: size * 0.7,
+          borderRadius: '50%',
+          border: `3px solid ${theme.red}`,
+          opacity: frame - at > 12 ? interpolate(t, [0, 40], [0.8, 0]) : 0,
+          transform: `scale(${interpolate(t, [0, 40], [0.5, 2.4])})`,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          left: -size / 2,
+          top: -size * 0.707 - size / 2,
+          width: size,
+          height: size,
+          borderRadius: '50% 50% 50% 0',
+          background: theme.red,
+          border: `4px solid ${theme.paper}`,
+          boxSizing: 'border-box',
+          boxShadow: '0 6px 14px rgba(0,0,0,0.55)',
+          opacity: Math.min(1, s * 3),
+          transform: `translateY(${(1 - s) * -size * 2.5}px) rotate(-45deg)`,
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            width: size * 0.3,
+            height: size * 0.3,
+            borderRadius: '50%',
+            background: theme.paper,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Garis rute putus-putus yang tergambar di atas foto cetak (peta), panah di ujung, label di tengah rute.
+// Koordinat persen gambar. Ukuran asli foto dibaca dulu (delayRender) supaya arah panah tepat.
+export const RuteLayer: React.FC<{rute: Rute; photo: string; at: number}> = ({rute, photo, at}) => {
+  const frame = useCurrentFrame();
+  const L = useLayout();
+  const [ukuran, setUkuran] = useState<{w: number; h: number} | null>(null);
+  const [handle] = useState(() => delayRender(`Ukuran foto rute ${photo}`));
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      setUkuran({w: img.naturalWidth, h: img.naturalHeight});
+      continueRender(handle);
+    };
+    img.onerror = () => cancelRender(new Error(`Foto rute tidak bisa dimuat: ${photo}`));
+    img.src = staticFile(photo);
+  }, [handle, photo]);
+  if (!ukuran || rute.titik.length < 2) return null;
+
+  const {w, h} = ukuran;
+  const pts = rute.titik.map((p) => [(p.x / 100) * w, (p.y / 100) * h]);
+  const seg = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]));
+  const total = seg.reduce((a, b) => a + b, 0);
+  const d = `M ${pts.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' L ')}`;
+  const draw = interpolate(frame - at, [0, 28 + seg.length * 6], [0, 1], {...clamp, easing: Easing.inOut(Easing.quad)});
+  const [ax, ay] = pts[pts.length - 2];
+  const [bx, by] = pts[pts.length - 1];
+  const angle = (Math.atan2(by - ay, bx - ax) * 180) / Math.PI;
+  const tip = rute.titik[rute.titik.length - 1];
+  const arrow = interpolate(draw, [0.92, 1], [0, 1], clamp);
+
+  // Titik tengah rute (menurut panjang garis) untuk label
+  let sisa = total / 2;
+  let tengah = rute.titik[0];
+  for (let i = 0; i < seg.length; i++) {
+    if (sisa <= seg[i]) {
+      const f = sisa / seg[i];
+      const [a, b] = [rute.titik[i], rute.titik[i + 1]];
+      tengah = {x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f};
+      break;
+    }
+    sisa -= seg[i];
+  }
+  const labelReveal = interpolate(draw, [0.5, 0.75], [0, 100], clamp);
+  const maskId = `rute-${photo.replace(/[^a-z0-9]/gi, '')}`;
+
+  return (
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
+      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{position: 'absolute', width: '100%', height: '100%', overflow: 'visible'}}>
+        <mask id={maskId} maskUnits="userSpaceOnUse" x={-w} y={-h} width={w * 3} height={h * 3}>
+          <path
+            d={d}
+            pathLength={1}
+            fill="none"
+            stroke="#fff"
+            strokeWidth={w * 0.06}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray={1}
+            strokeDashoffset={1 - draw}
+          />
+        </mask>
+        <g mask={`url(#${maskId})`} style={{filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.6))'}}>
+          <path
+            d={d}
+            fill="none"
+            stroke={theme.red}
+            strokeWidth={L.pin.stroke}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray={`${L.pin.stroke * 3} ${L.pin.stroke * 2.2}`}
+            vectorEffect="non-scaling-stroke"
+          />
+        </g>
+      </svg>
+      <div
+        style={{
+          position: 'absolute',
+          left: `${tip.x}%`,
+          top: `${tip.y}%`,
+          width: 0,
+          height: 0,
+          borderTop: `${L.pin.size * 0.36}px solid transparent`,
+          borderBottom: `${L.pin.size * 0.36}px solid transparent`,
+          borderLeft: `${L.pin.size * 0.62}px solid ${theme.red}`,
+          transform: `translate(-60%, -50%) rotate(${angle}deg) scale(${arrow})`,
+          transformOrigin: '60% 50%',
+          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.6))',
+        }}
+      />
+      {rute.label ? (
+        <div
+          style={{
+            position: 'absolute',
+            left: `${tengah.x}%`,
+            top: `${tengah.y}%`,
+            transform: 'translate(-50%, -150%)',
+            clipPath: `inset(0 ${100 - labelReveal}% 0 0)`,
+            background: theme.red,
+            color: '#fff',
+            padding: '6px 14px',
+            fontFamily: theme.fontMono,
+            fontWeight: 600,
+            fontSize: L.anotasiLabelSize,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {rute.label}
+        </div>
+      ) : null}
     </AbsoluteFill>
   );
 };
@@ -298,7 +484,11 @@ export const UlangGrid: React.FC<{photo: string; jumlah: number; start: number; 
 // Lapisan teks scene: tag kiri atas, judul berstabilo, stempel. Waktu muncul mengikuti narasi.
 // `stempelPalingCepat`: stempel tidak boleh muncul sebelum frame ini (dipakai scene fact supaya stempel
 // menunggu angka besar mengecil jadi badge, tidak menimpanya).
-export const SceneLayers: React.FC<{scene: Scene; words: TimedWord[]; stempelPalingCepat?: number}> = ({
+export const SceneLayers: React.FC<{
+  scene: Pick<Scene, 'tag' | 'judul' | 'judulDi' | 'stempel' | 'duration'>;
+  words: TimedWord[];
+  stempelPalingCepat?: number;
+}> = ({
   scene,
   words,
   stempelPalingCepat = 0,

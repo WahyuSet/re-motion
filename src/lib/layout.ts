@@ -23,6 +23,31 @@ const LANDSCAPE = {
   photoText: {left: 110, right: 110, bottom: 110, maxWidth: 1400, fontSize: 76},
   /** Di landscape tepat di atas baris tag per shot (top 80) */
   watermark: {top: 26, right: 110, fontSize: 30},
+  /** Kartu bab (ChapterScene): label "BAB 2", garis emas, judul bab di tengah layar */
+  chapter: {labelSize: 44, labelSpacing: 18, lineWidth: 360, judulSize: 124, maxWidth: 1500, offsetY: -20},
+  /** Garis waktu horizontal. Titik > 4: jarak tetap `panSpacing` dan kamera bergeser mengikuti titik aktif */
+  timeline: {
+    start: 200,
+    end: 1720,
+    line: 560,
+    panSpacing: 470,
+    yearSize: 76,
+    labelSize: 28,
+    labelWidth: 380,
+    dot: 30,
+  },
+  /** Kutipan: teks di kiri, foto berbingkai di kanan */
+  kutipan: {
+    teksLeft: 130,
+    teksTop: 230,
+    teksWidth: 980,
+    teksSize: 64,
+    markSize: 240,
+    sumberSize: 30,
+    foto: {left: 1200, top: 170, width: 600, height: 700, rotate: 2.5},
+  },
+  /** Pin lokasi di anotasi & tebal garis rute (px layar) */
+  pin: {size: 46, stroke: 6},
   /** Thumbnail 1280×720 (src/Thumbnail.tsx): judul kiri bawah di atas gradien gelap dari kiri */
   thumbnail: {
     left: 64,
@@ -60,6 +85,29 @@ const VERTICAL: LayoutTokens = {
   photoText: {left: S.left, right: S.right, bottom: S.bottom + 20, maxWidth: SAFE_WIDTH, fontSize: 68},
   // Sebaris dengan tag scene (kiri), di dalam area aman kanan
   watermark: {top: S.top + 14, right: S.right, fontSize: 30},
+  chapter: {labelSize: 40, labelSpacing: 14, lineWidth: 300, judulSize: 108, maxWidth: SAFE_WIDTH, offsetY: -140},
+  // Garis waktu tegak di kiri area aman; tahun & label di kanan garis, di atas subtitle (tengah 1160)
+  timeline: {
+    start: S.top + 120,
+    end: 960,
+    line: S.left + 60,
+    panSpacing: 175,
+    yearSize: 66,
+    labelSize: 28,
+    labelWidth: SAFE_WIDTH - 140,
+    dot: 30,
+  },
+  // Foto di atas, kutipan di bawahnya, subtitle tetap di tengah-bawah (kutipan short maks. 20 kata)
+  kutipan: {
+    teksLeft: S.left,
+    teksTop: 690,
+    teksWidth: SAFE_WIDTH,
+    teksSize: 46,
+    markSize: 170,
+    sumberSize: 26,
+    foto: {left: S.left + 110, top: S.top + 30, width: SAFE_WIDTH - 220, height: 380, rotate: -2},
+  },
+  pin: {size: 52, stroke: 7},
   // Cover 1080×1920: judul di tengah-bawah area aman, di atas gradien gelap dari bawah
   thumbnail: {
     left: S.left,

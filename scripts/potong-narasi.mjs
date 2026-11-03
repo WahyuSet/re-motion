@@ -186,7 +186,7 @@ const cutsByWhisper = async (python, scenes, silences) => {
     const prev = anchorsOf(k - 1);
     const next = anchorsOf(k);
     if (!prev.length || !next.length) {
-      throw new Error(`Narasi scene ${k} atau ${k + 1} tidak terdengar di audio. Pastikan audio sesuai naskah terbaru.`);
+      throw new Error(`Narasi scene ${scenes[k - 1].i + 1} atau ${scenes[k].i + 1} tidak terdengar di audio. Pastikan audio sesuai naskah terbaru.`);
     }
     const prevEnd = prev[prev.length - 1].end;
     const nextStart = next[0].start;

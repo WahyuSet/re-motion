@@ -189,6 +189,11 @@ Format setiap scene (contoh scene 3):
 ```
 Scene `title` memakai `kicker`, `title`, `subtitle`. Scene `fact` memakai `value`, `format: 'year'` (kalau tertulis), `label`. Scene `outro` memakai `title` dan `cta: 'Follow untuk sejarah lainnya'`. Semua `duration: 90`.
 
+**Opsional fitur Engine v2 (tanpa mengubah narasi):**
+- **Kartu bab (`type: 'chapter'`)**: scene pembuka bab (misal scene 8 *Cerita `*batalion Inggris*`* dengan `nomor: 2`, atau scene 27 *Warisan `*zaman kolonial*`* dengan `nomor: 6`) boleh memakai `type: 'chapter'` (otomatis jadi chapter YouTube; bungkus judul bab di narasi dengan `*bintang*` atau sisipkan kartu bab singkat `duration: 75` tanpa narasi sebelum scene pembuka bab). Bab lainnya cukup memakai `bab: '<judul bab>'` (dimulai dari scene 1 `bab: 'Membaca plat'`).
+- **Garis waktu (`type: 'timeline'`)**: scene 9 (rentang 1811–1816: `titik: [{tahun: 1811, label: 'Mendarat di Cilincing', di: 'sebelas'}, {tahun: 1816, label: 'Belanda berkuasa lagi', di: 'enam'}]`) atau scene 14 (membandingkan 1811 invasi Inggris vs 1894 mobil pertama vs 1900 plat pertama) boleh memakai `type: 'timeline'` supaya loncatan tahun terlihat berdampingan.
+- **Pin & rute di peta**: shot peta di scene 9 (Cilincing → Batavia), scene 12 (Semarang → Surakarta), atau scene 21–23 (peta karesidenan Jawa Barat/Kediri) boleh memakai `anotasi` dengan `bentuk: 'pin'` dan/atau `rute`.
+
 ### Bab 1. Membaca plat (scene 1–7)
 
 **1 · title**

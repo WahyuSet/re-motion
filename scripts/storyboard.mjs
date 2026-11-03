@@ -67,8 +67,9 @@ try {
       const from = starts[k];
       const to = k === shots.length - 1 ? scene.duration : starts[k + 1];
       const spoken = words.filter((w) => w.start >= from - 2 && w.start < to - 2).map((w) => w.word);
-      // Ambil cuplikan setelah foto selesai masuk, sekitar 55% durasi shot
-      const frame = sceneStart + from + Math.round(Math.max(SHOT_OVERLAP + 8, (to - from) * 0.55));
+      // Ambil cuplikan setelah foto selesai masuk, sekitar 55% durasi shot (timeline 1 shot / chapter bernarasi / rute: 80% supaya elemen sudah muncul)
+      const p = ((scene.type === 'timeline' || (scene.type === 'chapter' && scene.narasi)) && shots.length === 1) || shot.rute ? 0.8 : 0.55;
+      const frame = sceneStart + from + Math.round(Math.max(SHOT_OVERLAP + 8, (to - from) * p));
       return {k: k + 1, shot, from: sceneStart + from, to: sceneStart + to, frame, spoken};
     });
     board.push({n: index + 1, scene, start: sceneStart, end, shots: shotInfo});
@@ -96,13 +97,35 @@ const CAPTION_CHARS = vertical ? 24 : 44;
 const GAP = 12;
 const PAD = 20;
 
+const infoShot = (shot) => {
+  const pin = (shot.anotasi ?? []).filter((a) => a.bentuk === 'pin').length;
+  const ling = (shot.anotasi ?? []).length - pin;
+  return [
+    shot.di && `di "${shot.di}"`,
+    shot.layout === 'print' && 'print',
+    pin && `${pin} pin`,
+    ling && `${ling} anotasi`,
+    shot.rute && `rute${shot.rute.label ? ` "${shot.rute.label}"` : ''}`,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+};
+
 const renderBlock = async (b) => {
   const s = b.scene;
-  const header = `Scene ${b.n} · ${s.type} · ${time(b.start)}–${time(b.end)}${b.n > 1 ? ` · transisi: ${s.transition ?? 'dorong'}` : ''}${s.bab ? `   ▸ BAB: ${s.bab}` : ''}`;
-  const sub = [s.tag && `tag: ${s.tag}`, s.judul && `judul: ${plain(s.judul)}`, s.type === 'fact' && `angka: ${s.value}${s.suffix ?? ''} (${s.label})`, s.stempel && `stempel: ${s.stempel.teks}`]
+  const bab = s.bab ?? (s.type === 'chapter' ? `Bab ${s.nomor}: ${plain(s.judul ?? '')}` : '');
+  const header = `Scene ${b.n} · ${s.type} · ${time(b.start)}–${time(b.end)}${b.n > 1 ? ` · transisi: ${s.transition ?? 'dorong'}` : ''}${bab ? `   ▸ BAB: ${bab}` : ''}`;
+  const sub = [
+    s.tag && `tag: ${s.tag}`,
+    s.judul && s.type !== 'chapter' && `judul: ${plain(s.judul)}`,
+    s.type === 'fact' && `angka: ${s.value}${s.suffix ?? ''} (${s.label})`,
+    s.type === 'timeline' && `titik: ${(s.titik ?? []).map((t) => `${t.tahun} ${t.label}`).join(' → ')}`,
+    s.type === 'kutipan' && `kutipan (${s.sumber}): "${plain(s.teks ?? '').slice(0, 60)}${plain(s.teks ?? '').length > 60 ? '…' : ''}"`,
+    s.stempel && `stempel: ${s.stempel.teks}`,
+  ]
     .filter(Boolean)
     .join('   ·   ');
-  const narasi = wrap(`“${plain(s.narasi ?? '')}”`, 120, 3);
+  const narasi = s.narasi ? wrap(`“${plain(s.narasi)}”`, 120, 3) : ['(tanpa narasi)'];
   const top = 46 + (sub ? 30 : 0) + narasi.length * 32 + 12;
   const captionLines = b.shots.map((x) =>
     wrap(`“${x.spoken.join(' ')}”`, CAPTION_CHARS, vertical ? 4 : 3),
@@ -120,9 +143,8 @@ const renderBlock = async (b) => {
   b.shots.forEach((x, k) => {
     const left = PAD + k * (THUMB_W + GAP);
     const cy = top + THUMB_H + 26;
-    const di = x.shot.di ? ` · di "${x.shot.di}"` : '';
-    const layout = x.shot.layout === 'print' ? ' · print' : '';
-    // di/print di baris abu-abu bawah, supaya label tidak melewati lebar cuplikan
+    const info = infoShot(x.shot);
+    // di/print/pin/rute di baris abu-abu bawah, supaya label tidak melewati lebar cuplikan
     const label = `Shot ${x.k} · ${time(x.from)} (${detik(x)})`;
     svg += `<text x="${left}" y="${cy}" font-family="Arial" font-size="19" font-weight="bold" fill="#ffd54a">${xml(label)}</text>`;
     captionLines[k].forEach((line, li) => {
@@ -131,8 +153,8 @@ const renderBlock = async (b) => {
     const name = x.shot.photo.split('/').pop().replace(/\.jpg$/, '');
     const nameY = cy + 26 + captionLines[k].length * 26;
     svg += `<text x="${left}" y="${nameY}" font-family="Arial" font-size="16" fill="#8f8473">${xml(name.slice(0, vertical ? 30 : 52))}</text>`;
-    if (di || layout) {
-      svg += `<text x="${left}" y="${nameY + 22}" font-family="Arial" font-size="16" fill="#8f8473">${xml((di + layout).slice(3))}</text>`;
+    if (info) {
+      svg += `<text x="${left}" y="${nameY + 22}" font-family="Arial" font-size="16" fill="#8f8473">${xml(info)}</text>`;
     }
   });
   svg += '</svg>';
@@ -168,13 +190,17 @@ for (const b of board) {
   const s = b.scene;
   md.push(`## Scene ${b.n} (${s.type}) ${time(b.start)}–${time(b.end)}`);
   if (s.bab) md.push(`- Bab (chapter YouTube): ${s.bab}`);
+  else if (s.type === 'chapter') md.push(`- Kartu bab ${s.nomor} (chapter YouTube): ${plain(s.judul ?? '')}`);
   if (s.tag) md.push(`- Tag: ${s.tag}`);
-  if (s.judul) md.push(`- Judul: ${plain(s.judul)}`);
+  if (s.judul && s.type !== 'chapter') md.push(`- Judul: ${plain(s.judul)}`);
   if (s.type === 'fact') md.push(`- Angka: ${s.value}${s.suffix ?? ''} — ${s.label}`);
+  if (s.type === 'timeline') md.push(`- Garis waktu: ${(s.titik ?? []).map((t) => `${t.tahun} ${t.label}${t.di ? ` (di "${t.di}")` : ''}`).join(' → ')}`);
+  if (s.type === 'kutipan') md.push(`- Kutipan (${s.sumber}): "${plain(s.teks ?? '')}"`);
   if (s.stempel) md.push(`- Stempel: ${s.stempel.teks}`);
-  md.push(`- Narasi: ${plain(s.narasi ?? '')}`);
+  md.push(`- Narasi: ${s.narasi ? plain(s.narasi) : '(tanpa narasi)'}`);
   for (const x of b.shots) {
-    md.push(`  - Shot ${x.k} (${time(x.from)}, ${detik(x)}${x.shot.di ? `, di "${x.shot.di}"` : ''}): ${x.shot.photo.split('/').pop()} — kata: "${x.spoken.join(' ')}"`);
+    const info = infoShot(x.shot);
+    md.push(`  - Shot ${x.k} (${time(x.from)}, ${detik(x)}${info ? `, ${info}` : ''}): ${x.shot.photo.split('/').pop()} — kata: "${x.spoken.join(' ')}"`);
   }
   md.push('');
 }
