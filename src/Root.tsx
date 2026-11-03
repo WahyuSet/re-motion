@@ -23,10 +23,11 @@ export const RemotionRoot: React.FC = () => {
           defaultProps={{script}}
           calculateMetadata={async ({props}) => {
             const prepared = await prepareScript(props.script, FPS);
+            const grain = (props as {grain?: number}).grain ?? prepared.grain;
             return {
               ...FORMAT_SIZE[prepared.format ?? 'landscape'],
               durationInFrames: getTotalDuration(prepared),
-              props: {script: prepared},
+              props: {script: grain === undefined ? prepared : {...prepared, grain}},
             };
           }}
         />

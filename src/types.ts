@@ -209,6 +209,8 @@ export type VideoScript = {
   musicVolume?: number;
   /** Efek suara otomatis (transisi, stempel, angka, judul, props, timeline). Default true; false = matikan */
   sfx?: boolean;
+  /** Ketebalan bintik film (grain) 0–1. Default 1; kurangi bila ukuran file terlalu besar */
+  grain?: number;
   /** Rekaman narasi satu file utuh di public/ (kalau tidak dipotong per scene) */
   voiceover?: string;
   /**

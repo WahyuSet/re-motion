@@ -37,7 +37,7 @@ const Dust: React.FC = () => {
 };
 
 // Grain film + vignette + kedip halus + cahaya hangat yang bergeser, nuansa arsip/dokumenter.
-export const FilmOverlay: React.FC = () => {
+export const FilmOverlay: React.FC<{grain?: number}> = ({grain = 1}) => {
   const frame = useCurrentFrame();
   const seed = Math.floor(frame / 2) % 12;
   const flicker = 0.03 + random(`flicker-${Math.floor(frame / 3)}`) * 0.03;
@@ -53,12 +53,14 @@ export const FilmOverlay: React.FC = () => {
         }}
       />
       <Dust />
-      <svg width="100%" height="100%" style={{position: 'absolute', opacity: 0.14, mixBlendMode: 'overlay'}}>
-        <filter id={`grain-${seed}`}>
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed={seed} stitchTiles="stitch" />
-        </filter>
-        <rect width="100%" height="100%" filter={`url(#grain-${seed})`} />
-      </svg>
+      {grain > 0 ? (
+        <svg width="100%" height="100%" style={{position: 'absolute', opacity: 0.14 * grain, mixBlendMode: 'overlay'}}>
+          <filter id={`grain-${seed}`}>
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed={seed} stitchTiles="stitch" />
+          </filter>
+          <rect width="100%" height="100%" filter={`url(#grain-${seed})`} />
+        </svg>
+      ) : null}
       <AbsoluteFill
         style={{background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.65) 100%)'}}
       />

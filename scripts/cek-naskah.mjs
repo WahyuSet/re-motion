@@ -66,7 +66,10 @@ for (const t of ['zoom', 'whip']) {
 const stempelCount = scenes.filter((s) => s.stempel).length;
 if (stempelCount > 2) warn('stempel', `Stempel dipakai ${stempelCount} kali.`, 'Maksimal 2 per video, hanya untuk momen paling penting.');
 
-// --- SFX ---
+// --- SFX & Grain ---
+if (script.grain !== undefined && (typeof script.grain !== 'number' || script.grain < 0 || script.grain > 1)) {
+  err('grain', `Nilai grain (${script.grain}) di luar 0–1.`, 'Isi grain antara 0 (tanpa bintik film) sampai 1 (default).');
+}
 if (script.sfx !== false) {
   for (const sfxName of ['whoosh', 'dum', 'tik', 'pop', 'swell']) {
     const sfxPath = `sfx/${sfxName}.wav`;

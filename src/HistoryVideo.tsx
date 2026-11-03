@@ -139,7 +139,7 @@ export const HistoryVideo: React.FC<{script: VideoScript}> = ({script}) => {
     <SfxContext.Provider value={script.sfx !== false}>
       <AbsoluteFill style={{backgroundColor: theme.bg}}>
         <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
-        <FilmOverlay />
+        <FilmOverlay grain={script.grain} />
         {script.watermark === false ? null : <Watermark text={script.watermark ?? CHANNEL.nama} />}
         {script.music ? (
           <Audio

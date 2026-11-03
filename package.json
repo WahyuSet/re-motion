@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "remotion studio",
     "render": "remotion render Borobudur out/borobudur.mp4",
+    "render:preview": "node scripts/render.mjs --preview",
+    "render:final": "node scripts/render.mjs --final",
     "still": "remotion still Borobudur out/preview.png --frame=60",
     "typecheck": "tsc",
     "foto": "node scripts/cari-foto.mjs",

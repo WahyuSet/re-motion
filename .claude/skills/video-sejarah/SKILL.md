@@ -204,21 +204,19 @@ Hasilnya `out/storyboard/<slug>-1.jpg`, `-2.jpg`, … (4 scene per halaman) + `o
 1. Isi data upload di `src/data/<slug>.ts` (di atas `scenes`), salin dari **Resep paket YouTube** di bawah: `youtube` (judul, deskripsi, tags) dan `thumbnail` (judul ≤5 kata + foto). Video ≥2 menit: pastikan `bab` sudah ada (Langkah 2). Jalankan `node scripts/cek-naskah.mjs <slug>` → `✓ LULUS`.
 2. Render dan buat paket:
    ```bash
-   npx remotion render <Id> out/<slug>.mp4
+   node scripts/render.mjs <slug> --preview     # opsional: cek cepat setengah resolusi (<30% waktu final)
+   node scripts/render.mjs <slug>               # final 1080p + normalisasi audio -14 LUFS + versi kirim 720p (≤28 MB)
    node scripts/paket-youtube.mjs <slug>
    ```
-   Render ±5–10 menit; jalankan di background. `paket-youtube` butuh ±1 menit.
+   Render final ±5–10 menit; jalankan di background. `paket-youtube` butuh ±1 menit.
 3. Lihat `out/youtube/<slug>/thumbnail.jpg` **dan** `thumbnail-kecil.jpg` dengan Read. Di versi kecil, judul harus terbaca dan stabilo kuning terlihat. Kalau tidak: perpendek `thumbnail.judul`, ganti foto (pilih yang bagian kirinya gelap/tenang; short: bagian bawahnya), atau atur `focus`, lalu ulangi `paket-youtube`.
 4. Baca baris `⚠` di akhir output `paket-youtube` dan perbaiki sesuai isinya (lihat **Masalah umum**).
 
 Kirim ke user:
-- `out/<slug>.mp4` (1080p, untuk upload).
+- `out/<slug>.mp4` (1080p, untuk upload) dan `out/<slug>-720p.mp4` (versi kirim ≤28 MB).
 - Folder `out/youtube/<slug>/`: `thumbnail.jpg` (Thumbnail), `judul.txt` (kolom Judul), `deskripsi.txt` (kolom Deskripsi: sudah berisi chapter, kredit foto wajib CC BY / CC BY-SA, dan hashtag), `tags.txt` (kolom Tags), `subtitle.id.srt` (menu Subtitel → Unggah file → bahasa Indonesia).
 - Kredit saja (tanpa paket): `node scripts/kredit.mjs <slug>` → `out/<slug>-kredit.txt`.
-- Kalau user minta file dikirim tapi lebih dari 30 MB, buat versi preview 720p:
-  ```bash
-  node -e "import('./scripts/lib/ffmpeg.mjs').then(({ffmpeg})=>ffmpeg(['-y','-i','out/<slug>.mp4','-vf','scale=1280:720','-c:v','libx264','-b:v','3100k','-maxrate','3400k','-bufsize','6800k','-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart','out/<slug>-720p.mp4']))"
-  ```
+- Kalau ukuran file 1080p dirasa terlalu besar, kurangi bintik film dengan `grain: 0.5` (atau `0` sampai `1`, default `1`) di `src/data/<slug>.ts`.
 
 ---
 
@@ -255,9 +253,9 @@ node scripts/buat-video.mjs <slug> --short                                     #
 
 **Langkah 8–9:** `cek-frame` & `storyboard` otomatis tegak. Storyboard & persetujuan user tetap wajib. Render:
 ```bash
-npx remotion render <Id> out/<slug>.mp4
+node scripts/render.mjs <slug>
 ```
-File 1080×1920 siap diunggah ke Shorts, TikTok, dan Reels.
+File `out/<slug>.mp4` (1080×1920) dan `out/<slug>-720p.mp4` (720×1280, ≤28 MB) siap diunggah ke Shorts, TikTok, dan Reels.
 
 Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 
