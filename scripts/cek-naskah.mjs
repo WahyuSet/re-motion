@@ -198,6 +198,13 @@ for (const [i, scene] of scenes.entries()) {
     }
   }
 
+  // --- Bab (chapter YouTube) ---
+  if (scene.bab !== undefined) {
+    if (!String(scene.bab).trim()) err(where, 'bab kosong.', "Isi judul bab pendek, contoh bab: 'Asal-usul pesarean', atau hapus field bab.");
+    else if (scene.bab.length > 50) warn(where, `Judul bab "${scene.bab}" terlalu panjang.`, 'Maksimal ±50 huruf supaya chapter terbaca di YouTube.');
+    if (short) warn(where, 'bab dipakai di video short.', 'YouTube Shorts tidak menampilkan chapter. Hapus field bab.');
+  }
+
   // --- Audio ---
   if (script.narasiAudio && narasi) {
     const file = `${script.narasiAudio}/${String(i + 1).padStart(2, '0')}.${script.narasiExt ?? 'mp3'}`;
@@ -233,6 +240,8 @@ const audioSeconds = async (file) => {
 
 // Semua shot berurutan sepanjang video
 const urutan = [];
+/** Frame mulai & durasi tiap scene di video (untuk chapter) */
+const waktuScene = [];
 for (const [i, scene] of scenes.entries()) {
   const shots = (scene.shots ?? (scene.photo ? [{photo: scene.photo}] : [])).filter((s) => s.photo);
   let duration = scene.duration;
@@ -244,6 +253,8 @@ for (const [i, scene] of scenes.entries()) {
     duration = narasiDuration(scene.duration, seconds, FPS, next);
     words = sceneWords({narasi: scene.narasi, kata: kataJson?.[String(i)] ?? spreadWords(scene.narasi, seconds)}, FPS);
   }
+  const prev = waktuScene.at(-1);
+  waktuScene.push({start: prev ? prev.start + prev.duration - transitionFrames(scene.transition) : 0, duration});
   const starts = shotStarts(shots, words, duration);
   shots.forEach((shot, k) => {
     const to = k === shots.length - 1 ? duration : starts[k + 1];
@@ -302,6 +313,41 @@ for (let k = 0; k < scenes.length; ) {
     rit(`scene ${k + 1}–${j}`, `${j - k} scene ${scenes[k].type} berturut-turut.`, 'Terasa monoton. Sisipkan scene fact (angka/tahun) di tengahnya.');
   }
   k = j;
+}
+
+// --- Paket YouTube: youtube, thumbnail, aturan chapter ---
+if (script.youtube) {
+  const judul = script.youtube.judul?.trim() ?? '';
+  if (!judul) err('youtube', 'youtube.judul kosong.', "Isi judul video YouTube, contoh youtube: {judul: 'Sejarah Gunung Kawi, Tempat Bertemunya Banyak Tradisi'}.");
+  else if (judul.length > 100) err('youtube', `Judul YouTube ${judul.length} huruf.`, 'YouTube menolak judul lebih dari 100 huruf. Ringkas.');
+  else if (judul.length > 60) warn('youtube', `Judul YouTube ${judul.length} huruf.`, 'Ideal ≤60 huruf supaya tidak terpotong di hasil pencarian.');
+  const tagsTxt = (script.youtube.tags ?? []).join(', ');
+  if (tagsTxt.length > 500) err('youtube', `Tags ${tagsTxt.length} huruf.`, 'Batas kolom Tags YouTube 500 huruf. Kurangi jumlah tags.');
+  if (!script.youtube.tags?.length) warn('youtube', 'youtube.tags kosong.', "Isi 5–10 kata kunci, contoh tags: ['gunung kawi', 'sejarah malang']. 3 tag pertama jadi hashtag.");
+  if (/[<>]/.test(script.youtube.deskripsi ?? '')) warn('youtube', 'Deskripsi berisi tanda < atau >.', 'YouTube tidak mengizinkan tanda itu; paket-youtube akan membuangnya.');
+  if ((script.youtube.deskripsi ?? '').length > 3000) warn('youtube', 'Deskripsi lebih dari 3000 huruf.', 'Batas YouTube 5000 huruf termasuk chapter & kredit foto yang ditambahkan otomatis. Ringkas.');
+}
+if (script.thumbnail) {
+  const t = script.thumbnail;
+  const n = wordsOf(plain(t.judul ?? '')).filter(Boolean).length;
+  if (!n) err('thumbnail', 'thumbnail.judul kosong.', "Isi judul thumbnail ≤5 kata, contoh judul: 'Satu gunung, *banyak tradisi*'.");
+  else if (n > 5) err('thumbnail', `Judul thumbnail ${n} kata.`, 'Maksimal 5 kata supaya terbaca di ukuran kecil.');
+  if (((t.judul ?? '').match(/\*/g) ?? []).length % 2 !== 0) err('thumbnail', 'Jumlah tanda * di judul thumbnail ganjil.', 'Bungkus frasa kunci berpasangan: *banyak tradisi*.');
+  else if (n && !t.judul.includes('*')) warn('thumbnail', 'Judul thumbnail tanpa *stabilo*.', 'Tandai 1 frasa kunci dengan *bintang* supaya mencolok.');
+  if (!t.photo) err('thumbnail', 'thumbnail tanpa foto.', "Tulis thumbnail: {judul: '...', ...foto('NN-nama.jpg')}.");
+  else if (!(await exists(t.photo))) err('thumbnail', `File public/${t.photo} tidak ada.`, 'Cek nama file di folder foto, salin persis.');
+  else if (!t.credit) err('thumbnail', 'Foto thumbnail tanpa kredit.', "Selalu pakai ...foto('nama.jpg'), jangan tulis path foto manual.");
+  if (t.sub && t.sub.length > R.tagMax) warn('thumbnail', `thumbnail.sub "${t.sub}" terlalu panjang.`, `Maksimal ±${R.tagMax} huruf.`);
+}
+const bab = scenes.map((s, i) => (s.bab ? i : -1)).filter((i) => i >= 0);
+if (bab.length && !short) {
+  if (bab[0] !== 0) err(`scene ${bab[0] + 1}`, 'Bab pertama tidak di scene 1.', "YouTube hanya menampilkan chapter kalau chapter pertama di 0:00. Tambahkan bab: '<judul>' di scene 1.");
+  if (bab.length < 3) err('bab', `Hanya ${bab.length} bab.`, 'YouTube butuh minimal 3 chapter. Tambah bab di scene yang memulai bagian cerita baru.');
+  const akhir = waktuScene.length ? waktuScene.at(-1).start + waktuScene.at(-1).duration : 0;
+  bab.forEach((i, k) => {
+    const detik = ((k + 1 < bab.length ? waktuScene[bab[k + 1]].start : akhir) - waktuScene[i].start) / FPS;
+    if (detik < 10) err(`scene ${i + 1}`, `Bab "${scenes[i].bab}" hanya ${fmt(detik)} detik.`, 'Setiap chapter YouTube minimal 10 detik. Pindahkan bab berikutnya ke scene yang lebih jauh, atau gabungkan.');
+  });
 }
 
 const totalDetik = urutan.reduce((sum, x) => sum + x.detik, 0);

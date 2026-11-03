@@ -104,6 +104,11 @@ type BaseScene = {
   judulDi?: string;
   /** Cap/stempel merah yang menghentak masuk, dipakai 1–2 kali per video */
   stempel?: Stempel;
+  /**
+   * Scene ini membuka bab baru: jadi chapter YouTube di deskripsi (scripts/paket-youtube.mjs).
+   * Isi judul bab pendek, contoh 'Asal-usul pesarean'. Bab pertama wajib di scene 1.
+   */
+  bab?: string;
 };
 
 export type TitleScene = BaseScene & {
@@ -162,4 +167,29 @@ export type VideoScript = {
   narasiAudio?: string;
   /** Ekstensi file audio narasi, default 'mp3' */
   narasiExt?: 'mp3' | 'wav' | 'm4a';
+  /** Teks upload YouTube (scripts/paket-youtube.mjs) */
+  youtube?: YoutubeMeta;
+  /** Gambar thumbnail (landscape 1280×720) atau cover (short 1080×1920), dirender sebagai Still <Id>Thumb */
+  thumbnail?: ThumbnailData;
+};
+
+export type YoutubeMeta = {
+  /** Judul video di YouTube, maks. 100 huruf (ideal ≤60 supaya tidak terpotong) */
+  judul: string;
+  /** Paragraf pembuka deskripsi. Chapter, kredit foto, dan hashtag ditambahkan otomatis */
+  deskripsi?: string;
+  /** Kata kunci untuk kolom Tags, contoh ['gunung kawi', 'sejarah malang'] */
+  tags?: string[];
+};
+
+export type ThumbnailData = {
+  /** Judul raksasa maks. 5 kata. Frasa dalam *bintang* diberi stabilo kuning */
+  judul: string;
+  /** Foto latar, isi lewat ...foto('nama.jpg') (credit ikut terisi, dipakai di daftar kredit) */
+  photo: string;
+  credit?: string;
+  /** Label kecil di atas judul, contoh 'Sejarah Malang' */
+  sub?: string;
+  /** Titik tengah potongan foto dalam persen (penting untuk cover short yang memotong foto landscape), default tengah */
+  focus?: {x: number; y: number};
 };

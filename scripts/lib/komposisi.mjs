@@ -40,14 +40,15 @@ export const tutup = async () => {
 
 /**
  * Buka komposisi video (slug 'gunung-kawi' atau id 'GunungKawi').
- * Hasil: {composition, serveUrl, browser, renderFrame(frame, output)}
+ * Hasil: {composition, serveUrl, browser, renderFrame(frame, output, opsi?)}
+ * `opsi` diteruskan ke renderStill, misalnya {imageFormat: 'jpeg', jpegQuality: 90}.
  */
 export const bukaKomposisi = async (slugAtauId) => {
   const id = /[A-Z]/.test(slugAtauId[0]) ? slugAtauId : idDari(slugAtauId);
   const {serveUrl, browser} = await bukaProyek();
   const composition = await selectComposition({serveUrl, id, inputProps: {}, puppeteerInstance: browser});
-  const renderFrame = (frame, output) =>
-    renderStill({composition, serveUrl, output, frame, inputProps: {}, puppeteerInstance: browser});
+  const renderFrame = (frame, output, opsi = {}) =>
+    renderStill({composition, serveUrl, output, frame, inputProps: {}, puppeteerInstance: browser, ...opsi});
   return {composition, serveUrl, browser, renderFrame};
 };
 

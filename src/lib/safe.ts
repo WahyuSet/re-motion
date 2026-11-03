@@ -10,3 +10,9 @@ export const FORMAT_SIZE = {
   landscape: {width: 1920, height: 1080},
   short: {width: 1080, height: 1920},
 };
+
+/** Ukuran thumbnail YouTube (landscape) dan cover Shorts/TikTok/Reels (short) */
+export const THUMB_SIZE = {
+  landscape: {width: 1280, height: 720},
+  short: {width: 1080, height: 1920},
+};

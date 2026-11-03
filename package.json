@@ -11,6 +11,7 @@
     "foto": "node scripts/cari-foto.mjs",
     "props": "node scripts/generate-props.mjs",
     "kredit": "node scripts/kredit.mjs",
+    "paket": "node scripts/paket-youtube.mjs",
     "narasi": "node scripts/narasi.mjs",
     "potong-narasi": "node scripts/potong-narasi.mjs",
     "baru": "node scripts/buat-video.mjs",

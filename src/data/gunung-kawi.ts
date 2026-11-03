@@ -9,10 +9,19 @@ const foto = fotoDari('gunung-kawi', credits);
 export const gunungKawi: VideoScript = {
   narasiAudio: 'audio/gunung-kawi',
   narasiExt: 'wav',
+  // Paket upload: node scripts/paket-youtube.mjs gunung-kawi
+  youtube: {
+    judul: 'Sejarah Gunung Kawi, Tempat Bertemunya Banyak Tradisi',
+    deskripsi:
+      'Di lereng Gunung Kawi, Kabupaten Malang, ada pesarean yang diziarahi orang dari berbagai suku dan agama. Dari laskar Perang Jawa, kisah Eyang Djoego dan Raden Mas Iman Soedjono, sampai masjid dan klenteng yang berdiri berdampingan.',
+    tags: ['gunung kawi', 'sejarah malang', 'pesarean gunung kawi', 'eyang djoego', 'sejarah nusantara'],
+  },
+  thumbnail: {judul: 'Satu gunung, *banyak tradisi*', sub: 'Sejarah Malang', ...foto('07-gunung-kawi-saka-pesarean.jpg')},
   scenes: [
     {
       type: 'title',
       duration: 90,
+      bab: 'Gunung Kawi',
       kicker: 'Sejarah Nusantara',
       title: 'Gunung Kawi',
       subtitle: 'Tempat bertemunya banyak tradisi',
@@ -58,6 +67,7 @@ export const gunungKawi: VideoScript = {
       duration: 90,
       transition: 'dorong',
       tag: 'Desa Wonosari · lereng selatan',
+      bab: 'Asal-usul pesarean',
       judul: 'Makam di *lereng selatan*',
       judulDi: 'Wonosari',
       narasi:
@@ -102,6 +112,7 @@ export const gunungKawi: VideoScript = {
       duration: 90,
       transition: 'dorong',
       tag: 'Kanjeng Kyai Zakaria II',
+      bab: 'Eyang Djoego dan Iman Soedjono',
       judul: 'Sang ulama, *Eyang Djoego*',
       judulDi: 'ulama,',
       narasi:
@@ -174,6 +185,7 @@ export const gunungKawi: VideoScript = {
       duration: 90,
       transition: 'dorong',
       tag: 'Twa Low She · Djie Low She',
+      bab: 'Satu kompleks, banyak tradisi',
       judul: 'Dihormati *warga Tionghoa*',
       judulDi: 'Tionghoa,',
       narasi:
@@ -216,6 +228,7 @@ export const gunungKawi: VideoScript = {
       duration: 90,
       transition: 'kartu',
       tag: 'Kisah populer · tidak terbukti',
+      bab: 'Mitos dan tradisi',
       judul: 'Cerita dari *pabrik rokok*',
       judulDi: 'Bentoel',
       narasi:

@@ -98,7 +98,7 @@ const PAD = 20;
 
 const renderBlock = async (b) => {
   const s = b.scene;
-  const header = `Scene ${b.n} · ${s.type} · ${time(b.start)}–${time(b.end)}${b.n > 1 ? ` · transisi: ${s.transition ?? 'dorong'}` : ''}`;
+  const header = `Scene ${b.n} · ${s.type} · ${time(b.start)}–${time(b.end)}${b.n > 1 ? ` · transisi: ${s.transition ?? 'dorong'}` : ''}${s.bab ? `   ▸ BAB: ${s.bab}` : ''}`;
   const sub = [s.tag && `tag: ${s.tag}`, s.judul && `judul: ${plain(s.judul)}`, s.type === 'fact' && `angka: ${s.value}${s.suffix ?? ''} (${s.label})`, s.stempel && `stempel: ${s.stempel.teks}`]
     .filter(Boolean)
     .join('   ·   ');
@@ -167,6 +167,7 @@ const md = [`# Storyboard ${id}`, '', `Total ${time(board.at(-1).end)}, ${board.
 for (const b of board) {
   const s = b.scene;
   md.push(`## Scene ${b.n} (${s.type}) ${time(b.start)}–${time(b.end)}`);
+  if (s.bab) md.push(`- Bab (chapter YouTube): ${s.bab}`);
   if (s.tag) md.push(`- Tag: ${s.tag}`);
   if (s.judul) md.push(`- Judul: ${plain(s.judul)}`);
   if (s.type === 'fact') md.push(`- Angka: ${s.value}${s.suffix ?? ''} — ${s.label}`);

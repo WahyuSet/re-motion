@@ -60,6 +60,8 @@ Aturan `narasi` (teks yang dibacakan TTS dan sekaligus subtitle):
 
 Isi field lain mengikuti **Resep scene** di bawah. Biarkan `shots: []` dulu (diisi di langkah 4).
 
+**Bab (chapter YouTube)**, hanya video panjang ≥2 menit (short: jangan pakai): bagi cerita jadi 3–7 bagian. Tambahkan `bab: '<judul bab pendek>'` di scene yang **memulai** tiap bagian. Bab pertama wajib di scene 1, setiap bab minimal 10 detik (±2 scene). Contoh di `src/data/gunung-kawi.ts`: scene 1 `bab: 'Gunung Kawi'`, scene 4 `bab: 'Asal-usul pesarean'`, dst.
+
 **Selesai jika:** `cek-naskah` tidak lagi menampilkan error tentang narasi/TODO/judul (error "shots kosong" masih wajar sampai langkah 4).
 
 ## Langkah 3 — Cari foto bebas lisensi
@@ -189,16 +191,22 @@ Hasilnya `out/storyboard/<slug>-1.jpg`, `-2.jpg`, … (4 scene per halaman) + `o
 2. 🛑 **Kirim semua halaman storyboard ke user** dan tanya: "Storyboard sudah oke untuk dirender, atau ada scene/foto yang mau diganti?" Sebutkan juga scene yang fotonya kurang cocok karena tidak ada foto bebas lisensi yang pas.
 3. Kalau user minta perubahan: ubah naskah, jalankan `cek-naskah` + `storyboard` lagi, kirim ulang. Lanjut ke Langkah 9 **hanya setelah user setuju**.
 
-## Langkah 9 — Render & kredit
+## Langkah 9 — Render & paket YouTube
 
-```bash
-npx remotion render <Id> out/<slug>.mp4
-node scripts/kredit.mjs <slug>
-```
+1. Isi data upload di `src/data/<slug>.ts` (di atas `scenes`), salin dari **Resep paket YouTube** di bawah: `youtube` (judul, deskripsi, tags) dan `thumbnail` (judul ≤5 kata + foto). Video ≥2 menit: pastikan `bab` sudah ada (Langkah 2). Jalankan `node scripts/cek-naskah.mjs <slug>` → `✓ LULUS`.
+2. Render dan buat paket:
+   ```bash
+   npx remotion render <Id> out/<slug>.mp4
+   node scripts/paket-youtube.mjs <slug>
+   ```
+   Render ±5–10 menit; jalankan di background. `paket-youtube` butuh ±1 menit.
+3. Lihat `out/youtube/<slug>/thumbnail.jpg` **dan** `thumbnail-kecil.jpg` dengan Read. Di versi kecil, judul harus terbaca dan stabilo kuning terlihat. Kalau tidak: perpendek `thumbnail.judul`, ganti foto (pilih yang bagian kirinya gelap/tenang; short: bagian bawahnya), atau atur `focus`, lalu ulangi `paket-youtube`.
+4. Baca baris `⚠` di akhir output `paket-youtube` dan perbaiki sesuai isinya (lihat **Masalah umum**).
 
-Render ±5–10 menit; jalankan di background. Kirim ke user:
+Kirim ke user:
 - `out/<slug>.mp4` (1080p, untuk upload).
-- `out/<slug>-kredit.txt` → wajib ditempel di deskripsi YouTube (foto CC BY / CC BY-SA).
+- Folder `out/youtube/<slug>/`: `thumbnail.jpg` (Thumbnail), `judul.txt` (kolom Judul), `deskripsi.txt` (kolom Deskripsi: sudah berisi chapter, kredit foto wajib CC BY / CC BY-SA, dan hashtag), `tags.txt` (kolom Tags), `subtitle.id.srt` (menu Subtitel → Unggah file → bahasa Indonesia).
+- Kredit saja (tanpa paket): `node scripts/kredit.mjs <slug>` → `out/<slug>-kredit.txt`.
 - Kalau user minta file dikirim tapi lebih dari 30 MB, buat versi preview 720p:
   ```bash
   node -e "import('./scripts/lib/ffmpeg.mjs').then(({ffmpeg})=>ffmpeg(['-y','-i','out/<slug>.mp4','-vf','scale=1280:720','-c:v','libx264','-b:v','3100k','-maxrate','3400k','-bufsize','6800k','-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart','out/<slug>-720p.mp4']))"
@@ -299,6 +307,22 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 },
 ```
 
+## Resep paket YouTube (salin ke atas `scenes`, lalu ganti isinya)
+
+```ts
+  youtube: {
+    judul: 'Sejarah Majapahit, Kerajaan Penguasa Lautan Nusantara',   // ≤100 huruf, ideal ≤60
+    deskripsi: 'Satu paragraf 2–3 kalimat tentang isi video, hanya fakta dari sumber.md.',
+    tags: ['majapahit', 'sejarah nusantara', 'trowulan', 'gajah mada', 'kerajaan hindu'],  // 3 pertama jadi hashtag
+  },
+  thumbnail: {judul: 'Penguasa *lautan Nusantara*', sub: 'Sejarah Jawa Timur', ...foto('07-situs-trowulan.jpg')},
+```
+
+- `youtube.deskripsi`: tulis paragraf pembuka saja. Chapter (`bab`), daftar kredit foto, dan hashtag ditambahkan otomatis oleh `paket-youtube`.
+- `thumbnail.judul`: maks. 5 kata, berbeda dari judul video (thumbnail = rasa penasaran, judul = kata kunci pencarian). Tepat satu frasa `*bintang*` (stabilo kuning).
+- `thumbnail` foto: lewat `...foto()` (kredit ikut masuk deskripsi). Pilih foto paling kuat & jelas; judul ditaruh di kiri bawah (short: tengah bawah), jadi bagian itu sebaiknya tidak ramai. Short: tambah `focus: {x, y}` kalau objek utama tidak di tengah foto.
+- `thumbnail.sub` opsional: label kecil di atas judul (≤40 huruf, short ≤26).
+
 **Watermark**: nama channel (`src/channel.ts`, sekarang "jejakala") otomatis tampil di kanan atas semua video, landscape maupun short. Jangan menambah watermark/logo sendiri. Hanya kalau user meminta: `watermark: false` (tanpa watermark) atau `watermark: 'teks lain'` di naskah.
 
 **Transisi** (`transition` di scene ke-2 dan seterusnya): selang-seling `dorong` dan `kartu`; `none` antar dua scene fact berturut-turut; `zoom` atau `whip` paling banyak sekali per video.
@@ -322,6 +346,11 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 | `potong-narasi`: kecocokan rendah / ⚠ | Audio tidak sesuai naskah terbaru. Minta TTS ulang dari `naskah-full.txt` |
 | `potong-narasi`: "Python + faster-whisper tidak ditemukan" | Pemotongan pakai jeda (kurang akurat). Beri tahu user; minta jeda ±1,5 dtk antar paragraf di TTS |
 | Subtitle/hitungan angka tidak sinkron | `kata.json` usang → ulangi langkah 7 |
+| `paket-youtube`: "Naskah belum punya youtube.judul" | Tambahkan blok `youtube` dari **Resep paket YouTube** |
+| `paket-youtube`: "Chapter tidak dimasukkan ke deskripsi" | Jalankan `cek-naskah`, perbaiki error `bab` (bab pertama di scene 1, minimal 3 bab, tiap bab ≥10 detik), ulangi `paket-youtube` |
+| `paket-youtube`: "timing subtitle masih PERKIRAAN" | Audio narasi belum dipasang. Selesaikan langkah 6–7, lalu ulangi `paket-youtube` |
+| `cek-naskah`: "Bab ... hanya N detik" | Bab terlalu rapat. Hapus `bab` di scene itu, atau pindahkan ke scene yang lebih jauh |
+| Judul thumbnail tidak terbaca di `thumbnail-kecil.jpg` | Perpendek `thumbnail.judul` (2–4 kata), ganti foto yang bagian judulnya lebih gelap/tenang |
 | Short: teks/props kena area merah di `cek-frame` | Pindahkan props/stempel ke x 7–86%, y 13–78%; perpendek tag/judul |
 | Short: foto hanya menampilkan bagian tidak penting | Atur `focus: {x, y}`, pakai `pan-left`/`pan-right`, atau `layout: 'print'` |
 | Foto muncul tidak pas dengan kata yang diucapkan | Tambah `di: '<kata>'` di shot itu; cek di storyboard |

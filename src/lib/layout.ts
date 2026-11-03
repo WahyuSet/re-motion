@@ -1,7 +1,7 @@
 import {useVideoConfig} from 'remotion';
-import {FORMAT_SIZE, SAFE_SHORT} from './safe';
+import {FORMAT_SIZE, SAFE_SHORT, THUMB_SIZE} from './safe';
 
-export {FORMAT_SIZE, SAFE_SHORT};
+export {FORMAT_SIZE, SAFE_SHORT, THUMB_SIZE};
 
 // Ukuran & posisi elemen per orientasi. Nilai landscape = angka asli template (jangan diubah tanpa alasan,
 // semua video landscape yang sudah ada bergantung padanya).
@@ -23,6 +23,17 @@ const LANDSCAPE = {
   photoText: {left: 110, right: 110, bottom: 110, maxWidth: 1400, fontSize: 76},
   /** Di landscape tepat di atas baris tag per shot (top 80) */
   watermark: {top: 26, right: 110, fontSize: 30},
+  /** Thumbnail 1280×720 (src/Thumbnail.tsx): judul kiri bawah di atas gradien gelap dari kiri */
+  thumbnail: {
+    left: 64,
+    bottom: 64,
+    maxWidth: 820,
+    judulSize: 124,
+    subSize: 24,
+    channel: {top: 34, right: 44, fontSize: 30},
+    gradient:
+      'linear-gradient(90deg, rgba(10,8,6,0.94) 0%, rgba(10,8,6,0.7) 42%, rgba(10,8,6,0) 78%), linear-gradient(0deg, rgba(10,8,6,0.6) 0%, rgba(10,8,6,0) 45%)',
+  },
 };
 
 export type LayoutTokens = typeof LANDSCAPE;
@@ -49,6 +60,16 @@ const VERTICAL: LayoutTokens = {
   photoText: {left: S.left, right: S.right, bottom: S.bottom + 20, maxWidth: SAFE_WIDTH, fontSize: 68},
   // Sebaris dengan tag scene (kiri), di dalam area aman kanan
   watermark: {top: S.top + 14, right: S.right, fontSize: 30},
+  // Cover 1080×1920: judul di tengah-bawah area aman, di atas gradien gelap dari bawah
+  thumbnail: {
+    left: S.left,
+    bottom: S.bottom + 40,
+    maxWidth: SAFE_WIDTH,
+    judulSize: 150,
+    subSize: 30,
+    channel: {top: S.top + 14, right: S.right, fontSize: 34},
+    gradient: 'linear-gradient(0deg, rgba(10,8,6,0.95) 0%, rgba(10,8,6,0.75) 38%, rgba(10,8,6,0) 65%)',
+  },
 };
 
 export const useLayout = (): LayoutTokens => {

@@ -36,9 +36,22 @@ Panduan langkah demi langkah (juga dipakai AI agent sebagai skill, ditulis supay
 | 7. Audio | `npm run potong-narasi -- majapahit "D:\path\tts.wav"` | `public/audio/majapahit/` + `kata.json` |
 | 8. Cek | `npm run cek -- majapahit` lalu `npm run cek-frame -- majapahit` | daftar error + cara memperbaiki; `out/cek/majapahit-lembar.jpg` |
 | 8b. Storyboard | `npm run storyboard -- majapahit` | `out/storyboard/majapahit-N.jpg`: cuplikan tiap shot + kata yang diucapkan saat shot tampil. **Wajib disetujui sebelum render** |
-| 9. Render | `npx remotion render Majapahit out/majapahit.mp4` lalu `npm run kredit -- majapahit` | MP4 + `out/majapahit-kredit.txt` |
+| 9. Render & paket | `npx remotion render Majapahit out/majapahit.mp4` lalu `npm run paket -- majapahit` | MP4 + `out/youtube/majapahit/`: thumbnail, judul, deskripsi (chapter + kredit), tags, subtitle SRT |
 
 `npm run cek` memeriksa semua aturan (jumlah shot, judul ≤5 kata, angka di narasi, tanda bintang di scene fakta, file foto/audio ada, kredit, kecocokan `kata.json`) dan menulis cara memperbaikinya. Bagian **RITME** (hanya peringatan) memeriksa tempo visual: lama tiap shot (1,5–7 dtk, short 1–5 dtk), foto yang dipakai berulang, gerak kamera sama berturut-turut, shot `print` beruntun, dan jenis scene yang monoton, lalu menulis ringkasan jumlah shot, rata-rata durasi, dan foto unik. Durasi dihitung dari audio narasi dengan rumus yang sama dengan render.
+
+## Paket upload YouTube
+
+Isi di naskah (contoh lengkap: `src/data/gunung-kawi.ts`):
+
+```ts
+youtube: {judul: 'Sejarah Gunung Kawi, Tempat Bertemunya Banyak Tradisi', deskripsi: '…', tags: ['gunung kawi', 'sejarah malang']},
+thumbnail: {judul: 'Satu gunung, *banyak tradisi*', sub: 'Sejarah Malang', ...foto('07-gunung-kawi-saka-pesarean.jpg')},
+// per scene, hanya video panjang: scene yang memulai bagian cerita baru
+bab: 'Asal-usul pesarean',
+```
+
+`npm run paket -- gunung-kawi` membuat `out/youtube/gunung-kawi/`: `thumbnail.jpg` (1280×720; short: cover 1080×1920) + `thumbnail-kecil.jpg` untuk cek keterbacaan, `judul.txt`, `deskripsi.txt` (paragraf + chapter dari `bab` + kredit foto + hashtag), `tags.txt`, dan `subtitle.id.srt` (teks naskah, waktu dari audio narasi). Thumbnail bisa dilihat di Studio sebagai Still `<Id>Thumb`. `npm run cek` memeriksa aturannya: judul ≤100 huruf, judul thumbnail ≤5 kata, chapter (bab pertama di scene 1, minimal 3 bab, tiap bab ≥10 detik).
 
 ## Watermark channel
 
@@ -146,6 +159,7 @@ scripts/
   cari-foto.mjs       cari & unduh foto bebas lisensi + kredit
   generate-props.mjs  generate props via Flow Bridge + hapus background
   kredit.mjs          daftar kredit untuk deskripsi YouTube
+  paket-youtube.mjs   paket upload: thumbnail, judul, deskripsi + chapter, tags, subtitle SRT
   narasi.mjs          ekspor naskah narasi untuk TTS
   potong-narasi.mjs   potong narasi utuh jadi audio per scene
   buat-video.mjs      siapkan video baru dari template + daftarkan
