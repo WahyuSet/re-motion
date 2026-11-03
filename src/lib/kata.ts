@@ -4,6 +4,8 @@ import type {Scene, WordTiming} from '../types';
 
 /** Jeda sebelum suara mulai di tiap scene (frame) */
 export const NARASI_DELAY = 8;
+/** Jeda setelah suara selesai sebelum scene berganti (frame), di luar durasi transisi */
+export const NARASI_TAIL = 12;
 /** Lama transisi antar scene (frame); 0 untuk transisi 'none' */
 export const TRANSITION_FRAMES = 18;
 export const transitionFrames = (type: string | undefined) => (type === 'none' ? 0 : TRANSITION_FRAMES);
@@ -47,6 +49,27 @@ export const sceneWords = (scene: {narasi?: string; kata?: WordTiming[]}, fps: n
     end: NARASI_DELAY + Math.round((timings[i]?.[1] ?? 0) * fps),
   }));
 };
+
+/** Kecepatan bicara TTS bahasa Indonesia rata-rata (sama dengan scripts/narasi.mjs) */
+export const WORDS_PER_SECOND = 2.4;
+export const estimateSeconds = (narasi: string) => narasi.trim().split(/\s+/).length / WORDS_PER_SECOND;
+
+// Perkiraan timing kalau tidak ada kata.json: waktu dibagi sesuai panjang tiap kata.
+export const spreadWords = (narasi: string, seconds: number): WordTiming[] => {
+  const words = narasi.trim().split(/\s+/);
+  const weights = words.map((w) => w.replace(/\*/g, '').length + 2);
+  const total = weights.reduce((a, b) => a + b, 0);
+  let t = 0;
+  return weights.map((w) => {
+    const start = t;
+    t += (w / total) * seconds;
+    return [start, t];
+  });
+};
+
+/** Durasi scene (frame) supaya narasi sepanjang `seconds` selesai sebelum transisi ke scene berikutnya */
+export const narasiDuration = (minDuration: number, seconds: number, fps: number, nextTransitionFrames: number) =>
+  Math.max(minDuration, NARASI_DELAY + Math.ceil(seconds * fps) + NARASI_TAIL + nextTransitionFrames);
 
 export const normalizeWord = (word: string) => word.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
 

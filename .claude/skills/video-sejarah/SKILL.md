@@ -103,6 +103,11 @@ Isi `shots` setiap scene dengan 2–4 foto, lalu tambahkan lapisan sesuai **Rese
 
 **Selesai jika:** `node scripts/cek-naskah.mjs <slug>` → `✓ LULUS`.
 
+Lalu baca bagian **RITME** di hasil `cek-naskah` (peringatan tempo visual, tidak membuat GAGAL):
+1. Perbaiki setiap baris `⚠` sesuai baris "Perbaiki:" (lihat juga tabel **Masalah umum**), lalu jalankan `cek-naskah` lagi.
+2. Kalau suatu catatan tidak bisa diperbaiki (misalnya tidak ada foto bebas lisensi lain), biarkan, dan sebutkan ke user saat mengirim storyboard.
+3. Baris `Ritme: N shot, rata-rata X dtk/shot ...` adalah ringkasan; idealnya rata-rata 2,5–4,5 dtk dan foto unik mendekati jumlah shot.
+
 Boleh langsung cek tampilan sebelum ada audio: `node scripts/cek-frame.mjs <slug>` (durasi scene diperkirakan dari jumlah kata narasi, ±2,4 kata/detik). Video panjang (16+ scene) menghasilkan lembar kontak yang tinggi; potong jadi 3 bagian sebelum dilihat supaya tetap terbaca.
 
 ## Langkah 5 — Props (opsional)
@@ -178,7 +183,7 @@ Dua foto tampak bertumpuk samar di satu kotak = frame jatuh tepat di pergantian 
 node scripts/storyboard.mjs <slug>
 ```
 
-Hasilnya `out/storyboard/<slug>-1.jpg`, `-2.jpg`, … (4 scene per halaman) + `out/storyboard/<slug>.md`. Tiap scene berisi: waktu mulai–selesai, transisi, tag/judul/angka/stempel, narasi, lalu **setiap shot** dengan cuplikan gambar, waktu mulai, dan **kata-kata yang diucapkan selama shot itu tampil**.
+Hasilnya `out/storyboard/<slug>-1.jpg`, `-2.jpg`, … (4 scene per halaman) + `out/storyboard/<slug>.md`. Tiap scene berisi: waktu mulai–selesai, transisi, tag/judul/angka/stempel, narasi, lalu **setiap shot** dengan cuplikan gambar, waktu mulai, lama tampil (misal `(3,2 dtk)`, angkanya sama dengan catatan RITME), dan **kata-kata yang diucapkan selama shot itu tampil**.
 
 1. Lihat setiap halaman dengan Read. Untuk setiap shot, bandingkan cuplikan dengan kata-kata di bawahnya: apakah foto menunjukkan hal yang sedang diucapkan? Kalau tidak cocok, tambah/perbaiki `di`, tukar urutan shot, atau ganti foto. Jalankan ulang storyboard.
 2. 🛑 **Kirim semua halaman storyboard ke user** dan tanya: "Storyboard sudah oke untuk dirender, atau ada scene/foto yang mau diganti?" Sebutkan juga scene yang fotonya kurang cocok karena tidak ada foto bebas lisensi yang pas.
@@ -300,6 +305,8 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 
 **Batas**: judul ≤5 kata · tag ≤40 huruf · label anotasi ≤24 huruf · stempel ≤2 per video · 2–4 shot per scene.
 
+**Ritme** (dicek di bagian RITME `cek-naskah`): tiap shot tampil 1,5–7 dtk (short: 1–5 dtk) · satu foto maks. 3 kali per video dan tidak di dua scene berturut-turut · dua shot full berurutan jangan bergerak sama · maks. 3 shot `print` beruntun · jenis scene yang sama maks. 4 berturut-turut.
+
 ---
 
 ## Masalah umum
@@ -321,6 +328,12 @@ Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 | `cek-naskah`: "di ... tidak ada di narasi" | Kata salah ketik, tidak ada di narasi scene itu, atau urutan `di` terbalik dengan urutan shot |
 | Layar hitam di lembar kontak | Scene tanpa shot atau nama file foto salah → `cek-naskah` |
 | Judul/badge bertumpuk dengan tag | Hapus `tag` scene di scene fact; di scene photo tag + judul sudah diatur posisinya |
+| RITME: "Shot hanya tampil X dtk, terlalu cepat" | Dua `di` terlalu berdekatan di narasi. Hapus salah satu shot, atau ganti `di` dengan kata yang lebih jauh dari `di` shot sebelumnya/berikutnya |
+| RITME: "Shot diam X dtk, terlalu lama" | Tambah shot baru dengan `di: '<kata>'` = kata di tengah bagian narasi yang tampil lama itu (cek kata-katanya di storyboard) |
+| RITME: "Foto ... dipakai N kali" / "dipakai di dua scene berturut-turut" | Ganti foto itu di sebagian scene dengan foto lain dari contact sheet. Kurang foto → `cari-foto` dengan kata kunci baru (slug sama) |
+| RITME: "Gerak kamera ... sama dengan shot sebelumnya" | Ganti `move` salah satu shot, atau hapus `move` supaya dipilih bergantian otomatis. Shot sebelumnya bisa shot terakhir scene sebelumnya |
+| RITME: "N shot print berturut-turut" | Ubah salah satu shot di tengahnya jadi full (hapus `layout: 'print'`), atau sisipkan shot foto berwarna |
+| RITME: "N scene photo berturut-turut" | Ubah satu scene di tengahnya jadi `fact` (angka/tahun yang memang disebut narasi), atau pindahkan scene fact yang ada ke tengah deretan itu |
 
 Alasan desain (kenapa 2–4 shot, kenapa transisi tertentu, ukuran teks, dsb.): `referensi/desain.md`.
 

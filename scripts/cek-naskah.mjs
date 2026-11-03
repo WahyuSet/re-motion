@@ -2,9 +2,11 @@
 //
 // Pakai: node scripts/cek-naskah.mjs borobudur
 // Keluar dengan kode 1 kalau ada ERROR. PERINGATAN boleh dibiarkan kalau memang disengaja.
+// RITME = peringatan tempo visual (durasi shot, foto berulang, gerak kamera, variasi scene).
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {ALL_FORMATS, FilePathSource, Input} from 'mediabunny';
 import {importTs, loadScript} from './lib/load-script.mjs';
 
 const slug = process.argv[2];
@@ -207,7 +209,107 @@ for (const [i, scene] of scenes.entries()) {
   }
 }
 
-for (const [label, list, icon] of [['ERROR', errors, '✗'], ['PERINGATAN', warnings, '⚠']]) {
+// --- RITME: durasi shot, foto berulang, gerak kamera, variasi scene (hanya peringatan) ---
+// Durasi scene & waktu shot dihitung dengan rumus yang sama dengan video (src/lib/kata.ts).
+const ritme = [];
+const rit = (where, msg, fix) => ritme.push({where, msg, fix});
+const {sceneWords, shotStarts, transitionFrames, narasiDuration, estimateSeconds, spreadWords} = await importTs('src/lib/kata.ts');
+const {shotMove} = await importTs('src/lib/motion.ts');
+const FPS = 30;
+const RITME = short ? {min: 1, max: 5} : {min: 1.5, max: 7};
+const namaFoto = (p) => p.split('/').pop();
+const fmt = (s) => s.toFixed(1).replace('.', ',');
+
+const audioSeconds = async (file) => {
+  const input = new Input({formats: ALL_FORMATS, source: new FilePathSource(path.resolve('public', file))});
+  try {
+    return await input.computeDuration();
+  } catch {
+    return null;
+  } finally {
+    input.dispose();
+  }
+};
+
+// Semua shot berurutan sepanjang video
+const urutan = [];
+for (const [i, scene] of scenes.entries()) {
+  const shots = (scene.shots ?? (scene.photo ? [{photo: scene.photo}] : [])).filter((s) => s.photo);
+  let duration = scene.duration;
+  let words = [];
+  if (scene.narasi) {
+    const file = script.narasiAudio ? `${script.narasiAudio}/${String(i + 1).padStart(2, '0')}.${script.narasiExt ?? 'mp3'}` : null;
+    const seconds = (file && (await audioSeconds(file))) ?? estimateSeconds(scene.narasi);
+    const next = i + 1 < scenes.length ? transitionFrames(scenes[i + 1].transition) : 0;
+    duration = narasiDuration(scene.duration, seconds, FPS, next);
+    words = sceneWords({narasi: scene.narasi, kata: kataJson?.[String(i)] ?? spreadWords(scene.narasi, seconds)}, FPS);
+  }
+  const starts = shotStarts(shots, words, duration);
+  shots.forEach((shot, k) => {
+    const to = k === shots.length - 1 ? duration : starts[k + 1];
+    urutan.push({
+      scene: i + 1,
+      where: `scene ${i + 1} (${scene.type}), shot ${k + 1}`,
+      shot,
+      layout: shot.layout ?? 'full',
+      move: shotMove(shot, k, short),
+      detik: (to - starts[k]) / FPS,
+    });
+  });
+}
+
+for (const x of urutan) {
+  if (x.detik < RITME.min) {
+    rit(x.where, `Shot hanya tampil ${fmt(x.detik)} dtk, terlalu cepat.`, `Minimal ±${fmt(RITME.min)} dtk. Hapus shot ini, atau pindahkan di ke kata yang lebih jauh dari di shot sebelumnya/berikutnya.`);
+  } else if (x.detik > RITME.max) {
+    rit(x.where, `Shot diam ${fmt(x.detik)} dtk, terlalu lama.`, `Maksimal ±${RITME.max} dtk. Tambah shot baru dengan di: '<kata>' di tengah bagian narasi ini (1 foto per ±3 detik).`);
+  }
+}
+
+const pemakaian = new Map();
+for (const x of urutan) pemakaian.set(x.shot.photo, [...(pemakaian.get(x.shot.photo) ?? []), x.scene]);
+for (const [photo, list] of pemakaian) {
+  if (list.length > 3) {
+    rit('video', `Foto ${namaFoto(photo)} dipakai ${list.length} kali (scene ${[...new Set(list)].join(', ')}).`, 'Maksimal 3 kali per video. Ganti sebagian dengan foto lain (cari-foto dengan kata kunci baru).');
+  }
+  const uniq = [...new Set(list)];
+  for (let k = 1; k < uniq.length; k++) {
+    if (uniq[k] === uniq[k - 1] + 1) {
+      rit(`scene ${uniq[k - 1]}–${uniq[k]}`, `Foto ${namaFoto(photo)} dipakai di dua scene berturut-turut.`, 'Ganti fotonya di salah satu scene supaya penonton melihat gambar baru.');
+    }
+  }
+}
+
+for (let k = 1; k < urutan.length; k++) {
+  const [a, b] = [urutan[k - 1], urutan[k]];
+  if (a.layout === 'full' && b.layout === 'full' && a.move === b.move) {
+    rit(b.where, `Gerak kamera '${b.move}' sama dengan shot sebelumnya.`, "Isi move berbeda (push-in, pull-out, pan-left, pan-right, tilt-up, tilt-down), atau kosongkan move supaya dipilih bergantian.");
+  }
+}
+for (let k = 0; k < urutan.length; ) {
+  let j = k;
+  while (j < urutan.length && urutan[j].layout === 'print') j++;
+  if (j - k > 3) {
+    rit(`${urutan[k].where} s.d. ${urutan[j - 1].where}`, `${j - k} shot print berturut-turut.`, "Maksimal 3. Selingi dengan shot full (foto memenuhi layar).");
+  }
+  k = Math.max(j, k + 1);
+}
+
+for (let k = 0; k < scenes.length; ) {
+  let j = k;
+  while (j < scenes.length && scenes[j].type === scenes[k].type) j++;
+  if (j - k >= 5) {
+    rit(`scene ${k + 1}–${j}`, `${j - k} scene ${scenes[k].type} berturut-turut.`, 'Terasa monoton. Sisipkan scene fact (angka/tahun) di tengahnya.');
+  }
+  k = j;
+}
+
+const totalDetik = urutan.reduce((sum, x) => sum + x.detik, 0);
+const ringkasanRitme = urutan.length
+  ? `Ritme: ${urutan.length} shot, rata-rata ${fmt(totalDetik / urutan.length)} dtk/shot (${fmt(Math.min(...urutan.map((x) => x.detik)))}–${fmt(Math.max(...urutan.map((x) => x.detik)))} dtk), ${pemakaian.size} foto unik dari ${urutan.length} shot.`
+  : null;
+
+for (const [label, list, icon] of [['ERROR', errors, '✗'], ['PERINGATAN', warnings, '⚠'], ['RITME', ritme, '⚠']]) {
   if (!list.length) continue;
   console.log(`\n${label} (${list.length})`);
   for (const {where, msg, fix} of list) {
@@ -233,7 +335,9 @@ if (tanpaDi.length) {
   );
 }
 
+if (ringkasanRitme) console.log(`\n${ringkasanRitme}`);
+
 console.log(
-  `\n${errors.length ? '✗ GAGAL' : '✓ LULUS'}: ${short ? 'short 9:16, ' : ''}${scenes.length} scene, ±${Math.round(estSeconds)} detik, ${errors.length} error, ${warnings.length} peringatan.`,
+  `\n${errors.length ? '✗ GAGAL' : '✓ LULUS'}: ${short ? 'short 9:16, ' : ''}${scenes.length} scene, ±${Math.round(estSeconds)} detik, ${errors.length} error, ${warnings.length} peringatan, ${ritme.length} catatan ritme.`,
 );
 if (errors.length) process.exitCode = 1;

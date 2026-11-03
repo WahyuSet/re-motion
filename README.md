@@ -38,7 +38,7 @@ Panduan langkah demi langkah (juga dipakai AI agent sebagai skill, ditulis supay
 | 8b. Storyboard | `npm run storyboard -- majapahit` | `out/storyboard/majapahit-N.jpg`: cuplikan tiap shot + kata yang diucapkan saat shot tampil. **Wajib disetujui sebelum render** |
 | 9. Render | `npx remotion render Majapahit out/majapahit.mp4` lalu `npm run kredit -- majapahit` | MP4 + `out/majapahit-kredit.txt` |
 
-`npm run cek` memeriksa semua aturan (jumlah shot, judul ≤5 kata, angka di narasi, tanda bintang di scene fakta, file foto/audio ada, kredit, kecocokan `kata.json`) dan menulis cara memperbaikinya.
+`npm run cek` memeriksa semua aturan (jumlah shot, judul ≤5 kata, angka di narasi, tanda bintang di scene fakta, file foto/audio ada, kredit, kecocokan `kata.json`) dan menulis cara memperbaikinya. Bagian **RITME** (hanya peringatan) memeriksa tempo visual: lama tiap shot (1,5–7 dtk, short 1–5 dtk), foto yang dipakai berulang, gerak kamera sama berturut-turut, shot `print` beruntun, dan jenis scene yang monoton, lalu menulis ringkasan jumlah shot, rata-rata durasi, dan foto unik. Durasi dihitung dari audio narasi dengan rumus yang sama dengan render.
 
 ## Watermark channel
 

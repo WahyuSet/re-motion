@@ -2,15 +2,12 @@ import React from 'react';
 import {AbsoluteFill, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {SHOT_OVERLAP as OVERLAP, shotStarts, type TimedWord} from '../lib/kata';
 import {useLayout} from '../lib/layout';
+import {shotMove} from '../lib/motion';
 import type {CameraMove, Shot} from '../types';
 import {Credit} from './Caption';
 import {AnotasiLayer, Tag} from './Layout';
 /** Anotasi mulai tergambar setelah foto mapan (frame sejak shot mulai) */
 const ANOTASI_AT = 22;
-
-const AUTO_MOVES: CameraMove[] = ['push-in', 'pan-left', 'pull-out', 'pan-right', 'tilt-up', 'push-in', 'tilt-down'];
-// Layar vertikal memotong foto landscape jadi pita sempit: utamakan pan yang menyusuri lebar foto.
-const AUTO_MOVES_VERTICAL: CameraMove[] = ['pan-right', 'push-in', 'pan-left', 'pull-out'];
 
 // Pan di layar vertikal: geser titik crop (objectPosition) melintasi foto, 15% -> 85% lebar foto.
 const verticalPanX = (move: CameraMove, p: number) =>
@@ -45,8 +42,7 @@ const ShotView: React.FC<{
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const L = useLayout();
-  const autoMoves = L.vertical ? AUTO_MOVES_VERTICAL : AUTO_MOVES;
-  const move = shot.move ?? autoMoves[index % autoMoves.length];
+  const move = shotMove(shot, index, L.vertical);
   const p = interpolate(frame, [0, duration], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',

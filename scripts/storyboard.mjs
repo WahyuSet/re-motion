@@ -33,6 +33,8 @@ const time = (frame) => {
 };
 const xml = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const plain = (t) => t.replace(/\*/g, '');
+/** Lama shot tampil, contoh '3,2 dtk' (cocokkan dengan catatan RITME di cek-naskah) */
+const detik = (x) => `${((x.to - x.from) / FPS).toFixed(1).replace('.', ',')} dtk`;
 
 // Bungkus teks ke beberapa baris berdasarkan perkiraan lebar huruf.
 const wrap = (text, maxChars, maxLines) => {
@@ -105,7 +107,7 @@ const renderBlock = async (b) => {
   const captionLines = b.shots.map((x) =>
     wrap(`“${x.spoken.join(' ')}”`, CAPTION_CHARS, vertical ? 4 : 3),
   );
-  const captionH = 30 + Math.max(...captionLines.map((l) => l.length), 1) * 26 + 26;
+  const captionH = 30 + Math.max(...captionLines.map((l) => l.length), 1) * 26 + 26 + 22;
   const H = top + THUMB_H + captionH + PAD;
 
   let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
@@ -120,12 +122,18 @@ const renderBlock = async (b) => {
     const cy = top + THUMB_H + 26;
     const di = x.shot.di ? ` · di "${x.shot.di}"` : '';
     const layout = x.shot.layout === 'print' ? ' · print' : '';
-    svg += `<text x="${left}" y="${cy}" font-family="Arial" font-size="19" font-weight="bold" fill="#ffd54a">${xml(`Shot ${x.k} · ${time(x.from)}${di}${layout}`)}</text>`;
+    // di/print di baris abu-abu bawah, supaya label tidak melewati lebar cuplikan
+    const label = `Shot ${x.k} · ${time(x.from)} (${detik(x)})`;
+    svg += `<text x="${left}" y="${cy}" font-family="Arial" font-size="19" font-weight="bold" fill="#ffd54a">${xml(label)}</text>`;
     captionLines[k].forEach((line, li) => {
       svg += `<text x="${left}" y="${cy + 26 + li * 26}" font-family="Arial" font-size="19" fill="#f3ead7">${xml(line)}</text>`;
     });
     const name = x.shot.photo.split('/').pop().replace(/\.jpg$/, '');
-    svg += `<text x="${left}" y="${cy + 26 + captionLines[k].length * 26}" font-family="Arial" font-size="16" fill="#8f8473">${xml(name.slice(0, vertical ? 30 : 52))}</text>`;
+    const nameY = cy + 26 + captionLines[k].length * 26;
+    svg += `<text x="${left}" y="${nameY}" font-family="Arial" font-size="16" fill="#8f8473">${xml(name.slice(0, vertical ? 30 : 52))}</text>`;
+    if (di || layout) {
+      svg += `<text x="${left}" y="${nameY + 22}" font-family="Arial" font-size="16" fill="#8f8473">${xml((di + layout).slice(3))}</text>`;
+    }
   });
   svg += '</svg>';
 
@@ -165,7 +173,7 @@ for (const b of board) {
   if (s.stempel) md.push(`- Stempel: ${s.stempel.teks}`);
   md.push(`- Narasi: ${plain(s.narasi ?? '')}`);
   for (const x of b.shots) {
-    md.push(`  - Shot ${x.k} (${time(x.from)}${x.shot.di ? `, di "${x.shot.di}"` : ''}): ${x.shot.photo.split('/').pop()} — kata: "${x.spoken.join(' ')}"`);
+    md.push(`  - Shot ${x.k} (${time(x.from)}, ${detik(x)}${x.shot.di ? `, di "${x.shot.di}"` : ''}): ${x.shot.photo.split('/').pop()} — kata: "${x.spoken.join(' ')}"`);
   }
   md.push('');
 }
