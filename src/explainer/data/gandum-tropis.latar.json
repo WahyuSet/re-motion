@@ -1,0 +1,17 @@
+[
+  {
+    "name": "gandum-tropis-1",
+    "prompt": "wide realistic modern photography of Gandum Tropis scene 1 location, natural colors, full-bleed camera frame no border, clean composition",
+    "utuh": true
+  },
+  {
+    "name": "gandum-tropis-2",
+    "prompt": "wide realistic modern indoor or outdoor photography of Gandum Tropis scene 2 location, natural daylight, full-bleed camera frame no border, high detail",
+    "utuh": true
+  },
+  {
+    "name": "gandum-tropis-4",
+    "prompt": "wide realistic modern photography of Gandum Tropis conclusion scene location, soft natural lighting, full-bleed camera frame no border",
+    "utuh": true
+  }
+]
