@@ -57,7 +57,27 @@ bab: 'Asal-usul pesarean',
 
 Nama channel di `src/channel.ts` (sekarang **jejakala**) tampil halus di kanan atas semua video. Ganti nama di file itu untuk semua video sekaligus, atau per video di naskah: `watermark: 'teks lain'` / `watermark: false`.
 
-## Mode short (9:16): YouTube Shorts, TikTok, Reels
+## Video Explainer — Cutout Motion 9:16 ("nahh gini")
+
+Engine terpisah di `src/explainer/` khusus untuk video Cutout Motion Explainer Shorts 9:16 (*"Kenapa...", "Kok bisa...", hitungan biaya, fisika/teknik sehari-hari*). Menggabungkan **Full Real Background 100% per scene**, cutout objek PNG realistis (Flow Bridge), meme reaksi, foto arsip berbingkai hitam (Wikimedia), living cutout motion, dan 3 pilar komedi.
+
+> ⛔ **ATURAN WAJIB BACKGROUND:** Setiap scene cerita & diagram (`hook`, `stage`, `diagram`) **WAJIB** memiliki `latar: 'latar/<slug>-N.png'` lokasi real unik (100% opasitas, bukan kanvas krem polos, bukan transparan, bukan blur). Hanya scene `beat` (`"Oke, sini gue jelasin."`) yang memakai kanvas krem.
+
+Panduan skill lengkap: [`.claude/skills/video-explainer/SKILL.md`](.claude/skills/video-explainer/SKILL.md).
+
+| Langkah | Perintah | Hasil |
+|---|---|---|
+| 0. Kerangka naskah | `npm run baru:explainer -- <slug>` | `src/explainer/data/<slug>.ts`, `.props.json`, `.latar.json`, `.sumber.md` |
+| 1. Background real per scene | `node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh` | File latar utuh di `public/latar/` |
+| 2. Props cutout PNG | `node scripts/generate-props.mjs --file src/explainer/data/<slug>.props.json` | PNG transparan di `public/props/` |
+| 3. Validasi naskah | `npm run cek:explainer -- <slug>` | Cek aturan latar real, motion, komedi, teks, audio |
+| 4. Potong audio TTS | `node scripts/potong-narasi.mjs <slug> "<audio.wav>"` | Audio per scene + timestamp kata |
+| 5. Cek frame | `npm run cek-frame -- <slug>` | Storyboard & lembar frame di `out/cek/` |
+| 6. Render final | `npm run render:final -- <slug>` | File video siap tayang di `out/<slug>.mp4` |
+
+---
+
+## Mode short (9:16): YouTube Shorts, TikTok, Reels (Engine Sejarah)
 
 ```bash
 npm run baru -- borobudur-short --short --dari borobudur   # short turunan dari video panjang (foto & sumber sama)

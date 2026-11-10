@@ -10,8 +10,16 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
 ## Aturan Keras
 
 1. **Jangan sentuh Engine Sejarah:** Dilarang mengubah `src/HistoryVideo.tsx`, `src/Thumbnail.tsx`, `src/theme.ts`, `src/types.ts`, `src/scenes/*`, `src/components/*`, atau `src/data/daftar.ts`.
-2. **Hanya edit file milik video explainer itu:** `src/explainer/data/<slug>.ts`, `src/explainer/data/<slug>.props.json`, `src/explainer/data/<slug>.sumber.md`, dan `src/explainer/daftar.ts`.
-3. **Watermark default:** Kosongkan dulu (`watermark: false`) di naskah sampai nama channel final ditentukan.
+2. **WAJIB Full Real Background Unik per Scene (100% Opasitas, DILARANG Kanvas Polos/Transparan):**
+   > ⛔ **PERINGATAN KERAS:** Setiap scene cerita & diagram (`type: 'hook'`, `'stage'`, `'diagram'`) **WAJIB** memiliki properti `latar: 'latar/<slug>-N.png'` yang diisi gambar lokasi real 100% (bukan warna krem polos, bukan transparan, bukan blur). Hanya scene jeda `type: 'beat'` yang menggunakan kanvas krem. Validator `npm run cek:explainer` akan langsung **GAGAL (ERROR)** bila ada scene non-beat tanpa `latar`.
+   - Latar di-generate via Flow Bridge utuh:
+     ```bash
+     node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh
+     ```
+   - Dilarang menduplikasi gambar latar yang sama di scene berbeda (tiap scene punya sudut/lokasi unik).
+   - Dilarang memakai `latarOpacity` atau `latarBlur` (engine otomatis me-render 100% tajam dengan *slow zoom*).
+3. **Hanya edit file milik video explainer itu:** `src/explainer/data/<slug>.ts`, `src/explainer/data/<slug>.props.json`, `src/explainer/data/<slug>.latar.json`, `src/explainer/data/<slug>.sumber.md`, dan `src/explainer/daftar.ts`.
+4. **Watermark default:** Kosongkan dulu (`watermark: false`) di naskah sampai nama channel final ditentukan.
 3b. **Jeda Ritme `BeatScene` (`type: 'beat'`):**
    - Gunakan kalimat transisi **`teks: 'Oke, sini gue jelasin.'`** (bukan `"nah"`), ditemani karakter meme kucing berkacamata yang sedang menjelaskan (`props/meme-kucing-jelasin.png`) lengkap dengan aksi gerak:
      ```ts

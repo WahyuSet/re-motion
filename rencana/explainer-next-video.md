@@ -103,26 +103,29 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
 ## 3. Urutan Perintah Saat Mulai Next Video
 
 ```bash
-# 0. Buat kerangka naskah baru (sudah berisi contoh hook komedi + SFX + props)
+# 0. Buat kerangka naskah baru (otomatis membuat .ts, .props.json, dan .latar.json)
 npm run baru:explainer -- <slug>
 
-# 1. Generate cutout PNG (termasuk 1-2 prop komedi) & cari foto asli Wikimedia
+# 1. Generate Full Real Background Lokasi per Scene (WAJIB — Full 100% Real)
+node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh
+
+# 2. Generate cutout PNG props & cari foto asli Wikimedia
 node scripts/generate-props.mjs --file src/explainer/data/<slug>.props.json --style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
 node scripts/cari-foto.mjs "<keyword>" --slug <slug> --limit 4 --min-width 800
 
-# 2. Validasi naskah & ekspor teks narasi untuk TTS
+# 3. Validasi naskah (akan ERROR jika ada scene tanpa latar real) & ekspor teks narasi untuk TTS
 npm run cek:explainer -- <slug>
 node scripts/narasi.mjs <slug>
 
-# 3. Potong audio TTS & sinkronkan kata per kata (faster-whisper)
+# 4. Potong audio TTS & sinkronkan kata per kata (faster-whisper)
 node scripts/potong-narasi.mjs <slug> "<path-audio.wav>"
 npm run cek:explainer -- <slug>
 
-# 4. Cek frame & storyboard
+# 5. Cek frame & storyboard
 node scripts/cek-frame.mjs <slug>
 node scripts/storyboard.mjs <slug>
 
-# 5. Render final & paket YouTube
+# 6. Render final & paket YouTube
 node scripts/render.mjs <slug> --final
 node scripts/paket-youtube.mjs <slug>
 ```
