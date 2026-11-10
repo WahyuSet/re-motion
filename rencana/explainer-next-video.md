@@ -42,6 +42,8 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
      - `props/meme-kucing-titik.png`: Kucing bengong sticker titik-titik `...`.
      - `props/meme-kucing-think.png`: Kucing oren pose *"Let me think"*.
      - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas.
+      - `props/meme-kucing-jelasin.png`: Kucing oren pakai rompi & kacamata menunjuk semangat (*"Oke, sini gue jelasin!"*).
+      - `props/meme-kucing-guru.png`: Kucing profesor berkacamata pegang tongkat di depan papan tulis.
    - Pasangkan dengan aksi motion:
      ```ts
      {
@@ -78,7 +80,10 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
 
 ## 2. Aturan Sinkronisasi Visual & Anti Layar Kosong (Hasil Evaluasi Video #1)
 
-1. **Watermark tetap:** `watermark: 'nahh gini'`.
+1. **Watermark kosongkan dulu:** `watermark: false` (sampai ada nama channel final).
+2. **Transisi BeatScene 'Oke, sini gue jelasin.':**
+   - Ganti kata transisi dari "nah" menjadi `teks: 'Oke, sini gue jelasin.'`.
+   - Pasangkan dengan karakter meme kucing menjelaskan (`props/meme-kucing-jelasin.png` atau `props/meme-kucing-guru.png`, `masuk: 'pop'`, `sfx: 'boing'`).
 2. **Zero Dead Air (Detik `0.0s` Wajib Ada Visual):**
    - Setiap scene (`hook`, `stage`, `diagram`) wajib langsung menampilkan visual pembuka sejak frame `0` (`delay: 0` atau `di` pada kata ke-1/ke-2).
    - Saat kalimat pembuka berupa pertanyaan/kebingungan, langsung pasang karakter mikir (`props/token-mikir.png` atau prop ekspresi sejenis) + tanda tanya (`simbol: 'tanya'`).

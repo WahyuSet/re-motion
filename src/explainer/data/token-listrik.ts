@@ -2,7 +2,7 @@ import type {ExplainerScript} from '../types';
 
 export const tokenListrik: ExplainerScript = {
   format: 'short',
-  watermark: 'nahh gini',
+  watermark: false,
   narasiAudio: 'audio/token-listrik',
   narasiExt: 'wav',
   youtube: {
@@ -196,12 +196,24 @@ export const tokenListrik: ExplainerScript = {
         },
       ],
     },
-    // Scene 3: Beat — jeda ritme "nah"
+    // Scene 3: Beat — transisi "Oke, sini gue jelasin."
     {
       type: 'beat',
       duration: 50,
-      teks: 'nah',
+      teks: 'Oke, sini gue jelasin.',
       narasi: '*Nah*, begini rincian hitungannya.',
+      items: [
+        {
+          kind: 'prop',
+          src: 'props/meme-kucing-jelasin.png',
+          x: 50,
+          y: 58,
+          width: 360,
+          masuk: 'pop',
+          sfx: 'boing',
+          aksi: [{type: 'wiggle', di: 'rincian', rotate: 10, durasi: 16}],
+        },
+      ],
     },
     // Scene 4: Diagram Potongan — Setiap langkah potongan ditemani visual nyata di bagian bawah
     {

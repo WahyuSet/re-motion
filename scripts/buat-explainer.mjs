@@ -47,7 +47,7 @@ const template = `import type {ExplainerScript} from '../types';
 // Cek dengan: npm run cek:explainer -- ${slug}
 export const ${varName}: ExplainerScript = {
   format: 'short',
-  watermark: 'nahh gini',
+  watermark: false,
   // Isi dua baris ini SETELAH audio narasi dipotong (node scripts/potong-narasi.mjs ${slug} <file-audio>):
   // narasiAudio: 'audio/${slug}',
   // narasiExt: 'wav',
@@ -101,9 +101,20 @@ export const ${varName}: ExplainerScript = {
     },
     {
       type: 'beat',
-      duration: 45,
-      teks: 'nah',
-      narasi: '*Nah*, begini alasannya.',
+      duration: 55,
+      teks: 'Oke, sini gue jelasin.',
+      narasi: 'Oke, *sini gue jelasin* alasannya.',
+      items: [
+        {
+          kind: 'prop',
+          src: 'props/meme-kucing-jelasin.png',
+          x: 50,
+          y: 58,
+          width: 360,
+          masuk: 'pop',
+          sfx: 'boing',
+        },
+      ],
     },
     {
       type: 'stage',

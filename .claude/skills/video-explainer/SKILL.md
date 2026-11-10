@@ -11,7 +11,28 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
 
 1. **Jangan sentuh Engine Sejarah:** Dilarang mengubah `src/HistoryVideo.tsx`, `src/Thumbnail.tsx`, `src/theme.ts`, `src/types.ts`, `src/scenes/*`, `src/components/*`, atau `src/data/daftar.ts`.
 2. **Hanya edit file milik video explainer itu:** `src/explainer/data/<slug>.ts`, `src/explainer/data/<slug>.props.json`, `src/explainer/data/<slug>.sumber.md`, dan `src/explainer/daftar.ts`.
-3. **Watermark default:** Selalu gunakan `watermark: 'nahh gini'`.
+3. **Watermark default:** Kosongkan dulu (`watermark: false`) di naskah sampai nama channel final ditentukan.
+3b. **Jeda Ritme `BeatScene` (`type: 'beat'`):**
+   - Gunakan kalimat transisi **`teks: 'Oke, sini gue jelasin.'`** (bukan `"nah"`), ditemani karakter meme kucing berkacamata yang sedang menjelaskan (`props/meme-kucing-jelasin.png`):
+     ```ts
+     {
+       type: 'beat',
+       duration: 55,
+       teks: 'Oke, sini gue jelasin.',
+       narasi: 'Oke, *sini gue jelasin* alasannya.',
+       items: [
+         {
+           kind: 'prop',
+           src: 'props/meme-kucing-jelasin.png',
+           x: 50,
+           y: 52,
+           width: 340,
+           masuk: 'pop',
+           sfx: 'boing',
+         },
+       ],
+     }
+     ```
 4. **Anti Layar Kosong (Zero Dead Air):**
    - **Detik `0.0s` di setiap scene wajib punya visual pembuka** (`delay: 0` atau `di` pada 1–2 kata pertama). Saat kalimat pembuka berupa pertanyaan (*"Kenapa bisa beda?"*, *"Banyak yang mengira..."*), tampilkan karakter ekspresif sedang berpikir (`props/token-mikir.png` atau sejenisnya) + simbol `tanya` (`?`).
    - **Setiap klausa yang diucapkan harus punya pasangan visual** yang muncul tepat di kata pemicunya (`di: '<kata>'`). Jangan biarkan ada jeda `> 2,5 detik` tanpa perubahan visual.
@@ -107,7 +128,8 @@ Tulis fakta dan angka acuan (tarif resmi, rumus fisika, aturan daerah, dsb.) bes
 3. Lihat hasil foto di `public/photos/<slug>/_contact-sheet.jpg` dan pilih yang paling jelas untuk dipasang dengan `bingkai: true`.
 
 ### Langkah 3 — Tulis Naskah & Rancang Visual per Kalimat
-Susun 5–7 scene (`hook` → `stage` → `beat` `"nah"` → `diagram` / `stage` → `stage` penutup):
+Susun 5–7 scene (`hook` → `stage` → `beat` `"Oke, sini gue jelasin."` + `props/meme-kucing-jelasin.png` → `diagram` / `stage` → `stage` penutup):
+- Set `watermark: false` di level `ExplainerScript`.
 - Semua angka di dalam `narasi` **wajib ditulis sebagai kata huruf** (`seratus ribu`, `enam puluh satu koma tiga`).
 - Semua `width` pada `StageItem` menggunakan satuan **piksel** (contoh: prop utama `300–420`, prop pendamping `220–280`, simbol `100–180`).
 - Semua koordinat `x, y` wajib berada di area aman Shorts (`x: 8..92`, `y: 12..76`).
@@ -140,6 +162,9 @@ node scripts/paket-youtube.mjs <slug>
 
 Sebelum mulai render setiap video explainer berikutnya, pastikan semua poin di bawah ini terpenuhi:
 
+- [ ] **Watermark & Beat Scene Standar Baru:**
+  - `watermark: false` di `ExplainerScript` (kosongkan dulu).
+  - Scene `beat` memakai `teks: 'Oke, sini gue jelasin.'` (dan narasi `"Oke, *sini gue jelasin* ..."`) + karakter meme kucing menjelaskan (`props/meme-kucing-jelasin.png`, `masuk: 'pop'`, `sfx: 'boing'`).
 - [ ] **Pilar 1 — Komedi di Narasi (Minimal 2–3 Celetukan Relatable):**
   - Ada 1 kalimat celetukan sehari-hari / hiperbola komedi di **Hook (Scene 1)** atau **Salah Kaprah (Scene 2)**.
   - Ada 1 kalimat punchline / sindiran ringan saat fakta utama atau hitungan terbongkar (**Scene 3/4**).
