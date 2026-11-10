@@ -1,0 +1,164 @@
+import React from 'react';
+import {Img, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {Sfx} from '../components/Sfx';
+import {parseWords, type TimedWord} from '../lib/kata';
+import {explainerTheme} from './theme';
+import {hitungTransformItem, waktuItem} from './timing';
+import type {StageItem, StageSymbolType} from './types';
+
+const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number}> = ({simbol, width}) => {
+  switch (simbol) {
+    case 'larang':
+      return (
+        <svg width={width} height={width} viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke={explainerTheme.red} strokeWidth="12" />
+          <line x1="25" y1="25" x2="95" y2="95" stroke={explainerTheme.red} strokeWidth="12" strokeLinecap="round" />
+        </svg>
+      );
+    case 'centang':
+      return (
+        <svg width={width} height={width} viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="rgba(46, 125, 50, 0.14)" stroke={explainerTheme.green} strokeWidth="10" />
+          <path d="M 34 62 L 52 80 L 88 42" fill="none" stroke={explainerTheme.green} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'panah':
+      return (
+        <svg width={width} height={width * 0.6} viewBox="0 0 140 84">
+          <line x1="12" y1="42" x2="112" y2="42" stroke={explainerTheme.red} strokeWidth="12" strokeLinecap="round" />
+          <path d="M 92 18 L 124 42 L 92 66" fill="none" stroke={explainerTheme.red} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'retak':
+      return (
+        <svg width={width} height={width * 0.75} viewBox="0 0 240 180">
+          <path
+            d="M 20 155 L 72 118 L 96 126 L 138 78 L 172 86 L 220 24 M 138 78 L 112 36 M 72 118 L 44 74"
+            fill="none"
+            stroke="#120f0c"
+            strokeWidth="7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+    case 'tetes-air':
+      return (
+        <svg width={width} height={width} viewBox="0 0 120 120">
+          <path d="M 60 14 C 60 14 26 58 26 80 A 34 34 0 1 0 94 80 C 94 58 60 14 60 14 Z" fill="#29b6f6" stroke="#0288d1" strokeWidth="5" />
+          <ellipse cx="48" cy="76" rx="7" ry="12" fill="rgba(255,255,255,0.55)" transform="rotate(-18 48 76)" />
+        </svg>
+      );
+    case 'gelombang-air':
+      return (
+        <svg width={width} height={width * 0.35} viewBox="0 0 300 105">
+          <path
+            d="M 10 55 Q 45 20 80 55 T 150 55 T 220 55 T 290 55 L 290 95 L 10 95 Z"
+            fill="rgba(41, 182, 246, 0.78)"
+            stroke="#0277bd"
+            strokeWidth="6"
+          />
+        </svg>
+      );
+  }
+};
+
+const StageItemView: React.FC<{
+  item: StageItem;
+  words: TimedWord[];
+  duration: number;
+}> = ({item, words, duration}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const tf = hitungTransformItem(item, frame, fps, words, duration);
+  if (!tf.visible) return null;
+
+  const kind = item.kind ?? (item.simbol ? 'simbol' : item.teks ? 'teks' : 'prop');
+  const width = item.width ?? (kind === 'simbol' ? 170 : 340);
+  const origin = tf.originY === 'bottom' ? '50% 100%' : '50% 50%';
+  const anchorTranslate = tf.originY === 'bottom' ? 'translate(-50%, -100%)' : 'translate(-50%, -50%)';
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: `${tf.x}%`,
+        top: `${tf.y}%`,
+        zIndex: item.zIndex ?? 10,
+        opacity: tf.opacity,
+        transformOrigin: origin,
+        transform: `${anchorTranslate} translate(${tf.tx + tf.shakeX}px, ${tf.ty}px) scale(${tf.scaleX}, ${tf.scaleY}) rotate(${tf.rotate}deg)`,
+        pointerEvents: 'none',
+      }}
+    >
+      {kind === 'prop' && item.src ? (
+        <Img
+          src={staticFile(item.src)}
+          style={{
+            width,
+            display: 'block',
+            borderRadius: item.bingkai ? 10 : 0,
+            border: item.bingkai ? `6px solid ${explainerTheme.ink}` : undefined,
+            filter: 'drop-shadow(0 12px 22px rgba(0,0,0,0.18))',
+          }}
+        />
+      ) : null}
+      {kind === 'teks' && item.teks ? (
+        <div
+          style={{
+            fontFamily: explainerTheme.fontBody,
+            fontWeight: 900,
+            fontSize: item.ukuran ?? 56,
+            color: item.warna ?? (item.kotak ? explainerTheme.bannerText : explainerTheme.ink),
+            background: item.kotak,
+            padding: item.kotak ? '10px 24px' : 0,
+            borderRadius: item.kotak ? 8 : 0,
+            whiteSpace: 'nowrap',
+            letterSpacing: -0.5,
+          }}
+        >
+          {parseWords(item.teks).map((w, idx) => (
+            <span
+              key={idx}
+              style={{
+                color: w.highlight ? explainerTheme.accent : undefined,
+                marginRight: idx + 1 < parseWords(item.teks!).length ? '0.24em' : 0,
+              }}
+            >
+              {w.word}
+            </span>
+          ))}
+        </div>
+      ) : null}
+      {kind === 'simbol' && item.simbol ? <SymbolSvg simbol={item.simbol} width={width} /> : null}
+    </div>
+  );
+};
+
+export const Stage: React.FC<{
+  items?: StageItem[];
+  words: TimedWord[];
+  duration: number;
+}> = ({items, words, duration}) => {
+  if (!items?.length) return null;
+
+  return (
+    <>
+      {items.map((item, i) => {
+        const {masukAt, aksi} = waktuItem(item, words, duration);
+        const isHeavy = item.simbol === 'larang' || item.simbol === 'retak';
+        return (
+          <React.Fragment key={i}>
+            {item.masuk !== 'none' ? <Sfx name={isHeavy ? 'dum' : 'pop'} at={masukAt} /> : null}
+            {aksi
+              .filter((a) => a.type === 'shake')
+              .map((a, k) => (
+                <Sfx key={`shk-${k}`} name="dum" at={a.at} />
+              ))}
+            <StageItemView item={item} words={words} duration={duration} />
+          </React.Fragment>
+        );
+      })}
+    </>
+  );
+};
