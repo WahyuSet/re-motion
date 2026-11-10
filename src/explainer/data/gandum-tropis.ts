@@ -37,9 +37,10 @@ export const gandumTropis: ExplainerScript = {
         width: 320,
         masuk: 'pop',
         delay: 0,
+        sampai: 'kenapa gak',
         aksi: [
           {type: 'wiggle', di: 'mie instan', rotate: 12, durasi: 16},
-          {type: 'jump', di: 'sawah gandum', dy: 50, durasi: 16, sfx: 'boing'},
+          {type: 'pulse', di: 'gorengan', durasi: 14},
         ],
       },
       items: [
@@ -72,8 +73,10 @@ export const gandumTropis: ExplainerScript = {
           width: 310,
           masuk: 'slide-up',
           di: 'kenapa gak',
-          sampai: 'kita?',
-          aksi: [{type: 'wiggle', di: 'sawah gandum', rotate: 14, durasi: 18}],
+          aksi: [
+            {type: 'wiggle', di: 'sawah gandum', rotate: 14, durasi: 18},
+            {type: 'jump', di: 'kampung kita?', dy: 45, durasi: 16, sfx: 'boing'},
+          ],
         },
       ],
     },
