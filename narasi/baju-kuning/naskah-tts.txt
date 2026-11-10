@@ -1,0 +1,31 @@
+PANDUAN TTS: baju-kuning
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs baju-kuning <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±2.9 detik
+Baju putih bersih, lama-kelamaan kok malah menguning?
+
+[02] (stage) ±6.7 detik
+Banyak yang nyalahin jamur lemari atau deterjen pelit, padahal biang keroknya ada di badan kita sendiri.
+
+[03] (beat) ±2.5 detik
+Oke, sini gue jelasin penyebab kimianya.
+
+[04] (stage) ±9.6 detik
+Keringat kita bawa minyak sebum yang nempel di serat kain. Begitu kena oksigen, minyak ini teroksidasi persis kayak apel yang digigit terus menguning.
+
+[05] (stage) ±7.1 detik
+Ditambah lagi, zat aluminium deodoran bereaksi bikin kerak ketiak, dan siraman pemutih klorin malah ngerusak serat kain.
+
+[06] (stage) ±7.1 detik
+Solusinya, rendam pakai air hangat campur baking soda atau sitrun, biar baju putih kesayangan lo tetap kinclong.
+
+Perkiraan total narasi: ±36 detik (belum termasuk jeda)
