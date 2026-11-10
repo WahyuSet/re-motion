@@ -3,6 +3,8 @@ import type {ExplainerScript} from '../types';
 export const tokenListrik: ExplainerScript = {
   format: 'short',
   watermark: '@NahhJadi',
+  narasiAudio: 'audio/token-listrik',
+  narasiExt: 'wav',
   youtube: {
     judul: 'Kenapa Beli Token Listrik Rp100.000 Dapetnya Cuma 61,3 kWh?',
     deskripsi:
