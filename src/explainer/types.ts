@@ -27,11 +27,24 @@ export type StageExitType =
   | 'slide-down'
   | 'none';
 
+export type ExplainerSfxName =
+  | 'whoosh'
+  | 'dum'
+  | 'tik'
+  | 'pop'
+  | 'swell'
+  | 'boing'
+  | 'boom'
+  | 'womp'
+  | 'slap'
+  | 'ding';
+
 export type StageAction = {
   type: 'move' | 'peek' | 'grow' | 'dim' | 'shake' | 'pulse';
   di?: string;
   delay?: number;
   durasi?: number;
+  sfx?: ExplainerSfxName | false;
   /** Untuk 'move' */
   toX?: number;
   toY?: number;
@@ -80,6 +93,7 @@ export type StageItem = {
   endFrame?: number;
   masuk?: StageEnterType;
   keluar?: StageExitType;
+  sfx?: ExplainerSfxName | false;
   aksi?: StageAction[];
 };
 

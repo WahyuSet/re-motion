@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {importTs} from '../../scripts/lib/load-script.mjs';
 
-test('potongFrasa splits TimedWord[] by max words, max chars, and punctuation', async () => {
+test('potongFrasa splits TimedWord[] by max words, max chars, punctuation, and absorbs closing orphan word', async () => {
   const {potongFrasa} = await importTs('src/explainer/timing.ts');
   const words = [
     {word: 'Nah,', highlight: false, start: 8, end: 16},
@@ -12,12 +12,20 @@ test('potongFrasa splits TimedWord[] by max words, max chars, and punctuation', 
     {word: 'seratus', highlight: false, start: 43, end: 52},
     {word: 'ribu', highlight: false, start: 53, end: 60},
     {word: 'beda?', highlight: false, start: 61, end: 72},
+    {word: 'Karena', highlight: false, start: 75, end: 82},
+    {word: 'ada', highlight: false, start: 83, end: 88},
+    {word: 'potongan', highlight: false, start: 89, end: 98},
+    {word: 'pajak', highlight: false, start: 99, end: 106},
+    {word: 'jalan', highlight: false, start: 107, end: 114},
+    {word: 'daerah', highlight: false, start: 115, end: 122},
+    {word: 'masing-masing.', highlight: false, start: 123, end: 135},
   ];
   const frasa = potongFrasa(words, 5, 34);
-  assert.equal(frasa.length, 3);
+  assert.equal(frasa.length, 4);
   assert.equal(frasa[0].kata.map((w) => w.word).join(' '), 'Nah,');
-  assert.equal(frasa[1].kata.map((w) => w.word).join(' '), 'kenapa isi token seratus ribu');
-  assert.equal(frasa[2].kata.map((w) => w.word).join(' '), 'beda?');
+  assert.equal(frasa[1].kata.map((w) => w.word).join(' '), 'kenapa isi token seratus ribu beda?');
+  assert.equal(frasa[2].kata.map((w) => w.word).join(' '), 'Karena ada potongan pajak jalan');
+  assert.equal(frasa[3].kata.map((w) => w.word).join(' '), 'daerah masing-masing.');
 });
 
 test('waktuItem resolves repeated trigger words sequentially (sampai after di, aksi in order)', async () => {

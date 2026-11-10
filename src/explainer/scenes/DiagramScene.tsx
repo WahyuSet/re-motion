@@ -91,7 +91,9 @@ const PotonganView: React.FC<{
               marginBottom: 12,
             }}
           >
-            <span style={{fontSize: 30, fontWeight: 700}}>{scene.awal.label}</span>
+            <span style={{fontSize: 30, fontWeight: 700}}>
+              {activeSteps.length > 0 ? 'Sisa Bersih' : scene.awal.label}
+            </span>
             <span style={{fontSize: 48, fontWeight: 900}}>{currentSisa}</span>
           </div>
           <div

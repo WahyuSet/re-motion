@@ -162,6 +162,21 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       for (const [ai, aksi] of (item.aksi ?? []).entries()) {
         if (aksi.di) cekKata(`${itemLabel} aksi[${ai + 1}].di`, aksi.di);
         if (aksi.sampai) cekKata(`${itemLabel} aksi[${ai + 1}].sampai`, aksi.sampai);
+        if (aksi.sfx && !(await existsPublic(`sfx/${aksi.sfx}.wav`))) {
+          err(
+            `${itemLabel} aksi[${ai + 1}]`,
+            `File SFX public/sfx/${aksi.sfx}.wav tidak ditemukan.`,
+            'Jalankan: node scripts/buat-sfx-explainer.mjs',
+          );
+        }
+      }
+
+      if (item.sfx && !(await existsPublic(`sfx/${item.sfx}.wav`))) {
+        err(
+          itemLabel,
+          `File SFX public/sfx/${item.sfx}.wav tidak ditemukan.`,
+          'Jalankan: node scripts/buat-sfx-explainer.mjs',
+        );
       }
     }
   }

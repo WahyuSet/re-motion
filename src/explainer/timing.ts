@@ -33,7 +33,8 @@ export const potongFrasa = (
 
   for (const w of words) {
     const calonHuruf = [...isi, w].map((x) => x.word).join(' ').length;
-    if (isi.length > 0 && (isi.length >= maxKata || calonHuruf > maxHuruf)) {
+    const isClosingOrphan = /[.,!?;:]$/.test(w.word) && calonHuruf <= maxHuruf + 8;
+    if (isi.length > 0 && !isClosingOrphan && (isi.length >= maxKata || calonHuruf > maxHuruf)) {
       simpan();
     }
     isi.push(w);
@@ -147,7 +148,8 @@ export const hitungTransformItem = (
   duration: number,
 ): ItemTransform => {
   const {masukAt, keluarAt, aksi} = waktuItem(item, words, duration);
-  const exitDur = item.keluar === 'none' ? 0 : 10;
+  const keluarMode = item.keluar ?? 'pop-out';
+  const exitDur = keluarMode === 'none' ? 0 : keluarMode === 'pop-out' ? 8 : 10;
 
   if (frame < masukAt || frame > keluarAt + exitDur) {
     return {
@@ -289,7 +291,7 @@ export const hitungTransformItem = (
   if (frame > keluarAt && exitDur > 0) {
     const outP = easeInOutQuad((frame - keluarAt) / exitDur);
     opacity *= 1 - outP;
-    switch (item.keluar ?? 'fade') {
+    switch (keluarMode) {
       case 'pop-out':
         scaleX *= 1 - outP * 0.6;
         scaleY *= 1 - outP * 0.6;

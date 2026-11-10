@@ -1,10 +1,37 @@
-import React from 'react';
-import {Img, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import {Sfx} from '../components/Sfx';
+import React, {useContext} from 'react';
+import {Audio, Img, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {SfxContext} from '../components/Sfx';
 import {parseWords, type TimedWord} from '../lib/kata';
 import {explainerTheme} from './theme';
 import {hitungTransformItem, waktuItem} from './timing';
-import type {StageItem, StageSymbolType} from './types';
+import type {ExplainerSfxName, StageItem, StageSymbolType} from './types';
+
+const EXPLAINER_SFX_VOL: Record<ExplainerSfxName, number> = {
+  whoosh: 0.22,
+  dum: 0.34,
+  tik: 0.26,
+  pop: 0.22,
+  swell: 0.26,
+  boing: 0.3,
+  boom: 0.36,
+  womp: 0.32,
+  slap: 0.3,
+  ding: 0.28,
+};
+
+export const ExplainerSfx: React.FC<{name: ExplainerSfxName; at?: number; volume?: number}> = ({
+  name,
+  at = 0,
+  volume,
+}) => {
+  const enabled = useContext(SfxContext);
+  if (!enabled) return null;
+  return (
+    <Sequence from={Math.max(0, Math.round(at))} layout="none">
+      <Audio src={staticFile(`sfx/${name}.wav`)} volume={volume ?? EXPLAINER_SFX_VOL[name]} />
+    </Sequence>
+  );
+};
 
 const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: string; progress?: number}> = ({
   simbol,
@@ -179,14 +206,25 @@ export const Stage: React.FC<{
       {items.map((item, i) => {
         const {masukAt, aksi} = waktuItem(item, words, duration);
         const isHeavy = item.simbol === 'larang' || item.simbol === 'retak';
+        const defaultEnterSfx: ExplainerSfxName | null =
+          item.masuk === 'none' || masukAt <= 2
+            ? null
+            : item.simbol === 'centang'
+              ? 'ding'
+              : isHeavy
+                ? 'dum'
+                : 'pop';
+        const enterSfx = item.sfx === false ? null : (item.sfx ?? defaultEnterSfx);
+
         return (
           <React.Fragment key={i}>
-            {item.masuk !== 'none' ? <Sfx name={isHeavy ? 'dum' : 'pop'} at={masukAt} /> : null}
-            {aksi
-              .filter((a) => a.type === 'shake')
-              .map((a, k) => (
-                <Sfx key={`shk-${k}`} name="dum" at={a.at} />
-              ))}
+            {enterSfx ? <ExplainerSfx name={enterSfx} at={masukAt} /> : null}
+            {aksi.map((a, k) => {
+              const defaultActionSfx: ExplainerSfxName | null =
+                a.type === 'peek' ? 'boing' : a.type === 'shake' ? 'dum' : null;
+              const actionSfx = a.sfx === false ? null : (a.sfx ?? defaultActionSfx);
+              return actionSfx ? <ExplainerSfx key={`act-sfx-${k}`} name={actionSfx} at={a.at} /> : null;
+            })}
             <StageItemView item={item} words={words} duration={duration} />
           </React.Fragment>
         );
