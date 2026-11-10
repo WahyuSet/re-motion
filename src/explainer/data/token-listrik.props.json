@@ -1,0 +1,14 @@
+[
+  {
+    "name": "token-meteran",
+    "prompt": "an Indonesian prepaid electricity meter keypad box on wall with digital LCD screen"
+  },
+  {
+    "name": "token-struk",
+    "prompt": "a paper payment receipt slip with 20 digit electricity token numbers"
+  },
+  {
+    "name": "token-lampu",
+    "prompt": "a bright yellow glowing light bulb icon"
+  }
+]

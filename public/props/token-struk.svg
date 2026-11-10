@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 420">
+  <path d="M 30 20 L 310 20 L 310 390 L 282 372 L 254 390 L 226 372 L 198 390 L 170 372 L 142 390 L 114 372 L 86 390 L 58 372 L 30 390 Z" fill="#fbf8ef" stroke="#1d1812" stroke-width="9" stroke-linejoin="round"/>
+  <text x="170" y="76" font-family="monospace" font-size="28" font-weight="bold" fill="#1d1812" text-anchor="middle">STRUK TOKEN PLN</text>
+  <line x1="56" y1="98" x2="284" y2="98" stroke="#1d1812" stroke-width="5" stroke-dasharray="10 8"/>
+  <text x="58" y="142" font-family="monospace" font-size="22" font-weight="bold" fill="#1d1812">NOMINAL</text>
+  <text x="282" y="142" font-family="monospace" font-size="24" font-weight="bold" fill="#1d1812" text-anchor="end">Rp100.000</text>
+  <text x="58" y="182" font-family="monospace" font-size="22" font-weight="bold" fill="#d93829">ADMIN</text>
+  <text x="282" y="182" font-family="monospace" font-size="22" font-weight="bold" fill="#d93829" text-anchor="end">-Rp2.500</text>
+  <text x="58" y="222" font-family="monospace" font-size="22" font-weight="bold" fill="#d93829">PPJ DAERAH</text>
+  <text x="282" y="222" font-family="monospace" font-size="22" font-weight="bold" fill="#d93829" text-anchor="end">-Rp8.863</text>
+  <line x1="56" y1="248" x2="284" y2="248" stroke="#1d1812" stroke-width="5"/>
+  <rect x="52" y="268" width="236" height="58" rx="8" fill="#1d1812"/>
+  <text x="170" y="306" font-family="monospace" font-size="26" font-weight="bold" fill="#ffffff" text-anchor="middle">4829-1039-8472</text>
+</svg>

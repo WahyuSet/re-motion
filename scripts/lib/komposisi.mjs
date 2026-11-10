@@ -62,13 +62,30 @@ export const modulKata = () => (kata ??= importTs('src/lib/kata.ts'));
  * - words: kata narasi bertimestamp (frame relatif awal scene)
  * - shotStarts: frame mulai tiap shot (relatif awal scene)
  */
+const virtualShots = (scene) => {
+  const raw = [
+    ...(scene.langkah ?? []).map((l) => ({photo: l.label ?? scene.type, di: l.di})),
+    ...(scene.items ?? [])
+      .filter((it) => it.di)
+      .map((it) => ({photo: it.src ?? it.teks ?? it.kind ?? scene.type, di: it.di})),
+  ];
+  const seen = new Set();
+  const unique = raw.filter((s) => {
+    if (!s.di || seen.has(s.di)) return false;
+    seen.add(s.di);
+    return true;
+  });
+  return [{photo: scene.utama?.src ?? scene.baris1 ?? scene.judul ?? scene.teks ?? scene.type}, ...unique.slice(0, 3)];
+};
+
 export const waktuScene = async (composition) => {
   const {sceneWords, shotStarts, transitionFrames} = await modulKata();
   const fps = composition.fps;
   let start = 0;
   return composition.props.script.scenes.map((scene, index) => {
     if (index > 0) start -= transitionFrames(scene.transition);
-    const shots = scene.shots ?? (scene.photo ? [{photo: scene.photo, credit: scene.credit}] : []);
+    const shots =
+      scene.shots ?? (scene.photo ? [{photo: scene.photo, credit: scene.credit}] : virtualShots(scene));
     const words = sceneWords(scene, fps);
     const item = {index, start, end: start + scene.duration, scene, shots, words, shotStarts: shotStarts(shots, words, scene.duration)};
     start += scene.duration;

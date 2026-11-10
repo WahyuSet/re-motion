@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 440">
+  <rect x="24" y="16" width="312" height="408" rx="22" fill="#e8e2ce" stroke="#1d1812" stroke-width="10"/>
+  <rect x="48" y="42" width="264" height="110" rx="10" fill="#2c3e35" stroke="#1d1812" stroke-width="8"/>
+  <rect x="64" y="58" width="232" height="78" rx="6" fill="#9bc400"/>
+  <text x="280" y="114" font-family="monospace" font-size="44" font-weight="bold" fill="#1d1812" text-anchor="end">61.3 kWh</text>
+  <circle cx="88" cy="186" r="12" fill="#d93829" stroke="#1d1812" stroke-width="5"/>
+  <text x="112" y="193" font-family="sans-serif" font-size="20" font-weight="bold" fill="#1d1812">PULSA</text>
+  <g fill="#f7f4ea" stroke="#1d1812" stroke-width="6">
+    <rect x="64" y="216" width="66" height="42" rx="6"/>
+    <rect x="147" y="216" width="66" height="42" rx="6"/>
+    <rect x="230" y="216" width="66" height="42" rx="6"/>
+    <rect x="64" y="272" width="66" height="42" rx="6"/>
+    <rect x="147" y="272" width="66" height="42" rx="6"/>
+    <rect x="230" y="272" width="66" height="42" rx="6"/>
+    <rect x="64" y="328" width="66" height="42" rx="6"/>
+    <rect x="147" y="328" width="66" height="42" rx="6"/>
+    <rect x="230" y="328" width="66" height="42" rx="6" fill="#d93829"/>
+  </g>
+</svg>

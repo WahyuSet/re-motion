@@ -152,7 +152,7 @@ const renderBlock = async (b) => {
       svg += `<text x="${left}" y="${cy + 26 + li * 26}" font-family="Arial" font-size="19" fill="#f3ead7">${xml(line)}</text>`;
     });
     const media = x.shot.video ?? x.shot.photo ?? '';
-    const name = media.split('/').pop().replace(/\.(jpg|mp4)$/, '');
+    const name = media.split('/').pop().replace(/\.(jpg|png|svg|mp4)$/, '');
     const nameY = cy + 26 + captionLines[k].length * 26;
     svg += `<text x="${left}" y="${nameY}" font-family="Arial" font-size="16" fill="#8f8473">${xml(name.slice(0, vertical ? 30 : 52))}</text>`;
     if (info) {

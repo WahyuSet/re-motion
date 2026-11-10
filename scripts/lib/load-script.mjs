@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import {build} from 'esbuild';
 
@@ -15,10 +16,12 @@ export const importTs = async (file) => {
   return import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
 };
 
-// Baca naskah src/data/<slug>.ts dari Node (TypeScript + import JSON).
+// Baca naskah src/data/<slug>.ts atau src/explainer/data/<slug>.ts dari Node (TypeScript + import JSON).
 export const loadScript = async (slug) => {
-  const mod = await importTs(path.join('src/data', `${slug}.ts`));
+  const candidates = [path.join('src/data', `${slug}.ts`), path.join('src/explainer/data', `${slug}.ts`)];
+  const file = candidates.find((c) => fs.existsSync(c)) ?? candidates[0];
+  const mod = await importTs(file);
   const script = Object.values(mod).find((v) => v && Array.isArray(v.scenes));
-  if (!script) throw new Error(`src/data/${slug}.ts tidak mengekspor naskah dengan "scenes"`);
+  if (!script) throw new Error(`${file} tidak mengekspor naskah dengan "scenes"`);
   return script;
 };

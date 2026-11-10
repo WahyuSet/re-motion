@@ -1,12 +1,8 @@
-import {loadFont as loadInter} from '@remotion/google-fonts/Inter';
-import {loadFont as loadPlexMono} from '@remotion/google-fonts/IBMPlexMono';
-
-const inter = loadInter('normal', {weights: ['500', '700', '800', '900'], subsets: ['latin']});
-const plexMono = loadPlexMono('normal', {weights: ['600', '700'], subsets: ['latin']});
+import {theme} from '../theme';
 
 export const explainerTheme = {
-  fontBody: inter.fontFamily,
-  fontMono: plexMono.fontFamily,
+  fontBody: theme.fontBody,
+  fontMono: theme.fontMono,
   bg: '#ddd5b8',
   ink: '#1d1812',
   bannerBg: '#0d0d0d',
