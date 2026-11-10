@@ -112,7 +112,13 @@ Contoh penggunaan di naskah:
 
 ### 3. Pilar Visual Props, High-Density Motion, & Gag Fisik
 - **Auto Living Cutout Motion (Aktif Otomatis):** Semua `prop` dan `simbol` otomatis bergerak halus selama tampil di layar (mengayun vertikal `±7px` + goyang sudut *paper-cutout* `±1.8°` + *breathing scale* `±1.5%` dengan fase acak per posisi `x, y` agar tidak kaku). Saat `masuk: 'drop'`, objek otomatis membal (*squash & stretch*) saat mendarat.
-- **Cutout Karakter/Meme Reaksi Komedi:** Prioritaskan **meme ikonik binatang mikir/bingung** (kucing pegang dagu `props/meme-kucing-paw.png`, kucing bengong `props/meme-kucing-titik.png`, kucing oren `props/meme-kucing-think.png`, monyet mikir `props/meme-monyet-mikir.png`) yang jauh lebih lucu dan relatable dibanding karakter 3D kaku. Padukan dengan cutout Flow Bridge (dompet kosong, beban raksasa, palu).
+- **Cutout Karakter/Meme Reaksi Komedi:** Prioritaskan **meme ikonik binatang mikir/bingung/merenung** yang jauh lebih lucu dan relatable dibanding karakter 3D kaku, lalu padukan dengan cutout Flow Bridge (dompet kosong, beban raksasa, palu):
+  - `props/meme-kucing-paw.png`: Kucing pose mikir serius (tangan di dagu ala *The Thinker*) — untuk pembuka pertanyaan/penasaran.
+  - `props/meme-kucing-merenung.png`: Kucing oren pakai rompi duduk tegak di bak pasir menatap kosong merenung — untuk momen melamun, merenung nasib/beban hidup, atau kena realita pahit (*sfx: `'womp'`).
+  - `props/meme-kucing-titik.png`: Kucing bengong stiker titik-titik `...` — untuk reaksi *speechless* / gagal paham.
+  - `props/meme-kucing-think.png`: Kucing oren *"Let me think"* — untuk momen ngitung atau mikir keras.
+  - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas — untuk kebingungan kocak.
+  - `props/meme-kucing-jelasin.png` & `props/meme-kucing-guru.png`: Kucing menjelaskan/profesor — khusus untuk `BeatScene` (`"Oke, sini gue jelasin."`) atau kesimpulan.
 - **Katalog Lengkap 9 Jenis `aksi` (`StageAction`) — Wajib Dipakai Padat (3–5 Aksi per Scene):**
 
 | `type` | Efek Gerak Visual | Default SFX | Kapan Wajib Dipakai | Contoh Sintaks |

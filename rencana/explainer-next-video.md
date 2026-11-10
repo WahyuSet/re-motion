@@ -39,11 +39,12 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
    - **Sangat disarankan & wajib diprioritaskan** untuk visual orang bingung / bertanya-tanya daripada karakter 3D generik.
    - Sudah tersedia library siap pakai di `public/props/`:
      - `props/meme-kucing-paw.png`: Kucing pose mikir serius (tangan di dagu ala patung *The Thinker*).
+     - `props/meme-kucing-merenung.png`: Kucing oren pakai rompi duduk tegak di bak pasir menatap kosong merenung (cocok untuk momen melamun, merenung beban hidup, atau kena realita pahit).
      - `props/meme-kucing-titik.png`: Kucing bengong sticker titik-titik `...`.
      - `props/meme-kucing-think.png`: Kucing oren pose *"Let me think"*.
      - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas.
-      - `props/meme-kucing-jelasin.png`: Kucing oren pakai rompi & kacamata menunjuk semangat (*"Oke, sini gue jelasin!"*).
-      - `props/meme-kucing-guru.png`: Kucing profesor berkacamata pegang tongkat di depan papan tulis.
+     - `props/meme-kucing-jelasin.png`: Kucing oren pakai rompi & kacamata menunjuk semangat (*"Oke, sini gue jelasin!"*).
+     - `props/meme-kucing-guru.png`: Kucing profesor berkacamata pegang tongkat di depan papan tulis.
    - Pasangkan dengan aksi motion:
      ```ts
      {
