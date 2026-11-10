@@ -1,0 +1,80 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {importTs} from '../../scripts/lib/load-script.mjs';
+
+test('potongFrasa splits TimedWord[] by max words, max chars, and punctuation', async () => {
+  const {potongFrasa} = await importTs('src/explainer/timing.ts');
+  const words = [
+    {word: 'Nah,', highlight: false, start: 8, end: 16},
+    {word: 'kenapa', highlight: false, start: 18, end: 26},
+    {word: 'isi', highlight: false, start: 27, end: 33},
+    {word: 'token', highlight: true, start: 34, end: 42},
+    {word: 'seratus', highlight: false, start: 43, end: 52},
+    {word: 'ribu', highlight: false, start: 53, end: 60},
+    {word: 'beda?', highlight: false, start: 61, end: 72},
+  ];
+  const frasa = potongFrasa(words, 5, 34);
+  assert.equal(frasa.length, 3);
+  assert.equal(frasa[0].kata.map((w) => w.word).join(' '), 'Nah,');
+  assert.equal(frasa[1].kata.map((w) => w.word).join(' '), 'kenapa isi token seratus ribu');
+  assert.equal(frasa[2].kata.map((w) => w.word).join(' '), 'beda?');
+});
+
+test('waktuItem resolves repeated trigger words sequentially (sampai after di, aksi in order)', async () => {
+  const {waktuItem} = await importTs('src/explainer/timing.ts');
+  const words = [
+    {word: 'token', highlight: false, start: 10, end: 20},
+    {word: 'pertama', highlight: false, start: 22, end: 32},
+    {word: 'lalu', highlight: false, start: 35, end: 45},
+    {word: 'token', highlight: false, start: 50, end: 60},
+    {word: 'kedua', highlight: false, start: 65, end: 75},
+  ];
+  const resolved = waktuItem(
+    {
+      kind: 'prop',
+      src: 'props/meteran.png',
+      x: 50,
+      y: 45,
+      di: 'token',
+      sampai: 'token',
+      aksi: [{type: 'move', di: 'lalu', toX: 30, toY: 45}],
+    },
+    words,
+    120,
+  );
+  assert.equal(resolved.masukAt, 10);
+  assert.equal(resolved.aksi[0].at, 35);
+  assert.equal(resolved.keluarAt, 50);
+});
+
+test('hitungTransformItem applies grow-up, move, peek, and dim deterministically', async () => {
+  const {hitungTransformItem} = await importTs('src/explainer/timing.ts');
+  const words = [
+    {word: 'mulai', highlight: false, start: 10, end: 18},
+    {word: 'geser', highlight: false, start: 30, end: 38},
+    {word: 'redup', highlight: false, start: 60, end: 68},
+  ];
+  const item = {
+    kind: 'prop',
+    src: 'props/batang.png',
+    x: 50,
+    y: 50,
+    di: 'mulai',
+    masuk: 'grow-up',
+    aksi: [
+      {type: 'move', di: 'geser', toX: 70, toY: 40, durasi: 10},
+      {type: 'dim', di: 'redup', toOpacity: 0.25, durasi: 10},
+    ],
+  };
+  const before = hitungTransformItem(item, 5, 30, words, 100);
+  assert.equal(before.visible, false);
+
+  const afterMove = hitungTransformItem(item, 45, 30, words, 100);
+  assert.equal(afterMove.visible, true);
+  assert.equal(afterMove.x, 70);
+  assert.equal(afterMove.y, 40);
+  assert.equal(afterMove.opacity, 1);
+
+  const afterDim = hitungTransformItem(item, 75, 30, words, 100);
+  assert.ok(Math.abs(afterDim.opacity - 0.25) < 0.01);
+});
