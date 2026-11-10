@@ -24,6 +24,12 @@ const RAW_DIR = path.join(PROPS_DIR, '_raw');
 const DEFAULT_STYLE =
   'vintage hand-painted illustration, museum artifact style, warm sepia and gold tones, soft studio lighting, highly detailed';
 
+const DEFAULT_UTUH_STYLE =
+  'clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no vintage paper effect, no sepia, high detail';
+
+const DEFAULT_EXPLAINER_PROP_STYLE =
+  'clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail';
+
 const BACKGROUNDS = {
   green: 'perfectly flat solid pure chroma green (#00FF00) background',
   magenta: 'perfectly flat solid pure magenta (#FF00FF) background',
@@ -34,7 +40,7 @@ const {values} = parseArgs({
     name: {type: 'string'},
     prompt: {type: 'string'},
     file: {type: 'string'},
-    style: {type: 'string', default: DEFAULT_STYLE},
+    style: {type: 'string'},
     bg: {type: 'string', default: 'green'},
     concurrency: {type: 'string', default: '4'},
     'remove-bg-only': {type: 'boolean', default: false},
@@ -58,20 +64,25 @@ const explainError = (status, body) => {
   return new Error(`HTTP ${status}: ${body.slice(0, 300)}`);
 };
 
-const buildPrompt = (subject, style, bg, utuh = false) =>
-  utuh
+const isExplainerFile = Boolean(values.file && /explainer/i.test(values.file));
+
+const buildPrompt = (subject, style, bg, utuh = false) => {
+  const resolvedStyle =
+    style ?? (utuh ? DEFAULT_UTUH_STYLE : isExplainerFile ? DEFAULT_EXPLAINER_PROP_STYLE : DEFAULT_STYLE);
+  return utuh
     ? [
         subject,
-        style,
-        'wide environmental background scene, clean uncluttered composition, soft warm lighting, no text, no watermark, no people in foreground',
+        resolvedStyle,
+        'wide environmental background scene, clean uncluttered composition, full-bleed edge-to-edge camera frame, no border, no frame, no text, no watermark, no people in foreground',
       ].join(', ')
     : [
         subject,
         'single isolated object, centered, the whole object fully visible with generous empty margin around it',
-        style,
+        resolvedStyle,
         'no text, no watermark, no frame, no cast shadow, no floor, no other objects',
         BACKGROUNDS[bg] ?? BACKGROUNDS.green,
       ].join(', ');
+};
 
 const headers = () => ({
   'Content-Type': 'application/json',

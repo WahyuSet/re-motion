@@ -162,9 +162,21 @@ await fs.writeFile(
   path.join(dataDir, `${slug}.latar.json`),
   JSON.stringify(
     [
-      {name: `${slug}-1`, prompt: `wide environmental photography of ${title} scene 1 location, clean composition`, utuh: true},
-      {name: `${slug}-2`, prompt: `wide clean indoor or outdoor photography of ${title} scene 2 location, high detail`, utuh: true},
-      {name: `${slug}-4`, prompt: `wide cinematic photography of ${title} conclusion scene location, soft natural lighting`, utuh: true},
+      {
+        name: `${slug}-1`,
+        prompt: `wide realistic modern photography of ${title} scene 1 location, natural colors, full-bleed camera frame no border, clean composition`,
+        utuh: true,
+      },
+      {
+        name: `${slug}-2`,
+        prompt: `wide realistic modern indoor or outdoor photography of ${title} scene 2 location, natural daylight, full-bleed camera frame no border, high detail`,
+        utuh: true,
+      },
+      {
+        name: `${slug}-4`,
+        prompt: `wide realistic modern photography of ${title} conclusion scene location, soft natural lighting, full-bleed camera frame no border`,
+        utuh: true,
+      },
     ],
     null,
     2,

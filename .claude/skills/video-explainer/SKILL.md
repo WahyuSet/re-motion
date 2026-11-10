@@ -10,11 +10,11 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
 ## Aturan Keras
 
 1. **Jangan sentuh Engine Sejarah:** Dilarang mengubah `src/HistoryVideo.tsx`, `src/Thumbnail.tsx`, `src/theme.ts`, `src/types.ts`, `src/scenes/*`, `src/components/*`, atau `src/data/daftar.ts`.
-2. **WAJIB Full Real Background Unik per Scene (100% Opasitas, DILARANG Kanvas Polos/Transparan):**
-   > ⛔ **PERINGATAN KERAS:** Setiap scene cerita & diagram (`type: 'hook'`, `'stage'`, `'diagram'`) **WAJIB** memiliki properti `latar: 'latar/<slug>-N.png'` yang diisi gambar lokasi real 100% (bukan warna krem polos, bukan transparan, bukan blur). Hanya scene jeda `type: 'beat'` yang menggunakan kanvas krem. Validator `npm run cek:explainer` akan langsung **GAGAL (ERROR)** bila ada scene non-beat tanpa `latar`.
-   - Latar di-generate via Flow Bridge utuh:
+2. **WAJIB Full Real Background Unik per Scene (100% Opasitas, Foto Modern Tanpa Bingkai/Sepia):**
+   > ⛔ **PERINGATAN KERAS:** Setiap scene cerita & diagram (`type: 'hook'`, `'stage'`, `'diagram'`) **WAJIB** memiliki properti `latar: 'latar/<slug>-N.png'` yang diisi **foto lokasi modern real 100%** (*full-bleed edge-to-edge*, warna natural, **dilarang efek lukisan/sepia/bingkai kertas tua**, bukan warna krem polos, bukan transparan, bukan blur). Hanya scene jeda `type: 'beat'` yang menggunakan kanvas krem. Validator `npm run cek:explainer` akan langsung **GAGAL (ERROR)** bila ada scene non-beat tanpa `latar`.
+   - Latar di-generate via Flow Bridge utuh (`--utuh` wajib memakai style fotografi modern full-frame tanpa bingkai/sepia):
      ```bash
-     node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh
+     node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh --style "clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no vintage paper effect, no sepia, high detail"
      ```
    - Dilarang menduplikasi gambar latar yang sama di scene berbeda (tiap scene punya sudut/lokasi unik).
    - Dilarang memakai `latarOpacity` atau `latarBlur` (engine otomatis me-render 100% tajam dengan *slow zoom*).
@@ -165,9 +165,9 @@ Membuat `src/explainer/data/<slug>.ts`, `<slug>.props.json`, `<slug>.sumber.md`,
 Tulis fakta dan angka acuan (tarif resmi, rumus fisika, aturan daerah, dsb.) beserta minimal 2 URL sumber di `src/explainer/data/<slug>.sumber.md`.
 
 ### Langkah 2 — Generate Background Lokasi Real & Cutout Props (Flow Bridge)
-1. Isi daftar background di `src/explainer/data/<slug>.latar.json` dan generate background lokasi utuh (`public/latar/`):
+1. Isi daftar background di `src/explainer/data/<slug>.latar.json` (pastikan prompt mendeskripsikan foto lokasi nyata) dan generate background lokasi utuh (`public/latar/`) dengan style foto modern tanpa bingkai/sepia:
    ```bash
-   node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh
+   node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh --style "clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no vintage paper effect, no sepia, high detail"
    ```
 2. Isi daftar props di `src/explainer/data/<slug>.props.json`, cek koneksi bridge, lalu generate cutout PNG transparan (`public/props/`):
    ```bash
