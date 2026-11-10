@@ -5,9 +5,8 @@ import type {ExplainerScript} from '../types';
 export const gandumTropis: ExplainerScript = {
   format: 'short',
   watermark: false,
-  // Isi dua baris ini SETELAH audio narasi dipotong (node scripts/potong-narasi.mjs gandum-tropis <file-audio>):
-  // narasiAudio: 'audio/gandum-tropis',
-  // narasiExt: 'wav',
+  narasiAudio: 'audio/gandum-tropis',
+  narasiExt: 'wav',
   youtube: {
     judul: 'Kenapa Gandum Tidak Tumbuh di Indonesia? Padahal Kita Juara Makan Mie!',
     deskripsi:
