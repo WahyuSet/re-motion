@@ -43,7 +43,7 @@ if (await exists(dataFile)) {
 
 const template = `import type {ExplainerScript} from '../types';
 
-// Naskah explainer "${title}".
+// Naskah explainer "${title}". Ikuti .claude/skills/video-explainer/SKILL.md.
 // Cek dengan: npm run cek:explainer -- ${slug}
 export const ${varName}: ExplainerScript = {
   format: 'short',
