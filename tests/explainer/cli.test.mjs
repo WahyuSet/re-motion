@@ -44,6 +44,7 @@ test('validasiExplainer allows repeated trigger word when sampai appears again a
       {
         type: 'stage',
         duration: 60,
+        latar: 'latar/token-kos.png',
         narasi: 'Beli token pertama lalu isi token kedua di meteran rumah.',
         items: [{kind: 'teks', teks: 'OK', x: 50, y: 40, di: 'lalu', sampai: 'token'}],
       },
@@ -56,6 +57,7 @@ test('validasiExplainer allows repeated trigger word when sampai appears again a
       {
         type: 'stage',
         duration: 60,
+        latar: 'latar/token-jalan.png',
         narasi: 'Penjelasan selesai dengan rapi.',
         items: [],
       },

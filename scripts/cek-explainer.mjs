@@ -101,6 +101,14 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       return idx;
     };
 
+    if (scene.latarOpacity !== undefined || scene.latarBlur !== undefined) {
+      err(
+        where,
+        'Dilarang memakai latarOpacity atau latarBlur.',
+        'Background explainer wajib Full Real 100% tanpa transparan. Hapus properti latarOpacity dan latarBlur.',
+      );
+    }
+
     if (scene.latar) {
       if (!(await existsPublic(scene.latar))) {
         err(where, `File latar public/${scene.latar} tidak ditemukan.`);
@@ -113,6 +121,12 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       } else {
         seenLatar.set(scene.latar, i + 1);
       }
+    } else if (scene.type !== 'beat') {
+      err(
+        where,
+        'Wajib memiliki background lokasi real.',
+        `Isi latar: 'latar/${slug}-${i + 1}.png' dan generate: node scripts/generate-props.mjs --utuh --name ${slug}-${i + 1} --prompt "<suasana-lokasi>"`,
+      );
     }
 
     if (scene.judulDi) cekKata('judulDi', scene.judulDi);
@@ -143,6 +157,17 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
           where,
           'Awal scene kosong di detik pertama.',
           'Beri minimal 1 item tanpa `di` (delay: 0) atau `di` pada 1–2 kata pertama agar panggung tidak kosong saat scene mulai.',
+        );
+      }
+    }
+
+    if ((scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
+      const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);
+      if (totalAksi === 0) {
+        warn(
+          where,
+          'Tidak ada `aksi` motion aktif pada item di scene ini.',
+          'Tambahkan minimal 3–5 `aksi` (jump, wiggle, squash, peek, move, shake, pulse) yang terikat ke kata narasi agar visual tidak statis.',
         );
       }
     }

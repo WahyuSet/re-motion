@@ -64,6 +64,7 @@ export const ${varName}: ExplainerScript = {
     {
       type: 'hook',
       duration: 110,
+      latar: 'latar/${slug}-1.png',
       baris1: 'TODO PERTANYAAN UTAMA',
       baris2: 'KENAPA BISA BEGITU?',
       narasi: 'TODO kalimat pembuka yang memancing rasa penasaran tentang *topik utama* ini.',
@@ -72,16 +73,32 @@ export const ${varName}: ExplainerScript = {
     {
       type: 'stage',
       duration: 120,
+      latar: 'latar/${slug}-2.png',
       narasi: 'TODO penjelasan visual pertama dengan celetukan *komedi* dan kata kunci *penting* di dalam kalimat.',
       items: [
         {
+          kind: 'prop',
+          src: 'props/meme-kucing-paw.png',
+          x: 28,
+          y: 54,
+          width: 300,
+          masuk: 'slide-up',
+          delay: 0,
+          sampai: 'penting',
+          aksi: [
+            {type: 'wiggle', di: 'penjelasan', rotate: 14, durasi: 18},
+            {type: 'move', di: 'komedi', toX: 24, toY: 56, toRotate: -5, durasi: 16},
+            {type: 'jump', di: 'penting', dy: 60, durasi: 18},
+          ],
+        },
+        {
           kind: 'simbol',
           simbol: 'tanya',
-          x: 28,
+          x: 46,
           y: 38,
-          width: 140,
+          width: 130,
           masuk: 'pop',
-          delay: 0,
+          delay: 4,
           sampai: 'penting',
           aksi: [{type: 'peek', di: 'komedi', dx: 12, dy: -8, rotate: -14, durasi: 12, tahan: 20, sfx: 'boing'}],
         },
@@ -96,6 +113,7 @@ export const ${varName}: ExplainerScript = {
           masuk: 'drop',
           sfx: 'boom',
           di: 'penting',
+          aksi: [{type: 'squash', di: 'kalimat', durasi: 16}],
         },
       ],
     },
@@ -113,12 +131,14 @@ export const ${varName}: ExplainerScript = {
           width: 360,
           masuk: 'pop',
           sfx: 'boing',
+          aksi: [{type: 'wiggle', di: 'jelasin', rotate: 12, durasi: 16}],
         },
       ],
     },
     {
       type: 'stage',
       duration: 120,
+      latar: 'latar/${slug}-4.png',
       narasi: 'TODO kesimpulan akhir yang menjawab pertanyaan di awal dengan *jelas*.',
       items: [
         {
@@ -139,6 +159,18 @@ export const ${varName}: ExplainerScript = {
 await fs.writeFile(dataFile, template);
 await fs.writeFile(path.join(dataDir, `${slug}.props.json`), '[]\n');
 await fs.writeFile(
+  path.join(dataDir, `${slug}.latar.json`),
+  JSON.stringify(
+    [
+      {name: `${slug}-1`, prompt: `wide environmental photography of ${title} scene 1 location, clean composition`, utuh: true},
+      {name: `${slug}-2`, prompt: `wide clean indoor or outdoor photography of ${title} scene 2 location, high detail`, utuh: true},
+      {name: `${slug}-4`, prompt: `wide cinematic photography of ${title} conclusion scene location, soft natural lighting`, utuh: true},
+    ],
+    null,
+    2,
+  ) + '\n',
+);
+await fs.writeFile(
   path.join(dataDir, `${slug}.sumber.md`),
   `# Sumber fakta: ${title}\n\nSetiap fakta di narasi + minimal 2 URL sumber.\n\n- Fakta: TODO\n  - https://...\n  - https://...\n`,
 );
@@ -154,10 +186,12 @@ if (!daftar.includes(`id: '${id}'`)) {
 console.log(`Dibuat (Explainer Short 9:16):
   src/explainer/data/${slug}.ts          naskah explainer (isi semua TODO)
   src/explainer/data/${slug}.props.json  daftar props untuk generate-props
+  src/explainer/data/${slug}.latar.json  daftar background real per scene
   src/explainer/data/${slug}.sumber.md   catatan sumber fakta
 Terdaftar sebagai Composition "${id}" di src/explainer/daftar.ts.
 
 Langkah berikutnya:
   1. Edit naskah di src/explainer/data/${slug}.ts
-  2. Cek naskah -> npm run cek:explainer -- ${slug}
-  3. Generate props (opsional) -> node scripts/generate-props.mjs --file src/explainer/data/${slug}.props.json`);
+  2. Generate background real -> node scripts/generate-props.mjs --file src/explainer/data/${slug}.latar.json --utuh
+  3. Generate props cutout   -> node scripts/generate-props.mjs --file src/explainer/data/${slug}.props.json
+  4. Cek naskah              -> npm run cek:explainer -- ${slug}`);

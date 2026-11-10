@@ -26,8 +26,6 @@ const FullSceneBackdrop: React.FC<{scene: ExplainerScene}> = ({scene}) => {
   if (!scene.latar) return null;
   const p = Math.min(1, Math.max(0, frame / Math.max(1, scene.duration)));
   const scale = 1.02 + p * 0.08;
-  const opacity = scene.latarOpacity ?? 1;
-  const blur = scene.latarBlur ?? 0;
 
   return (
     <AbsoluteFill style={{zIndex: 0, overflow: 'hidden', pointerEvents: 'none'}}>
@@ -37,8 +35,7 @@ const FullSceneBackdrop: React.FC<{scene: ExplainerScene}> = ({scene}) => {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          opacity,
-          filter: blur > 0 ? `blur(${blur}px)` : undefined,
+          opacity: 1,
           transform: `scale(${scale})`,
         }}
       />

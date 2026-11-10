@@ -13,7 +13,7 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
 2. **Hanya edit file milik video explainer itu:** `src/explainer/data/<slug>.ts`, `src/explainer/data/<slug>.props.json`, `src/explainer/data/<slug>.sumber.md`, dan `src/explainer/daftar.ts`.
 3. **Watermark default:** Kosongkan dulu (`watermark: false`) di naskah sampai nama channel final ditentukan.
 3b. **Jeda Ritme `BeatScene` (`type: 'beat'`):**
-   - Gunakan kalimat transisi **`teks: 'Oke, sini gue jelasin.'`** (bukan `"nah"`), ditemani karakter meme kucing berkacamata yang sedang menjelaskan (`props/meme-kucing-jelasin.png`):
+   - Gunakan kalimat transisi **`teks: 'Oke, sini gue jelasin.'`** (bukan `"nah"`), ditemani karakter meme kucing berkacamata yang sedang menjelaskan (`props/meme-kucing-jelasin.png`) lengkap dengan aksi gerak:
      ```ts
      {
        type: 'beat',
@@ -29,6 +29,7 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
            width: 340,
            masuk: 'pop',
            sfx: 'boing',
+           aksi: [{type: 'wiggle', di: 'jelasin', rotate: 12, durasi: 16}],
          },
        ],
      }
@@ -37,6 +38,18 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
    - **Detik `0.0s` di setiap scene wajib punya visual pembuka** (`delay: 0` atau `di` pada 1–2 kata pertama). Saat kalimat pembuka berupa pertanyaan (*"Kenapa bisa beda?"*, *"Banyak yang mengira..."*), tampilkan karakter ekspresif sedang berpikir (`props/token-mikir.png` atau sejenisnya) + simbol `tanya` (`?`).
    - **Setiap klausa yang diucapkan harus punya pasangan visual** yang muncul tepat di kata pemicunya (`di: '<kata>'`). Jangan biarkan ada jeda `> 2,5 detik` tanpa perubahan visual.
    - Saat berganti fase di dalam 1 scene, **samakan kata `sampai` objek lama dan `di` objek baru** (contoh: `sampai: 'melainkan'` dan `di: 'melainkan'`) agar tidak ada celah layar kosong 0,5 detik di antaranya, dan hindari menaruh objek baru di koordinat `x, y` yang persis menimpa objek yang sedang `fade` keluar.
+4b. **High-Density Motion Wajib (Motion Diperbanyak di Setiap Kalimat):**
+   - **Minimal 3–5 `aksi` aktif per scene (`HookScene` & `StageScene`):** Dilarang membiarkan prop hanya punya animasi `masuk` lalu diam sampai keluar. Setiap klausa (`tiap 1,5–2 detik`) wajib memicu aksi gerak (`jump`, `wiggle`, `squash`, `peek`, `move`, `shake`, `pulse`, `grow`) yang terikat ke kata narasi (`di: '<kata>'`).
+   - **Multi-Aksi Berantai pada Prop Utama (`2–3 aksi` per item):** Prop atau karakter yang tampil lebih dari 3 detik (seperti `utama` di `HookScene` atau objek fokus di `StageScene`) **wajib memiliki array `aksi` berisi 2–3 gerakan berurutan** mengikuti kata-kata narasi:
+     ```ts
+     aksi: [
+       {type: 'wiggle', di: 'kata-awal', rotate: 14, durasi: 18},
+       {type: 'move', di: 'kata-tengah', toX: 36, toY: 50, toScale: 1.1, toRotate: -4, durasi: 16},
+       {type: 'jump', di: 'kata-punchline', dy: 65, durasi: 18, sfx: 'boing'},
+     ]
+     ```
+   - **Wajib Pakai Perpindahan Posisi (`type: 'move'`) & Koreografi Sebab-Akibat:** Gunakan `{type: 'move', di: '<kata>', toX, toY, toScale, toRotate, durasi}` agar objek benar-benar bergeser/berpindah tempat di panggung, serta kombinasikan reaksi antar-objek pada kata `di` yang sama (contoh: Objek A `masuk: 'drop'` atau `type: 'move'` menghantam Objek B → Objek B memicu `{type: 'squash', di: '<kata>', durasi: 16, sfx: 'slap'}`).
+   - **Variasi Animasi Masuk (`masuk`) & Keluar (`keluar`):** Jangan semua item memakai `masuk: 'pop'`. Dalam 1 scene, kombinasikan minimal 3 gaya masuk: `'drop'` (jatuh dari atas + otomatis membal *squash-and-stretch*), `'slide-left'` / `'slide-right'`, `'slide-up'` / `'grow-up'`, dan `'pop'`.
 5. **Kombinasi Visual Wajib (Full Real Background Lokasi per Scene + Cutout PNG + Foto Asli Berbingkai):**
    - **Setiap scene cerita/diagram wajib punya Full Real Background lokasi yang UNIK (`latar: 'latar/<nama>.png'`)** dari Flow Bridge (`node scripts/generate-props.mjs --utuh --name <nama> --prompt "<lokasi sesuai narasi scene>"`) — dilarang memakai gambar latar yang sama berulang di beberapa scene.
    - Gunakan **cutout PNG transparan realistis** dari `scripts/generate-props.mjs` dengan style:
@@ -89,17 +102,45 @@ Contoh penggunaan di naskah:
 }
 ```
 
-### 3. Pilar Visual Props, Living Motion, & Gag Fisik
+### 3. Pilar Visual Props, High-Density Motion, & Gag Fisik
 - **Auto Living Cutout Motion (Aktif Otomatis):** Semua `prop` dan `simbol` otomatis bergerak halus selama tampil di layar (mengayun vertikal `±7px` + goyang sudut *paper-cutout* `±1.8°` + *breathing scale* `±1.5%` dengan fase acak per posisi `x, y` agar tidak kaku). Saat `masuk: 'drop'`, objek otomatis membal (*squash & stretch*) saat mendarat.
 - **Cutout Karakter/Meme Reaksi Komedi:** Prioritaskan **meme ikonik binatang mikir/bingung** (kucing pegang dagu `props/meme-kucing-paw.png`, kucing bengong `props/meme-kucing-titik.png`, kucing oren `props/meme-kucing-think.png`, monyet mikir `props/meme-monyet-mikir.png`) yang jauh lebih lucu dan relatable dibanding karakter 3D kaku. Padukan dengan cutout Flow Bridge (dompet kosong, beban raksasa, palu).
-- **Aksi Motion Ekspresif di `aksi` (`peek`, `jump`, `wiggle`, `squash`, `move`, `shake`, `pulse`):**
-  - **Ngintip (`type: 'peek'`):** Objek nongol miring dari pinggir layar dengan bunyi `boing` otomatis lalu sembunyi lagi:
-    ```ts
-    aksi: [{type: 'peek', di: 'kata punchline', dx: -18, dy: -6, rotate: -16, durasi: 12, tahan: 24}]
-    ```
-  - **Melompat (`type: 'jump'`):** Objek melompat ke atas dengan *squash & stretch* + bunyi `boing` otomatis saat disebut (`{type: 'jump', di: 'kata', dy: 70}`).
-  - **Goyang Kertas (`type: 'wiggle'`):** Objek bergoyang pendulum kiri-kanan `±14°` (`{type: 'wiggle', di: 'kata', rotate: 15, durasi: 20}`).
-  - **Penyet Membal (`type: 'squash'`):** Objek gepeng membal ke bawah + bunyi `slap` otomatis saat tertimpa objek lain (`{type: 'squash', di: 'kata', durasi: 16}`).
+- **Katalog Lengkap 9 Jenis `aksi` (`StageAction`) — Wajib Dipakai Padat (3–5 Aksi per Scene):**
+
+| `type` | Efek Gerak Visual | Default SFX | Kapan Wajib Dipakai | Contoh Sintaks |
+| :--- | :--- | :--- | :--- | :--- |
+| **`jump`** | Melompat ke atas (`dy`, default `60px`) + *squash & stretch* saat lepas landas dan mendarat | `'boing'` | Saat objek/karakter disebut namanya, kaget, atau antusias | `{type: 'jump', di: 'kata', dy: 70, durasi: 18}` |
+| **`wiggle`** | Goyang pendulum *paper-cutout* kiri-kanan (`±rotate°`, default `14°`) + sedikit membesar | — | Saat karakter bingung, berpikir, mengejek, atau menjelaskan | `{type: 'wiggle', di: 'kata', rotate: 15, durasi: 20}` |
+| **`squash`** | Gepeng membal ke bawah (`scaleX: 1.28, scaleY: 0.72` + turun `14px`) lalu kembali | `'slap'` | Saat objek tertimpa beban dari atas, tertekan, atau kena mental | `{type: 'squash', di: 'kata', durasi: 16}` |
+| **`peek`** | Nongol miring (`dx, dy, rotate`), tahan sebentar (`tahan`), lalu ngumpet balik | `'boing'` | Saat celetukan komedi, tanda tanya nyeleneh, atau karakter ngintip | `{type: 'peek', di: 'kata', dx: -16, dy: -8, rotate: -14, durasi: 12, tahan: 22}` |
+| **`move`** | Berpindah posisi permanen ke `toX, toY` (+ opsional `toScale`, `toRotate`) dengan pegas | — | Saat objek mendekat, bergeser memberi ruang, atau menabrak objek lain | `{type: 'move', di: 'kata', toX: 68, toY: 48, toScale: 1.1, toRotate: 6, durasi: 16}` |
+| **`shake`** | Getar cepat horizontal + rotasi (`intensitas`, default `10`) | — (sering `sfx: 'womp'`/`'boom'`) | Saat panik, kipas muter kencang, benda macet/terkunci, atau marah | `{type: 'shake', di: 'kata', intensitas: 12, durasi: 18, sfx: 'womp'}` |
+| **`pulse`** | Denyut membesar-kembali (`scale` naik `+18%`) | — | Saat kata kunci ditekankan atau energi/panas memancar | `{type: 'pulse', di: 'kata', durasi: 18}` |
+| **`grow`** | Ubah skala permanen ke `toScale` (atau `toScaleX` & `toScaleY` terpisah) | — | Saat benda membengkak, mengecil permanen, atau gepeng kustom | `{type: 'grow', di: 'kata', toScale: 1.22, durasi: 14}` |
+| **`dim`** | Redupkan opasitas objek lama (`to: 0.25`) tanpa menghilangkannya | — | Saat fokus berpindah ke objek sebelahnya | `{type: 'dim', di: 'kata', to: 0.3, durasi: 12}` |
+
+- **Pola Koreografi Reaksi Berantai (Multi-Action & Cause-Effect):**
+  Jangan biarkan prop cuma punya 1 aksi. Gunakan 2 pola ini di setiap scene:
+  1. **Pola Rantai pada 1 Karakter/Prop Utama (2–3 `aksi` berurutan):**
+     ```ts
+     {
+       kind: 'prop',
+       src: 'props/meme-kucing-paw.png',
+       x: 28,
+       y: 54,
+       width: 310,
+       masuk: 'slide-up',
+       delay: 0,
+       sampai: 'Padahal',
+       aksi: [
+         {type: 'wiggle', di: 'mengira', rotate: 14, durasi: 18},
+         {type: 'move', di: 'satu jendela', toX: 24, toY: 56, toRotate: -5, durasi: 16},
+         {type: 'jump', di: 'langsung sejuk', dy: 55, durasi: 16},
+       ],
+     }
+     ```
+  2. **Pola Tabrakan / Sebab-Akibat Antar 2 Objek pada Kata `di` yang Sama:**
+     Saat Objek A jatuh (`masuk: 'drop'`) atau bergeser (`type: 'move'`) di kata `'tertimpa'`, Objek B yang berada di bawah/dekatnya otomatis memicu `{type: 'squash', di: 'tertimpa'}` atau `{type: 'shake', di: 'tertimpa'}` pada kata yang persis sama.
 - **Label Celetukan Mikro (Micro-Gag Text):** `StageItem` `kind: 'teks'` ukuran `28–32` miring (`rotate: -6`) di dekat prop sebagai komentar sarkas singkat yang tidak perlu dibaca narator (contoh: `"Dompet menangis"`, `"Beban hidup"`).
 
 ---
@@ -115,17 +156,21 @@ Membuat `src/explainer/data/<slug>.ts`, `<slug>.props.json`, `<slug>.sumber.md`,
 ### Langkah 1 — Riset & Catat Sumber Fakta
 Tulis fakta dan angka acuan (tarif resmi, rumus fisika, aturan daerah, dsb.) beserta minimal 2 URL sumber di `src/explainer/data/<slug>.sumber.md`.
 
-### Langkah 2 — Generate Cutout PNG (Flow Bridge) & Cari Foto Asli (Wikimedia)
-1. Isi daftar objek di `src/explainer/data/<slug>.props.json`, cek koneksi bridge, lalu generate:
+### Langkah 2 — Generate Background Lokasi Real & Cutout Props (Flow Bridge)
+1. Isi daftar background di `src/explainer/data/<slug>.latar.json` dan generate background lokasi utuh (`public/latar/`):
+   ```bash
+   node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh
+   ```
+2. Isi daftar props di `src/explainer/data/<slug>.props.json`, cek koneksi bridge, lalu generate cutout PNG transparan (`public/props/`):
    ```bash
    node scripts/generate-props.mjs --cek
    node scripts/generate-props.mjs --file src/explainer/data/<slug>.props.json --style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
    ```
-2. Cari foto pendukung nyata dari Wikimedia Commons:
+3. Cari foto pendukung nyata dari Wikimedia Commons:
    ```bash
    node scripts/cari-foto.mjs "<kata kunci inggris>" --slug <slug> --limit 4 --min-width 800
    ```
-3. Lihat hasil foto di `public/photos/<slug>/_contact-sheet.jpg` dan pilih yang paling jelas untuk dipasang dengan `bingkai: true`.
+4. Lihat hasil foto di `public/photos/<slug>/_contact-sheet.jpg` dan pilih yang paling jelas untuk dipasang dengan `bingkai: true`.
 
 ### Langkah 3 — Tulis Naskah & Rancang Visual per Kalimat
 Susun 5–7 scene (`hook` → `stage` → `beat` `"Oke, sini gue jelasin."` + `props/meme-kucing-jelasin.png` → `diagram` / `stage` → `stage` penutup):
@@ -165,6 +210,9 @@ Sebelum mulai render setiap video explainer berikutnya, pastikan semua poin di b
 - [ ] **Watermark & Beat Scene Standar Baru:**
   - `watermark: false` di `ExplainerScript` (kosongkan dulu).
   - Scene `beat` memakai `teks: 'Oke, sini gue jelasin.'` (dan narasi `"Oke, *sini gue jelasin* ..."`) + karakter meme kucing menjelaskan (`props/meme-kucing-jelasin.png`, `masuk: 'pop'`, `sfx: 'boing'`).
+- [ ] **Full Real Background Unik per Scene (Wajib):**
+  - Setiap scene cerita & diagram (`hook`, `stage`, `diagram`) **wajib memiliki `latar: 'latar/<slug>-N.png'` yang unik** sesuai lokasi narasinya. Dilarang membiarkan background krem polos tanpa latar (kecuali scene `beat`), dan dilarang menduplikasi gambar latar yang sama di beberapa scene.
+  - File latar sudah di-generate ke `public/latar/` via `node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh`.
 - [ ] **Pilar 1 — Komedi di Narasi (Minimal 2–3 Celetukan Relatable):**
   - Ada 1 kalimat celetukan sehari-hari / hiperbola komedi di **Hook (Scene 1)** atau **Salah Kaprah (Scene 2)**.
   - Ada 1 kalimat punchline / sindiran ringan saat fakta utama atau hitungan terbongkar (**Scene 3/4**).
@@ -177,8 +225,13 @@ Sebelum mulai render setiap video explainer berikutnya, pastikan semua poin di b
     - `sfx: 'ding'` saat solusi/kesimpulan benar (`centang` ✅) muncul.
 - [ ] **Pilar 3 — Komedi di Visual Props (Cutout Reaksi + Gag Fisik):**
   - Di `<slug>.props.json`, wajib ada minimal **1–2 cutout PNG khusus reaksi/komedi** (contoh: karakter mikir/tepuk jidat, dompet kosong menangis, kucing melongo, beban batu raksasa) selain prop objek teknis utama.
-  - Gunakan minimal **1 aksi `peek`** (nongol miring dari tepi layar lalu ngumpet lagi) dan **1 aksi slapstick** (`drop` + `shake` atau `grow` gepeng) yang sinkron dengan kata punchline di narasi (`di: '<kata>'`).
+  - Gunakan minimal **1 aksi `peek`** (nongol miring dari tepi layar lalu ngumpet lagi) dan **1 aksi slapstick** (`drop` + `squash` / `shake` / `jump`) yang sinkron dengan kata punchline di narasi (`di: '<kata>'`).
   - Tambahkan minimal **1 label celetukan mikro** (`kind: 'teks'`, `ukuran: 28–32`, `rotate: -6`) di dekat prop sebagai komentar visual lucu.
+- [ ] **High-Density Motion (Motion Diperbanyak di Setiap Kalimat):**
+  - Setiap `HookScene` dan `StageScene` memiliki minimal **3–5 `aksi` aktif** yang tersebar di sepanjang kalimat (`jump`, `wiggle`, `squash`, `peek`, `move`, `shake`, `pulse`).
+  - Prop utama / karakter yang tampil lebih dari 3 detik memiliki **2–3 `aksi` berantai** (`aksi: [{type: 'wiggle', ...}, {type: 'move', ...}, {type: 'jump', ...}]`), tidak diam menunggu keluar.
+  - Minimal ada **1–2 aksi `type: 'move'`** per scene untuk perpindahan posisi objek di panggung atau koreografi sebab-akibat antar dua objek (`drop`/`move` → objek di bawahnya `squash`).
+  - Animasi `masuk` dalam 1 scene bervariasi (`drop`, `slide-left`, `slide-right`, `slide-up`, `grow-up`, `pop`), tidak monoton `pop` semua.
 - [ ] **Zero Dead Air & Tata Letak Rapi:**
   - Detik `0.0s` di setiap scene wajib langsung menampilkan prop pembuka (`delay: 0` atau `di` pada kata ke-1/ke-2).
   - Saat pergantian fase di dalam 1 scene, kata `sampai` objek lama **wajib sama** dengan kata `di` objek baru (`keluar: 'pop-out'` otomatis 8 frame).
