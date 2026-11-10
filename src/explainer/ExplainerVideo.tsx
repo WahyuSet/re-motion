@@ -12,6 +12,7 @@ import {NARASI_DELAY, narasiFile} from '../lib/narasi';
 import type {Scene as HistoryScene, TransitionType, VideoScript} from '../types';
 import {explainerTransitionFrames, getExplainerDuration, prepareExplainerScript} from './prep';
 import {BeatSceneView} from './scenes/BeatScene';
+import {DiagramSceneView} from './scenes/DiagramScene';
 import {HookSceneView} from './scenes/HookScene';
 import {StageSceneView} from './scenes/StageScene';
 import {ExplainerSubtitle} from './Subtitle';
@@ -27,6 +28,7 @@ const renderExplainerScene = (scene: ExplainerScene, fps: number) => {
       {scene.type === 'hook' ? <HookSceneView scene={scene} words={words} /> : null}
       {scene.type === 'beat' ? <BeatSceneView scene={scene} words={words} /> : null}
       {scene.type === 'stage' ? <StageSceneView scene={scene} words={words} /> : null}
+      {scene.type === 'diagram' ? <DiagramSceneView scene={scene} words={words} /> : null}
       <ExplainerSubtitle words={words} accentColor={scene.accentColor} />
     </AbsoluteFill>
   );
