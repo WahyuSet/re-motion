@@ -1,0 +1,31 @@
+PANDUAN TTS: gandum-tropis
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs gandum-tropis <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±8.3 detik
+Indonesia juara makan mie instan dan gorengan tepung. Tapi pernah gak mikir, kenapa gak ada sawah gandum di kampung kita?
+
+[02] (stage) ±8.8 detik
+Banyak yang ngira, tanah kita subur banget, lempar tongkat aja tumbuh. Giliran gandum ditanam, daunnya sih lebat, tapi bulirnya menolak keluar!
+
+[03] (beat) ±2.5 detik
+Oke, sini gue jelasin rahasia biologinya.
+
+[04] (stage) ±9.6 detik
+Gandum punya alarm biologis bernama vernalisasi. Tanaman ini wajib ngerasain hawa dingin di bawah lima belas derajat berminggu-minggu, baru selnya mau memproduksi biji.
+
+[05] (stage) ±9.2 detik
+Kedua, gandum butuh siang enam belas jam. Di khatulistiwa, matahari cuma dua belas jam, ditambah udara lembap yang bikin gampang busuk jamuran!
+
+[06] (stage) ±9.2 detik
+Makanya, daripada maksa gandum yang gampang masuk angin, petani kita jelas milih padi sang raja tropis. Kamu tim mie atau tim nasi?
+
+Perkiraan total narasi: ±48 detik (belum termasuk jeda)
