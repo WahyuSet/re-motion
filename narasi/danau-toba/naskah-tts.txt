@@ -1,0 +1,103 @@
+PANDUAN TTS: danau-toba
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs danau-toba <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±7.5 detik
+Di dataran tinggi Sumatera Utara, terhampar danau vulkanik yang menakjubkan. Inilah Danau Toba, kaldera raksasa bukti kekuatan bumi.
+
+[02] (photo) ±8.3 detik
+Membentang di ketinggian sembilan ratus empat meter di atas permukaan laut, pemandangan air birunya dikelilingi tebing pegunungan hijau yang megah.
+
+[03] (fact) ±7.9 detik
+Permukaan airnya sangat luas, mencapai seribu seratus tiga puluh kilometer persegi, menjadikannya danau terbesar di seluruh kawasan Asia Tenggara.
+
+[04] (fact) ±7.9 detik
+Kedalaman danau ini mencapai lima ratus lima meter, menyimpan volume air tawar yang luar biasa besar di dasar palungnya.
+
+[05] (photo) ±8.3 detik
+Dengan panjangnya mencapai seratus kilometer dan lebar tiga puluh kilometer, cekungan ini sebenarnya adalah kawah gunung api purba yang tenggelam.
+
+[06] (chapter) ±5.8 detik
+Puluhan ribu tahun lalu, bencana dahsyat meledak dari perut bumi dan mengguncang seluruh dunia.
+
+[07] (fact) ±8.3 detik
+Letusan katastropik terakhir meledak sekitar tujuh puluh empat ribu tahun lalu, menghasilkan endapan yang dikenal sebagai batuan Tuff Toba Muda.
+
+[08] (photo) ±7.9 detik
+Letusan ini digolongkan pada indeks letusan vulkanik skala delapan, tingkat tertinggi dalam sains kegunungapian yang melipatgandakan kekuatan letusan modern.
+
+[09] (fact) ±7.1 detik
+Ledakan tersebut memuntahkan dua ribu delapan ratus kilometer kubik batu apung dan abu panas ke udara bebas.
+
+[10] (photo) ±7.5 detik
+Angin kencang membawa debu vulkanik melintasi Samudra Hindia, mengubur Semenanjung Malaya hingga daratan India dengan lapisan abu tebal.
+
+[11] (kutipan) ±8.8 detik
+Para ilmuwan sempat menduga letusan ini nyaris memunahkan manusia purba, namun temuan arkeologi modern membuktikan populasi di berbagai kawasan berhasil bertahan.
+
+[12] (photo) ±7.9 detik
+Setelah ruang magma kosong terkuras, atap gunung runtuh menciptakan kaldera amblas yang perlahan terisi air hujan selama ribuan tahun.
+
+[13] (photo) ±6.7 detik
+Kajian geologi mengungkap bahwa kaldera terbentuk bertahap melalui empat letusan dahsyat sejak satu juta tahun silam.
+
+[14] (chapter) ±5.4 detik
+Dari dasar danau yang tenang, kekuatan geologi kembali bergolak membentuk sebuah pulau raksasa.
+
+[15] (photo) ±7.9 detik
+Tekanan magma dari dalam bumi perlahan mendorong dasar kaldera hingga terangkat ke permukaan, membentuk fenomena kubah bangkitan Pulau Samosir.
+
+[16] (fact) ±8.3 detik
+Pulau di tengah danau ini memiliki luas enam ratus tiga puluh kilometer persegi, hampir sebanding dengan luas wilayah negara Singapura.
+
+[17] (photo) ±7.9 detik
+Ratusan anak sungai bermuara ke Toba, namun airnya hanya mengalir keluar melalui satu celah sempit, yaitu lembah Sungai Asahan.
+
+[18] (photo) ±8.3 detik
+Masyarakat meyakini cerita rakyat tentang petani bernama Toba dan sumpah terlarang pada istrinya yang merupakan jelmaan seekor ikan mas ajaib.
+
+[19] (chapter) ±6.3 detik
+Tepian Danau Toba menjadi rumah bagi peradaban luhur suku Batak yang sarat dengan falsafah hidup.
+
+[20] (photo) ±8.3 detik
+Gunung Pusuk Buhit dipercaya sebagai tempat asal mula Si Raja Batak turun ke bumi dan menurunkan garis keturunan marga Batak.
+
+[21] (photo) ±8.3 detik
+Rumah adat Ruma Bolon berdiri megah dengan atap melengkung mirip perahu, dihiasi ukiran gorga bermakna pelindung dan lambang kesejahteraan hidup.
+
+[22] (fact) ±8.3 detik
+Di Huta Siallagan, terdapat kompleks batu persidangan berusia lebih dari empat ratus lima puluh tahun tempat para raja mengadili kejahatan.
+
+[23] (photo) ±7.9 detik
+Di Tomok, jasad para penguasa disemayamkan dalam sarkofagus batu utuh berukirkan wajah raja, tanpa dikubur ke dalam liang tanah.
+
+[24] (photo) ±7.9 detik
+Kearifan lokal terus hidup melalui tarian boneka Sigale-gale dan tenunan kain ulos sakral yang mengiringi setiap upacara adat masyarakat.
+
+[25] (timeline) ±7.1 detik
+Catatan sejarah merekam masuknya pengaruh luar, dari kedatangan misionaris Ludwig Nommensen hingga penetapan kaldera sebagai warisan internasional.
+
+[26] (chapter) ±6.7 detik
+Kini Danau Toba tidak hanya milik Nusantara, tetapi telah diakui sebagai warisan berharga bagi seluruh dunia.
+
+[27] (fact) ±7.9 detik
+Pada tahun dua ribu dua puluh, lembaga dunia UNESCO resmi menetapkan Kaldera Toba sebagai taman bumi warisan geologi dunia.
+
+[28] (photo) ±7.5 detik
+Kawasan Parapat dan Semenanjung Tuktuk kini berkembang menjadi pusat pariwisata internasional yang menyuguhkan keindahan panorama dan keramahan warga.
+
+[29] (photo) ±7.9 detik
+Tantangan masa depan adalah menjaga kualitas air dan kelestarian ekosistem kaldera agar keindahan purba ini tetap dinikmati generasi mendatang.
+
+[30] (outro) ±7.9 detik
+Danau Toba adalah monumen abadi pertemuan kedahsyatan bumi dan keagungan budaya. Ikuti channel ini untuk kisah sejarah Nusantara lainnya.
+
+Perkiraan total narasi: ±230 detik (belum termasuk jeda)

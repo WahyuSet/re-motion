@@ -1,0 +1,11 @@
+Isu penyadapan pakai sistem lims lagi ramai dibahas sampai bikin geger. Banyak yang parno, mengira ponsel mereka bisa tiba-tiba disadap tanpa ada tanda apa pun di layar.
+
+Banyak orang membayangkan alat sadap itu berupa koper antena rahasia ala film detektif. Faktanya, lims itu singkatan dari lawful interception management system, yaitu perangkat lunak resmi di pusat data operator seluler.
+
+Oke, sini gue jelasin cara kerjanya.
+
+Sistem ini sama sekali tidak menanam virus ke ponselmu. Saat target melakukan panggilan seluler biasa atau kirim pesan singkat, server operator langsung menduplikasi aliran suara ke komputer penyidik secara langsung.
+
+Namun ada kelemahannya, lims cuma bisa merekam telepon pulsa biasa dan pesan seluler. Aplikasi percakapan modern dengan enkripsi ujung ke ujung seperti whatsapp atau signal sama sekali tidak bisa ditembus.
+
+Jadi yang bermasalah kemarin bukan teknologinya, melainkan oknum orang dalam yang memasukkan nomor target tanpa izin pengadilan. Sistem resmi penegak hukum, kalau pengawasannya jebol, akhirnya malah disalahgunakan.

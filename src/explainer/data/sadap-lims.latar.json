@@ -1,0 +1,22 @@
+[
+  {
+    "name": "sadap-lims-2",
+    "prompt": "vertical 9:16 wide realistic modern indoor photography of a high-tech telecommunication network operations center control room with glowing dashboard monitors in soft focus background, natural lighting, clean composition, full-bleed edge-to-edge camera frame no border",
+    "utuh": true
+  },
+  {
+    "name": "sadap-lims-4",
+    "prompt": "vertical 9:16 wide realistic modern photography of a high-end enterprise datacenter server corridor with sleek server racks and cool blue LED indicator lights, clean floor, symmetrical depth, full-bleed edge-to-edge camera frame no border",
+    "utuh": true
+  },
+  {
+    "name": "sadap-lims-5",
+    "prompt": "vertical 9:16 wide realistic modern photography of a minimalist home office desk near a window, soft ambient daylight, clean wooden tabletop, uncluttered, full-bleed edge-to-edge camera frame no border",
+    "utuh": true
+  },
+  {
+    "name": "sadap-lims-6",
+    "prompt": "vertical 9:16 wide realistic modern photography of an elegant legal office desk with warm mahogany wood, clean modern corporate lawyer interior, full-bleed edge-to-edge camera frame no border",
+    "utuh": true
+  }
+]
