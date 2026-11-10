@@ -62,23 +62,34 @@ const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: strin
           <path d="M 92 18 L 124 42 L 92 66" fill="none" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
-    case 'tanya':
+    case 'tanya': {
+      const qColor = warna ?? explainerTheme.red;
       return (
-        <svg width={width} height={width} viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="52" fill={warna ?? explainerTheme.red} stroke={explainerTheme.ink} strokeWidth="8" />
-          <text
-            x="60"
-            y="84"
-            textAnchor="middle"
-            fontFamily={explainerTheme.fontBody}
-            fontWeight="900"
-            fontSize="76"
-            fill="#ffffff"
-          >
-            ?
-          </text>
+        <svg width={width} height={width * 1.25} viewBox="0 0 110 140" style={{overflow: 'visible'}}>
+          <filter id="q-shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="rgba(0,0,0,0.32)" />
+          </filter>
+          <g filter="url(#q-shadow)">
+            <path
+              d="M 55 18 C 33 18 23 32 23 46 C 23 52 27 56 34 56 C 41 56 46 51 46 45 C 46 38 49 32 55 32 C 61 32 67 35 67 42 C 67 50 60 56 53 62 C 47 68 42 76 43 88 C 43 92 47 96 52 96 C 57 96 61 92 61 87 C 61 79 65 74 72 68 C 80 61 88 53 88 40 C 88 24 74 18 55 18 Z M 52 105 C 46.5 105 42 109.5 42 115 C 42 120.5 46.5 125 52 125 C 57.5 125 62 120.5 62 115 C 62 109.5 57.5 105 52 105 Z"
+              fill={qColor}
+              stroke="#ffffff"
+              strokeWidth="14"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+            <path
+              d="M 55 18 C 33 18 23 32 23 46 C 23 52 27 56 34 56 C 41 56 46 51 46 45 C 46 38 49 32 55 32 C 61 32 67 35 67 42 C 67 50 60 56 53 62 C 47 68 42 76 43 88 C 43 92 47 96 52 96 C 57 96 61 92 61 87 C 61 79 65 74 72 68 C 80 61 88 53 88 40 C 88 24 74 18 55 18 Z M 52 105 C 46.5 105 42 109.5 42 115 C 42 120.5 46.5 125 52 125 C 57.5 125 62 120.5 62 115 C 62 109.5 57.5 105 52 105 Z"
+              fill={qColor}
+              stroke={explainerTheme.ink}
+              strokeWidth="6"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          </g>
         </svg>
       );
+    }
     case 'retak':
       return (
         <svg width={width} height={width * 0.75} viewBox="0 0 240 180">

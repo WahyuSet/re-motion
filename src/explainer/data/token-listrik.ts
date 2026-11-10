@@ -103,9 +103,9 @@ export const tokenListrik: ExplainerScript = {
         {
           kind: 'simbol',
           simbol: 'tanya',
-          x: 46,
-          y: 44,
-          width: 100,
+          x: 45,
+          y: 42,
+          width: 130,
           masuk: 'pop',
           delay: 4,
           sampai: 'Padahal',
