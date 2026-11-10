@@ -21,11 +21,33 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
      `--style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"`
      *(Catatan: hindari kata `"banknote"` atau mata uang negara asli di prompt Flow karena kena filter kebijakan; gunakan `"3D stylized bundle of red paper notes with golden coins"`).*
    - Kombinasikan dengan **foto asli dari Wikimedia Commons** (`scripts/cari-foto.mjs`) menggunakan `bingkai: true` pada `StageItem`.
-6. **Validasi Wajib:** Setiap selesai mengedit naskah, jalankan:
+6. **Wajib Sisipkan Humor & Komedi Visual (Gaya Khas `"nahh gini"`):**
+   - Setiap naskah explainer **wajib memiliki minimal 2–3 momen komedi/celetukan relatable** (baik di narasi maupun visual gag di panggung) agar tidak kaku seperti buku pelajaran.
+   - Gunakan resep komedi di bagian **Resep Humor & Komedi Visual** di bawah.
+7. **Validasi Wajib:** Setiap selesai mengedit naskah, jalankan:
    ```bash
    npm run cek:explainer -- <slug>
    ```
    Pastikan lulus dengan `0 error` dan `0 peringatan`.
+
+---
+
+## Resep Humor & Komedi Visual (`"nahh gini"`)
+
+Engine `src/explainer/` sudah memiliki fitur animasi komedi bawaan di [`Stage.tsx`](../../../src/explainer/Stage.tsx) dan [`timing.ts`](../../../src/explainer/timing.ts). Gunakan 4 teknik ini di setiap video:
+
+1. **Analogi Receh & Celetukan Relatable di Narasi:**
+   - Selipkan 1 kalimat celetukan sehari-hari yang dekat dengan penonton Indonesia di Scene 1 (Hook) atau Scene 2 (Salah Kaprah).
+   - *Contoh:* `"Bunyi tit-tit meteran pas tengah malem itu horornya ngalahin film setan"`, atau `"Bata disusun lurus itu kayak temen kelompok yang cuma numpang nama, diteken dikit langsung ambyar."`
+2. **Visual Gag "Ngintip" (`aksi: [{type: 'peek'}]`):**
+   - Saat narasi melempar punchline atau sindiran singkat, munculkan karakter/kucing/ekspresi kaget yang **nongol miring dari pinggir layar lalu ngumpet lagi**:
+     ```ts
+     aksi: [{type: 'peek', di: 'kata punchline', dx: -90, dy: -20, rotate: -14, durasi: 10, tahan: 14}]
+     ```
+3. **Slapstick Fisik (`drop` + `shake` + `grow` gepeng):**
+   - Objek jatuh menimpa sesuatu (`masuk: 'drop'`) diikuti objek di bawahnya bergetar (`type: 'shake', intensitas: 14`) atau penyet/gepeng (`type: 'grow', toScaleX: 1.25, toScaleY: 0.72`).
+4. **Label Celetukan Mikro (Micro-Gag Text):**
+   - Tambahkan `StageItem` `kind: 'teks'` ukuran kecil (`ukuran: 28–32`, `rotate: -6`) di dekat prop sebagai komentar komedi visual yang tidak perlu diucapkan di narasi (contoh: label `"Dompet menangis"` di dekat potongan pajak, atau `"Beban hidup 100 kg"` di atas beban bata).
 
 ---
 
