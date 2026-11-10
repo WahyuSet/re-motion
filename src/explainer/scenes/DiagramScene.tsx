@@ -188,7 +188,9 @@ const PotonganView: React.FC<{
             <div style={{fontSize: 26, fontWeight: 700, opacity: 0.92, textTransform: 'uppercase'}}>
               {scene.hasil.label}
             </div>
-            <div style={{fontSize: 64, fontWeight: 900, lineHeight: 1.1}}>{scene.hasil.nilai}</div>
+            <div style={{fontSize: 64, fontWeight: 900, lineHeight: 1.1}}>
+              {scene.hasil.nilai.replace(/\*/g, '')}
+            </div>
           </div>
         ) : null}
       </div>
