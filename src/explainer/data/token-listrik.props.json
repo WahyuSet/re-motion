@@ -1,14 +1,18 @@
 [
   {
     "name": "token-meteran",
-    "prompt": "an Indonesian prepaid electricity meter keypad box on wall with digital LCD screen"
+    "prompt": "an Indonesian prepaid electricity meter box with green digital LCD screen and numeric keypad buttons"
   },
   {
     "name": "token-struk",
-    "prompt": "a paper payment receipt slip with 20 digit electricity token numbers"
+    "prompt": "a clean paper payment receipt slip with printed numbers and barcode"
   },
   {
     "name": "token-lampu",
-    "prompt": "a bright yellow glowing light bulb icon"
+    "prompt": "a bright glowing yellow light bulb with metallic base"
+  },
+  {
+    "name": "token-rumah",
+    "prompt": "a cute realistic miniature Indonesian house with terracotta roof and glowing warm windows"
   }
 ]
