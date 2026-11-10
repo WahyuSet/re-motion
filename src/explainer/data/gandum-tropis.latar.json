@@ -1,17 +1,27 @@
 [
   {
     "name": "gandum-tropis-1",
-    "prompt": "wide realistic modern photography of Gandum Tropis scene 1 location, natural colors, full-bleed camera frame no border, clean composition",
+    "prompt": "wide realistic modern photography of a bright contemporary kitchen dining table with steaming bowl of instant noodles, wheat bread, natural daylight, full-bleed camera frame no border, clean composition",
     "utuh": true
   },
   {
     "name": "gandum-tropis-2",
-    "prompt": "wide realistic modern indoor or outdoor photography of Gandum Tropis scene 2 location, natural daylight, full-bleed camera frame no border, high detail",
+    "prompt": "wide realistic modern photography of extremely fertile Indonesian rural farmland, dark rich soil, vibrant green tropical vegetation, sunny day, full-bleed camera frame no border, high detail",
     "utuh": true
   },
   {
     "name": "gandum-tropis-4",
-    "prompt": "wide realistic modern photography of Gandum Tropis conclusion scene location, soft natural lighting, full-bleed camera frame no border",
+    "prompt": "wide realistic modern photography of a high-tech agricultural cool-climate botanical research laboratory and greenhouse, scientific equipment, soft cool lighting, full-bleed camera frame no border",
+    "utuh": true
+  },
+  {
+    "name": "gandum-tropis-5",
+    "prompt": "wide realistic modern photography of hot humid tropical lowland plains with intense sun and misty humid clouds above, full-bleed camera frame no border, cinematic realistic",
+    "utuh": true
+  },
+  {
+    "name": "gandum-tropis-6",
+    "prompt": "wide realistic modern aerial photography of lush green Indonesian terraced rice fields in early morning golden sunlight, peaceful rural scenery, full-bleed camera frame no border, high detail",
     "utuh": true
   }
 ]

@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "name": "gandum-mie",
+    "prompt": "clean realistic studio product photography cutout of a delicious steaming bowl of Indonesian instant noodles with egg and vegetables, isolated on white background, crisp edges, soft even lighting",
+    "utuh": false
+  },
+  {
+    "name": "gandum-karung-terigu",
+    "prompt": "clean realistic studio product photography cutout of a burlap sack of wheat flour with spilled white flour at base, isolated on white background, crisp edges, natural colors",
+    "utuh": false
+  },
+  {
+    "name": "gandum-tanaman-daun",
+    "prompt": "clean realistic studio product photography cutout of green lush leafy wheat stalk plant without any grain or spikes, pure vegetative leaves, isolated on white background, crisp edges",
+    "utuh": false
+  },
+  {
+    "name": "gandum-alarm-beku",
+    "prompt": "clean realistic studio photography cutout of a retro twin-bell alarm clock covered in frost and icicles, frozen clock, isolated on white background, crisp edges",
+    "utuh": false
+  },
+  {
+    "name": "gandum-termometer-dingin",
+    "prompt": "clean realistic studio photography cutout of a vertical glass mercury thermometer showing cold freezing temperature below fifteen degrees celsius with frost details, isolated on white background",
+    "utuh": false
+  },
+  {
+    "name": "gandum-bulir-emas",
+    "prompt": "clean realistic studio product photography cutout of a thick bundle of ripe golden wheat ears and grain heads, glistening golden color, isolated on white background, crisp edges",
+    "utuh": false
+  },
+  {
+    "name": "gandum-jamur",
+    "prompt": "clean realistic 3D stylized cutout of fungal plant blight mold spores attacking grain, fluffy grayish fungal growth, isolated on white background",
+    "utuh": false
+  },
+  {
+    "name": "gandum-kedinginan",
+    "prompt": "clean expressive cutout illustration of a cute sad cartoon wheat stalk shivering wearing a winter wool scarf and medical cooling patch on forehead, isolated on white background",
+    "utuh": false
+  },
+  {
+    "name": "padi-mahkota",
+    "prompt": "clean realistic studio product photography cutout of a proud bundle of golden ripe rice paddy stalks wearing a shiny golden royal king crown, isolated on white background, crisp edges",
+    "utuh": false
+  }
+]
