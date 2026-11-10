@@ -132,12 +132,16 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       }
 
       const idxDi = item.di ? cekKata(`${itemLabel} di`, item.di) : -1;
-      const idxSampai = item.sampai ? cekKata(`${itemLabel} sampai`, item.sampai) : -1;
-      if (item.di && item.sampai && idxDi >= 0 && idxSampai >= 0 && idxSampai <= idxDi) {
-        err(
-          itemLabel,
-          `Urutan waktu terbalik: sampai "${item.sampai}" muncul sebelum atau bersamaan dengan di "${item.di}".`,
-        );
+      if (item.sampai) {
+        const idxAny = indexOfWord(words, item.sampai);
+        if (idxAny < 0) {
+          err(where, `${itemLabel} sampai "${item.sampai}" tidak ditemukan di narasi.`);
+        } else if (idxDi >= 0 && indexOfWord(words, item.sampai, idxDi + 1) < 0) {
+          err(
+            itemLabel,
+            `Urutan waktu terbalik: sampai "${item.sampai}" muncul sebelum atau bersamaan dengan di "${item.di}".`,
+          );
+        }
       }
 
       for (const [ai, aksi] of (item.aksi ?? []).entries()) {

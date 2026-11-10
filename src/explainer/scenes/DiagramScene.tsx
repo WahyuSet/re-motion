@@ -206,14 +206,18 @@ const GridBataView: React.FC<{
 }> = ({scene, words}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const baris = scene.baris ?? 5;
+  const baris = scene.baris ?? 6;
   const kolom = scene.kolom ?? 5;
   const nilaiBeban = scene.beban?.nilai ?? 100;
   const satuan = scene.beban?.satuan ?? 'kg';
   const grid = hitungBebanBata(scene.pola, baris, kolom, nilaiBeban);
 
   const rakitAt = scene.rakitDi ? (frameOfWord(words, scene.rakitDi) ?? 0) : 0;
-  const bebanAt = scene.beban?.di ? (frameOfWord(words, scene.beban.di) ?? 18) : Infinity;
+  const bebanAt = scene.beban
+    ? scene.beban.di
+      ? (frameOfWord(words, scene.beban.di) ?? 18)
+      : 18
+    : Infinity;
   const angkaAt = scene.beban?.angkaDi
     ? (frameOfWord(words, scene.beban.angkaDi) ?? bebanAt + 12)
     : bebanAt + 12;
@@ -225,6 +229,33 @@ const GridBataView: React.FC<{
 
   return (
     <AbsoluteFill>
+      {scene.judul ? (
+        <div
+          style={{
+            position: 'absolute',
+            top: '14%',
+            left: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            zIndex: 20,
+          }}
+        >
+          <div
+            style={{
+              background: explainerTheme.bannerBg,
+              color: explainerTheme.bannerText,
+              padding: '10px 26px',
+              fontFamily: explainerTheme.fontBody,
+              fontWeight: 900,
+              fontSize: 44,
+              textTransform: 'uppercase',
+            }}
+          >
+            {scene.judul}
+          </div>
+        </div>
+      ) : null}
       <div
         style={{
           position: 'absolute',

@@ -6,27 +6,33 @@ import {explainerTheme} from './theme';
 import {hitungTransformItem, waktuItem} from './timing';
 import type {StageItem, StageSymbolType} from './types';
 
-const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number}> = ({simbol, width}) => {
+const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: string; progress?: number}> = ({
+  simbol,
+  width,
+  warna,
+  progress = 1,
+}) => {
+  const strokeRed = warna ?? explainerTheme.red;
   switch (simbol) {
     case 'larang':
       return (
         <svg width={width} height={width} viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="50" fill="none" stroke={explainerTheme.red} strokeWidth="12" />
-          <line x1="25" y1="25" x2="95" y2="95" stroke={explainerTheme.red} strokeWidth="12" strokeLinecap="round" />
+          <circle cx="60" cy="60" r="50" fill="none" stroke={strokeRed} strokeWidth="12" />
+          <line x1="25" y1="25" x2="95" y2="95" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" />
         </svg>
       );
     case 'centang':
       return (
         <svg width={width} height={width} viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="50" fill="rgba(46, 125, 50, 0.14)" stroke={explainerTheme.green} strokeWidth="10" />
-          <path d="M 34 62 L 52 80 L 88 42" fill="none" stroke={explainerTheme.green} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="60" cy="60" r="50" fill="rgba(46, 125, 50, 0.14)" stroke={warna ?? explainerTheme.green} strokeWidth="10" />
+          <path d="M 34 62 L 52 80 L 88 42" fill="none" stroke={warna ?? explainerTheme.green} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
     case 'panah':
       return (
         <svg width={width} height={width * 0.6} viewBox="0 0 140 84">
-          <line x1="12" y1="42" x2="112" y2="42" stroke={explainerTheme.red} strokeWidth="12" strokeLinecap="round" />
-          <path d="M 92 18 L 124 42 L 92 66" fill="none" stroke={explainerTheme.red} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+          <line x1="12" y1="42" x2="112" y2="42" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" />
+          <path d="M 92 18 L 124 42 L 92 66" fill="none" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
     case 'retak':
@@ -35,10 +41,12 @@ const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number}> = ({simbol, 
           <path
             d="M 20 155 L 72 118 L 96 126 L 138 78 L 172 86 L 220 24 M 138 78 L 112 36 M 72 118 L 44 74"
             fill="none"
-            stroke="#120f0c"
+            stroke={warna ?? '#120f0c'}
             strokeWidth="7"
             strokeLinecap="round"
             strokeLinejoin="round"
+            strokeDasharray={420}
+            strokeDashoffset={420 * (1 - Math.min(1, Math.max(0, progress)))}
           />
         </svg>
       );
@@ -130,7 +138,14 @@ const StageItemView: React.FC<{
           ))}
         </div>
       ) : null}
-      {kind === 'simbol' && item.simbol ? <SymbolSvg simbol={item.simbol} width={width} /> : null}
+      {kind === 'simbol' && item.simbol ? (
+        <SymbolSvg
+          simbol={item.simbol}
+          width={width}
+          warna={item.warna}
+          progress={(frame - waktuItem(item, words, duration).masukAt) / 14}
+        />
+      ) : null}
     </div>
   );
 };

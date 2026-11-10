@@ -36,3 +36,31 @@ test('validasiExplainer catches inverted sampai < di, missing trigger word, and 
   assert.ok(errors.some((e) => e.includes('tidakada')));
   assert.ok(errors.some((e) => e.includes('area aman') || e.includes('y=')));
 });
+
+test('validasiExplainer allows repeated trigger word when sampai appears again after di', async () => {
+  const repeatedWordScript = {
+    format: 'short',
+    scenes: [
+      {
+        type: 'stage',
+        duration: 60,
+        narasi: 'Beli token pertama lalu isi token kedua di meteran rumah.',
+        items: [{kind: 'teks', teks: 'OK', x: 50, y: 40, di: 'lalu', sampai: 'token'}],
+      },
+      {
+        type: 'beat',
+        duration: 45,
+        teks: 'nah',
+        narasi: 'Nah begini.',
+      },
+      {
+        type: 'stage',
+        duration: 60,
+        narasi: 'Penjelasan selesai dengan rapi.',
+        items: [],
+      },
+    ],
+  };
+  const {errors} = await validasiExplainer(repeatedWordScript, 'uji-ulang');
+  assert.deepEqual(errors, []);
+});

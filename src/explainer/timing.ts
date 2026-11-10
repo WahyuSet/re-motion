@@ -94,7 +94,7 @@ export const waktuItem = (
       const sIdx = indexOfWord(words, a.sampai, actionCursor);
       if (sIdx >= 0) endAt = words[sIdx].start;
       else endAt = duration;
-    } else if (a.type === 'pulse') {
+    } else if (a.type === 'pulse' && a.durasi === undefined) {
       endAt = duration;
     }
     return {...a, at, endAt};
