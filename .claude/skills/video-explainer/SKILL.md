@@ -70,7 +70,7 @@ Contoh penggunaan di naskah:
 
 ### 3. Pilar Visual Props, Living Motion, & Gag Fisik
 - **Auto Living Cutout Motion (Aktif Otomatis):** Semua `prop` dan `simbol` otomatis bergerak halus selama tampil di layar (mengayun vertikal `±7px` + goyang sudut *paper-cutout* `±1.8°` + *breathing scale* `±1.5%` dengan fase acak per posisi `x, y` agar tidak kaku). Saat `masuk: 'drop'`, objek otomatis membal (*squash & stretch*) saat mendarat.
-- **Cutout Karakter/Prop Komedi (Google Flow Bridge):** Di setiap `<slug>.props.json`, siapkan minimal **1–2 cutout prop khusus komedi/reaksi** (misal: karakter tepuk jidat, dompet kosong berdebu, kucing melongo, beban raksasa) dengan prompt `--style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"`.
+- **Cutout Karakter/Meme Reaksi Komedi:** Prioritaskan **meme ikonik binatang mikir/bingung** (kucing pegang dagu `props/meme-kucing-paw.png`, kucing bengong `props/meme-kucing-titik.png`, kucing oren `props/meme-kucing-think.png`, monyet mikir `props/meme-monyet-mikir.png`) yang jauh lebih lucu dan relatable dibanding karakter 3D kaku. Padukan dengan cutout Flow Bridge (dompet kosong, beban raksasa, palu).
 - **Aksi Motion Ekspresif di `aksi` (`peek`, `jump`, `wiggle`, `squash`, `move`, `shake`, `pulse`):**
   - **Ngintip (`type: 'peek'`):** Objek nongol miring dari pinggir layar dengan bunyi `boing` otomatis lalu sembunyi lagi:
     ```ts

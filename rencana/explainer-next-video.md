@@ -35,8 +35,25 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
 1. **Auto Living Motion (Aktif Otomatis di Semua `prop` & `simbol`):**
    - Semua cutout PNG dan simbol di panggung **otomatis bergerak hidup** tanpa perlu disetel manual: mengayun naik-turun (`±7px`), goyang miring ala potongan kertas (*paper-cutout tilt* `±1.8°`), dan *breathing scale* (`±1.5%`) dengan **fase acak per posisi (`phase offset`)** agar beberapa prop di layar tidak bergerak serempak seperti robot.
    - Saat prop jatuh (`masuk: 'drop'`), pendaratannya otomatis membal (*squash & stretch*).
-2. **Cutout PNG Reaksi/Komedi (Google Flow Bridge):**
-   - Saat menyusun `src/explainer/data/<slug>.props.json`, wajib masukkan **1–2 prop khusus komedi/ekspresi** (misal: karakter mikir/tepuk jidat, dompet kosong berdebu, kucing kaget, palu/beban raksasa) selain prop teknis utama.
+2. **Meme Visual Reaksi/Mikir (Kucing/Monyet Cutout PNG):**
+   - **Sangat disarankan & wajib diprioritaskan** untuk visual orang bingung / bertanya-tanya daripada karakter 3D generik.
+   - Sudah tersedia library siap pakai di `public/props/`:
+     - `props/meme-kucing-paw.png`: Kucing pose mikir serius (tangan di dagu ala patung *The Thinker*).
+     - `props/meme-kucing-titik.png`: Kucing bengong sticker titik-titik `...`.
+     - `props/meme-kucing-think.png`: Kucing oren pose *"Let me think"*.
+     - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas.
+   - Pasangkan dengan aksi motion:
+     ```ts
+     {
+       kind: 'prop',
+       src: 'props/meme-kucing-paw.png',
+       x: 28,
+       y: 56,
+       width: 320,
+       masuk: 'slide-up',
+       aksi: [{type: 'wiggle', di: 'mengira', rotate: 12, durasi: 18}],
+     }
+     ```
 3. **Aksi Motion Ekspresif di `aksi` (`peek`, `jump`, `wiggle`, `squash`, `move`, `shake`, `pulse`):**
    - **`type: 'peek'` (Ngintip):** Karakter/prop nongol miring dari pinggir layar tepat di kata punchline + bunyi `boing`, lalu ngumpet lagi:
      ```ts

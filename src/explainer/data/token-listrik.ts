@@ -91,13 +91,14 @@ export const tokenListrik: ExplainerScript = {
       items: [
         {
           kind: 'prop',
-          src: 'props/token-mikir.png',
+          src: 'props/meme-kucing-paw.png',
           x: 28,
           y: 56,
-          width: 300,
+          width: 320,
           masuk: 'slide-up',
           delay: 0,
           sampai: 'Padahal',
+          aksi: [{type: 'wiggle', di: 'mengira', rotate: 12, durasi: 18}],
         },
         {
           kind: 'simbol',
