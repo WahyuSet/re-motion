@@ -131,6 +131,31 @@ node scripts/paket-youtube.mjs <slug>
 
 ---
 
+## Checklist Wajib untuk Next Video (`"nahh gini"`)
+
+Sebelum mulai render setiap video explainer berikutnya, pastikan semua poin di bawah ini terpenuhi:
+
+- [ ] **Pilar 1 — Komedi di Narasi (Minimal 2–3 Celetukan Relatable):**
+  - Ada 1 kalimat celetukan sehari-hari / hiperbola komedi di **Hook (Scene 1)** atau **Salah Kaprah (Scene 2)**.
+  - Ada 1 kalimat punchline / sindiran ringan saat fakta utama atau hitungan terbongkar (**Scene 3/4**).
+  - Semua angka tetap ditulis dalam huruf (`seratus ribu`, `tiga puluh persen`) tanpa digit.
+- [ ] **Pilar 2 — Komedi di SFX (`boing`, `boom`, `womp`, `slap`, `ding`):**
+  - Minimal **3 SFX komedi** terpasang di sepanjang video lewat properti `sfx` pada `StageItem` atau `StageAction`:
+    - `sfx: 'boing'` saat ada prop/karakter nongol nyeleneh atau `type: 'peek'`.
+    - `sfx: 'womp'` saat salah kaprah terbongkar, uang terpotong, atau eksperimen gagal.
+    - `sfx: 'boom'` atau `sfx: 'slap'` saat punchline jatuh (`masuk: 'drop'`), bantahan `silang` ❌, atau beban menghantam objek.
+    - `sfx: 'ding'` saat solusi/kesimpulan benar (`centang` ✅) muncul.
+- [ ] **Pilar 3 — Komedi di Visual Props (Cutout Reaksi + Gag Fisik):**
+  - Di `<slug>.props.json`, wajib ada minimal **1–2 cutout PNG khusus reaksi/komedi** (contoh: karakter mikir/tepuk jidat, dompet kosong menangis, kucing melongo, beban batu raksasa) selain prop objek teknis utama.
+  - Gunakan minimal **1 aksi `peek`** (nongol miring dari tepi layar lalu ngumpet lagi) dan **1 aksi slapstick** (`drop` + `shake` atau `grow` gepeng) yang sinkron dengan kata punchline di narasi (`di: '<kata>'`).
+  - Tambahkan minimal **1 label celetukan mikro** (`kind: 'teks'`, `ukuran: 28–32`, `rotate: -6`) di dekat prop sebagai komentar visual lucu.
+- [ ] **Zero Dead Air & Tata Letak Rapi:**
+  - Detik `0.0s` di setiap scene wajib langsung menampilkan prop pembuka (`delay: 0` atau `di` pada kata ke-1/ke-2).
+  - Saat pergantian fase di dalam 1 scene, kata `sampai` objek lama **wajib sama** dengan kata `di` objek baru (`keluar: 'pop-out'` otomatis 8 frame).
+  - Jarak vertikal antar-item yang satu kolom minimal `16–18%` agar tidak bersentuhan.
+
+---
+
 ## Penyempurnaan Engine yang Sudah Aktif (Sejak Evaluasi `token-listrik`)
 
 1. **Default Keluar `pop-out` Cepat (8 Frame Anti-Ghosting) di [`src/explainer/timing.ts`](../../../src/explainer/timing.ts):**

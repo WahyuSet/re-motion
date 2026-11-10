@@ -72,8 +72,19 @@ export const ${varName}: ExplainerScript = {
     {
       type: 'stage',
       duration: 120,
-      narasi: 'TODO penjelasan visual pertama dengan kata kunci *penting* di dalam kalimat.',
+      narasi: 'TODO penjelasan visual pertama dengan celetukan *komedi* dan kata kunci *penting* di dalam kalimat.',
       items: [
+        {
+          kind: 'simbol',
+          simbol: 'tanya',
+          x: 28,
+          y: 38,
+          width: 140,
+          masuk: 'pop',
+          delay: 0,
+          sampai: 'penting',
+          aksi: [{type: 'peek', di: 'komedi', dx: 12, dy: -8, rotate: -14, durasi: 12, tahan: 20, sfx: 'boing'}],
+        },
         {
           kind: 'teks',
           teks: 'TODO POIN KUNCI',
@@ -82,7 +93,8 @@ export const ${varName}: ExplainerScript = {
           ukuran: 44,
           warna: '#ffffff',
           kotak: '#1976d2',
-          masuk: 'pop',
+          masuk: 'drop',
+          sfx: 'boom',
           di: 'penting',
         },
       ],
