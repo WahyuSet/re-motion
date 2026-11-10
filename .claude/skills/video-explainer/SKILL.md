@@ -67,13 +67,17 @@ Contoh penggunaan di naskah:
 }
 ```
 
-### 3. Pilar Visual Props & Gag Fisik
+### 3. Pilar Visual Props, Living Motion, & Gag Fisik
+- **Auto Living Cutout Motion (Aktif Otomatis):** Semua `prop` dan `simbol` otomatis bergerak halus selama tampil di layar (mengayun vertikal `±7px` + goyang sudut *paper-cutout* `±1.8°` + *breathing scale* `±1.5%` dengan fase acak per posisi `x, y` agar tidak kaku). Saat `masuk: 'drop'`, objek otomatis membal (*squash & stretch*) saat mendarat.
 - **Cutout Karakter/Prop Komedi (Google Flow Bridge):** Di setiap `<slug>.props.json`, siapkan minimal **1–2 cutout prop khusus komedi/reaksi** (misal: karakter tepuk jidat, dompet kosong berdebu, kucing melongo, beban raksasa) dengan prompt `--style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"`.
-- **Visual Gag "Ngintip" (`type: 'peek'`):** Objek nongol miring dari pinggir layar dengan bunyi `boing` otomatis lalu sembunyi lagi:
-  ```ts
-  aksi: [{type: 'peek', di: 'kata punchline', dx: -18, dy: -6, rotate: -16, durasi: 12, tahan: 24}]
-  ```
-- **Slapstick Fisik (`drop` + `shake` + `grow` gepeng):** Objek jatuh (`masuk: 'drop', sfx: 'boom'`) menimpa objek di bawahnya hingga gepeng (`type: 'grow', toScaleX: 1.25, toScaleY: 0.72, sfx: 'slap'`).
+- **Aksi Motion Ekspresif di `aksi` (`peek`, `jump`, `wiggle`, `squash`, `move`, `shake`, `pulse`):**
+  - **Ngintip (`type: 'peek'`):** Objek nongol miring dari pinggir layar dengan bunyi `boing` otomatis lalu sembunyi lagi:
+    ```ts
+    aksi: [{type: 'peek', di: 'kata punchline', dx: -18, dy: -6, rotate: -16, durasi: 12, tahan: 24}]
+    ```
+  - **Melompat (`type: 'jump'`):** Objek melompat ke atas dengan *squash & stretch* + bunyi `boing` otomatis saat disebut (`{type: 'jump', di: 'kata', dy: 70}`).
+  - **Goyang Kertas (`type: 'wiggle'`):** Objek bergoyang pendulum kiri-kanan `±14°` (`{type: 'wiggle', di: 'kata', rotate: 15, durasi: 20}`).
+  - **Penyet Membal (`type: 'squash'`):** Objek gepeng membal ke bawah + bunyi `slap` otomatis saat tertimpa objek lain (`{type: 'squash', di: 'kata', durasi: 16}`).
 - **Label Celetukan Mikro (Micro-Gag Text):** `StageItem` `kind: 'teks'` ukuran `28–32` miring (`rotate: -6`) di dekat prop sebagai komentar sarkas singkat yang tidak perlu dibaca narator (contoh: `"Dompet menangis"`, `"Beban hidup"`).
 
 ---

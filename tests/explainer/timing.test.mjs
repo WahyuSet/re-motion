@@ -86,3 +86,40 @@ test('hitungTransformItem applies grow-up, move, peek, and dim deterministically
   const afterDim = hitungTransformItem(item, 75, 30, words, 100);
   assert.ok(Math.abs(afterDim.opacity - 0.25) < 0.01);
 });
+
+test('hitungTransformItem applies default living idle motion on props and supports jump, wiggle, squash', async () => {
+  const {hitungTransformItem} = await importTs('src/explainer/timing.ts');
+  const words = [
+    {word: 'loncat', highlight: false, start: 20, end: 28},
+    {word: 'goyang', highlight: false, start: 50, end: 58},
+    {word: 'penyet', highlight: false, start: 80, end: 88},
+  ];
+  const item = {
+    kind: 'prop',
+    src: 'props/kucing.png',
+    x: 40,
+    y: 50,
+    delay: 0,
+    aksi: [
+      {type: 'jump', di: 'loncat', durasi: 16},
+      {type: 'wiggle', di: 'goyang', durasi: 16},
+      {type: 'squash', di: 'penyet', durasi: 16},
+    ],
+  };
+
+  // Idle motion changes ty & rotate between frames even before any action triggers
+  const idle1 = hitungTransformItem(item, 12, 30, words, 120);
+  const idle2 = hitungTransformItem(item, 18, 30, words, 120);
+  assert.notEqual(idle1.ty, idle2.ty);
+  assert.notEqual(idle1.rotate, idle2.rotate);
+
+  // Mid-jump lifts the prop upward (negative ty)
+  const midJump = hitungTransformItem({...item, float: false}, 28, 30, words, 120);
+  assert.ok(midJump.ty < -30);
+
+  // Mid-squash widens scaleX and compresses scaleY with bottom origin
+  const midSquash = hitungTransformItem({...item, float: false}, 88, 30, words, 120);
+  assert.equal(midSquash.originY, 'bottom');
+  assert.ok(midSquash.scaleX > 1.15);
+  assert.ok(midSquash.scaleY < 0.85);
+});

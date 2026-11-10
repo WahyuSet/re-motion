@@ -31,16 +31,29 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
 
 *(Jika butuh generate ulang file WAV: `node scripts/buat-sfx-explainer.mjs`)*
 
-### C. Komedi di Visual Props (Cutout Reaksi + Gag Fisik)
-1. **Cutout PNG Reaksi/Komedi (Google Flow Bridge):**
+### C. Komedi di Visual Props & Living Cutout Motion (Anti-Kaku)
+1. **Auto Living Motion (Aktif Otomatis di Semua `prop` & `simbol`):**
+   - Semua cutout PNG dan simbol di panggung **otomatis bergerak hidup** tanpa perlu disetel manual: mengayun naik-turun (`±7px`), goyang miring ala potongan kertas (*paper-cutout tilt* `±1.8°`), dan *breathing scale* (`±1.5%`) dengan **fase acak per posisi (`phase offset`)** agar beberapa prop di layar tidak bergerak serempak seperti robot.
+   - Saat prop jatuh (`masuk: 'drop'`), pendaratannya otomatis membal (*squash & stretch*).
+2. **Cutout PNG Reaksi/Komedi (Google Flow Bridge):**
    - Saat menyusun `src/explainer/data/<slug>.props.json`, wajib masukkan **1–2 prop khusus komedi/ekspresi** (misal: karakter mikir/tepuk jidat, dompet kosong berdebu, kucing kaget, palu/beban raksasa) selain prop teknis utama.
-2. **Aksi Ngintip (`type: 'peek'`):**
-   - Karakter/prop nongol miring dari pinggir layar tepat saat kata punchline diucapkan, lalu ngumpet lagi:
+3. **Aksi Motion Ekspresif di `aksi` (`peek`, `jump`, `wiggle`, `squash`, `move`, `shake`, `pulse`):**
+   - **`type: 'peek'` (Ngintip):** Karakter/prop nongol miring dari pinggir layar tepat di kata punchline + bunyi `boing`, lalu ngumpet lagi:
      ```ts
-     aksi: [{type: 'peek', di: 'horornya', dx: -18, dy: -6, rotate: -16, durasi: 12, tahan: 24, sfx: 'boing'}]
+     aksi: [{type: 'peek', di: 'horornya', dx: -18, dy: -6, rotate: -16, durasi: 12, tahan: 24}]
      ```
-3. **Aksi Slapstick (`drop` + `shake` / `grow` gepeng):**
-   - Prop jatuh dari atas (`masuk: 'drop', sfx: 'boom'`) menghantam objek di bawahnya hingga bergetar (`type: 'shake', intensitas: 14, sfx: 'slap'`) atau gepeng (`type: 'grow', toScaleX: 1.25, toScaleY: 0.72`).
+   - **`type: 'jump'` (Melompat Antusias):** Prop melompat ke atas lengkap dengan *squash & stretch* + bunyi `boing` otomatis saat namanya disebut:
+     ```ts
+     aksi: [{type: 'jump', di: 'kaget', dy: 70, durasi: 16}]
+     ```
+   - **`type: 'wiggle'` (Goyang Kertas Kiri-Kanan):** Prop bergoyang pendulum `±14°` saat sedang dibahas atau bingung (cocok untuk karakter mikir / tanda tanya):
+     ```ts
+     aksi: [{type: 'wiggle', di: 'bingung', rotate: 16, durasi: 20}]
+     ```
+   - **`type: 'squash'` (Penyet Membal):** Prop gepeng ke bawah lalu membal balik + bunyi `slap` otomatis (cocok saat tertimpa beban atau potongan pajak):
+     ```ts
+     aksi: [{type: 'squash', di: 'dipotong', durasi: 16}]
+     ```
 4. **Label Celetukan Mikro (Micro-Gag Text):**
    - Item `kind: 'teks'` ukuran kecil (`ukuran: 28–32`, `rotate: -6`) di dekat prop sebagai komentar visual lucu (misal: `"Dompet menangis"`, `"Beban hidup"`).
 

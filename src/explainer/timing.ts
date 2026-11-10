@@ -188,9 +188,13 @@ export const hitungTransformItem = (
       scaleY = enterEase;
       rotate += (1 - enterEase) * -12;
       break;
-    case 'drop':
+    case 'drop': {
       ty = (1 - enterEase) * -420;
+      const impact = Math.sin(clamp01((enterT - 0.55) / 0.45) * Math.PI);
+      scaleX = 1 + impact * 0.12;
+      scaleY = 1 - impact * 0.1;
       break;
+    }
     case 'slide-left':
       tx = (1 - enterEase) * 520;
       break;
@@ -279,12 +283,48 @@ export const hitungTransformItem = (
         }
         break;
       }
+      case 'jump': {
+        if (frame <= a.endAt) {
+          const localP = clamp01((frame - a.at) / dur);
+          const arc = Math.sin(localP * Math.PI);
+          ty -= arc * Math.abs(a.dy ?? 64);
+          scaleX *= 1 - arc * 0.08 + Math.sin(localP * Math.PI * 2) * 0.06;
+          scaleY *= 1 + arc * 0.12 - Math.sin(localP * Math.PI * 2) * 0.06;
+        }
+        break;
+      }
+      case 'wiggle': {
+        if (frame <= a.endAt) {
+          const localP = clamp01((frame - a.at) / dur);
+          const decay = 1 - localP * 0.6;
+          rotate += Math.sin(localP * Math.PI * 4) * (a.rotate ?? 14) * decay;
+        }
+        break;
+      }
+      case 'squash': {
+        if (frame <= a.endAt) {
+          originY = 'bottom';
+          const localP = clamp01((frame - a.at) / dur);
+          const sq = Math.sin(localP * Math.PI);
+          scaleX *= 1 + sq * 0.28;
+          scaleY *= 1 - sq * 0.24;
+        }
+        break;
+      }
     }
   }
 
-  if (item.float) {
+  // Living cutout idle motion: aktif otomatis untuk prop & simbol (kecuali float: false)
+  const isTextItem = item.kind === 'teks' || (!item.kind && Boolean(item.teks));
+  const shouldFloat = item.float ?? !isTextItem;
+  if (shouldFloat) {
     const t = Math.max(0, frame - masukAt);
-    ty += Math.sin(t / 22) * 8;
+    const phase = (item.x * 0.13 + item.y * 0.19) % (Math.PI * 2);
+    ty += Math.sin(t / 18 + phase) * 7;
+    rotate += Math.sin(t / 23 + phase) * 1.8;
+    const breath = 1 + Math.cos(t / 26 + phase) * 0.015;
+    scaleX *= breath;
+    scaleY *= breath;
   }
 
   // Animasi keluar bila melewati keluarAt

@@ -40,7 +40,7 @@ export type ExplainerSfxName =
   | 'ding';
 
 export type StageAction = {
-  type: 'move' | 'peek' | 'grow' | 'dim' | 'shake' | 'pulse';
+  type: 'move' | 'peek' | 'grow' | 'dim' | 'shake' | 'pulse' | 'jump' | 'wiggle' | 'squash';
   di?: string;
   delay?: number;
   durasi?: number;

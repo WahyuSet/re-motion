@@ -221,7 +221,13 @@ export const Stage: React.FC<{
             {enterSfx ? <ExplainerSfx name={enterSfx} at={masukAt} /> : null}
             {aksi.map((a, k) => {
               const defaultActionSfx: ExplainerSfxName | null =
-                a.type === 'peek' ? 'boing' : a.type === 'shake' ? 'dum' : null;
+                a.type === 'peek' || a.type === 'jump'
+                  ? 'boing'
+                  : a.type === 'squash'
+                    ? 'slap'
+                    : a.type === 'shake'
+                      ? 'dum'
+                      : null;
               const actionSfx = a.sfx === false ? null : (a.sfx ?? defaultActionSfx);
               return actionSfx ? <ExplainerSfx key={`act-sfx-${k}`} name={actionSfx} at={a.at} /> : null;
             })}
