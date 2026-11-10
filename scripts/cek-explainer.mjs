@@ -116,6 +116,21 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       ...(scene.items ?? []),
     ];
 
+    if (scene.type === 'stage' && allItems.length > 0) {
+      const hasOpeningItem = allItems.some((it) => {
+        if (!it.di) return (it.delay ?? 0) <= 15;
+        const idx = indexOfWord(words, it.di);
+        return idx >= 0 && idx <= 2;
+      });
+      if (!hasOpeningItem) {
+        warn(
+          where,
+          'Awal scene kosong di detik pertama.',
+          'Beri minimal 1 item tanpa `di` (delay: 0) atau `di` pada 1–2 kata pertama agar panggung tidak kosong saat scene mulai.',
+        );
+      }
+    }
+
     for (const [ii, item] of allItems.entries()) {
       const itemLabel = `${where} item ${ii + 1}`;
       if (item.src && !(await existsPublic(item.src))) {

@@ -47,7 +47,7 @@ const template = `import type {ExplainerScript} from '../types';
 // Cek dengan: npm run cek:explainer -- ${slug}
 export const ${varName}: ExplainerScript = {
   format: 'short',
-  watermark: '@NahhJadi',
+  watermark: 'nahh gini',
   // Isi dua baris ini SETELAH audio narasi dipotong (node scripts/potong-narasi.mjs ${slug} <file-audio>):
   // narasiAudio: 'audio/${slug}',
   // narasiExt: 'wav',

@@ -100,7 +100,7 @@ const renderTransition = (type: TransitionType = 'none', key: string) => {
 export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) => {
   const {fps, durationInFrames} = useVideoConfig();
   const suara = rentangSuara(script.scenes as unknown as HistoryScene[], fps);
-  const watermarkText = script.watermark === false ? null : script.watermark ?? `@${CHANNEL.nama}`;
+  const watermarkText = script.watermark === false ? null : script.watermark ?? 'nahh gini';
 
   const children = script.scenes.flatMap((scene, i) => {
     const narasi = narasiFile(script as unknown as VideoScript, i);

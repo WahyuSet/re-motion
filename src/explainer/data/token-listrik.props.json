@@ -14,5 +14,13 @@
   {
     "name": "token-rumah",
     "prompt": "a cute realistic miniature Indonesian house with terracotta roof and glowing warm windows"
+  },
+  {
+    "name": "token-uang",
+    "prompt": "a crisp red Indonesian one hundred thousand Rupiah banknote (Rp 100000 paper money bill)"
+  },
+  {
+    "name": "token-mikir",
+    "prompt": "a 3D stylized expressive man scratching his chin in a confused thinking pose, waist-up portrait cutout"
   }
 ]

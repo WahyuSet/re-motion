@@ -4,6 +4,7 @@ export type StageSymbolType =
   | 'larang'
   | 'centang'
   | 'panah'
+  | 'tanya'
   | 'retak'
   | 'tetes-air'
   | 'gelombang-air';

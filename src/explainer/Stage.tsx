@@ -35,6 +35,23 @@ const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: strin
           <path d="M 92 18 L 124 42 L 92 66" fill="none" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
+    case 'tanya':
+      return (
+        <svg width={width} height={width} viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="52" fill={warna ?? explainerTheme.red} stroke={explainerTheme.ink} strokeWidth="8" />
+          <text
+            x="60"
+            y="84"
+            textAnchor="middle"
+            fontFamily={explainerTheme.fontBody}
+            fontWeight="900"
+            fontSize="76"
+            fill="#ffffff"
+          >
+            ?
+          </text>
+        </svg>
+      );
     case 'retak':
       return (
         <svg width={width} height={width * 0.75} viewBox="0 0 240 180">
