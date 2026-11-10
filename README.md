@@ -61,7 +61,7 @@ Nama channel di `src/channel.ts` (sekarang **jejakala**) tampil halus di kanan a
 
 Engine terpisah di `src/explainer/` khusus untuk video Cutout Motion Explainer Shorts 9:16 (*"Kenapa...", "Kok bisa...", hitungan biaya, fisika/teknik sehari-hari*). Menggabungkan **Full Real Background 100% per scene**, cutout objek PNG realistis (Flow Bridge), meme reaksi, foto arsip berbingkai hitam (Wikimedia), living cutout motion, dan 3 pilar komedi.
 
-> ⛔ **ATURAN WAJIB BACKGROUND:** Setiap scene cerita & diagram (`hook`, `stage`, `diagram`) **WAJIB** memiliki `latar: 'latar/<slug>-N.png'` lokasi real unik (100% opasitas, bukan kanvas krem polos, bukan transparan, bukan blur). Hanya scene `beat` (`"Oke, sini gue jelasin."`) yang memakai kanvas krem.
+> ⛔ **ATURAN WAJIB BACKGROUND & HOOK:** Setiap scene cerita & diagram (`hook`, `stage`, `diagram`) **WAJIB** memiliki `latar: 'latar/<slug>-N.png'` lokasi real unik (100% opasitas, bukan kanvas krem polos, bukan transparan, bukan blur). Hanya scene `beat` (`"Oke, sini gue jelasin."`) yang memakai kanvas krem. Narasi `hook` wajib *stop-scroll* 1 kalimat pendek (`8-14 kata`, ~3 detik), dan judul `thumbnail` / `hook` wajib 2 baris utuh secara logika (`<= 28 karakter` per baris, `baris1` outline putih + `baris2` stabilo kuning).
 
 Panduan skill lengkap: [`.claude/skills/video-explainer/SKILL.md`](.claude/skills/video-explainer/SKILL.md).
 

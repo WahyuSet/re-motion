@@ -123,3 +123,11 @@ test('hitungTransformItem applies default living idle motion on props and suppor
   assert.ok(midSquash.scaleX > 1.15);
   assert.ok(midSquash.scaleY < 0.85);
 });
+
+test('fitThumbFontSize keeps maxFont for short titles and scales down proportionally for 24-char titles', async () => {
+  const {fitThumbFontSize} = await importTs('src/explainer/timing.ts');
+  assert.equal(fitThumbFontSize('HP DISADAP', 80, 912), 80);
+  const longSize = fitThumbFontSize('KENAPA BAHAN BAKU TEPUNG', 80, 912);
+  assert.ok(longSize < 80 && longSize >= 52, `expected scaled font between 52 and 79, got ${longSize}`);
+});
+

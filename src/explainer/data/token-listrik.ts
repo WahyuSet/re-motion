@@ -12,8 +12,8 @@ export const tokenListrik: ExplainerScript = {
     tags: ['token listrik', 'pln', 'listrik prabayar', 'kwh listrik', 'edukasi', 'nahhgini'],
   },
   thumbnail: {
-    baris1: 'ISI 100 RIBU',
-    baris2: 'KOK CUMA 61,3 kWh?',
+    baris1: 'TOKEN 100 RIBU',
+    baris2: 'ISINYA CUMA 61 kWh?',
     src: 'props/token-meteran.png',
   },
   scenes: [
@@ -22,8 +22,8 @@ export const tokenListrik: ExplainerScript = {
       type: 'hook',
       duration: 120,
       latar: 'latar/token-kos.png',
-      baris1: 'ISI TOKEN 100 RIBU',
-      baris2: 'KOK DAPETNYA BEDA?',
+      baris1: 'TOKEN 100 RIBU',
+      baris2: 'ISINYA CUMA 61 kWh?',
       utama: {
         kind: 'prop',
         src: 'props/token-meteran.png',

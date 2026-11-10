@@ -20,6 +20,24 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
    - Dilarang memakai `latarOpacity` atau `latarBlur` (engine otomatis me-render 100% tajam dengan *slow zoom*).
 3. **Hanya edit file milik video explainer itu:** `src/explainer/data/<slug>.ts`, `src/explainer/data/<slug>.props.json`, `src/explainer/data/<slug>.latar.json`, `src/explainer/data/<slug>.sumber.md`, dan `src/explainer/daftar.ts`.
 4. **Watermark default:** Kosongkan dulu (`watermark: false`) di naskah sampai nama channel final ditentukan.
+4a. **Desain Thumbnail & Aturan Penulisan Judul (`thumbnail` & `HookScene`):**
+   - **Desain Thumbnail (`ExplainerThumb.tsx`):** Menggunakan foto lokasi real (`thumbnail.latar` atau otomatis dari `hook.latar`) yang digelapkan dengan gradien sinematik (`#0b131b`), dipadukan dengan **`baris1` ber-outline putih tebal** dan **`baris2` di atas pita stabilo kuning (`#f5c518`) ber-outline putih** serta *auto-scale* ukuran font (`fitThumbFontSize`) agar selalu tampil 1 baris utuh per klausa.
+   - **Aturan Penulisan Judul (Singkat, Padat, Jelas, & Utuh Secara Logika):**
+     - Maksimal **28 karakter per baris** (`2-5 kata` per baris). Validator `cek-explainer.mjs` akan memberi peringatan bila melebihi 28 karakter.
+     - **Jaga Jembatan Logika & Bahasa Natural:** Jangan memotong kata sampai maknanya lompat atau kaku seperti robot. Gunakan pola **`[Subjek/Objek Jelas]` + `[Pertanyaan/Kejanggalan Natural]`**:
+       - `token-listrik`: `baris1: 'TOKEN 100 RIBU'`, `baris2: 'ISINYA CUMA 61 kWh?'`
+       - `sadap-lims`: `baris1: 'HP DISADAP'`, `baris2: 'TANPA KITA SADARI?'`
+       - `gandum-tropis`: `baris1: 'KENAPA BAHAN BAKU TEPUNG'`, `baris2: 'TIDAK ADA DI KEBUN KITA?'`
+4b. **Aturan Hook Narasi Stop-Scroll 3 Detik (Wajib untuk Next Video):**
+   - **Maksimal 8 sampai 14 Kata (1 Kalimat Padat, Durasi ~3 sampai 4 Detik / `95-120 frame`):** Di Shorts, penonton memutuskan scroll dalam 1,5 sampai 3 detik pertama. Dilarang menulis 2 kalimat atau lebih dari 14 kata di `HookScene` (validator `cek-explainer.mjs` otomatis memberi peringatan jika `> 15 kata`).
+   - **Rumus 2 Potong Langsung Tembak (`[Fakta/Kebiasaan 4 kata], [kok/kenapa kejanggalan 5 kata]?`):**
+     - **Haram Kalimat Pemanasan / Berita:** Dilarang membuka dengan *"Isu X lagi ramai dibahas..."*, *"Pernah gak sih lo mikir..."*, *"Tahukah kamu kalau..."*, atau kalimat pengantar panjang.
+     - **Contoh Hook Stop-Scroll yang Benar (9-10 kata, ~3 detik):**
+       - *"Kita juara makan mie instan, kok gak punya sawah gandum?"* (10 kata)
+       - *"Tanpa klik link aneh, kok HP tetap bisa disadap?"* (9 kata)
+       - *"Beli token seratus ribu, kok masuknya cuma enam puluh satu?"* (10 kata)
+       - *"Kenapa tukang bangunan gak pernah nyusun bata sejajar lurus?"* (9 kata)
+       - *"Nyalain kipas pas gerah, kok badan malah makin lengket?"* (9 kata)
 3b. **Jeda Ritme `BeatScene` (`type: 'beat'`):**
    - Gunakan kalimat transisi **`teks: 'Oke, sini gue jelasin.'`** (bukan `"nah"`), ditemani karakter meme kucing berkacamata yang sedang menjelaskan (`props/meme-kucing-jelasin.png`) lengkap dengan aksi gerak:
      ```ts
@@ -221,15 +239,23 @@ node scripts/paket-youtube.mjs <slug>
 
 Sebelum mulai render setiap video explainer berikutnya, pastikan semua poin di bawah ini terpenuhi:
 
+- [ ] **Hook Narasi Stop-Scroll 3 Detik (8 sampai 14 Kata, 1 Kalimat):**
+  - `narasi` di `HookScene` wajib singkat dan langsung menembak kejanggalan di detik pertama (`8-14 kata`, 1 kalimat, durasi `~3-4 detik` / `95-120 frame`).
+  - Gunakan rumus 2 potong: `[Fakta/Aksi 4 kata], [kok/kenapa kejanggalannya 5 kata]?` tanpa kalimat pengantar berita (*"Isu X lagi ramai..."*, *"Pernah gak sih..."*).
+- [ ] **Thumbnail & Judul 2 Baris Natural (Opsi 3 + Stabilo Baris 2):**
+  - `baris1` dan `baris2` di `thumbnail` serta `HookScene` menggunakan kalimat pendek yang utuh dan masuk akal secara logika (`2-5 kata`, `<= 28 karakter` per baris). Dilarang memotong kata secara telegrap yang bikin makna rancu.
+  - `thumbnail` memiliki `latar` foto lokasi nyata (atau otomatis memakai `hook.latar`) dan `src` prop cutout utama di tengah.
+  - Engine otomatis merender foto latar gelap sinematik, `baris1` teks gelap dengan sticker outline putih bulat, `baris2` di dalam blok stabilo kuning (`#f5c518`) miring `-1deg` + outline putih, serta `fitThumbFontSize` agar teks selalu muat 1 baris.
 - [ ] **Watermark & Beat Scene Standar Baru:**
   - `watermark: false` di `ExplainerScript` (kosongkan dulu).
   - Scene `beat` memakai `teks: 'Oke, sini gue jelasin.'` (dan narasi `"Oke, *sini gue jelasin* ..."`) + karakter meme kucing menjelaskan (`props/meme-kucing-jelasin.png`, `masuk: 'pop'`, `sfx: 'boing'`).
 - [ ] **Full Real Background Unik per Scene (Wajib):**
   - Setiap scene cerita & diagram (`hook`, `stage`, `diagram`) **wajib memiliki `latar: 'latar/<slug>-N.png'` yang unik** sesuai lokasi narasinya. Dilarang membiarkan background krem polos tanpa latar (kecuali scene `beat`), dan dilarang menduplikasi gambar latar yang sama di beberapa scene.
   - File latar sudah di-generate ke `public/latar/` via `node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh`.
-- [ ] **Pilar 1 — Komedi di Narasi (Minimal 2–3 Celetukan Relatable):**
-  - Ada 1 kalimat celetukan sehari-hari / hiperbola komedi di **Hook (Scene 1)** atau **Salah Kaprah (Scene 2)**.
-  - Ada 1 kalimat punchline / sindiran ringan saat fakta utama atau hitungan terbongkar (**Scene 3/4**).
+- [ ] **Pilar 1, Komedi di Narasi (Minimal 2-3 Celetukan Relatable di Scene 2/3/4):**
+  - Biarkan **Scene 1 (Hook)** fokus 1 kalimat *stop-scroll* (`8-14 kata`).
+  - Taruh 1 kalimat celetukan sehari-hari / hiperbola komedi di **Salah Kaprah (Scene 2)**.
+  - Taruh 1 kalimat punchline / sindiran ringan saat fakta utama atau hitungan terbongkar (**Scene 3/4**).
   - Semua angka tetap ditulis dalam huruf (`seratus ribu`, `tiga puluh persen`) tanpa digit.
 - [ ] **Pilar 2 — Komedi di SFX (`boing`, `boom`, `womp`, `slap`, `ding`):**
   - Minimal **3 SFX komedi** terpasang di sepanjang video lewat properti `sfx` pada `StageItem` atau `StageAction`:

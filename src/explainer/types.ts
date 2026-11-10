@@ -124,6 +124,7 @@ export type BeatScene = BaseExplainerScene & {
   type: 'beat';
   teks: string;
   di?: string;
+  items?: StageItem[];
 };
 
 export type StageScene = BaseExplainerScene & {
@@ -180,6 +181,8 @@ export type ExplainerThumbData = {
   baris1: string;
   baris2?: string;
   src?: string;
+  latar?: string;
+  stabilo?: string;
   items?: StageItem[];
 };
 

@@ -11,8 +11,9 @@ Acuan skill utama: [`.claude/skills/video-explainer/SKILL.md`](../.claude/skills
 Setiap video baru tema `"nahh gini"` **wajib** memiliki minimal **2–3 momen komedi** yang menggabungkan ketiga pilar ini secara bersamaan:
 
 ### A. Komedi di Narasi
-- Jangan menulis narasi kaku seperti buku pelajaran. Sisipkan **analogi receh atau keluhan relatable sehari-hari** di:
-  1. **Scene 1 (Hook) / Scene 2 (Salah Kaprah):** Kalimat yang langsung kena ke pengalaman penonton.
+- **Scene 1 (Hook)** tetap fokus 1 kalimat *stop-scroll* (`8-14 kata`, ~3 detik). Jangan menambah kalimat ke-2 di Hook.
+- Sisipkan **analogi receh atau keluhan relatable sehari-hari** di scene berikutnya:
+  1. **Scene 2 (Salah Kaprah):** Kalimat yang langsung kena ke pengalaman penonton.
      - *Contoh:* `"Bunyi tit-tit meteran pas tengah malem itu horornya ngalahin film setan."`
      - *Contoh:* `"Susunan bata sejajar lurus itu kayak temen kelompok yang cuma numpang nama, diteken dikit langsung ambyar."`
   2. **Scene 3/4 (Bongkar Fakta / Hitungan):** Celetukan singkat saat potongan/beban muncul.
@@ -81,7 +82,14 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
 
 ## 2. Aturan Sinkronisasi Visual & Anti Layar Kosong (Hasil Evaluasi Video #1)
 
-1. **Watermark kosongkan dulu:** `watermark: false` (sampai ada nama channel final).
+1. **Hook Narasi Stop-Scroll 3 Detik (Khusus Next Video, 8 sampai 14 Kata):**
+   - `narasi` di `HookScene` wajib selesai dalam **3 sampai 4 detik (`8-14 kata`, 1 kalimat padat)** agar penonton tidak keburu scroll.
+   - Gunakan rumus 2 potong langsung tembak: `[Fakta/Aksi 4 kata], [kok/kenapa kejanggalan 5 kata]?` (contoh: *"Kita juara makan mie instan, kok gak punya sawah gandum?"*, *"Nyalain kipas pas gerah, kok badan malah makin lengket?"*).
+   - Dilarang memakai kalimat pemanasan atau pembuka berita seperti *"Isu X lagi ramai dibahas..."* atau *"Pernah gak sih lo mikir..."*. Validator `cek-explainer.mjs` otomatis memberi peringatan bila `narasi` hook pada video baru melebihi 15 kata.
+2. **Thumbnail & Judul 2 Baris Natural (Opsi 3 + Stabilo Baris 2):**
+   - `ExplainerThumb.tsx` dan `HookScene.tsx` otomatis memakai foto lokasi gelap sinematik (`thumbnail.latar` atau fallback `hook.latar`), `baris1` teks gelap dengan sticker outline putih tebal, `baris2` di atas blok stabilo kuning (`#f5c518`) miring `-1deg` dengan outline putih, serta `fitThumbFontSize` agar tiap baris otomatis pas dalam 1 baris tanpa pecah.
+   - Tulis `baris1` dan `baris2` dengan kalimat singkat yang utuh dan masuk akal (`2-5 kata`, maksimal `28 karakter` per baris). Jangan memotong kata secara telegrap yang membuat artinya rancu (contoh benar: `TOKEN 100 RIBU` / `ISINYA CUMA 61 kWh?`, `KENAPA BAHAN BAKU TEPUNG` / `TIDAK ADA DI KEBUN KITA?`).
+2. **Watermark kosongkan dulu:** `watermark: false` (sampai ada nama channel final).
 2. **Transisi BeatScene 'Oke, sini gue jelasin.':**
    - Ganti kata transisi dari "nah" menjadi `teks: 'Oke, sini gue jelasin.'`.
    - Pasangkan dengan karakter meme kucing menjelaskan (`props/meme-kucing-jelasin.png` atau `props/meme-kucing-guru.png`, `masuk: 'pop'`, `sfx: 'boing'`).

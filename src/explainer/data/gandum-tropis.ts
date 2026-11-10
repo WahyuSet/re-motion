@@ -14,9 +14,10 @@ export const gandumTropis: ExplainerScript = {
     tags: ['gandum', 'pertanian', 'mie instan', 'terigu', 'vernalisasi', 'fotoperiodisme', 'sains', 'edukasi', 'nahhgini'],
   },
   thumbnail: {
-    baris1: 'MAKAN MIE JUARA',
-    baris2: 'KOK GAK ADA SAWAHNYA?',
-    src: 'props/gandum-mie.png',
+    baris1: 'KENAPA BAHAN BAKU TEPUNG',
+    baris2: 'TIDAK ADA DI KEBUN KITA?',
+    src: 'props/gandum-karung-terigu.png',
+    latar: 'latar/gandum-tropis-2.png',
   },
   scenes: [
     // Scene 1: Hook — Konsumsi mie instan juara vs nol ladang gandum di Indonesia
@@ -24,8 +25,8 @@ export const gandumTropis: ExplainerScript = {
       type: 'hook',
       duration: 115,
       latar: 'latar/gandum-tropis-1.png',
-      baris1: 'KONSUMSI MIE JUARA',
-      baris2: 'KOK GAK TANAM SENDIRI?',
+      baris1: 'KENAPA BAHAN BAKU TEPUNG',
+      baris2: 'TIDAK ADA DI KEBUN KITA?',
       narasi:
         'Indonesia juara makan *mie instan* dan gorengan tepung. Tapi pernah gak mikir, kenapa gak ada *sawah gandum* di kampung kita?',
       utama: {

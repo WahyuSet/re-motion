@@ -52,6 +52,19 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
   if (script?.thumbnail?.src && !(await existsPublic(script.thumbnail.src))) {
     err('thumbnail', `File public/${script.thumbnail.src} tidak ditemukan.`);
   }
+  if (script?.thumbnail?.latar && !(await existsPublic(script.thumbnail.latar))) {
+    err('thumbnail', `File latar public/${script.thumbnail.latar} tidak ditemukan.`);
+  }
+  for (const field of ['baris1', 'baris2']) {
+    const val = script?.thumbnail?.[field];
+    if (typeof val === 'string' && val.trim().length > 28) {
+      warn(
+        'thumbnail',
+        `${field} "${val}" terlalu panjang (${val.trim().length} karakter, batas 28).`,
+        'Ringkas menjadi 2–5 kata yang utuh secara logika agar teks thumbnail tetap besar dalam 1 baris.',
+      );
+    }
+  }
 
   const seenLatar = new Map();
 
@@ -130,6 +143,26 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
     }
 
     if (scene.judulDi) cekKata('judulDi', scene.judulDi);
+    if (scene.type === 'hook') {
+      const legacyHookSlugs = new Set(['token-listrik', 'sadap-lims', 'gandum-tropis']);
+      if (!legacyHookSlugs.has(slug) && words.length > 15) {
+        warn(
+          where,
+          `Hook narasi terlalu panjang (${words.length} kata, batas 14 kata / ~3-4 detik).`,
+          'Ringkas jadi 1 kalimat stop-scroll (8-14 kata): "[Fakta/aksi 4 kata], kok/kenapa [kejanggalan 5 kata]?" tanpa kalimat pengantar.',
+        );
+      }
+      for (const field of ['baris1', 'baris2']) {
+        const val = scene[field];
+        if (typeof val === 'string' && val.trim().length > 28) {
+          warn(
+            where,
+            `${field} "${val}" terlalu panjang (${val.trim().length} karakter, batas 28).`,
+            'Ringkas menjadi 2-5 kata yang utuh secara logika agar banner hook tetap 1 baris.',
+          );
+        }
+      }
+    }
     if (scene.di) cekKata('di', scene.di);
     if (scene.rakitDi) cekKata('rakitDi', scene.rakitDi);
     if (scene.beban?.di) cekKata('beban.di', scene.beban.di);

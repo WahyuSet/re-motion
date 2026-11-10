@@ -362,3 +362,16 @@ export const hitungTransformItem = (
     originY,
   };
 };
+
+export const fitThumbFontSize = (
+  teks: string,
+  maxFont = 80,
+  maxWidth = 912,
+): number => {
+  const clean = teks.trim();
+  if (!clean.length) return maxFont;
+  const estCharWidth = 0.65;
+  const fitted = Math.floor(maxWidth / (clean.length * estCharWidth));
+  return Math.max(42, Math.min(maxFont, fitted));
+};
+
