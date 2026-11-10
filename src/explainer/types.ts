@@ -104,6 +104,12 @@ type BaseExplainerScene = {
   kata?: WordTiming[];
   accentColor?: string;
   bab?: string;
+  /** Path gambar latar lokasi hybrid di public/ (contoh: 'latar/token-kos.png') */
+  latar?: string;
+  /** Opacity latar lokasi (default 0.28) */
+  latarOpacity?: number;
+  /** Blur piksel latar lokasi (default 5) */
+  latarBlur?: number;
 };
 
 export type HookScene = BaseExplainerScene & {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Audio, Sequence, staticFile, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Img, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {linearTiming, springTiming, TransitionSeries} from '@remotion/transitions';
 import {fade} from '@remotion/transitions/fade';
 import {slide} from '@remotion/transitions/slide';
@@ -21,15 +21,41 @@ import type {ExplainerScene, ExplainerScript} from './types';
 
 export {explainerTransitionFrames, getExplainerDuration, prepareExplainerScript};
 
+const FullSceneBackdrop: React.FC<{scene: ExplainerScene}> = ({scene}) => {
+  const frame = useCurrentFrame();
+  if (!scene.latar) return null;
+  const p = Math.min(1, Math.max(0, frame / Math.max(1, scene.duration)));
+  const scale = 1.02 + p * 0.08;
+  const opacity = scene.latarOpacity ?? 1;
+  const blur = scene.latarBlur ?? 0;
+
+  return (
+    <AbsoluteFill style={{zIndex: 0, overflow: 'hidden', pointerEvents: 'none'}}>
+      <Img
+        src={staticFile(scene.latar)}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity,
+          filter: blur > 0 ? `blur(${blur}px)` : undefined,
+          transform: `scale(${scale})`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
 const renderExplainerScene = (scene: ExplainerScene, fps: number) => {
   const words = sceneWords(scene, fps);
   return (
     <AbsoluteFill>
+      <FullSceneBackdrop scene={scene} />
       {scene.type === 'hook' ? <HookSceneView scene={scene} words={words} /> : null}
       {scene.type === 'beat' ? <BeatSceneView scene={scene} words={words} /> : null}
       {scene.type === 'stage' ? <StageSceneView scene={scene} words={words} /> : null}
       {scene.type === 'diagram' ? <DiagramSceneView scene={scene} words={words} /> : null}
-      <ExplainerSubtitle words={words} accentColor={scene.accentColor} />
+      <ExplainerSubtitle words={words} accentColor={scene.accentColor} overPhoto={Boolean(scene.latar)} />
     </AbsoluteFill>
   );
 };

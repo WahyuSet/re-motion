@@ -53,6 +53,8 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
     err('thumbnail', `File public/${script.thumbnail.src} tidak ditemukan.`);
   }
 
+  const seenLatar = new Map();
+
   for (const [i, scene] of scenes.entries()) {
     const where = `scene ${i + 1} (${scene.type})`;
     const narasi = scene.narasi ?? '';
@@ -98,6 +100,20 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       }
       return idx;
     };
+
+    if (scene.latar) {
+      if (!(await existsPublic(scene.latar))) {
+        err(where, `File latar public/${scene.latar} tidak ditemukan.`);
+      } else if (seenLatar.has(scene.latar)) {
+        warn(
+          where,
+          `Latar "${scene.latar}" sudah dipakai di scene ${seenLatar.get(scene.latar)}.`,
+          'Gunakan background lokasi unik per scene sesuai narasi.',
+        );
+      } else {
+        seenLatar.set(scene.latar, i + 1);
+      }
+    }
 
     if (scene.judulDi) cekKata('judulDi', scene.judulDi);
     if (scene.di) cekKata('di', scene.di);

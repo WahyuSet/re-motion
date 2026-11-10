@@ -151,7 +151,7 @@ const StageItemView: React.FC<{
             display: 'block',
             borderRadius: item.bingkai ? 10 : 0,
             border: item.bingkai ? `6px solid ${explainerTheme.ink}` : undefined,
-            filter: 'drop-shadow(0 12px 22px rgba(0,0,0,0.18))',
+            filter: 'drop-shadow(0 16px 26px rgba(0,0,0,0.34))',
           }}
         />
       ) : null}

@@ -21,6 +21,7 @@ export const tokenListrik: ExplainerScript = {
     {
       type: 'hook',
       duration: 120,
+      latar: 'latar/token-kos.png',
       baris1: 'ISI TOKEN 100 RIBU',
       baris2: 'KOK DAPETNYA BEDA?',
       utama: {
@@ -85,6 +86,7 @@ export const tokenListrik: ExplainerScript = {
     {
       type: 'stage',
       duration: 135,
+      latar: 'latar/token-kamar.png',
       narasi: 'Banyak yang mengira beli *seratus ribu* itu harusnya dapat angka seratus utuh. Padahal token prabayar itu bukan isi saldo uang, melainkan *konversi ke daya* kilowatt jam.',
       items: [
         {
@@ -205,6 +207,7 @@ export const tokenListrik: ExplainerScript = {
       type: 'diagram',
       mode: 'potongan',
       duration: 210,
+      latar: 'latar/token-loket.png',
       judul: 'HITUNGAN TOKEN RP100.000',
       awal: {label: 'Beli Token', nilai: 'Rp100.000'},
       langkah: [
@@ -295,6 +298,7 @@ export const tokenListrik: ExplainerScript = {
     {
       type: 'stage',
       duration: 135,
+      latar: 'latar/token-jalan.png',
       narasi: 'Terus kenapa tiap daerah *hasilnya beda*? Karena persentase pajak jalan ditentukan masing-masing *pemerintah daerah*, mulai tiga persen sampai sepuluh persen. Makanya makin kecil pajaknya, makin *banyak listrik* yang masuk ke rumahmu.',
       items: [
         {

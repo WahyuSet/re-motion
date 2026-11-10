@@ -18,6 +18,7 @@ import {removeBackground} from './lib/remove-bg.mjs';
 const BRIDGE_URL = process.env.FLOW_BRIDGE_URL ?? 'http://127.0.0.1:8001';
 const TOKEN = process.env.FLOW_BRIDGE_TOKEN ?? '';
 const PROPS_DIR = path.resolve('public/props');
+const LATAR_DIR = path.resolve('public/latar');
 const RAW_DIR = path.join(PROPS_DIR, '_raw');
 
 const DEFAULT_STYLE =
@@ -37,6 +38,7 @@ const {values} = parseArgs({
     bg: {type: 'string', default: 'green'},
     concurrency: {type: 'string', default: '4'},
     'remove-bg-only': {type: 'boolean', default: false},
+    utuh: {type: 'boolean', default: false},
     cek: {type: 'boolean', default: false},
   },
 });
@@ -56,14 +58,20 @@ const explainError = (status, body) => {
   return new Error(`HTTP ${status}: ${body.slice(0, 300)}`);
 };
 
-const buildPrompt = (subject, style, bg) =>
-  [
-    subject,
-    'single isolated object, centered, the whole object fully visible with generous empty margin around it',
-    style,
-    'no text, no watermark, no frame, no cast shadow, no floor, no other objects',
-    BACKGROUNDS[bg] ?? BACKGROUNDS.green,
-  ].join(', ');
+const buildPrompt = (subject, style, bg, utuh = false) =>
+  utuh
+    ? [
+        subject,
+        style,
+        'wide environmental background scene, clean uncluttered composition, soft warm lighting, no text, no watermark, no people in foreground',
+      ].join(', ')
+    : [
+        subject,
+        'single isolated object, centered, the whole object fully visible with generous empty margin around it',
+        style,
+        'no text, no watermark, no frame, no cast shadow, no floor, no other objects',
+        BACKGROUNDS[bg] ?? BACKGROUNDS.green,
+      ].join(', ');
 
 const headers = () => ({
   'Content-Type': 'application/json',
@@ -85,8 +93,9 @@ const checkBridge = async () => {
   return health;
 };
 
-const generateOne = async ({name, prompt}, style, bg) => {
-  const fullPrompt = buildPrompt(prompt, style, bg);
+const generateOne = async ({name, prompt, utuh}, style, bg, forceUtuh = false) => {
+  const isUtuh = Boolean(utuh || forceUtuh);
+  const fullPrompt = buildPrompt(prompt, style, bg, isUtuh);
   const res = await fetch(`${BRIDGE_URL}/v1/images/generations`, {
     method: 'POST',
     headers: headers(),
@@ -99,6 +108,13 @@ const generateOne = async ({name, prompt}, style, bg) => {
   const json = await res.json();
   const b64 = json.data?.[0]?.b64_json;
   if (!b64) throw new Error('Response tidak berisi b64_json');
+
+  if (isUtuh) {
+    await fs.mkdir(LATAR_DIR, {recursive: true});
+    const latarPath = path.join(LATAR_DIR, `${name}.png`);
+    await fs.writeFile(latarPath, Buffer.from(b64, 'base64'));
+    return latarPath;
+  }
 
   const rawPath = path.join(RAW_DIR, `${name}.png`);
   await fs.writeFile(rawPath, Buffer.from(b64, 'base64'));
@@ -165,7 +181,9 @@ const main = async () => {
 
   await checkBridge();
   console.log(`Generate ${items.length} props lewat ${BRIDGE_URL} ...`);
-  const results = await runPool(items, Number(values.concurrency), (item) => generateOne(item, values.style, values.bg));
+  const results = await runPool(items, Number(values.concurrency), (item) =>
+    generateOne(item, values.style, values.bg, values.utuh),
+  );
 
   const failed = results.filter((r) => !r.ok);
   const skipped = items.length - results.length;

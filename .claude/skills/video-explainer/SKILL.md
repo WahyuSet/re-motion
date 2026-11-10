@@ -16,7 +16,8 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
    - **Detik `0.0s` di setiap scene wajib punya visual pembuka** (`delay: 0` atau `di` pada 1–2 kata pertama). Saat kalimat pembuka berupa pertanyaan (*"Kenapa bisa beda?"*, *"Banyak yang mengira..."*), tampilkan karakter ekspresif sedang berpikir (`props/token-mikir.png` atau sejenisnya) + simbol `tanya` (`?`).
    - **Setiap klausa yang diucapkan harus punya pasangan visual** yang muncul tepat di kata pemicunya (`di: '<kata>'`). Jangan biarkan ada jeda `> 2,5 detik` tanpa perubahan visual.
    - Saat berganti fase di dalam 1 scene, **samakan kata `sampai` objek lama dan `di` objek baru** (contoh: `sampai: 'melainkan'` dan `di: 'melainkan'`) agar tidak ada celah layar kosong 0,5 detik di antaranya, dan hindari menaruh objek baru di koordinat `x, y` yang persis menimpa objek yang sedang `fade` keluar.
-5. **Kombinasi Visual Wajib (Cutout PNG + Foto Asli Berbingkai):**
+5. **Kombinasi Visual Wajib (Full Real Background Lokasi per Scene + Cutout PNG + Foto Asli Berbingkai):**
+   - **Setiap scene cerita/diagram wajib punya Full Real Background lokasi yang UNIK (`latar: 'latar/<nama>.png'`)** dari Flow Bridge (`node scripts/generate-props.mjs --utuh --name <nama> --prompt "<lokasi sesuai narasi scene>"`) — dilarang memakai gambar latar yang sama berulang di beberapa scene.
    - Gunakan **cutout PNG transparan realistis** dari `scripts/generate-props.mjs` dengan style:
      `--style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"`
      *(Catatan: hindari kata `"banknote"` atau mata uang negara asli di prompt Flow karena kena filter kebijakan; gunakan `"3D stylized bundle of red paper notes with golden coins"`).*

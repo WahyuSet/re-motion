@@ -70,7 +70,10 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
    - Engine kini otomatis menggunakan `keluar: 'pop-out'` (8 frame) sehingga tidak ada bayangan transparan (*ghosting*) di atas objek baru.
 4. **Jarak Vertikal Aman (`16–18%`):**
    - Jangan menumpuk badge teks, simbol `?`, dan prop terlalu rapat di sisi yang sama; beri selisih `y` minimal `16–18%`.
-5. **Kombinasi Cutout PNG + Foto Asli Wikimedia:**
+5. **Full Real Background Lokasi Unik per Scene + Cutout PNG + Foto Asli Wikimedia:**
+   - **Setiap scene (`hook`, `stage`, `diagram`) wajib memiliki `latar: 'latar/<nama>.png'` yang BEDA-BEDA (unik per scene)** sesuai suasana lokasi narasi di scene tersebut (generate lewat `node scripts/generate-props.mjs --utuh --name <nama> --prompt "<lokasi>"`).
+   - Background ditampilkan **Full Real (100% terang tanpa transparan)** dengan *slow camera zoom* (`1.02x` -> `1.10x`) dan kotak *pill* krem otomatis di belakang subtitle.
+   - Validator `npm run cek:explainer` otomatis memberi peringatan jika ada gambar `latar` yang dipakai berulang di scene lain.
    - Setiap video wajib memadukan cutout PNG transparan realistis (`scripts/generate-props.mjs`) dan foto nyata berbingkai hitam (`scripts/cari-foto.mjs` dengan `bingkai: true`).
 
 ---
