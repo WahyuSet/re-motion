@@ -135,7 +135,11 @@ Contoh penggunaan di naskah:
   - `props/meme-kucing-merenung.png`: Kucing oren pakai rompi duduk tegak di bak pasir menatap kosong merenung — untuk momen melamun, merenung nasib/beban hidup, atau kena realita pahit (*sfx: `'womp'`).
   - `props/meme-kucing-titik.png`: Kucing bengong stiker titik-titik `...` — untuk reaksi *speechless* / gagal paham.
   - `props/meme-kucing-think.png`: Kucing oren *"Let me think"* — untuk momen ngitung atau mikir keras.
-  - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas — untuk kebingungan kocak.
+  - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas (HD) — untuk kebingungan kocak / gagal paham.
+  - `props/meme-kucing-sinis.png`: Kucing oren lirik sinis (*side-eye glare*) — untuk mencurigai kebiasaan salah, trik jebakan, atau momen skeptis/sindir kebiasaan boros.
+  - `props/meme-kucing-senyum.png`: *Polite Cat* / senyum kecut sopan — untuk senyum pasrah, trik rahasia, atau konfirmasi santai tapi ngena.
+  - `props/meme-kucing-nangis.png`: Kucing nangis tutup mulut (*Crying Cat*) — untuk momen boncos, dompet sekarat, penyesalan mendalam, atau apes kena zonk (*sfx: `'womp'`).
+  - `props/meme-kucing-jempol.png`: Kucing oren acungkan jempol (*Thumbs Up*) — untuk validasi, konfirmasi solusi mantap, atau kesimpulan sukses (*sfx: `'ding'`* atau `'pop'`).
   - `props/meme-kucing-jelasin.png` & `props/meme-kucing-guru.png`: Kucing menjelaskan/profesor — khusus untuk `BeatScene` (`"Oke, sini gue jelasin."`) atau kesimpulan.
 - **Katalog Lengkap 9 Jenis `aksi` (`StageAction`) — Wajib Dipakai Padat (3–5 Aksi per Scene):**
 

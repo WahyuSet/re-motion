@@ -43,7 +43,11 @@ Gunakan properti `sfx: '<nama>'` pada `StageItem` (saat objek masuk) atau `Stage
      - `props/meme-kucing-merenung.png`: Kucing oren pakai rompi duduk tegak di bak pasir menatap kosong merenung (cocok untuk momen melamun, merenung beban hidup, atau kena realita pahit).
      - `props/meme-kucing-titik.png`: Kucing bengong sticker titik-titik `...`.
      - `props/meme-kucing-think.png`: Kucing oren pose *"Let me think"*.
-     - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas.
+     - `props/meme-monyet-mikir.png`: Monyet garuk dagu nengok ke atas (HD).
+     - `props/meme-kucing-sinis.png`: Kucing oren lirik sinis (*side-eye glare*) — momen skeptis / sindir kebiasaan boros.
+     - `props/meme-kucing-senyum.png`: *Polite Cat* / senyum kecut sopan — senyum pasrah atau konfirmasi santai tapi ngena.
+     - `props/meme-kucing-nangis.png`: Kucing nangis tutup mulut (*Crying Cat*) — boncos, apes, dompet nangis (*sfx: `'womp'`*).
+     - `props/meme-kucing-jempol.png`: Kucing oren jempol (*Thumbs Up*) — validasi sukses, solusi mantap (*sfx: `'ding'`*).
      - `props/meme-kucing-jelasin.png`: Kucing oren pakai rompi & kacamata menunjuk semangat (*"Oke, sini gue jelasin!"*).
      - `props/meme-kucing-guru.png`: Kucing profesor berkacamata pegang tongkat di depan papan tulis.
    - Pasangkan dengan aksi motion:
