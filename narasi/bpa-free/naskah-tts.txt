@@ -1,0 +1,28 @@
+PANDUAN TTS: bpa-free
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs bpa-free <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±11.7 detik
+Pernah lihat botol air mineral dipasangi stiker gede BPA Free? Banyak orang rela bayar lebih mahal karena takut racun, padahal itu cuma trik marketing yang manfaatin kepanikan kita!
+
+[02] (stage) ±17.1 detik
+Botol air kemasan sekali pakai itu bahannya plastik PET nomor satu. Nah, dari rumus kimianya, plastik PET dari awal memang nol persen BPA, alias nggak pernah pakai BPA sama sekali! Jadi klaim BPA Free di sini persis kayak garam bebas kolesterol.
+
+[03] (beat) ±3.8 detik
+Oke, sini gue jelasin di mana sebenarnya BPA bersembunyi.
+
+[04] (stage) ±17.5 detik
+BPA itu cuma dipakai di plastik polikarbonat berkode nomor tujuh, kayak galon isi ulang keras atau tumbler jadul. Bahayanya baru muncul kalau botolnya kena panas ekstrem, misalnya dijemur di dalam mobil terik, yang bikin senyawa kimia terlepas dan larut ke air minum!
+
+[05] (stage) ±15.8 detik
+Jadi kuncinya gampang: cukup intip kode segitiga di pantat botol. Pilih nomor satu atau lima, dan yang paling penting, jangan pernah minum air dari botol yang sudah kepanasan di mobil. Jangan lupa bagikan video ini ke teman kamu!
+
+Perkiraan total narasi: ±66 detik (belum termasuk jeda)

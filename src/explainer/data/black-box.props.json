@@ -1,0 +1,42 @@
+[
+  {
+    "name": "black-box-unit",
+    "prompt": "clean realistic studio product photography cutout of a bright orange airplane flight data recorder black box with cylindrical underwater locator beacon on top, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-fdr",
+    "prompt": "clean realistic studio product photography cutout of an orange rectangular flight data recorder electronic unit with connector pins and sensor ports, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-cvr",
+    "prompt": "clean realistic studio product photography cutout of an orange cockpit voice recorder box with microphone audio symbol badge, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-pesawat",
+    "prompt": "clean realistic studio product photography cutout of a modern white commercial airliner passenger airplane flying at dynamic three-quarter angle, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-radar",
+    "prompt": "clean realistic studio product photography cutout of a circular green glowing aviation radar scope monitor with aircraft blips, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-kamera",
+    "prompt": "clean realistic studio product photography cutout of a black broadcast video camera camcorder with red recording LED dot, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-gauge",
+    "prompt": "clean realistic studio product photography cutout of an airplane circular airspeed indicator instrument gauge with needle and speed markings, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-turbin",
+    "prompt": "clean realistic studio product photography cutout of a modern jet airplane turbofan engine intake with titanium blades, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-alarm",
+    "prompt": "clean realistic studio product photography cutout of a glowing red aircraft master warning emergency alarm indicator light, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "black-box-pinger",
+    "prompt": "clean realistic studio product photography cutout of a golden metal cylindrical underwater locator beacon pinger with sonar wave rings, crisp edges, natural colors, soft even lighting, high detail"
+  }
+]

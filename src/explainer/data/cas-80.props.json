@@ -1,0 +1,26 @@
+[
+  {
+    "name": "cas-hp-cas",
+    "prompt": "clean realistic studio product photography cutout of a modern sleek smartphone charging with USB-C cable plugged in, battery charging icon on display, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "cas-charger",
+    "prompt": "clean realistic studio product photography cutout of a modern white USB-C wall fast charger adapter with coiled white cable, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "cas-sel-litium",
+    "prompt": "clean realistic studio product photography cutout of a rectangular silver pouch cell lithium ion smartphone battery with ribbon connector pins, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "cas-baterai-gembung",
+    "prompt": "clean realistic studio product photography cutout of a swollen bloated deformed lithium polymer pouch cell smartphone battery, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "cas-chip-pengaman",
+    "prompt": "clean realistic studio product photography cutout of a small battery management system BMS electronic circuit board with microchips and gold contact pads, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "cas-baterai-alkaline",
+    "prompt": "clean realistic studio product photography cutout of a classic AA alkaline cylinder battery, crisp edges, natural colors, soft even lighting, high detail"
+  }
+]

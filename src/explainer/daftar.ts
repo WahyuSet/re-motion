@@ -1,3 +1,5 @@
+import {cas80} from './data/cas-80';
+import {blackBox} from './data/black-box';
 import {bajuKuning} from './data/baju-kuning';
 import {gandumTropis} from './data/gandum-tropis';
 import {sadapLims} from './data/sadap-lims';
@@ -17,4 +19,6 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'BataZigzag', script: bataZigzag},
   {id: 'BpaFree', script: bpaFree},
   {id: 'EfekRumahKaca', script: efekRumahKaca},
+  {id: 'BlackBox', script: blackBox},
+  {id: 'Cas80', script: cas80},
 ];

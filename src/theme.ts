@@ -1,20 +1,13 @@
-import {loadFont as loadPlayfair} from '@remotion/google-fonts/PlayfairDisplay';
-import {loadFont as loadInter} from '@remotion/google-fonts/Inter';
-import {loadFont as loadPlexMono} from '@remotion/google-fonts/IBMPlexMono';
-import {loadFont as loadCinzel} from '@remotion/google-fonts/Cinzel';
-
-const playfair = loadPlayfair('normal', {weights: ['700', '900'], subsets: ['latin']});
-const inter = loadInter('normal', {weights: ['400', '600', '800'], subsets: ['latin']});
-const plexMono = loadPlexMono('normal', {weights: ['500', '600'], subsets: ['latin']});
-const cinzel = loadCinzel('normal', {weights: ['600', '800'], subsets: ['latin']});
-
+// Tema visual global & font.
+// Menggunakan font family string standar dengan fallback sistem agar render offline/lokal
+// tidak bergantung pada unduhan jaringan gstatic yang rentan timeout.
 export const theme = {
-  fontTitle: playfair.fontFamily,
-  fontBody: inter.fontFamily,
+  fontTitle: 'Playfair Display, Georgia, serif',
+  fontBody: 'Inter, system-ui, -apple-system, sans-serif',
   /** Tag, label anotasi, sumber: gaya "jurnalisme visual" */
-  fontMono: plexMono.fontFamily,
+  fontMono: 'IBM Plex Mono, Menlo, monospace',
   /** Tahun & nama dalam huruf kapital berjarak: gaya "sketsa vintage" */
-  fontYear: cinzel.fontFamily,
+  fontYear: 'Cinzel, Georgia, serif',
   bg: '#14110d',
   paper: '#f3ead7',
   ink: '#1d1812',

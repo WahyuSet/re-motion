@@ -1,0 +1,27 @@
+[
+  {
+    "name": "erk-kota",
+    "prompt": "wide street level photography of modern city boulevard with tall glass skyscraper office buildings under bright daylight sky, realistic urban architecture",
+    "utuh": true
+  },
+  {
+    "name": "erk-kebun",
+    "prompt": "wide bright photography inside a lush botanical glasshouse conservatory filled with green plants and warm sunlight rays, clean natural composition",
+    "utuh": true
+  },
+  {
+    "name": "erk-atmosfer",
+    "prompt": "wide cinematic photography of Earth curved horizon and glowing blue atmosphere layer seen from high stratosphere with warm sunbeams, realistic space view",
+    "utuh": true
+  },
+  {
+    "name": "erk-polusi",
+    "prompt": "wide environmental photography of industrial power plant smokestacks and busy city highway traffic under hazy warm orange sky, realistic documentary style",
+    "utuh": true
+  },
+  {
+    "name": "erk-hijau",
+    "prompt": "wide bright photography of green sustainable eco city park with lush trees, solar panels, and clean blue sky, warm natural sunlight",
+    "utuh": true
+  }
+]

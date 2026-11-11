@@ -10,9 +10,11 @@ Acuan skill utama: [`.claude/skills/video-explainer/SKILL.md`](../.claude/skills
 
 Setiap video baru tema `"nahh gini"` **wajib** memiliki minimal **2–3 momen komedi** yang menggabungkan ketiga pilar ini secara bersamaan:
 
-### A. Komedi di Narasi
-- **Scene 1 (Hook)** tetap fokus 1 kalimat *stop-scroll* (`8-14 kata`, ~3 detik). Jangan menambah kalimat ke-2 di Hook.
-- Sisipkan **analogi receh atau keluhan relatable sehari-hari** di scene berikutnya:
+### A. Komedi di Narasi & Bebas Slop AI (`antislop-copywriting` + `humanizer-indonesia`)
+- **Scene 1 (Hook)** tetap fokus 1 kalimat *stop-scroll* (`8-14 kata`, ~3 detik). Tanpa basa-basi atau signposting AI (*"Mari kita bahas..."*, *"Tahukah kamu..."*).
+- **Filter Anti-Slop (antislop-copywriting):** Bersihkan kosakata kosong AI (*"solusi mutakhir"*, *"merevolusi"*, *"game changer"*), buang penekanan tigaan paksaan (*rule of three*), dan hindari penutup ala chatbot.
+- **Aliran Tutur Alami (humanizer-indonesia):** Hapus kalke terjemahan harfiah asing (*"di mana hal ini mengakibatkan..."*), gunakan register lisan yang mengalir santai dengan partikel tutur alami (*nih, kok, lho, tuh, kan*), kalimat pendek-padat yang alami untuk TTS.
+- **Sisipkan analogi receh atau keluhan relatable sehari-hari** di scene berikutnya:
   1. **Scene 2 (Salah Kaprah):** Kalimat yang langsung kena ke pengalaman penonton.
      - *Contoh:* `"Bunyi tit-tit meteran pas tengah malem itu horornya ngalahin film setan."`
      - *Contoh:* `"Susunan bata sejajar lurus itu kayak temen kelompok yang cuma numpang nama, diteken dikit langsung ambyar."`

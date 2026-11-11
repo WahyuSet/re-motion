@@ -1,0 +1,28 @@
+PANDUAN TTS: black-box
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs black-box <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±3.8 detik
+Pesawat jatuh dicari black box, emang apa sih fungsinya?
+
+[02] (stage) ±9.2 detik
+Banyak yang ngira kotak ini bisa menyelamatkan pesawat atau kamera langsung. Padahal saat terbang, kerjanya cuma pasif nyatet tanpa bisa mencegah musibah.
+
+[03] (beat) ±3.3 detik
+Oke, sini gue jelasin dua isi di dalamnya.
+
+[04] (stage) ±9.6 detik
+Pertama, ada FDR yang nyatet ribuan data teknis seperti kecepatan dan mesin. Kedua, ada CVR yang ngerekam obrolan pilot sampai bunyi alarm kokpit.
+
+[05] (stage) ±7.5 detik
+Fungsi sejatinya adalah saksi bisu pengungkap fakta, supaya kesalahan yang sama gak pernah terulang lagi di dunia penerbangan.
+
+Perkiraan total narasi: ±33 detik (belum termasuk jeda)

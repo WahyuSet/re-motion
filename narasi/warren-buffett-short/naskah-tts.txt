@@ -1,0 +1,34 @@
+PANDUAN TTS: warren-buffett-short
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs warren-buffett-short <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±6.7 detik
+Sembilan puluh sembilan persen hartanya baru datang setelah usia lima puluh. Inilah rahasia keuangan Warren Buffett.
+
+[02] (fact) ±6.3 detik
+Sejak kecil ia giat menabung dari berdagang, lalu membeli saham pertamanya pada usia sebelas tahun.
+
+[03] (photo) ±6.7 detik
+Dari gurunya Benjamin Graham, ia belajar investasi nilai, yakni membeli perusahaan bagus di bawah harga aslinya.
+
+[04] (fact) ±7.1 detik
+Tahun seribu sembilan ratus enam puluh lima, ia mengambil alih pabrik tekstil Berkshire Hathaway menjadi perusahaan induk.
+
+[05] (photo) ±6.7 detik
+Bersama Charlie Munger, ia membiarkan modalnya tumbuh puluhan tahun layaknya gulungan bola salju yang terus membesar.
+
+[06] (fact) ±7.1 detik
+Meski amat kaya, ia tetap hidup sederhana di rumah lamanya dan menyumbangkan sembilan puluh sembilan persen hartanya.
+
+[07] (outro) ±7.5 detik
+Kekayaan sejati lahir dari disiplin dan kesabaran. Tonton versi lengkapnya di channel ini, dan ikuti untuk kisah lainnya.
+
+Perkiraan total narasi: ±48 detik (belum termasuk jeda)

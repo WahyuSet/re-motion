@@ -1,0 +1,22 @@
+[
+  {
+    "name": "black-box-1",
+    "prompt": "wide realistic modern photography of airport runway and terminal at dusk with runway lights and dark cinematic sky, clean composition, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no vintage paper effect, no sepia, high detail",
+    "utuh": true
+  },
+  {
+    "name": "black-box-2",
+    "prompt": "wide realistic modern photography inside a commercial passenger airplane cabin aisle, passenger seats and overhead bins, natural indoor lighting, full-bleed edge-to-edge camera frame, no border, no frame, no sepia, high detail",
+    "utuh": true
+  },
+  {
+    "name": "black-box-4",
+    "prompt": "wide realistic modern photography of an avionics engineering laboratory and aircraft investigation workshop with diagnostic tools and computer monitors, clean lighting, full-bleed edge-to-edge camera frame, no border, no frame, no sepia, high detail",
+    "utuh": true
+  },
+  {
+    "name": "black-box-5",
+    "prompt": "wide realistic modern photography inside a spacious aviation maintenance hangar with clean polished concrete floor and commercial aircraft tail in background, soft daylight, full-bleed edge-to-edge camera frame, no border, no frame, no sepia, high detail",
+    "utuh": true
+  }
+]

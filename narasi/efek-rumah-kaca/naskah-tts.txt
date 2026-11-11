@@ -1,0 +1,31 @@
+PANDUAN TTS: efek-rumah-kaca
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs efek-rumah-kaca <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±11.7 detik
+Waktu dengar istilah efek rumah kaca, pernah gak sih kamu ngira biang keroknya itu gedung-gedung kaca tinggi di perkotaan? Padahal gedung kaca di jalanan itu nggak salah apa-apa!
+
+[02] (stage) ±16.7 detik
+Istilah itu aslinya perumpamaan dari rumah kaca pertanian tempat nanam sayur di negara dingin. Uniknya, efek rumah kaca alami itu sebenarnya penyelamat bumi! Tanpa dia, suhu bumi bakal anjlok ke minus delapan belas derajat alias beku kayak kulkas dua pintu!
+
+[03] (beat) ±3.8 detik
+Oke, sini gue jelasin kenapa sekarang malah jadi bahaya.
+
+[04] (stage) ±14.6 detik
+Siang hari, panas matahari bebas menembus atmosfer buat menghangatkan bumi. Harusnya, sebagian panas itu dipantulkan balik ke luar angkasa. Tapi gas karbon dioksida dan metana di udara menahan panas itu, jadi mantul balik ke bumi!
+
+[05] (stage) ±13.3 detik
+Masalahnya, asap pabrik, knalpot kendaraan, dan pembakaran batu bara bikin selimut gas itu makin tebal. Ibarat tidur siang bolong tanpa kipas, tapi dipaksa pakai lima lapis bedcover sekaligus, ya jelas bumi kepanasan!
+
+[06] (stage) ±14.6 detik
+Akibatnya suhu global naik, es kutub mencair, dan cuaca jadi makin ekstrem. Jadi solusinya bukan musuhin gedung kaca, tapi kurangi polusi asap dan hemat energi biar bumi kembali adem. Bagikan video ini ke teman kamu!
+
+Perkiraan total narasi: ±75 detik (belum termasuk jeda)

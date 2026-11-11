@@ -1,6 +1,6 @@
 ---
 name: video-explainer
-description: Membuat video Cutout Motion Explainer 9:16 ("nahh gini") di src/explainer/ tanpa menyentuh engine sejarah. Menggabungkan cutout objek PNG realistis (Google Flow Bridge) + foto asli berbingkai hitam (Wikimedia Commons), diagram interaktif (potongan biaya & grid bata), subtitle 1-baris di bawah, serta sinkronisasi kata-per-kata (faster-whisper). Pakai skill ini setiap kali user minta video explainer baru ("kenapa...", "kok bisa...", hitungan biaya, fisika/teknik sehari-hari).
+description: Membuat video Cutout Motion Explainer 9:16 ("nahh gini") di src/explainer/ tanpa menyentuh engine sejarah. Memadukan penulisan narasi anti-slop copy (antislop-copywriting) dan bahasa tutur Indonesia alami mengalir (humanizer-indonesia), cutout objek PNG realistis (Google Flow Bridge) + foto asli berbingkai hitam (Wikimedia Commons), diagram interaktif (potongan biaya & grid bata), subtitle 1-baris di bawah, serta sinkronisasi kata-per-kata (faster-whisper). Pakai skill ini setiap kali user minta video explainer baru ("kenapa...", "kok bisa...", hitungan biaya, fisika/teknik sehari-hari).
 ---
 
 # Video Explainer — Tema `"nahh gini"` (`src/explainer/`)
@@ -38,6 +38,17 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
        - *"Beli token seratus ribu, kok masuknya cuma enam puluh satu?"* (10 kata)
        - *"Kenapa tukang bangunan gak pernah nyusun bata sejajar lurus?"* (9 kata)
        - *"Nyalain kipas pas gerah, kok badan malah makin lengket?"* (9 kata)
+4c. **Standar Narasi Wajib (Kolaborasi `antislop-copywriting` + `humanizer-indonesia`):**
+   - **Saringan Anti-Slop (antislop-copywriting):**
+     - **Haram Signposting AI:** Dilarang membuka dengan *"Mari kita bedah..."*, *"Tahukah kamu bahwa..."*, *"Yuk kita cari tahu..."*.
+     - **Haram Kosakata Hampa (Empty AI Vocabulary):** Buang kata klise AI seperti *"solusi mutakhir"*, *"merevolusi"*, *"game changer"*, *"menakjubkan"*, *"perjalanan epik"*.
+     - **Haram Struktur Tigaan Paksaan (Rule of Three Overuse):** Jangan memaksakan tiga butir ritmis jika faktanya hanya dua.
+     - **Haram Penyangkalan Klise:** Jangan pakai pola *"Ini bukan sekadar X, tapi Y"*.
+   - **Saringan Aliran Tutur Alami (humanizer-indonesia):**
+     - **Hapus Kalke / Pinjam Terjemah Asing:** Hindari terjemahan harfiah bahasa Inggris seperti *"di mana hal ini menghasilkan..."* (ganti jadi *"ujung-ujungnya..."* atau *"hasilnya..."*), *"bukan berarti bahwa..."*.
+     - **Register Lisan & Luwes:** Gunakan partikel tutur Indonesia yang pas (*nih, kok, lho, tuh, kan*), kalimat pendek-padat yang alami saat diucapkan oleh voiceover/TTS, dan hindari pasif korporat kaku.
+     - **Angka Wajib Huruf:** Tetap patuhi aturan Remotion TTS: semua nominal/angka wajib dieja huruf (*"seratus ribu"*, bukan `100.000`).
+     - **Jaga Kata Pemicu Visual:** Jangan menghapus frasa kata kunci yang menjadi jangkar properti `di` dan `sampai` pada panggung.
 3b. **Jeda Ritme `BeatScene` (`type: 'beat'`):**
    - Gunakan kalimat transisi **`teks: 'Oke, sini gue jelasin.'`** (bukan `"nah"`), ditemani karakter meme kucing berkacamata yang sedang menjelaskan (`props/meme-kucing-jelasin.png`) lengkap dengan aksi gerak:
      ```ts
@@ -97,11 +108,22 @@ Ikuti langkah 0–7 **berurutan**. Engine ini **100% terpisah** dari engine seja
 
 Engine `src/explainer/` mendukung **3 pilar komedi terintegrasi** di [`Stage.tsx`](../../../src/explainer/Stage.tsx), [`timing.ts`](../../../src/explainer/timing.ts), dan [`buat-sfx-explainer.mjs`](../../../scripts/buat-sfx-explainer.mjs). Setiap video baru wajib mengombinasikan ketiganya:
 
-### 1. Pilar Narasi (Analogi Receh & Celetukan Relatable)
-- Selipkan 2–3 kalimat celetukan sehari-hari yang dekat dengan penonton Indonesia (di Hook, Salah Kaprah, atau Penutup).
-- Hindari bahasa kaku seperti buku teks; gunakan perbandingan sehari-hari yang jenaka:
-  - *Contoh:* `"Bunyi tit-tit meteran pas tengah malem itu horornya ngalahin film setan."`
-  - *Contoh:* `"Bata disusun lurus itu kayak temen kelompok yang cuma numpang nama, diteken dikit langsung ambyar."`
+### 1. Pilar Narasi (Analogi Receh, Bebas Slop, & Bahasa Tutur Alami)
+Menggabungkan **antislop-copywriting** (filter pembersih AI) dan **humanizer-indonesia** (jiwa bahasa lisan):
+- **Filter Anti-Slop (antislop-copywriting):**
+  - Buang semua kata pembuka basi (*"Tahukah kamu bahwa..."*, *"Mari kita bahas..."*).
+  - Coret kosakata kosong AI (*"solusi mutakhir"*, *"merevolusi"*, *"game changer"*, *"menakjubkan"*).
+  - Hindari pola tigaan paksaan (*rule of three*) dan penyangkalan klise (*"bukan hanya... melainkan..."*).
+  - Hapus penutup chatbot (*"Semoga bermanfaat ya, tinggalkan komentar..."*).
+- **Sentuhan Humanizer Indonesia (humanizer-indonesia):**
+  - Bersihkan kalke/terjemahan harfiah bahasa Inggris (*"di mana hal ini..."* $\rightarrow$ *"ujung-ujungnya..."*).
+  - Hidupkan partikel tutur alami (*nih, kok, lho, tuh, kan*) dan kalimat pendek-padat yang enak diucapkan narator.
+  - Subjek-predikat aktif dan konkret (hindari pasif korporat kaku).
+- **Analogi Komedi & Celetukan Relatable:**
+  - Selipkan 2–3 kalimat celetukan sehari-hari yang dekat dengan penonton Indonesia (di Hook, Salah Kaprah, atau Penutup).
+  - Hindari bahasa kaku seperti buku teks; gunakan perbandingan sehari-hari yang jenaka:
+    - *Contoh:* `"Bunyi tit-tit meteran pas tengah malem itu horornya ngalahin film setan."`
+    - *Contoh:* `"Bata disusun lurus itu kayak temen kelompok yang cuma numpang nama, diteken dikit langsung ambyar."`
 
 ### 2. Pilar SFX Komedi (`public/sfx/*.wav` + properti `sfx` di `StageItem` / `StageAction`)
 Generator [`scripts/buat-sfx-explainer.mjs`](../../../scripts/buat-sfx-explainer.mjs) menyediakan 5 SFX komedi khusus selain SFX dasar (`pop`, `whoosh`, `tick`, `chime`, `sub`). Pasang lewat `sfx: '<nama>'` pada `StageItem` atau `StageAction` (atau `sfx: false` untuk membungkam):
@@ -256,10 +278,12 @@ Sebelum mulai render setiap video explainer berikutnya, pastikan semua poin di b
 - [ ] **Full Real Background Unik per Scene (Wajib):**
   - Setiap scene cerita & diagram (`hook`, `stage`, `diagram`) **wajib memiliki `latar: 'latar/<slug>-N.png'` yang unik** sesuai lokasi narasinya. Dilarang membiarkan background krem polos tanpa latar (kecuali scene `beat`), dan dilarang menduplikasi gambar latar yang sama di beberapa scene.
   - File latar sudah di-generate ke `public/latar/` via `node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh`.
-- [ ] **Pilar 1, Komedi di Narasi (Minimal 2-3 Celetukan Relatable di Scene 2/3/4):**
-  - Biarkan **Scene 1 (Hook)** fokus 1 kalimat *stop-scroll* (`8-14 kata`).
-  - Taruh 1 kalimat celetukan sehari-hari / hiperbola komedi di **Salah Kaprah (Scene 2)**.
+- [ ] **Pilar 1, Komedi di Narasi & Bebas Slop AI (antislop-copywriting + humanizer-indonesia):**
+  - Biarkan **Scene 1 (Hook)** fokus 1 kalimat *stop-scroll* (`8-14 kata`) tanpa basa-basi / signposting (*"Tahukah kamu..."*, *"Mari kita bahas..."*).
+  - Taruh 1 kalimat celetukan sehari-hari / hiperbola komedi di **Salah Kaprah (Scene 2)** yang relatable.
   - Taruh 1 kalimat punchline / sindiran ringan saat fakta utama atau hitungan terbongkar (**Scene 3/4**).
+  - Bersihkan kosakata hampa AI (*"solusi mutakhir"*, *"merevolusi"*, *"game changer"*) dan kalke asing (*"di mana hal ini..."*).
+  - Gunakan partikel tutur alami Indonesia (*nih, kok, lho, tuh, kan*) dan kalimat pendek-padat yang alami untuk TTS.
   - Semua angka tetap ditulis dalam huruf (`seratus ribu`, `tiga puluh persen`) tanpa digit.
 - [ ] **Pilar 2 — Komedi di SFX (`boing`, `boom`, `womp`, `slap`, `ding`):**
   - Minimal **3 SFX komedi** terpasang di sepanjang video lewat properti `sfx` pada `StageItem` atau `StageAction`:

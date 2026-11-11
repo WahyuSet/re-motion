@@ -1,0 +1,91 @@
+PANDUAN TTS: warren-buffett
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs warren-buffett <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±10.0 detik
+Bagaimana seseorang bisa menjadi salah satu manusia terkaya di dunia, namun tetap tinggal di rumah yang sama selama puluhan tahun? Inilah kisah Warren Buffett.
+
+[02] (photo) ±8.8 detik
+Di kota Omaha, Nebraska, Warren Buffett masih menempati rumah sederhana yang ia beli pada tahun seribu sembilan ratus lima puluh delapan.
+
+[03] (fact) ±8.8 detik
+Ia lahir pada tiga puluh Agustus seribu sembilan ratus tiga puluh, tepat ketika Amerika Serikat sedang dihantam krisis ekonomi Depresi Besar.
+
+[04] (photo) ±8.3 detik
+Sejak usia enam tahun, ia sudah mencari uang sendiri dengan menjual permen karet, botol minuman, hingga mengantar koran keliling kota.
+
+[05] (fact) ±9.2 detik
+Pada tahun seribu sembilan ratus empat puluh dua, di usia sebelas tahun, Buffett membeli tiga lembar saham pertamanya di perusahaan Cities Service.
+
+[06] (photo) ±8.8 detik
+Harga saham itu sempat anjlok sebelum naik tipis. Ia buru-buru menjualnya demi untung kecil, padahal setelah itu harganya melesat berkali-kali lipat.
+
+[07] (photo) ±9.2 detik
+Pengalaman masa kecil itu mengajarkan prinsip penting bahwa pasar modal memindahkan uang dari orang yang tidak sabar kepada orang yang memiliki kesabaran.
+
+[08] (photo) ±9.2 detik
+Saat remaja, ia mengumpulkan tabungan dari hasil mengantar koran dan menaruh mesin permainan di pangkas rambut, lalu membeli lahan pertanian di Nebraska.
+
+[09] (fact) ±9.2 detik
+Setelah ditolak Universitas Harvard, Buffett mendaftar ke Universitas Columbia pada tahun seribu sembilan ratus lima puluh untuk belajar langsung dari Benjamin Graham.
+
+[10] (photo) ±8.8 detik
+Graham adalah bapak investasi nilai. Ia mengajarkan cara mencari perusahaan bagus yang harga sahamnya sedang dijual jauh di bawah nilai aslinya.
+
+[11] (kutipan) ±10.0 detik
+Dalam surat tahunannya pada dua ribu delapan, Buffett merangkum pelajaran gurunya: harga adalah apa yang Anda bayar, sedangkan nilai adalah apa yang Anda dapatkan.
+
+[12] (photo) ±9.6 detik
+Tahun seribu sembilan ratus lima puluh satu, ia naik kereta di akhir pekan demi mengetuk pintu kantor asuransi GEICO dan mempelajari cara kerjanya.
+
+[13] (photo) ±9.2 detik
+Dari sana ia memahami bahwa perusahaan asuransi menerima uang premi di muka sebelum klaim dibayar, sehingga dana itu bisa diputarkan untuk berinvestasi.
+
+[14] (fact) ±8.3 detik
+Pada tahun seribu sembilan ratus lima puluh enam, Buffett kembali ke Omaha dan mendirikan kemitraan investasi dari kamar tidur rumahnya.
+
+[15] (fact) ±9.2 detik
+Lalu pada tahun seribu sembilan ratus enam puluh lima, ia mengambil alih kendali perusahaan tekstil tua yang sedang merugi bernama Berkshire Hathaway.
+
+[16] (photo) ±9.6 detik
+Bisnis tekstilnya terus tertekan impor murah. Buffett pun mengalihkan arus kasnya untuk membeli perusahaan asuransi, perbankan, dan ritel di bawah satu perusahaan induk.
+
+[17] (photo) ±9.2 detik
+Bersama sahabat dan mitra bisnisnya, Charlie Munger, ia mengubah strategi menjadi membeli perusahaan hebat dengan harga wajar dan memegangnya dalam jangka panjang.
+
+[18] (timeline) ±13.8 detik
+Berkshire membeli asuransi National Indemnity tahun seribu sembilan ratus enam puluh tujuh, toko cokelat tahun tujuh puluh dua, saham minuman bersoda tahun delapan puluh delapan, hingga raksasa teknologi tahun dua ribu enam belas.
+
+[19] (photo) ±9.2 detik
+Prinsip pertamanya terkenal tegas: aturan nomor satu adalah jangan pernah kehilangan uang, dan aturan nomor dua adalah jangan lupakan aturan nomor satu.
+
+[20] (photo) ±8.8 detik
+Kekayaannya tumbuh berkat efek bunga berbunga. Ia mengibaratkannya seperti menggelindingkan bola salju kecil dari puncak bukit panjang yang basah dan bersalju.
+
+[21] (fact) ±9.2 detik
+Buktinya, sebagian besar kekayaan bersih Warren Buffett baru terbentuk setelah ia melewati usia lima puluh tahun, hasil dari investasi yang tidak terputus.
+
+[22] (photo) ±8.8 detik
+Ia juga menolak membeli bisnis yang tidak ia pahami. Dalam keseharian, ia menghindari utang konsumtif dan tetap sarapan sederhana setiap pagi.
+
+[23] (fact) ±8.8 detik
+Sejak tahun dua ribu enam, Buffett berjanji menyumbangkan lebih dari sembilan puluh sembilan persen kekayaannya untuk kegiatan amal dan kesehatan dunia.
+
+[24] (photo) ±9.2 detik
+Bersama Bill dan Melinda Gates pada tahun dua ribu sepuluh, ia menggagas gerakan untuk mengajak para miliarder dunia menyumbangkan mayoritas harta mereka.
+
+[25] (photo) ±8.3 detik
+Setiap tahun, puluhan ribu orang datang ke Omaha untuk mendengarkan wejangan keuangannya tentang kesabaran, disiplin, dan ketenangan menghadapi gejolak pasar.
+
+[26] (outro) ±9.2 detik
+Kisah Warren Buffett membuktikan bahwa kekayaan sejati dibangun dari disiplin, kesabaran, dan waktu. Ikuti channel ini untuk kisah tokoh dan sejarah lainnya.
+
+Perkiraan total narasi: ±240 detik (belum termasuk jeda)

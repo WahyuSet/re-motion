@@ -208,6 +208,7 @@ const main = async () => {
       crf,
       outputLocation: rawMp4,
       overwrite: true,
+      timeoutInMilliseconds: 120000,
       onProgress,
     });
 

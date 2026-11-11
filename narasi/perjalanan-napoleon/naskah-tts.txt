@@ -1,0 +1,34 @@
+PANDUAN TTS: perjalanan-napoleon
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs perjalanan-napoleon <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (title) ±5.8 detik
+Dari pulau kecil di Mediterania, ia menaklukkan hampir seluruh Eropa. Inilah Perjalanan Napoleon Bonaparte.
+
+[02] (photo) ±6.3 detik
+Lahir di Pulau Korsika, perwira artileri muda ini melejit menjadi pemimpin tertinggi setelah Revolusi Prancis.
+
+[03] (fact) ±6.7 detik
+Tahun seribu delapan ratus empat, ia menobatkan dirinya sebagai Kaisar Prancis dan menyusun kitab hukum sipil.
+
+[04] (photo) ±6.3 detik
+Setelah berjaya di Austerlitz, kekuatannya hancur saat menyerbu Rusia di tengah musim dingin yang membekukan.
+
+[05] (timeline) ±7.1 detik
+Mundur dari Rusia tahun seribu delapan ratus dua belas, ia dibuang ke Elba, lalu kalah di Waterloo.
+
+[06] (photo) ±6.3 detik
+Napoleon akhirnya diasingkan ke Pulau Saint Helena hingga wafat, sebelum jenazahnya dipulangkan ke Kota Paris.
+
+[07] (outro) ±6.3 detik
+Jejak hukum dan militernya mengubah Eropa selamanya. Ikuti channel ini untuk kisah sejarah dunia lainnya.
+
+Perkiraan total narasi: ±45 detik (belum termasuk jeda)

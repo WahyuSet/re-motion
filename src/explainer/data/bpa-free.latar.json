@@ -1,0 +1,22 @@
+[
+  {
+    "name": "bpa-supermarket",
+    "prompt": "wide cinematic photography of modern supermarket beverage shelves stocked with clean mineral water bottles, neon cool lighting, highly detailed",
+    "utuh": true
+  },
+  {
+    "name": "bpa-pabrik",
+    "prompt": "wide modern clean pharmaceutical or food laboratory interior with stainless steel and clean glass, bright ambient lighting, high resolution",
+    "utuh": true
+  },
+  {
+    "name": "bpa-mobil-panas",
+    "prompt": "wide bright photography looking inside hot car dashboard interior under scorching bright sunny day summer heat glare, intense light",
+    "utuh": true
+  },
+  {
+    "name": "bpa-dapur-sehat",
+    "prompt": "wide contemporary bright aesthetic kitchen counter with clean water carafe and glass, soft natural sunlight, Scandinavian minimalist interior",
+    "utuh": true
+  }
+]

@@ -1,0 +1,31 @@
+PANDUAN TTS: kamar-panas
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs kamar-panas <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±10.8 detik
+Pernah gak sih di luar udah malam dan adem, tapi pas masuk kamar tidur rasanya malah pengap kayak kukusan bolu? Padahal kipas angin udah muter kenceng!
+
+[02] (stage) ±10.8 detik
+Banyak yang mengira cukup buka satu jendela dan nyalain kipas, kamar langsung sejuk. Padahal tanpa jalur keluar, kipas cuma muterin udara panas dan uap keringatmu sendiri.
+
+[03] (beat) ±2.5 detik
+Nah, ini dua biang kerok fisikanya.
+
+[04] (stage) ±10.0 detik
+Pertama, tembok bata itu kayak temen yang suka nyimpen dendam. Seharian dipanggang matahari, panasnya merambat pelan dan baru dilepas ke kamar pas malam hari.
+
+[05] (stage) ±11.7 detik
+Kedua, udara panas dan uap napas kita itu sifatnya naik ke plafon. Kalau kamar cuma punya satu celah tanpa ventilasi silang, hawa pengapnya terkunci rapat di atas kepalamu.
+
+[06] (stage) ±12.5 detik
+Solusinya, buka dua jalur udara seperti jendela dan sedikit celah pintu. Atau hadapkan kipas ke arah luar jendela sebentar untuk membuang hawa panas, biar udara malam yang sejuk tersedot masuk.
+
+Perkiraan total narasi: ±58 detik (belum termasuk jeda)

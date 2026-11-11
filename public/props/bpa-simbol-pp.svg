@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
+  <defs>
+    <radialGradient id="badge-bg-pp" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#039be5" />
+      <stop offset="50%" stop-color="#0288d1" />
+      <stop offset="100%" stop-color="#01579b" />
+    </radialGradient>
+    <linearGradient id="rim-pp" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#b3e5fc" />
+      <stop offset="50%" stop-color="#0288d1" />
+      <stop offset="100%" stop-color="#012d52" />
+    </linearGradient>
+    <linearGradient id="gloss-pp" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.65)" />
+      <stop offset="45%" stop-color="rgba(255,255,255,0.08)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+    </linearGradient>
+    <filter id="badge-shadow-pp" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="12" flood-color="rgba(1,87,155,0.45)" />
+    </filter>
+  </defs>
+
+  <g filter="url(#badge-shadow-pp)">
+    <!-- 3D Base Outer Circle -->
+    <circle cx="170" cy="170" r="145" fill="url(#rim-pp)" />
+    <circle cx="170" cy="170" r="136" fill="url(#badge-bg-pp)" stroke="#01579b" stroke-width="4"/>
+    
+    <!-- Top Glass Highlight -->
+    <ellipse cx="170" cy="98" rx="108" ry="58" fill="url(#gloss-pp)" />
+
+    <!-- Triangle Chasing Arrows (White 3D Embossed) -->
+    <g transform="translate(170, 155) scale(1.15)">
+      <path d="M 0 -72 L 38 -5 L 18 -5 L 0 -36 L -26 12 L -42 2 Z" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))"/>
+      <polygon points="32,-25 58,-4 30,16" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))"/>
+
+      <path d="M 52 18 L 14 74 L 3 56 L 28 18 L -30 18 L -30 0 Z" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))"/>
+      <polygon points="3,82 12,48 -18,66" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))"/>
+
+      <path d="M -52 18 L -14 74 L -3 56 L -28 18 L 30 18 L 30 0 Z" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))"/>
+      <polygon points="-3,82 -12,48 18,66" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))"/>
+
+      <!-- Center Number 5 -->
+      <text x="0" y="24" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="64" fill="#ffffff" text-anchor="middle" dominant-baseline="central" filter="drop-shadow(0 4px 8px rgba(0,0,0,0.35))">5</text>
+    </g>
+
+    <!-- Bottom Pill Tag: "PP (FOOD GRADE)" -->
+    <rect x="55" y="248" width="230" height="48" rx="24" fill="#ffffff" filter="drop-shadow(0 6px 10px rgba(0,0,0,0.25))"/>
+    <text x="170" y="278" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="#01579b" text-anchor="middle" letter-spacing="1">PP (FOOD GRADE)</text>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+Pernah gak sih beli token listrik seratus ribu rupiah, tapi pas diketik ke meteran angkanya malah cuma enam puluh satu koma tiga? Bahkan beda kota, hasilnya ikut beda!
+
+Banyak yang mengira beli seratus ribu itu harusnya dapat angka seratus utuh. Padahal token prabayar itu bukan isi saldo uang, melainkan konversi ke daya kilowatt jam.
+
+Nah, begini rincian hitungannya.
+
+Dari modal seratus ribu, pertama dipotong biaya admin loket dua ribu lima ratus rupiah. Lalu dipotong pajak penerangan jalan untuk pemerintah daerah sekitar delapan ribu delapan ratus rupiah. Sisa bersihnya baru dibagi tarif dasar listrik seribu empat ratus empat puluh empat rupiah, hingga keluar angka enam puluh satu koma tiga kilowatt jam.
+
+Terus kenapa tiap daerah hasilnya beda? Karena persentase pajak jalan ditentukan masing-masing pemerintah daerah, mulai tiga persen sampai sepuluh persen. Makanya makin kecil pajaknya, makin banyak listrik yang masuk ke rumahmu.

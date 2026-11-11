@@ -46,9 +46,24 @@ export const tutup = async () => {
 export const bukaKomposisi = async (slugAtauId, inputProps = {}) => {
   const id = /[A-Z]/.test(slugAtauId[0]) ? slugAtauId : idDari(slugAtauId);
   const {serveUrl, browser} = await bukaProyek();
-  const composition = await selectComposition({serveUrl, id, inputProps, puppeteerInstance: browser});
+  const composition = await selectComposition({
+    serveUrl,
+    id,
+    inputProps,
+    puppeteerInstance: browser,
+    timeoutInMilliseconds: 120000,
+  });
   const renderFrame = (frame, output, opsi = {}) =>
-    renderStill({composition, serveUrl, output, frame, inputProps, puppeteerInstance: browser, ...opsi});
+    renderStill({
+      composition,
+      serveUrl,
+      output,
+      frame,
+      inputProps,
+      puppeteerInstance: browser,
+      timeoutInMilliseconds: 60000,
+      ...opsi,
+    });
   return {composition, serveUrl, browser, renderFrame};
 };
 
