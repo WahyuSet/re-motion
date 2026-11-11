@@ -22,5 +22,9 @@
   {
     "name": "cas-baterai-alkaline",
     "prompt": "clean realistic studio product photography cutout of a classic AA alkaline cylinder battery, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "cas-multimeter-volt",
+    "prompt": "clean realistic studio product photography cutout of a compact digital multimeter voltmeter device with bright glowing LCD display showing 4.35V high voltage reading with test probes, crisp edges, natural colors, soft studio lighting, high detail"
   }
 ]

@@ -291,19 +291,30 @@ export const cas80: ExplainerScript = {
           di: 'litium ion',
           sampai: 'penuh',
         },
-        // Tegangan tinggi saat mendekati 100%
+        // Tegangan tinggi saat mendekati 100% (multimeter 4.35V)
+        {
+          kind: 'prop',
+          src: 'props/cas-multimeter-volt.png',
+          x: 72,
+          y: 44,
+          width: 210,
+          masuk: 'drop',
+          di: 'penuh',
+          sampai: 'tertekan',
+          sfx: 'ding',
+          aksi: [{type: 'pulse', di: 'tinggi', durasi: 14}],
+        },
         {
           kind: 'teks',
           teks: 'TEGANGAN NAIK ↑',
           x: 72,
-          y: 38,
-          ukuran: 28,
+          y: 63,
+          ukuran: 26,
           warna: '#ffffff',
           kotak: '#e65100',
           masuk: 'pop',
           di: 'penuh',
           sampai: 'tertekan',
-          sfx: 'ding',
         },
         // Sel tertekan (baterai gembung / stress)
         {
