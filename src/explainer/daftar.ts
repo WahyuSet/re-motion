@@ -8,6 +8,7 @@ import {bpaFree} from './data/bpa-free';
 import {bataZigzag} from './data/bata-zigzag';
 import {kamarPanas} from './data/kamar-panas';
 import {tokenListrik} from './data/token-listrik';
+import {refleksKucing} from './data/refleks-kucing';
 import type {ExplainerScript} from './types';
 
 export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
@@ -21,4 +22,5 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'EfekRumahKaca', script: efekRumahKaca},
   {id: 'BlackBox', script: blackBox},
   {id: 'Cas80', script: cas80},
+  {id: 'RefleksKucing', script: refleksKucing},
 ];

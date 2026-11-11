@@ -182,7 +182,7 @@ export const cas80: ExplainerScript = {
           width: 140,
           masuk: 'pop',
           di: 'Keduanya',
-          sampai: 'pengaman',
+          sampai: 'HP',
           sfx: 'slap',
         },
         {
@@ -195,7 +195,7 @@ export const cas80: ExplainerScript = {
           kotak: '#d93829',
           masuk: 'drop',
           di: 'Keduanya',
-          sampai: 'pengaman',
+          sampai: 'HP',
         },
         // Fakta: HP punya chip pengaman otomatis
         {
@@ -437,6 +437,7 @@ export const cas80: ExplainerScript = {
           width: 130,
           masuk: 'pop',
           di: 'awet',
+          sampai: 'gampang',
           sfx: 'ding',
         },
         {
@@ -449,6 +450,7 @@ export const cas80: ExplainerScript = {
           kotak: '#2e7d32',
           masuk: 'drop',
           di: 'awet',
+          sampai: 'gampang',
         },
         // Kucing jempol penutup
         {
@@ -461,6 +463,18 @@ export const cas80: ExplainerScript = {
           di: 'gampang',
           sfx: 'ding',
           zIndex: 10,
+        },
+        {
+          kind: 'teks',
+          teks: 'PALING GAMPANG',
+          x: 72,
+          y: 34,
+          ukuran: 28,
+          warna: '#ffffff',
+          kotak: '#2e7d32',
+          masuk: 'drop',
+          di: 'gampang',
+          sfx: 'ding',
         },
       ],
     },

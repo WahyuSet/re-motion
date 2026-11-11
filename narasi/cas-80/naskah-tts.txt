@@ -1,0 +1,28 @@
+PANDUAN TTS: cas-80
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs cas-80 <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±5.0 detik
+HP dicas sampai seratus persen, kok malah disuruh berhenti di delapan puluh?
+
+[02] (stage) ±9.2 detik
+Banyak yang ngira cas penuh bikin baterai meledak, atau harus dihabisin sampai nol dulu. Keduanya salah, HP sekarang udah punya pengaman otomatis.
+
+[03] (beat) ±3.3 detik
+Oke, sini gue jelasin kenapa harus delapan puluh.
+
+[04] (stage) ±9.2 detik
+Baterai HP itu litium ion. Makin mendekati penuh, tegangannya makin tinggi dan selnya makin tertekan. Apalagi kalau sambil panas, kapasitasnya pelan-pelan menyusut.
+
+[05] (stage) ±9.6 detik
+Makanya iPhone dan Samsung keluaran baru punya fitur batas pengisian. Gak wajib sih, tapi kalau mau HP awet bertahun-tahun, ini cara paling gampang.
+
+Perkiraan total narasi: ±36 detik (belum termasuk jeda)
