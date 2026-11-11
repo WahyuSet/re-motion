@@ -229,7 +229,7 @@ export const cas80: ExplainerScript = {
       type: 'beat',
       duration: 80,
       teks: 'Oke, sini gue jelasin.',
-      narasi: 'Oke, *sini gue jelasin* kenapa harus delapan puluh.',
+      narasi: 'Oke, *sini gue jelasin* kenapa harus di delapan puluh.',
       items: [
         {
           kind: 'prop',
@@ -389,7 +389,7 @@ export const cas80: ExplainerScript = {
       judul: 'FITUR BAWAAN',
       judulDi: 'batas pengisian',
       narasi:
-        'Makanya iPhone dan Samsung keluaran baru punya fitur *batas pengisian*. Gak wajib sih, tapi kalau mau HP awet bertahun-tahun, ini cara paling gampang.',
+        'Makanya iPhone dan Samsung keluaran baru punya fitur *batas pengisian*. Nggak wajib sih, tapi kalau mau HP awet bertahun-tahun, ini cara paling gampang.',
       items: [
         // HP dicas di kiri
         {
