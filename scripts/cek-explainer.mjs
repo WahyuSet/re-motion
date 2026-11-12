@@ -5,7 +5,7 @@
 // - koordinat x/y objek di dalam area aman YouTube Shorts (x: 8..92%, y: 12..76%)
 // - keberadaan file prop di public/
 //
-// Pakai: node scripts/cek-explainer.mjs token-listrik
+// Pakai: node scripts/cek-explainer.mjs token-listrik [--peta]
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -15,6 +15,7 @@ import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
 import {cekHook, cekRencana} from './lib/explainer-cek/hook.mjs';
+import {formatPeta} from './lib/explainer-cek/peta.mjs';
 
 // Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
 export const LEGACY = new Set([
@@ -297,12 +298,15 @@ const isMain =
 if (isMain) {
   const slug = process.argv[2];
   if (!slug) {
-    console.error('Pakai: node scripts/cek-explainer.mjs <slug>');
+    console.error('Pakai: node scripts/cek-explainer.mjs <slug> [--peta]');
     process.exit(1);
   }
 
   try {
     const script = await loadScript(slug);
+    if (process.argv.includes('--peta')) {
+      console.log(formatPeta(script, await importTs('src/lib/kata.ts')));
+    }
     const {errors, warnings} = await validasiExplainer(script, slug);
 
     try {
