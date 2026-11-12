@@ -14,6 +14,11 @@ Cetakan video patokan: **hitungan potongan uang** (scene `diagram` mode `potonga
 
 Terpilih: #1
 
+## Thumbnail
+Subjek lengkap: gaji 5 juta
+Gambar: props/potongan-gaji-uang.png
+Uji 1 detik: orang yang cuma lihat gambarnya tahu ini soal uang gaji yang berkurang
+
 ## Narasi
 ### Scene 1 (hook)
 Gaji lima juta, kok yang masuk rekening cuma *empat juta delapan ratus*?

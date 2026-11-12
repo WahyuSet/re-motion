@@ -34,7 +34,7 @@ Membuat `.ts`, `.rencana.md`, `.props.json`, `.latar.json`, `.sumber.md`, dan me
 Tulis setiap fakta dan angka di `<slug>.sumber.md`, minimal 2 URL sumber. Fakta yang tidak ada sumbernya jangan masuk narasi. `sumber.md` itu **catatan**, boleh bergaya laporan; **jangan salin kalimatnya ke narasi**. Narasi ditulis ulang seperti orang bercerita (lihat `referensi/narasi.md`).
 
 ### Langkah 2: Hook & judul (di `.rencana.md`, bagian `## Hook`)
-Baca `referensi/hook-judul.md`. Tulis 5 kandidat, 1 per rumus, beri skor 5 kriteria (0-2), isi `Total`, lalu tulis `Terpilih: #N` untuk Total tertinggi (minimal 7). (dicek validator: R1, R2, H1-H4)
+Baca `referensi/hook-judul.md`. Tulis 5 kandidat, 1 per rumus, beri skor 5 kriteria (0-2), isi `Total`, lalu tulis `Terpilih: #N` untuk Total tertinggi (minimal 7). Lalu isi bagian `## Thumbnail`: **Subjek lengkap** (benda + tempatnya), **Gambar** (prop yang menampilkan subjek lengkap, bukan potongannya), dan **Uji 1 detik**. Judul wajib memuat semua kata penting subjek, jadi bisa dipahami tanpa video. (dicek validator: R1-R3, H1-H5, T1)
 
 ### Langkah 3: Narasi (di `.rencana.md`, bagian `## Narasi`)
 Baca `referensi/narasi.md`. Tulis narasi per scene (5-7 scene: hook → stage salah kaprah → beat → stage/diagram fakta → stage penutup). Lalu jalankan checklist "uji baca keras" di `referensi/narasi.md`. **Jangan pakai skill `humanizer-indonesia`**: skill itu dikalibrasi untuk tulisan akademik dan justru membuat naskah lisan kaku. (dicek validator: N1-N5)

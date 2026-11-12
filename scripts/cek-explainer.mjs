@@ -16,7 +16,7 @@ import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visua
 import {cekNominal} from './lib/explainer-cek/diagram.mjs';
 import {cekNarasiScene, cekNarasiVideo} from './lib/explainer-cek/narasi.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
-import {cekHook, cekRencana} from './lib/explainer-cek/hook.mjs';
+import {cekHook, cekRencana, cekThumbnail} from './lib/explainer-cek/hook.mjs';
 import {formatPeta} from './lib/explainer-cek/peta.mjs';
 import {cekBeat, cekZona} from './lib/explainer-cek/layout.mjs';
 
@@ -82,9 +82,11 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     err('thumbnail', `File latar public/${script.thumbnail.latar} tidak ditemukan.`);
   }
   cekHook(script, kata, lapor, {legacy});
-  if (!legacy) cekRencana(await muatRencana(slug, opts), lapor);
+  const rencana = legacy ? null : await muatRencana(slug, opts);
+  if (!legacy) cekRencana(rencana, lapor);
 
   const props = legacy ? [] : await muatProps(slug, opts, lapor);
+  if (!legacy) cekThumbnail(script, rencana, props, lapor);
 
   const seenLatar = new Map();
 

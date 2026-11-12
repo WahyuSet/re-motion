@@ -43,6 +43,26 @@ Diturunkan dari hook terpilih; dipakai di `thumbnail` dan scene `hook`.
 - `baris2` diakhiri `?`, atau memuat angka, atau kata kontras.
 - Digit **boleh** di judul (tidak dibaca TTS).
 
+### Judul harus berdiri sendiri (dicek validator: H5)
+
+**Uji orang asing:** kalau cuma membaca judulnya, tanpa gambar dan tanpa video, orang tahu ini soal **benda apa, di mana**? Kalau jawabannya "pintu apa?", "air yang mana?", judulnya belum lengkap.
+
+1. Tulis dulu **Subjek lengkap** di bagian `## Thumbnail` rencana: benda + tempat/konteksnya ("rak telur di pintu kulkas", "kabel listrik depan rumah", "gaji 5 juta").
+2. Semua kata penting subjek itu wajib ada di `baris1`/`baris2`.
+3. Kalau kepanjangan, buang **kata pengisi** dulu (ADA, YANG, ITU, INI, SEMUA), jangan buang kata konteks.
+
+| Lemah | Kenapa | Lengkap |
+|---|---|---|
+| `ADA RAK TELUR DI PINTU` | pintu apa? "ADA" cuma pengisi | `RAK TELUR DI PINTU KULKAS` |
+| `TELUR CEPAT BUSUK` | di mana? kenapa? | `TELUR DI PINTU KULKAS` / `KOK CEPAT BUSUK?` |
+
+### Gambar thumbnail (dicek validator: T1)
+
+- Gambar (`thumbnail.src`) menampilkan **subjek lengkap dengan tempatnya**: kulkas terbuka dengan rak pintu berisi telur, **bukan** telur saja.
+- **Uji 1 detik:** orang yang cuma melihat gambarnya (judulnya ditutup) tahu ini soal apa.
+- Harus prop dari `props.json` video ini, bukan meme. Kalau belum ada prop yang menampilkan subjek lengkap, generate prop khusus thumbnail.
+- Tulis file-nya di `Gambar:` pada bagian `## Thumbnail` rencana, lalu samakan dengan `thumbnail.src`.
+
 | Bagus | Lemah | Kenapa |
 |---|---|---|
 | `AIR JUTAAN TAHUN` / `DI BOTOL CUMA 2 TAHUN?` | `AIR PUTIH GAK BASI` / `KOK ADA KADALUWARSA?` | yang bagus punya kontras angka |
@@ -62,5 +82,10 @@ Diturunkan dari hook terpilih; dipakai di `thumbnail` dan scene `hook`.
 | 5 | kok-kenapa | ... |
 
 Terpilih: #1
+
+## Thumbnail
+Subjek lengkap: air botol kemasan
+Gambar: props/air-botol-expired.png
+Uji 1 detik: orang yang cuma lihat gambarnya tahu ini soal tanggal kadaluwarsa di botol air
 ```
-Kolom pertama harus angka, kolom terakhir harus angka (validator membacanya).
+Kolom pertama harus angka, kolom terakhir harus angka (validator membacanya). Bagian `## Thumbnail` wajib ada (validator R3).

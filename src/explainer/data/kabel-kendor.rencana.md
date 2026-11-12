@@ -14,6 +14,11 @@ Cetakan video patokan: **fisika/teknik di jalan, perbandingan dua keadaan** (sia
 
 Terpilih: #4 (seri dengan #5; dipilih #4 karena rumus taruhan belum dicontohkan di video patokan lain)
 
+## Thumbnail
+Subjek lengkap: kabel depan rumah
+Gambar: props/kabel-kendor-tiang-kendor.png
+Uji 1 detik: orang yang cuma lihat gambarnya tahu ini soal kabel listrik melengkung di antara tiang
+
 ## Narasi
 ### Scene 1 (hook)
 Kabel listrik di depan rumahmu ternyata *memanjang* tiap siang.

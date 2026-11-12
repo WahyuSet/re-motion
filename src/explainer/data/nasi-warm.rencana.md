@@ -13,6 +13,11 @@ Isi berurutan: Hook -> Narasi -> Peta Visual. Panduan: .claude/skills/video-expl
 
 Terpilih: #1
 
+## Thumbnail
+Subjek lengkap: nasi di-warm
+Gambar: props/nasi-warm-rice-cooker-kuning.png
+Uji 1 detik: orang yang cuma lihat gambarnya tahu ini soal nasi menguning di rice cooker
+
 ## Narasi
 ### Scene 1 (hook)
 Nasinya cuma dihangatkan dua belas jam, kok warnanya kayak *roti bakar*?

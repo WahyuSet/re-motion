@@ -6,7 +6,7 @@ import {bacaTabelHook, cekRencana} from '../../scripts/lib/explainer-cek/hook.mj
 test('templateRencana memuat 5 baris kandidat hook dan heading wajib', () => {
   const teks = templateRencana('Air Kadaluwarsa');
   assert.ok(teks.startsWith('# Rencana: Air Kadaluwarsa'), teks.slice(0, 40));
-  for (const h of ['## Hook', '## Narasi', '## Peta Visual', 'Terpilih: #TODO']) {
+  for (const h of ['## Hook', '## Thumbnail', '## Narasi', '## Peta Visual', 'Terpilih: #TODO']) {
     assert.ok(teks.includes(h), `tidak ada ${h}`);
   }
   assert.equal(bacaTabelHook(teks).length, 5);

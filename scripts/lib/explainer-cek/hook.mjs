@@ -100,3 +100,58 @@ export const cekRencana = (teks, lapor) => {
     lapor.warn(where, `R2 kandidat terpilih #${no} skornya ${kandidat.total} (minimal ${MIN_SKOR}).`, 'Perbaiki hook sampai skor >= 7 atau pilih kandidat lain.');
   }
 };
+
+// Bagian "## Thumbnail" di rencana: subjek lengkap judul dan gambar thumbnail yang dipilih sengaja.
+const KATA_PENGISI = new Set(['di', 'ke', 'dari', 'yang', 'ada', 'itu', 'ini', 'dan', 'atau', 'buat', 'untuk', 'si', 'para', 'sang', 'kok', 'nya']);
+const normal = (w) => w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+
+export const bacaThumbnail = (teks) => {
+  const isi = teks.replace(/\r\n?/g, '\n');
+  const m = isi.match(/^## Thumbnail[^\n]*\n([\s\S]*?)(?=^## |(?![\s\S]))/m);
+  if (!m) return null;
+  const ambil = (label) => m[1].match(new RegExp(`^${label}:\s*(.+)$`, 'mi'))?.[1].trim() ?? '';
+  return {subjek: ambil('Subjek lengkap'), gambar: ambil('Gambar'), uji: ambil('Uji 1 detik')};
+};
+
+export const cekThumbnail = (script, teksRencana, props, lapor) => {
+  if (teksRencana === null || teksRencana === undefined) return; // sudah dilaporkan R1
+  const thumb = bacaThumbnail(teksRencana);
+  if (!thumb || !thumb.subjek || /TODO/.test(thumb.subjek)) {
+    lapor.warn(
+      'rencana.md',
+      'R3 bagian "## Thumbnail" (Subjek lengkap, Gambar, Uji 1 detik) belum diisi.',
+      'Tulis subjek judul selengkapnya (benda + tempat), contoh "rak telur di pintu kulkas", lalu file gambar thumbnail.',
+    );
+    return;
+  }
+
+  // H5: setiap kata penting subjek muncul di judul thumbnail dan judul hook.
+  const kataSubjek = thumb.subjek.split(/\s+/).map(normal).filter((w) => w && !KATA_PENGISI.has(w));
+  const judul = [['thumbnail', script?.thumbnail], ...(script?.scenes ?? []).map((s, i) => [`scene ${i + 1} (hook)`, s.type === 'hook' ? s : null])];
+  for (const [where, obj] of judul) {
+    if (!obj) continue;
+    const kataJudul = new Set(`${obj.baris1 ?? ''} ${obj.baris2 ?? ''}`.split(/\s+/).map(normal));
+    const hilang = kataSubjek.filter((w) => !kataJudul.has(w));
+    if (hilang.length) {
+      lapor.warn(
+        where,
+        `H5 judul belum memuat "${hilang.join('", "')}" dari subjek "${thumb.subjek}".`,
+        'Judul harus bisa dipahami tanpa video. Kalau kepanjangan, buang kata pengisi (ADA, YANG, ITU), jangan buang kata konteks.',
+      );
+    }
+  }
+
+  // T1: gambar thumbnail dipilih sengaja dan berupa prop yang digenerate untuk video ini.
+  const src = script?.thumbnail?.src;
+  if (src !== thumb.gambar) {
+    lapor.warn('thumbnail', `T1 thumbnail.src "${src}" berbeda dengan Gambar di rencana "${thumb.gambar}".`, 'Samakan, dan pastikan gambar itu menampilkan subjek lengkap judul.');
+  }
+  const daftar = new Set((props ?? []).map((p) => `props/${p?.name}.png`));
+  if (thumb.gambar && !daftar.has(thumb.gambar)) {
+    lapor.warn(
+      'thumbnail',
+      `T1 Gambar thumbnail "${thumb.gambar}" bukan prop di props.json.`,
+      'Generate prop khusus yang menampilkan subjek lengkap (benda + tempatnya), jangan pakai meme atau potongan benda.',
+    );
+  }
+};
