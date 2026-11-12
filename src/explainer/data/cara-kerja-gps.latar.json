@@ -1,17 +1,18 @@
 [
   {
     "name": "cara-kerja-gps-1",
-    "prompt": "wide realistic modern photography of Cara Kerja Gps scene 1 location, natural colors, full-bleed camera frame no border, clean composition",
-    "utuh": true
+    "prompt": "first-person view of a lush tropical pine forest hiking trail in Indonesia during daylight, tall green trees, dappled sunlight on dirt path, clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no text"
   },
   {
     "name": "cara-kerja-gps-2",
-    "prompt": "wide realistic modern indoor or outdoor photography of Cara Kerja Gps scene 2 location, natural daylight, full-bleed camera frame no border, high detail",
-    "utuh": true
+    "prompt": "modern urban street corner in Jakarta during daytime with cafes, asphalt road, and a cellular telecom tower in the distance under blue sky, clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no text"
   },
   {
     "name": "cara-kerja-gps-4",
-    "prompt": "wide realistic modern photography of Cara Kerja Gps conclusion scene location, soft natural lighting, full-bleed camera frame no border",
-    "utuh": true
+    "prompt": "deep space view looking down at Earth curved horizon glowing blue atmosphere at night with city lights and dark starry cosmos above, clean realistic modern space photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no text"
+  },
+  {
+    "name": "cara-kerja-gps-5",
+    "prompt": "aerial daytime view above a modern Indonesian city intersection with roads, green parks, and rooftops seen from high vantage point, clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no text"
   }
 ]

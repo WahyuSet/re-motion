@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "name": "gps-hp-peta",
+    "prompt": "clean realistic studio product photography cutout of a modern touchscreen mobile phone standing upright showing a digital navigation road map with blue marker dot on screen, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "gps-antena-pancar",
+    "prompt": "clean realistic studio product photography cutout of a smartphone with a comical oversized walkie-talkie radio dish antenna mounted on top emitting red concentric signal rings, no text, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "gps-satelit",
+    "prompt": "clean realistic studio product photography cutout of a modern navigation satellite with metallic gold foil body and two unfolded blue solar panel wings, no text, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "gps-jam-atom",
+    "prompt": "clean realistic studio product photography cutout of a high-tech precision atomic clock module with glowing cyan digital pulse ring and brass vacuum chamber cylinders, no text, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "gps-bumi-orbit",
+    "prompt": "clean realistic studio product photography cutout of a 3D Earth globe surrounded by three glowing golden orbital rings with tiny miniature satellites around it, no text, crisp edges, natural colors, soft even lighting, high detail"
+  },
+  {
+    "name": "gps-trilaterasi",
+    "prompt": "clean realistic studio product photography cutout of a 3D diorama showing four small satellites above projecting four intersecting translucent glowing rings meeting at a single red map pin on a miniature city block below, no text, crisp edges, natural colors, soft even lighting, high detail"
+  }
+]
