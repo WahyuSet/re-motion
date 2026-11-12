@@ -14,6 +14,7 @@ import {importTs, loadScript} from './lib/load-script.mjs';
 import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 import {cekNominal} from './lib/explainer-cek/diagram.mjs';
+import {cekNarasiScene, cekNarasiVideo} from './lib/explainer-cek/narasi.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
 import {cekHook, cekRencana} from './lib/explainer-cek/hook.mjs';
 import {formatPeta} from './lib/explainer-cek/peta.mjs';
@@ -105,6 +106,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     if (!legacy) cekVisualScene(scene, where, words, kata, lapor);
     if (!legacy) cekUrutanAksi(scene, where, words, kata, lapor);
     if (!legacy) cekNominal(scene, where, lapor);
+    if (!legacy) cekNarasiScene(scene, where, lapor);
     if (/\d/.test(plain(narasi))) {
       err(
         where,
@@ -273,6 +275,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   if (!legacy) {
     cekProps(script, props, kata, lapor);
     cekMotionVideo(script, lapor);
+    cekNarasiVideo(script, lapor);
   }
 
   return {errors, warnings};

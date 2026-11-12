@@ -1,6 +1,6 @@
 ---
 name: video-explainer
-description: Membuat video Cutout Motion Explainer 9:16 ("nahh gini") di src/explainer/ tanpa menyentuh engine sejarah. Alurnya rencana dulu (5 kandidat hook berskor, narasi, peta visual per klausa), baru props dan naskah; validator cek:explainer memaksa setiap klausa narasi punya visual. Narasi disaring antislop-copywriting + humanizer-indonesia, props cutout dari Google Flow Bridge, latar foto real per scene, subtitle kata-per-kata (faster-whisper). Pakai skill ini setiap kali user minta video explainer baru ("kenapa...", "kok bisa...", hitungan biaya, fisika/teknik sehari-hari).
+description: Membuat video Cutout Motion Explainer 9:16 ("nahh gini") di src/explainer/ tanpa menyentuh engine sejarah. Alurnya rencana dulu (5 kandidat hook berskor, narasi, peta visual per klausa), baru props dan naskah; validator cek:explainer memaksa setiap klausa narasi punya visual. Narasi lisan diperiksa validator (kalimat pendek, tanpa gaya buku pelajaran, tanpa rujukan kabur), props cutout dari Google Flow Bridge, latar foto real per scene, subtitle kata-per-kata (faster-whisper). Pakai skill ini setiap kali user minta video explainer baru ("kenapa...", "kok bisa...", hitungan biaya, fisika/teknik sehari-hari).
 ---
 
 # Video Explainer "nahh gini" (`src/explainer/`)
@@ -31,13 +31,13 @@ npm run baru:explainer -- <slug>
 Membuat `.ts`, `.rencana.md`, `.props.json`, `.latar.json`, `.sumber.md`, dan mendaftarkan ke `daftar.ts`.
 
 ### Langkah 1: Riset
-Tulis setiap fakta dan angka di `<slug>.sumber.md`, minimal 2 URL sumber. Fakta yang tidak ada sumbernya jangan masuk narasi.
+Tulis setiap fakta dan angka di `<slug>.sumber.md`, minimal 2 URL sumber. Fakta yang tidak ada sumbernya jangan masuk narasi. `sumber.md` itu **catatan**, boleh bergaya laporan; **jangan salin kalimatnya ke narasi**. Narasi ditulis ulang seperti orang bercerita (lihat `referensi/narasi.md`).
 
 ### Langkah 2: Hook & judul (di `.rencana.md`, bagian `## Hook`)
 Baca `referensi/hook-judul.md`. Tulis 5 kandidat, 1 per rumus, beri skor 5 kriteria (0-2), isi `Total`, lalu tulis `Terpilih: #N` untuk Total tertinggi (minimal 7). (dicek validator: R1, R2, H1-H4)
 
 ### Langkah 3: Narasi (di `.rencana.md`, bagian `## Narasi`)
-Baca `referensi/narasi.md`. Tulis narasi per scene (5-7 scene: hook → stage salah kaprah → beat → stage/diagram fakta → stage penutup). Lalu jalankan skill `humanizer-indonesia` dan `antislop:antislop-copywriting` pada narasi itu.
+Baca `referensi/narasi.md`. Tulis narasi per scene (5-7 scene: hook → stage salah kaprah → beat → stage/diagram fakta → stage penutup). Lalu jalankan checklist "uji baca keras" di `referensi/narasi.md`. **Jangan pakai skill `humanizer-indonesia`**: skill itu dikalibrasi untuk tulisan akademik dan justru membuat naskah lisan kaku. (dicek validator: N1-N5)
 
 ### Langkah 4: Peta visual (di `.rencana.md`, bagian `## Peta Visual`)
 Pecah narasi tiap scene per klausa (dipotong di `, . ? ! ; :`). Untuk **setiap** klausa tulis 1 baris: `Klausa | Visual | File | Aksi`.
@@ -103,6 +103,6 @@ Topik baru yang tidak cocok dengan ketiganya tetap boleh; ambil patokan terdekat
 ## Referensi
 
 - `referensi/hook-judul.md`: 5 rumus hook, rubrik skor, aturan judul thumbnail.
-- `referensi/narasi.md`: saringan antislop + humanizer, contoh sebelum/sesudah.
+- `referensi/narasi.md`: aturan narasi lisan (N1-N5), arti kata penghubung, contoh sebelum/sesudah dari video nyata.
 - `referensi/visual.md`: katalog masuk/keluar/aksi/simbol/SFX/meme sesuai engine, pola koreografi, tata letak.
 - `referensi/contoh-scene.md`: 1 scene lengkap yang lolos validator, untuk ditiru.
