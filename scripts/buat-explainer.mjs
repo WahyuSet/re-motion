@@ -1,10 +1,11 @@
 // Siapkan video explainer baru di src/explainer/data/<slug>.ts, daftar props .props.json,
-// catatan sumber .sumber.md, dan daftarkan ke src/explainer/daftar.ts.
+// rencana .rencana.md, catatan sumber .sumber.md, dan daftarkan ke src/explainer/daftar.ts.
 //
 // Pakai: node scripts/buat-explainer.mjs bata-zigzag
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {templateProps, templateRencana} from './lib/explainer-template.mjs';
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const slug = process.argv[2];
@@ -44,7 +45,8 @@ if (await exists(dataFile)) {
 const template = `import type {ExplainerScript} from '../types';
 
 // Naskah explainer "${title}". Ikuti .claude/skills/video-explainer/SKILL.md.
-// Cek dengan: npm run cek:explainer -- ${slug}
+// Tulis dulu ${slug}.rencana.md (hook, narasi, peta visual), lalu salin peta ke file ini.
+// Cek dengan: npm run cek:explainer -- ${slug} --peta
 export const ${varName}: ExplainerScript = {
   format: 'short',
   watermark: false,
@@ -161,7 +163,8 @@ export const ${varName}: ExplainerScript = {
 `;
 
 await fs.writeFile(dataFile, template);
-await fs.writeFile(path.join(dataDir, `${slug}.props.json`), '[]\n');
+await fs.writeFile(path.join(dataDir, `${slug}.props.json`), JSON.stringify(templateProps(), null, 2) + '\n');
+await fs.writeFile(path.join(dataDir, `${slug}.rencana.md`), templateRencana(title));
 await fs.writeFile(
   path.join(dataDir, `${slug}.latar.json`),
   JSON.stringify(
@@ -200,14 +203,17 @@ if (!daftar.includes(`id: '${id}'`)) {
 }
 
 console.log(`Dibuat (Explainer Short 9:16):
-  src/explainer/data/${slug}.ts          naskah explainer (isi semua TODO)
-  src/explainer/data/${slug}.props.json  daftar props untuk generate-props
-  src/explainer/data/${slug}.latar.json  daftar background real per scene
-  src/explainer/data/${slug}.sumber.md   catatan sumber fakta
+  src/explainer/data/${slug}.ts           naskah explainer
+  src/explainer/data/${slug}.rencana.md   rencana: hook, narasi, peta visual
+  src/explainer/data/${slug}.props.json   daftar props (tiap prop wajib punya "untuk")
+  src/explainer/data/${slug}.latar.json   daftar background real per scene
+  src/explainer/data/${slug}.sumber.md    catatan sumber fakta
 Terdaftar sebagai Composition "${id}" di src/explainer/daftar.ts.
 
 Langkah berikutnya:
-  1. Edit naskah di src/explainer/data/${slug}.ts
-  2. Generate background real -> node scripts/generate-props.mjs --file src/explainer/data/${slug}.latar.json --utuh
-  3. Generate props cutout   -> node scripts/generate-props.mjs --file src/explainer/data/${slug}.props.json
-  4. Cek naskah              -> npm run cek:explainer -- ${slug}`);
+  1. Isi sumber fakta        -> src/explainer/data/${slug}.sumber.md
+  2. Isi rencana (hook, narasi, peta visual) -> src/explainer/data/${slug}.rencana.md
+  3. Isi props.json & latar.json dari peta (tiap prop wajib punya "untuk")
+  4. Generate latar & props  -> node scripts/generate-props.mjs --file ... (lihat SKILL.md langkah 5)
+  5. Salin peta ke naskah    -> src/explainer/data/${slug}.ts
+  6. Cek naskah              -> npm run cek:explainer -- ${slug} --peta`);
