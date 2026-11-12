@@ -95,3 +95,27 @@ export const cekNarasiVideo = (script, lapor) => {
     }
   }
 };
+
+// D3: total durasi video. Dari kata.json kalau audio sudah dipotong, kalau belum dari perkiraan
+// 2,4 kata per detik (sama dengan scripts/narasi.mjs), plus jeda sekitar 0,5 detik per scene.
+const KATA_PER_DETIK = 2.4;
+const JEDA_SCENE = 0.5;
+const MAX_DETIK = 60;
+
+export const perkiraanDurasi = (script, kataJson) =>
+  (script?.scenes ?? []).reduce((total, s, i) => {
+    const kata = kataJson?.[i];
+    const detik = Array.isArray(kata) && kata.length ? kata[kata.length - 1][1] : polos(s.narasi ?? '').split(/\s+/).filter(Boolean).length / KATA_PER_DETIK;
+    return total + detik + JEDA_SCENE;
+  }, 0);
+
+export const cekDurasi = (script, kataJson, lapor) => {
+  const detik = perkiraanDurasi(script, kataJson);
+  if (detik > MAX_DETIK) {
+    lapor.warn(
+      'video',
+      `D3 ${kataJson ? 'durasi' : 'perkiraan durasi'} ${Math.round(detik)} detik (batas ${MAX_DETIK}).`,
+      'Pangkas narasi: buang kalimat yang tidak membawa fakta baru, atau gabungkan dua scene fakta.',
+    );
+  }
+};

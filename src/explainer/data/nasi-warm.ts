@@ -262,6 +262,7 @@ export const nasiWarm: ExplainerScript = {
           masuk: 'fade',
           delay: 0,
           sampai: 'nasinya',
+          keluar: 'none',
           aksi: [
             {type: 'pulse', di: 'air', skala: 1.15, durasi: 18},
             {type: 'wiggle', di: 'menguap', rotate: 8, durasi: 16},

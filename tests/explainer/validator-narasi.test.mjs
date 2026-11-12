@@ -72,3 +72,23 @@ test('N1: scene diagram boleh sampai 22 kata', async () => {
   const {warnings} = await validasiExplainer({format: 'short', scenes: [diagram, beat]}, 'uji-narasi', OPTS);
   assert.equal(kode(warnings, 'N1').length, 0, warnings.join(' | '));
 });
+
+test('D3: perkiraan durasi lebih dari 60 detik jadi peringatan', async () => {
+  const kalimat = 'Botol plastik itu rapuh kena panas terus. ';
+  const panjang = kalimat.repeat(6).trim(); // 42 kata per scene
+  const {warnings} = await cek(panjang, panjang, panjang, panjang);
+  assert.equal(kode(warnings, 'D3').length, 1, warnings.join(' | '));
+});
+
+test('D3: video pendek lolos', async () => {
+  const {warnings} = await cek('Botol plastik itu rapuh.', 'Plastiknya mulai lepas ke air.');
+  assert.equal(kode(warnings, 'D3').length, 0, warnings.join(' | '));
+});
+
+test('CLI mencetak BELUM SELESAI selama masih ada peringatan', async () => {
+  const {execFileSync} = await import('node:child_process');
+  const out = execFileSync(process.execPath, ['scripts/cek-explainer.mjs', 'air-kadaluwarsa'], {encoding: 'utf8'});
+  assert.ok(out.includes('BELUM SELESAI') && !out.includes('✓ LULUS'), out.slice(-300));
+  const bersih = execFileSync(process.execPath, ['scripts/cek-explainer.mjs', 'kabel-kendor'], {encoding: 'utf8'});
+  assert.ok(bersih.includes('✓ LULUS'), bersih.slice(-300));
+});

@@ -8,8 +8,8 @@ const naskah = (scene) => ({format: 'short', scenes: [{duration: 90, latar: 'lat
 const teks = (extra) => ({kind: 'teks', teks: 'OK', x: 50, delay: 0, ...extra});
 const ada = (pesan, kode) => pesan.some((m) => m.includes(kode));
 
-test('L1: item hook di zona judul (y < 36) jadi peringatan', async () => {
-  const hook = {type: 'hook', baris1: 'A', baris2: 'B?', narasi: 'Botol plastik kok rapuh?', items: [teks({y: 30})]};
+test('L1: tepi atas item hook di zona judul (< 28%) jadi peringatan', async () => {
+  const hook = {type: 'hook', baris1: 'A', baris2: 'B?', narasi: 'Botol plastik kok rapuh?', items: [teks({y: 26})]};
   const {warnings} = await validasiExplainer(naskah(hook), 'uji-layout', OPTS);
   assert.ok(ada(warnings, 'L1'), warnings.join(' | '));
 });

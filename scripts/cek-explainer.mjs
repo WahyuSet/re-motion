@@ -14,11 +14,12 @@ import {importTs, loadScript} from './lib/load-script.mjs';
 import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 import {cekNominal} from './lib/explainer-cek/diagram.mjs';
-import {cekNarasiScene, cekNarasiVideo} from './lib/explainer-cek/narasi.mjs';
+import {cekDurasi, cekNarasiScene, cekNarasiVideo} from './lib/explainer-cek/narasi.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
 import {cekHook, cekRencana, cekThumbnail} from './lib/explainer-cek/hook.mjs';
 import {formatPeta} from './lib/explainer-cek/peta.mjs';
 import {cekBeat, cekZona} from './lib/explainer-cek/layout.mjs';
+import {muatUkuran} from './lib/explainer-cek/kotak.mjs';
 
 // Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
 export const LEGACY = new Set([
@@ -86,6 +87,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   if (!legacy) cekRencana(rencana, lapor);
 
   const props = legacy ? [] : await muatProps(slug, opts, lapor);
+  const ukuran = legacy ? new Map() : await muatUkuran(script);
   if (!legacy) cekThumbnail(script, rencana, props, lapor);
 
   const seenLatar = new Map();
@@ -105,7 +107,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     const words = parseWords(narasi.trim());
-    if (!legacy) cekVisualScene(scene, where, words, kata, lapor);
+    if (!legacy) cekVisualScene(scene, where, words, kata, lapor, ukuran);
     if (!legacy) cekUrutanAksi(scene, where, words, kata, lapor);
     if (!legacy) cekNominal(scene, where, lapor);
     if (!legacy) cekNarasiScene(scene, where, lapor);
@@ -201,7 +203,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     if (!legacy) cekMotionScene(scene, where, lapor);
-    if (!legacy) cekZona(scene, where, lapor);
+    if (!legacy) cekZona(scene, where, lapor, ukuran);
     if (!legacy) cekBeat(scene, where, lapor);
     if (legacy && (scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
       const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);
@@ -278,6 +280,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     cekProps(script, props, kata, lapor);
     cekMotionVideo(script, lapor);
     cekNarasiVideo(script, lapor);
+    cekDurasi(script, kataJson, lapor);
   }
 
   return {errors, warnings};
@@ -346,10 +349,12 @@ if (isMain) {
     if (errors.length > 0) {
       console.error(`\n✗ GAGAL: ${errors.length} error, ${warnings.length} peringatan.`);
       process.exitCode = 1;
-    } else {
+    } else if (warnings.length > 0) {
       console.log(
-        `\n✓ LULUS: ${slug} (${script.scenes.length} scene, ${warnings.length} peringatan).`,
+        `\n⚠ BELUM SELESAI: ${slug} (${script.scenes.length} scene, 0 error, ${warnings.length} peringatan). Selesai = 0 error dan 0 peringatan; kerjakan setiap PERBAIKI di atas.`,
       );
+    } else {
+      console.log(`\n✓ LULUS: ${slug} (${script.scenes.length} scene, 0 error, 0 peringatan).`);
     }
   } catch (e) {
     console.error(`✗ Gagal membaca naskah "${slug}": ${e.message}`);

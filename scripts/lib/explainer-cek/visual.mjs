@@ -2,10 +2,14 @@
 // Semua posisi dihitung dalam indeks kata narasi (bukan frame) agar bisa dicek sebelum audio ada.
 // `kata` = modul src/lib/kata.ts ({indexOfWord, parseWords}).
 
+import {kotakItem, porsiTumpuk} from './kotak.mjs';
+
 const AKHIR_KLAUSA = /[.,!?;:]$/;
 const MAX_KATA_KOSONG = 6;
 const DEKAT_X = 18;
 const DEKAT_Y = 16;
+/** Porsi kotak terkecil yang boleh tertutup prop lain sebelum dianggap tumpuk. */
+const PORSI_TUMPUK = 0.3;
 
 export const pecahKlausa = (words) => {
   const hasil = [];
@@ -120,7 +124,7 @@ const frasaKunci = (words) => {
 
 const SCENE_VISUAL = new Set(['hook', 'stage', 'diagram']);
 
-export const cekVisualScene = (scene, where, words, kata, lapor) => {
+export const cekVisualScene = (scene, where, words, kata, lapor, ukuran = new Map()) => {
   if (!SCENE_VISUAL.has(scene.type) || !words.length) return;
   const kejadian = kejadianScene(scene, words, kata);
   const ada = (mulai, akhir) => kejadian.some((k) => k.idx >= mulai && k.idx <= akhir);
@@ -161,7 +165,9 @@ export const cekVisualScene = (scene, where, words, kata, lapor) => {
     }
   }
 
-  // V6
+  // V6: dua prop tampil bersamaan dan kotaknya saling tumpuk.
+  // Serah-terima (sampai lama = di baru) ikut dihitung, karena item lama masih tampil
+  // 8-10 frame saat animasi keluar; kecuali item lama memakai keluar: 'none'.
   const props = semuaItem(scene).filter((it) => it.src);
   for (let i = 0; i < props.length; i++) {
     for (let j = i + 1; j < props.length; j++) {
@@ -169,14 +175,22 @@ export const cekVisualScene = (scene, where, words, kata, lapor) => {
       const b = props[j];
       const ra = rentangItem(a, words, kata);
       const rb = rentangItem(b, words, kata);
-      const beririsan = ra.masuk < rb.keluar && rb.masuk < ra.keluar;
-      if (beririsan && Math.abs(a.x - b.x) < DEKAT_X && Math.abs(a.y - b.y) < DEKAT_Y) {
-        lapor.warn(
-          where,
-          `V6 prop ${a.src} dan ${b.src} tampil bersamaan dan saling tumpuk.`,
-          `Jauhkan minimal ${DEKAT_X} pada x atau ${DEKAT_Y} pada y, atau samakan sampai item lama dengan di item baru.`,
-        );
-      }
+      const serahTerima =
+        (ra.keluar === rb.masuk && (a.keluar ?? 'pop-out') !== 'none') ||
+        (rb.keluar === ra.masuk && (b.keluar ?? 'pop-out') !== 'none');
+      const bersamaan = (ra.masuk < rb.keluar && rb.masuk < ra.keluar) || serahTerima;
+      if (!bersamaan) continue;
+      const ka = kotakItem(a, ukuran.get(a.src));
+      const kb = kotakItem(b, ukuran.get(b.src));
+      const tumpuk = ka && kb ? porsiTumpuk(ka, kb) > PORSI_TUMPUK : Math.abs(a.x - b.x) < DEKAT_X && Math.abs(a.y - b.y) < DEKAT_Y;
+      if (!tumpuk) continue;
+      lapor.warn(
+        where,
+        `V6 prop ${a.src} dan ${b.src} ${serahTerima ? 'bertumpuk saat serah-terima' : 'tampil bersamaan dan saling tumpuk'}.`,
+        serahTerima
+          ? "Geser item baru ke posisi lain, atau beri item lama keluar: 'none' supaya langsung hilang."
+          : 'Geser salah satu prop sampai kotaknya tidak bertumpuk, atau kecilkan width.',
+      );
     }
   }
 };

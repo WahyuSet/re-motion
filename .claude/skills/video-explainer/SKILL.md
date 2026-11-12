@@ -16,7 +16,7 @@ Setiap pesan validator berbentuk `lokasi: masalah → PERBAIKI: langkah`. Kerjak
 3. Scene `hook`, `stage`, `diagram` wajib punya `latar: 'latar/<slug>-N.png'` yang unik per scene. Hanya `beat` yang tanpa latar. Jangan pakai `latarOpacity`/`latarBlur`.
 4. `watermark: false` sampai nama channel final ditentukan.
 5. Angka di `narasi` wajib huruf (`seratus ribu`, bukan `100.000`). Digit hanya boleh di `baris1`/`baris2`/teks panggung.
-6. Koordinat item: `x` 8..92, `y` 12..76 (area aman Shorts). Di scene `hook` jangan taruh item di `y` < 36 (zona judul), di `stage` berjudul `y` < 26, dan di semua scene jangan `y` > 70 (zona subtitle). (dicek validator: L1, L2) `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180.
+6. Posisi dicek dari **tepi kotak** prop (lebar = `width`, tinggi = `width` × rasio PNG asli), bukan titik tengahnya. Keempat tepi harus di area aman Shorts: kiri ≥ 7%, **kanan ≤ 86%** (sisi kanan tertutup tombol), atas ≥ 13%, bawah ≤ 78%. Tepi atas di bawah judul (hook ≥ 28%, stage berjudul ≥ 22%), tepi bawah di atas subtitle (≤ 73,5%). Prop potret tinggi (meteran, tiang, botol) butuh `width` kecil. `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180. (dicek validator: A1, L1, L2)
 7. Scene `beat` selalu: tanpa `latar`, `teks: 'Oke, sini gue jelasin.'` (persis), dan item `props/meme-kucing-jelasin.png` (`masuk: 'pop'`, **tanpa** `sfx`, karena banner sudah berbunyi pop). Narasinya boleh dilanjutkan: "Oke, *sini gue jelasin* penyebabnya." (dicek validator: B1-B4)
 8. Setiap klausa narasi punya visual yang **menggambarkan isi klausa itu** (dicek validator: V1, V3, V4). Kata benda yang disebut (mobil, tanggal, botol) harus kelihatan di layar saat diucapkan.
 9. Setiap prop di `props.json` punya `untuk: "<frasa persis dari narasi>"` (dicek validator: V4).
@@ -53,7 +53,7 @@ node scripts/generate-props.mjs --cek
 node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh --style "clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no vintage paper effect, no sepia, high detail"
 node scripts/generate-props.mjs --file src/explainer/data/<slug>.props.json --style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
 ```
-Uang di video Indonesia **wajib rupiah asli**, jangan uang fiktif atau dolar. Prompt yang lolos Flow (dicoba 2026-11-12): "neat stack of Indonesian rupiah banknotes, red one hundred thousand rupiah notes on top with blue fifty thousand rupiah notes underneath, slightly fanned out, realistic paper texture". Layar HP/aplikasi: minta "no numbers, no currency symbols" supaya tidak muncul dolar. Foto asli opsional: `node scripts/cari-foto.mjs "<kata kunci inggris>" --slug <slug> --limit 4 --min-width 800`, pasang dengan `bingkai: true`.
+`generate-props` otomatis menambahkan "single isolated object" ke prompt, jadi prop yang butuh konteks (kulkas dengan pintu terbuka, tiang dengan kabelnya) **wajib menyebut konteks itu di prompt**. Objek berwarna hijau digenerate dengan `--bg magenta` supaya tidak ikut terhapus. Uang di video Indonesia **wajib rupiah asli**, jangan uang fiktif atau dolar. Prompt yang lolos Flow (dicoba 2026-11-12): "neat stack of Indonesian rupiah banknotes, red one hundred thousand rupiah notes on top with blue fifty thousand rupiah notes underneath, slightly fanned out, realistic paper texture". Layar HP/aplikasi: minta "no numbers, no currency symbols" supaya tidak muncul dolar. Foto asli opsional: `node scripts/cari-foto.mjs "<kata kunci inggris>" --slug <slug> --limit 4 --min-width 800`, pasang dengan `bingkai: true`.
 
 ### Langkah 6: Tulis naskah `.ts`
 Salin peta ke `src/explainer/data/<slug>.ts`. Setiap baris peta = 1 item atau 1 aksi dengan `di` = kata pertama klausa / kata pemicu. Contoh lengkap: `referensi/contoh-scene.md`. Isi `thumbnail` dari hook terpilih.
@@ -71,22 +71,23 @@ node scripts/potong-narasi.mjs <slug> "<path-file-audio>"
 ```
 Aktifkan `narasiAudio: 'audio/<slug>'` dan `narasiExt: 'wav'`, jalankan Langkah 7 lagi, lalu:
 ```bash
-node scripts/cek-frame.mjs <slug>
+node scripts/cek-frame.mjs <slug> --rapat
 node scripts/storyboard.mjs <slug>
 node scripts/render.mjs <slug> --preview
 node scripts/render.mjs <slug> --final
 node scripts/paket-youtube.mjs <slug>
 ```
-Periksa `out/cek/<slug>-lembar.jpg` dan `out/storyboard/<slug>-1.jpg`: tidak ada visual menumpuk, keluar area aman, atau layar kosong.
+`--rapat` mengambil frame di setiap item masuk dan saat serah-terima, bukan cuma 35%/85%. Periksa `out/cek/<slug>-lembar.jpg` dan `out/storyboard/<slug>-1.jpg`: tidak ada visual menumpuk, keluar area aman, atau layar kosong.
 
 Semua hasil akhir ada di `out/explainer/<slug>/`: `<slug>.mp4`, `<slug>-720p.mp4`, `<slug>-preview.mp4`, `youtube.txt` (bagian `=== JUDUL ===`, `=== DESKRIPSI ===`, `=== TAGS ===` dalam 1 file), `subtitle.id.srt`, `thumbnail.jpg`, `thumbnail-kecil.jpg`.
 
 ## Definisi Selesai
 
 - `.rencana.md` lengkap tanpa `TODO`, hook terpilih skor >= 7.
-- `npm run cek:explainer -- <slug>` → `✓ LULUS ... 0 peringatan`.
+- `npm run cek:explainer -- <slug>` → `✓ LULUS: <slug> (... 0 error, 0 peringatan)`. Kalau yang muncul `⚠ BELUM SELESAI`, belum selesai: kerjakan setiap PERBAIKI.
+- Total durasi ≤ 60 detik (dicek validator: D3).
 - `--peta` tidak menampilkan `(kosong) ✗`, dan setiap benda yang disebut narasi kelihatan di klausanya.
-- Storyboard dicek visual (setelah audio ada).
+- `cek-frame --rapat` dan storyboard dicek visual (setelah audio ada): tidak ada prop di area merah, menumpuk, atau menabrak judul/subtitle.
 
 ## Video Patokan
 

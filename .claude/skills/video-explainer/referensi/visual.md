@@ -10,7 +10,7 @@ Semua nilai di sini sama dengan kode `src/explainer/` (`types.ts`, `timing.ts`, 
 | `src` | prop: `'props/<nama>.png'` |
 | `teks`, `ukuran`, `warna`, `kotak` | teks: isi, ukuran font (default 56), warna, warna kotak latar |
 | `simbol` | lihat tabel simbol |
-| `x`, `y` | posisi tengah dalam persen (x 8..92, y 12..76) |
+| `x`, `y` | posisi tengah dalam persen. Yang dicek validator adalah **tepi kotaknya**: kiri ≥ 7, kanan ≤ 86, atas ≥ 13, bawah ≤ 78 (A1) |
 | `width` | piksel (default prop 340, simbol 170) |
 | `rotate`, `zIndex`, `bingkai` | rotasi awal (derajat), lapisan (default 10), bingkai hitam foto asli |
 | `di` / `delay` | masuk di kata `di`, atau `delay` frame dari awal scene (tanpa `di` dan tanpa `delay` = frame 0) |
@@ -115,4 +115,6 @@ Sebab-akibat pada kata yang sama: A `masuk: 'drop'` di `'tertimpa'` → B `{type
 - Ganti fase: `sampai` item lama = `di` item baru (kata yang sama), jangan taruh item baru di posisi persis item yang sedang keluar.
 - Dua prop yang tampil bersamaan: selisih minimal 18 pada `x` atau 16 pada `y` (validator V6).
 - Item satu kolom: jarak vertikal 16-18%.
-- Subtitle ada di bawah (`bottom` 430 px); jangan taruh item penting di `y` > 76.
+- Subtitle mulai di sekitar y 74%: tepi bawah kotak item ≤ 73,5% (L2). Judul hook sampai sekitar 27%: tepi atas item di hook ≥ 28% (L1).
+- Tinggi prop = `width` × rasio PNG asli. Cek ukuran PNG (`public/props/<nama>.png`) sebelum memilih `width`: prop potret 1:3 dengan `width` 200 tingginya 600 px (31% layar).
+- Serah-terima di posisi yang sama (`sampai` lama = `di` baru): beri item lama `keluar: 'none'`, kalau tidak keduanya bertumpuk 8 frame (V6).
