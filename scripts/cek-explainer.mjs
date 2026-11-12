@@ -234,7 +234,16 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
       }
 
       for (const [ai, aksi] of (item.aksi ?? []).entries()) {
-        if (aksi.di) cekKata(`${itemLabel} aksi[${ai + 1}].di`, aksi.di);
+        if (aksi.di) {
+          const idxAksi = cekKata(`${itemLabel} aksi[${ai + 1}].di`, aksi.di);
+          if (!legacy && idxAksi >= 0 && idxDi >= 0 && indexOfWord(words, aksi.di, idxDi + 1) < 0) {
+            err(
+              `${itemLabel} aksi[${ai + 1}].di`,
+              `Urutan waktu terbalik: aksi di "${aksi.di}" hanya muncul sebelum atau bersamaan dengan di "${item.di}", jadi engine menjalankannya 12 frame setelah item masuk.`,
+              'Pilih kata pemicu aksi yang diucapkan sesudah kata di item.',
+            );
+          }
+        }
         if (aksi.sampai) cekKata(`${itemLabel} aksi[${ai + 1}].sampai`, aksi.sampai);
         if (aksi.sfx && !(await existsPublic(`sfx/${aksi.sfx}.wav`))) {
           err(

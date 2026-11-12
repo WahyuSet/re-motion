@@ -167,3 +167,35 @@ test('slug LEGACY melewati V1-V6', async () => {
   );
   assert.ok(![...errors, ...warnings].some((m) => /\bV[1-6]\b/.test(m)), [...errors, ...warnings].join(' | '));
 });
+
+test('V1: langkah[].di berulang dirantai seperti engine diagram', async () => {
+  const {errors} = await validasiExplainer(
+    naskah({
+      type: 'diagram',
+      mode: 'potongan',
+      narasi: 'Gaji dipotong pajak, lalu dipotong cicilan, sisanya sedikit.',
+      awal: {label: 'Gaji', nilai: '100'},
+      langkah: [
+        {label: 'Pajak', potong: '10', sisa: '90', di: 'dipotong'},
+        {label: 'Cicilan', potong: '20', sisa: '70', di: 'dipotong'},
+      ],
+      hasil: {label: 'Sisa', nilai: '70', di: 'sisanya'},
+    }),
+    'uji-visual',
+    OPTS,
+  );
+  assert.ok(!errors.some((e) => e.includes('V1')), errors.join(' | '));
+});
+
+test('aksi.di yang hanya muncul sebelum di item jadi error urutan', async () => {
+  const {errors} = await validasiExplainer(
+    naskah({
+      type: 'stage',
+      narasi: 'Botol plastik itu rapuh sekali.',
+      items: [teks({delay: 0}), {kind: 'prop', src: 'props/air-botol-retak.png', x: 50, y: 50, di: 'rapuh', aksi: [{type: 'jump', di: 'Botol'}]}],
+    }),
+    'uji-visual',
+    OPTS,
+  );
+  assert.ok(errors.some((e) => e.includes('aksi[1].di') && e.includes('Botol') && e.includes('sebelum')), errors.join(' | '));
+});

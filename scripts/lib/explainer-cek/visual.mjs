@@ -76,10 +76,20 @@ export const kejadianScene = (scene, words, kata) => {
     ['beban.angkaDi', scene.beban?.angkaDi],
     ['pembagi.di', scene.pembagi?.di],
     ['hasil.di', scene.hasil?.di],
-    ...(scene.langkah ?? []).map((l, i) => [`langkah[${i + 1}].di`, l.di]),
   ];
   for (const [nama, target] of fieldScene) {
     if (target) tambah(kata.indexOfWord(words, target, 0), `${nama}@${target}`);
+  }
+
+  // Sama dengan resolvePotongan di src/explainer/diagram.ts: pencarian langkah dirantai.
+  let searchFrom = 0;
+  for (const [i, l] of (scene.langkah ?? []).entries()) {
+    if (!l.di) continue;
+    const idx = kata.indexOfWord(words, l.di, searchFrom);
+    if (idx >= 0) {
+      tambah(idx, `langkah[${i + 1}].di@${l.di}`);
+      searchFrom = idx + 1;
+    }
   }
 
   return hasil.sort((a, b) => a.idx - b.idx);
