@@ -1,6 +1,8 @@
+import {telurKulkas} from './data/telur-kulkas';
 import {kabelKendor} from './data/kabel-kendor';
 import {potonganGaji} from './data/potongan-gaji';
 import {nasiWarm} from './data/nasi-warm';
+import {airKadaluwarsa} from './data/air-kadaluwarsa';
 import {cas80} from './data/cas-80';
 import {blackBox} from './data/black-box';
 import {bajuKuning} from './data/baju-kuning';
@@ -24,7 +26,9 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'EfekRumahKaca', script: efekRumahKaca},
   {id: 'BlackBox', script: blackBox},
   {id: 'Cas80', script: cas80},
+  {id: 'AirKadaluwarsa', script: airKadaluwarsa},
   {id: 'NasiWarm', script: nasiWarm},
   {id: 'PotonganGaji', script: potonganGaji},
   {id: 'KabelKendor', script: kabelKendor},
+  {id: 'TelurKulkas', script: telurKulkas},
 ];

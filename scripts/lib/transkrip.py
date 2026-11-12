@@ -16,19 +16,27 @@ with open(script_path, encoding="utf-8") as f:
     prompt = f.read()
 
 model = WhisperModel(model_name, device="cpu", compute_type="int8")
-segments, _ = model.transcribe(
-    audio,
-    language="id",
-    word_timestamps=True,
-    initial_prompt=prompt,
-    condition_on_previous_text=False,
-)
 
-words = [
-    {"word": w.word.strip(), "start": round(w.start, 3), "end": round(w.end, 3)}
-    for segment in segments
-    for w in (segment.words or [])
-]
+def run_transcribe(use_prompt=True):
+    segments, _ = model.transcribe(
+        audio,
+        language="id",
+        word_timestamps=True,
+        initial_prompt=prompt if use_prompt else None,
+        condition_on_previous_text=False,
+    )
+    return [
+        {"word": w.word.strip(), "start": round(float(w.start), 3), "end": round(float(w.end), 3)}
+        for segment in segments
+        for w in (segment.words or [])
+    ]
+
+words = run_transcribe(use_prompt=True)
+# Jika prompt naskah memicu halusinasi decoder (terlambat deteksi awal audio > 2.5s), fallback tanpa prompt
+if not words or (words and words[0]["start"] > 2.5):
+    words_fallback = run_transcribe(use_prompt=False)
+    if words_fallback and (not words or words_fallback[0]["start"] < words[0]["start"]):
+        words = words_fallback
 
 with open(out_path, "w", encoding="utf-8") as f:
     json.dump(words, f, ensure_ascii=False)
