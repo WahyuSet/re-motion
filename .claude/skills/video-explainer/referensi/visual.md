@@ -83,6 +83,8 @@ Komedi (minimal 3 per video, validator M5):
 
 Meme **menemani**, bukan menggantikan. Kalau klausa menyebut benda, benda itu tetap harus tampil.
 
+Karakter reaksi **selalu** dari tabel ini, jangan digenerate lewat Flow Bridge (ciri khas channel). Kalau ekspresi yang dibutuhkan belum ada (misalnya jijik, syok/kaget), pakai meme terdekat sementara dan **sebutkan ke user** ekspresi yang kurang supaya user yang mencarikan.
+
 ## Kepadatan Motion (validator M1-M6)
 
 - Scene `hook`/`stage`: minimal 3 aksi, minimal 2 jenis `masuk`, scene `stage` minimal 1 `move`.

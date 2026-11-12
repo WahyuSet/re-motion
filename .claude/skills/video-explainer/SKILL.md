@@ -47,13 +47,13 @@ Pecah narasi tiap scene per klausa (dipotong di `, . ? ! ; :`). Untuk **setiap**
 Tambahkan 2-3 momen komedi (meme reaksi, `peek`, teks celetukan). Lihat `referensi/visual.md`.
 
 ### Langkah 5: Props & latar dari peta
-Isi `<slug>.props.json` dari kolom File peta: `{"name", "prompt", "untuk"}`. `untuk` = frasa klausa yang diilustrasikan. Isi `<slug>.latar.json` 1 latar per scene non-beat. Lalu generate:
+Isi `<slug>.props.json` dari kolom File peta: `{"name", "prompt", "untuk"}`. `untuk` = frasa klausa yang diilustrasikan. Isi `<slug>.latar.json` 1 latar per scene non-beat. **Latar tidak boleh memuat benda yang juga jadi prop** (rice cooker, kulkas, tiang listrik, dsb.), karena prop akan menyatu dengan foto. Flow **mengabaikan larangan** seperti "no utility poles"; gambarkan pemandangan yang memang tidak punya benda itu (langit di atas atap, dinding polos), dan pilih latar yang kontras dengan warna prop. Lalu generate:
 ```bash
 node scripts/generate-props.mjs --cek
 node scripts/generate-props.mjs --file src/explainer/data/<slug>.latar.json --utuh --style "clean realistic modern photography, natural colors, full-bleed edge-to-edge camera frame, no border, no frame, no vintage paper effect, no sepia, high detail"
 node scripts/generate-props.mjs --file src/explainer/data/<slug>.props.json --style "clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
 ```
-Hindari kata "banknote" atau nama mata uang di prompt (kena filter); pakai "3D stylized bundle of red paper notes with golden coins". Foto asli opsional: `node scripts/cari-foto.mjs "<kata kunci inggris>" --slug <slug> --limit 4 --min-width 800`, pasang dengan `bingkai: true`.
+Uang di video Indonesia **wajib rupiah asli**, jangan uang fiktif atau dolar. Prompt yang lolos Flow (dicoba 2026-11-12): "neat stack of Indonesian rupiah banknotes, red one hundred thousand rupiah notes on top with blue fifty thousand rupiah notes underneath, slightly fanned out, realistic paper texture". Layar HP/aplikasi: minta "no numbers, no currency symbols" supaya tidak muncul dolar. Foto asli opsional: `node scripts/cari-foto.mjs "<kata kunci inggris>" --slug <slug> --limit 4 --min-width 800`, pasang dengan `bingkai: true`.
 
 ### Langkah 6: Tulis naskah `.ts`
 Salin peta ke `src/explainer/data/<slug>.ts`. Setiap baris peta = 1 item atau 1 aksi dengan `di` = kata pertama klausa / kata pemicu. Contoh lengkap: `referensi/contoh-scene.md`. Isi `thumbnail` dari hook terpilih.
@@ -87,6 +87,18 @@ Semua hasil akhir ada di `out/explainer/<slug>/`: `<slug>.mp4`, `<slug>-720p.mp4
 - `npm run cek:explainer -- <slug>` → `✓ LULUS ... 0 peringatan`.
 - `--peta` tidak menampilkan `(kosong) ✗`, dan setiap benda yang disebut narasi kelihatan di klausanya.
 - Storyboard dicek visual (setelah audio ada).
+
+## Video Patokan
+
+Tiga video ini lolos validator tanpa peringatan dan sudah dirender final. **Sebelum Langkah 2, buka patokan yang cetakannya paling mirip dengan topikmu** dan tiru strukturnya (urutan scene, jumlah item, pola aksi, cara memilih latar). Isi file: `src/explainer/data/<slug>.{rencana.md,ts,props.json,latar.json,sumber.md}`.
+
+| Slug | Cetakan | Rumus hook | Yang dicontohkan |
+|---|---|---|---|
+| `nasi-warm` | sains dapur / salah kaprah (scene `stage` saja) | kontras-angka | sebab-akibat dengan `move`, punchline hiperbola ("keras kayak kerupuk"), `peek` |
+| `potongan-gaji` | hitungan potongan uang | kontras-angka | scene `diagram` mode `potongan` 4 langkah, prop pendamping berganti tiap langkah di `y` 66, uang rupiah asli |
+| `kabel-kendor` | fisika/teknik di jalan, dua keadaan | taruhan | siang vs malam, kendor vs kencang, latar langit/dinding polos supaya prop tipis tetap kontras |
+
+Topik baru yang tidak cocok dengan ketiganya tetap boleh; ambil patokan terdekat dan sebutkan bedanya di `.rencana.md`. Ketiga patokan dijaga test `tests/explainer/patokan.test.mjs`: kalau aturan validator berubah dan patokan jadi gagal, perbaiki patokannya juga.
 
 ## Referensi
 

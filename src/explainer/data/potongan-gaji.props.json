@@ -1,0 +1,11 @@
+[
+  {"name": "potongan-gaji-slip", "untuk": "slip gaji", "prompt": "printed monthly salary slip paper with a table of numbers and a total line, slightly curled, isolated on clean background"},
+  {"name": "potongan-gaji-hp-rekening", "untuk": "masuk rekening", "prompt": "modern smartphone showing a generic banking app screen with a large incoming transfer notification bubble, a wallet icon and a green arrow, no numbers, no currency symbols, no logos, isolated on clean background"},
+  {"name": "potongan-gaji-gunting", "untuk": "main potong", "prompt": "large red handled scissors cutting into a sheet of paper, isolated on clean background"},
+  {"name": "potongan-gaji-buku-aturan", "untuk": "aturannya", "prompt": "thick hardcover law book with a wooden judge gavel resting on top, isolated on clean background"},
+  {"name": "potongan-gaji-celengan", "untuk": "sebagian malah balik", "prompt": "pink ceramic piggy bank with golden coins dropping into the slot, isolated on clean background"},
+  {"name": "potongan-gaji-kartu-sehat", "untuk": "BPJS Kesehatan", "prompt": "generic green health insurance member card with a medical cross icon, no text, no logo, isolated on clean background"},
+  {"name": "potongan-gaji-kakek-pensiun", "untuk": "Jaminan Pensiun", "prompt": "happy elderly Indonesian man with grey hair relaxing in a wooden rocking chair holding a cup of tea, full body, isolated on clean background"},
+  {"name": "potongan-gaji-uang", "untuk": "Sisa bersihnya", "prompt": "neat stack of Indonesian rupiah banknotes, red one hundred thousand rupiah notes on top with blue fifty thousand rupiah notes underneath, slightly fanned out, realistic paper texture"},
+  {"name": "potongan-gaji-gedung-kantor", "untuk": "kantor juga ikut bayar", "prompt": "small modern glass office building miniature model, isolated on clean background"}
+]

@@ -1,0 +1,31 @@
+PANDUAN TTS: kabel-kendor
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs kabel-kendor <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±3.8 detik
+Kabel listrik di depan rumahmu ternyata memanjang tiap siang.
+
+[02] (stage) ±7.1 detik
+Banyak yang ngira kabel kendor itu tanda tukangnya malas narik. Padahal lengkungan itu sengaja dibuat, namanya andongan.
+
+[03] (beat) ±2.9 detik
+Oke, sini gue jelasin kenapa harus kendor.
+
+[04] (stage) ±7.9 detik
+Kabelnya dari logam. Pas siang kena panas matahari plus panas dari arus listrik, logamnya memuai dan lengkungannya makin turun.
+
+[05] (stage) ±8.8 detik
+Malamnya udara dingin, kabel menyusut dan tertarik lagi. Kalau dari awal dipasang kencang, tarikannya bisa bikin kabel putus atau tiangnya miring.
+
+[06] (stage) ±7.9 detik
+Jadi kendornya itu memang dihitung. Asal masih di atas jarak aman ke tanah, lengkungan itu tanda kabelnya dipasang benar.
+
+Perkiraan total narasi: ±38 detik (belum termasuk jeda)
