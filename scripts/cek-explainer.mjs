@@ -13,6 +13,7 @@ import {fileURLToPath} from 'node:url';
 import {importTs, loadScript} from './lib/load-script.mjs';
 import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekVisualScene} from './lib/explainer-cek/visual.mjs';
+import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
 
 // Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
 export const LEGACY = new Set([
@@ -217,7 +218,8 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
       }
     }
 
-    if ((scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
+    if (!legacy) cekMotionScene(scene, where, lapor);
+    if (legacy && (scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
       const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);
       if (totalAksi === 0) {
         warn(
@@ -279,7 +281,10 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
   }
 
-  if (!legacy) cekProps(script, props, kata, lapor);
+  if (!legacy) {
+    cekProps(script, props, kata, lapor);
+    cekMotionVideo(script, lapor);
+  }
 
   return {errors, warnings};
 };
