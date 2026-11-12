@@ -12,6 +12,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {importTs, loadScript} from './lib/load-script.mjs';
 import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
+import {cekProps, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 
 // Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
 export const LEGACY = new Set([
@@ -36,7 +37,9 @@ const existsPublic = (rel) =>
 const plain = (text) => text.replace(/\*/g, '');
 
 export const validasiExplainer = async (script, slug = 'explainer', opts = {}) => {
-  const {indexOfWord, parseWords} = await importTs('src/lib/kata.ts');
+  const kata = await importTs('src/lib/kata.ts');
+  const {indexOfWord, parseWords} = kata;
+  const legacy = LEGACY.has(slug);
   const errors = [];
   const warnings = [];
   const format = (where, msg, fix) => `${where}: ${msg}${fix ? ` → PERBAIKI: ${fix}` : ''}`;
@@ -83,6 +86,8 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
   }
 
+  const props = legacy ? [] : await muatProps(slug, opts, lapor);
+
   const seenLatar = new Map();
 
   for (const [i, scene] of scenes.entries()) {
@@ -100,6 +105,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     const words = parseWords(narasi.trim());
+    if (!legacy) cekVisualScene(scene, where, words, kata, lapor);
     if (/\d/.test(plain(narasi))) {
       err(
         where,
@@ -273,7 +279,29 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
   }
 
+  if (!legacy) cekProps(script, props, kata, lapor);
+
   return {errors, warnings};
+};
+
+const muatProps = async (slug, opts, lapor) => {
+  if (Array.isArray(opts.props)) return opts.props;
+  let raw = opts.propsRaw;
+  if (raw === undefined) {
+    try {
+      raw = await fs.readFile(path.resolve('src/explainer/data', `${slug}.props.json`), 'utf8');
+    } catch {
+      return [];
+    }
+  }
+  try {
+    const data = JSON.parse(raw);
+    if (Array.isArray(data)) return data;
+    lapor.err('props.json', 'Isi props.json harus berupa array.', 'Bungkus entri dengan [ ... ].');
+  } catch (e) {
+    lapor.err('props.json', `File props.json bukan JSON valid (${e.message}).`, 'Perbaiki tanda koma/kurung di props.json.');
+  }
+  return [];
 };
 
 const isMain =
