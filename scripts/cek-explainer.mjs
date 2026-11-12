@@ -11,6 +11,21 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {importTs, loadScript} from './lib/load-script.mjs';
+import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
+
+// Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
+export const LEGACY = new Set([
+  'token-listrik',
+  'sadap-lims',
+  'gandum-tropis',
+  'baju-kuning',
+  'kamar-panas',
+  'bata-zigzag',
+  'bpa-free',
+  'efek-rumah-kaca',
+  'black-box',
+  'cas-80',
+]);
 
 const existsPublic = (rel) =>
   fs.access(path.resolve('public', rel)).then(
@@ -20,12 +35,14 @@ const existsPublic = (rel) =>
 
 const plain = (text) => text.replace(/\*/g, '');
 
-export const validasiExplainer = async (script, slug = 'explainer') => {
+export const validasiExplainer = async (script, slug = 'explainer', opts = {}) => {
   const {indexOfWord, parseWords} = await importTs('src/lib/kata.ts');
   const errors = [];
   const warnings = [];
-  const err = (where, msg, fix) => errors.push(`${where}: ${msg}${fix ? ` (${fix})` : ''}`);
-  const warn = (where, msg, fix) => warnings.push(`${where}: ${msg}${fix ? ` (${fix})` : ''}`);
+  const format = (where, msg, fix) => `${where}: ${msg}${fix ? ` → PERBAIKI: ${fix}` : ''}`;
+  const err = (where, msg, fix) => errors.push(format(where, msg, fix));
+  const warn = (where, msg, fix) => warnings.push(format(where, msg, fix));
+  const lapor = {err, warn};
 
   const scenes = script?.scenes ?? [];
   const short = (script?.format ?? 'short') === 'short';
@@ -207,6 +224,7 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
 
     for (const [ii, item] of allItems.entries()) {
       const itemLabel = `${where} item ${ii + 1}`;
+      cekSkemaItem(item, itemLabel, lapor);
       if (item.src && !(await existsPublic(item.src))) {
         err(itemLabel, `File prop public/${item.src} tidak ditemukan.`);
       }
