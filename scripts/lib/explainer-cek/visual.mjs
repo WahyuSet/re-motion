@@ -68,6 +68,9 @@ export const kejadianScene = (scene, words, kata) => {
     }
   }
 
+  // Panel diagram (bar awal / dinding bata dan judulnya) sudah tampil sejak frame 0.
+  if (scene.type === 'diagram') tambah(0, scene.mode === 'potongan' ? 'diagram (bar awal)' : 'diagram');
+
   const fieldScene = [
     ['di', scene.di],
     ['judulDi', scene.judulDi],
@@ -212,6 +215,35 @@ export const cekProps = (script, props, kata, lapor) => {
         `V4 prop "${name}" untuk "${entry.untuk}" tidak dipakai di ${daftar}.`,
         `Pasang src: '${src}' di ${daftar}, atau ganti untuk dengan frasa dari scene tempat prop ini dipakai.`,
       );
+    }
+  }
+};
+
+// U1: aksi dalam satu item harus diurutkan sesuai urutan kata di narasi.
+// Engine mencari aksi berikutnya setelah aksi sebelumnya; kalau tidak ketemu, ia mundur
+// ke posisi masuk item, sehingga aksi itu diam-diam berjalan lebih awal dari yang dibayangkan.
+export const cekUrutanAksi = (scene, where, words, kata, lapor) => {
+  for (const [ii, item] of semuaItem(scene).entries()) {
+    const {cursor} = posisiMasuk(item, words, kata);
+    let actionCursor = cursor;
+    let sebelumnya = null;
+    for (const [ai, a] of (item.aksi ?? []).entries()) {
+      if (!a.di) continue;
+      const idx = kata.indexOfWord(words, a.di, actionCursor);
+      if (idx >= 0) {
+        actionCursor = idx + 1;
+        sebelumnya = a.di;
+        continue;
+      }
+      const fallback = kata.indexOfWord(words, a.di, cursor);
+      if (fallback >= 0 && sebelumnya) {
+        lapor.warn(
+          `${where} item ${ii + 1} aksi[${ai + 1}]`,
+          `U1 aksi di "${a.di}" diucapkan sebelum aksi sebelumnya ("${sebelumnya}"), jadi berjalan lebih awal dari urutan array.`,
+          'Urutkan array aksi sesuai urutan kata di narasi.',
+        );
+      }
+      if (fallback >= 0) actionCursor = fallback + 1;
     }
   }
 };

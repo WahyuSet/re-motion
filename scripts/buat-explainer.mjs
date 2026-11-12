@@ -72,7 +72,7 @@ export const ${varName}: ExplainerScript = {
       latar: 'latar/${slug}-1.png',
       baris1: 'TODO SUBJEK JELAS',
       baris2: 'KENAPA BISA BEGITU?',
-      // Hook Stop-Scroll (wajib 8-14 kata, 1 kalimat ~3 detik, langsung tembak kejanggalan tanpa pengantar):
+      // Hook Stop-Scroll (wajib 7-14 kata, 1 kalimat ~3 detik, langsung tembak kejanggalan tanpa pengantar):
       narasi: 'TODO kebiasaan singkat sehari-hari, kok bisa muncul *kejanggalan utama* ini?',
       items: [],
     },

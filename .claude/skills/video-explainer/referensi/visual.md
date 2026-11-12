@@ -39,16 +39,18 @@ Semua nilai di sini sama dengan kode `src/explainer/` (`types.ts`, `timing.ts`, 
 
 ## Aksi (`aksi: [...]`)
 
+**Satuan:** `x`, `y`, `toX`, `toY`, `peek.dx`, `peek.dy` dalam persen layar (`peek.dx: -16` = geser 16% lebar layar). `jump.dy` dan `shake.intensitas` dalam piksel (`jump.dy: 60` = lompat 60 px). `durasi`, `delay`, `tahan` dalam frame (30 frame = 1 detik). `width` dalam piksel.
+
 Field umum semua aksi: `type`, `di`, `delay`, `durasi` (default 18), `sfx`. Aksi tanpa `di` jalan 12 frame setelah item masuk. `di` aksi dicari setelah kata `di` item.
 
 | `type` | Field khusus (default) | Efek | SFX default |
 |---|---|---|---|
-| `jump` | `dy` (64) | lompat + squash-stretch | `boing` |
+| `jump` | `dy` (64, **piksel**) | lompat + squash-stretch | `boing` |
 | `wiggle` | `rotate` (14) | goyang kiri-kanan | - |
 | `squash` | - | gepeng ke bawah lalu balik | `slap` |
-| `peek` | `dx` (-14), `dy` (0), `rotate` (-15), `tahan` (35) | nongol miring, tahan, ngumpet | `boing` |
-| `move` | `toX`, `toY`, `toScale`, `toRotate` | pindah posisi permanen | - |
-| `shake` | `intensitas` (10) | getar horizontal | `dum` |
+| `peek` | `dx` (-14), `dy` (0) dalam **persen layar**, `rotate` (-15, derajat), `tahan` (35, frame) | nongol miring, tahan, ngumpet | `boing` |
+| `move` | `toX`, `toY` (posisi **persen layar**, sama seperti `x`/`y`), `toScale`, `toRotate` | pindah posisi permanen | - |
+| `shake` | `intensitas` (10, piksel) | getar horizontal | `dum` |
 | `pulse` | `skala` (1.08), `sampai` | denyut; `skala: 1.18` untuk denyut kuat; tanpa `durasi` berdenyut sampai akhir scene | - |
 | `grow` | `toScale`, atau `toScaleX`/`toScaleY` | ubah skala permanen dari bawah | - |
 | `dim` | `toOpacity` atau `to` (0.25) | redupkan | - |
@@ -79,6 +81,10 @@ Komedi (minimal 3 per video, validator M5):
 | `meme-kucing-senyum.png` | senyum pasrah, trik rahasia |
 | `meme-kucing-nangis.png` | boncos, menyesal (`womp`) |
 | `meme-kucing-jempol.png` | solusi mantap, kesimpulan (`ding`) |
+| `meme-kucing-syok.png` | syok, tepuk kepala "aduh", fakta pahit terbongkar (`womp`) |
+| `meme-kucing-kaget.png` | kaget melotot, angka mengejutkan (`boom`) |
+| `meme-kucing-tutuphidung.png` | jijik, bau, basi, "ih apaan nih" |
+| `meme-kucing-judes.png` | galak, menunjuk/menegur kebiasaan salah (`slap`) |
 | `meme-kucing-jelasin.png`, `meme-kucing-guru.png` | scene beat, penjelasan |
 
 Meme **menemani**, bukan menggantikan. Kalau klausa menyebut benda, benda itu tetap harus tampil.

@@ -12,10 +12,12 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {importTs, loadScript} from './lib/load-script.mjs';
 import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
-import {cekProps, cekVisualScene} from './lib/explainer-cek/visual.mjs';
+import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visual.mjs';
+import {cekNominal} from './lib/explainer-cek/diagram.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
 import {cekHook, cekRencana} from './lib/explainer-cek/hook.mjs';
 import {formatPeta} from './lib/explainer-cek/peta.mjs';
+import {cekBeat, cekZona} from './lib/explainer-cek/layout.mjs';
 
 // Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
 export const LEGACY = new Set([
@@ -101,6 +103,8 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
 
     const words = parseWords(narasi.trim());
     if (!legacy) cekVisualScene(scene, where, words, kata, lapor);
+    if (!legacy) cekUrutanAksi(scene, where, words, kata, lapor);
+    if (!legacy) cekNominal(scene, where, lapor);
     if (/\d/.test(plain(narasi))) {
       err(
         where,
@@ -193,6 +197,8 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     if (!legacy) cekMotionScene(scene, where, lapor);
+    if (!legacy) cekZona(scene, where, lapor);
+    if (!legacy) cekBeat(scene, where, lapor);
     if (legacy && (scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
       const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);
       if (totalAksi === 0) {

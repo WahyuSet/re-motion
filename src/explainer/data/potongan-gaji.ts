@@ -158,7 +158,6 @@ export const potonganGaji: ExplainerScript = {
           y: 54,
           width: 340,
           masuk: 'pop',
-          sfx: 'boing',
           aksi: [{type: 'wiggle', di: 'jelasin', rotate: 12, durasi: 16}],
         },
       ],

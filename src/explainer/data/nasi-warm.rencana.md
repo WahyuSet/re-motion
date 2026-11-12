@@ -43,7 +43,7 @@ Jadi, warm cukup beberapa jam aja dan jangan tambahin *nasi dingin* ke nasi hang
 | Klausa | Visual | File | Aksi |
 |---|---|---|---|
 | Warnanya sih mirip nasi kuning syukuran, | tumpeng nasi kuning + teks celetukan "Bukan syukuran!" | props/nasi-warm-tumpeng.png | wiggle@syukuran |
-| tapi banyak yang ngira itu tanda *basi*. | kucing jijik tutup hidung | props/meme-kucing-sinis.png | wiggle@ngira, shake@basi (womp) |
+| tapi banyak yang ngira itu tanda *basi*. | kucing jijik tutup hidung | props/meme-kucing-tutuphidung.png | wiggle@ngira, shake@basi (womp) |
 | Padahal mode warm justru menahan nasi di atas *enam puluh derajat*, | termometer 60°C | props/nasi-warm-termometer.png | move@menahan, pulse@enam puluh derajat |
 | jadi kuman gak betah. | kuman kabur | props/nasi-warm-kuman-kabur.png | jump@gak |
 
@@ -66,7 +66,7 @@ Jadi, warm cukup beberapa jam aja dan jangan tambahin *nasi dingin* ke nasi hang
 | Makin lama, | tutup rice cooker beruap | props/nasi-warm-uap-tutup.png | - |
 | *air di nasi* ikut menguap lewat tutup. | (sama) uap keluar | props/nasi-warm-uap-tutup.png | pulse@air, wiggle@menguap |
 | Lewat *dua belas jam*, | jam weker | props/nasi-warm-jam-weker.png | shake@jam |
-| nasinya kering dan keras kayak *kerupuk*. | nasi kering menggumpal, kucing syok ngintip, kerupuk | props/nasi-warm-nasi-keras.png, props/meme-kucing-titik.png, props/nasi-warm-kerupuk.png | squash@keras, move@kayak, peek@kayak |
+| nasinya kering dan keras kayak *kerupuk*. | nasi kering menggumpal, kucing syok ngintip, kerupuk | props/nasi-warm-nasi-keras.png, props/meme-kucing-syok.png, props/nasi-warm-kerupuk.png | squash@keras, move@kayak, peek@kayak |
 
 ### Scene 6
 | Klausa | Visual | File | Aksi |

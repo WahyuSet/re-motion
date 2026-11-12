@@ -16,8 +16,8 @@ Setiap pesan validator berbentuk `lokasi: masalah → PERBAIKI: langkah`. Kerjak
 3. Scene `hook`, `stage`, `diagram` wajib punya `latar: 'latar/<slug>-N.png'` yang unik per scene. Hanya `beat` yang tanpa latar. Jangan pakai `latarOpacity`/`latarBlur`.
 4. `watermark: false` sampai nama channel final ditentukan.
 5. Angka di `narasi` wajib huruf (`seratus ribu`, bukan `100.000`). Digit hanya boleh di `baris1`/`baris2`/teks panggung.
-6. Koordinat item: `x` 8..92, `y` 12..76 (area aman Shorts). `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180.
-7. Scene `beat` selalu: `teks: 'Oke, sini gue jelasin.'` + `props/meme-kucing-jelasin.png` (`masuk: 'pop'`, `sfx: 'boing'`).
+6. Koordinat item: `x` 8..92, `y` 12..76 (area aman Shorts). Di scene `hook` jangan taruh item di `y` < 36 (zona judul), di `stage` berjudul `y` < 26, dan di semua scene jangan `y` > 70 (zona subtitle). (dicek validator: L1, L2) `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180.
+7. Scene `beat` selalu: tanpa `latar`, `teks: 'Oke, sini gue jelasin.'` (persis), dan item `props/meme-kucing-jelasin.png` (`masuk: 'pop'`, **tanpa** `sfx`, karena banner sudah berbunyi pop). Narasinya boleh dilanjutkan: "Oke, *sini gue jelasin* penyebabnya." (dicek validator: B1-B4)
 8. Setiap klausa narasi punya visual yang **menggambarkan isi klausa itu** (dicek validator: V1, V3, V4). Kata benda yang disebut (mobil, tanggal, botol) harus kelihatan di layar saat diucapkan.
 9. Setiap prop di `props.json` punya `untuk: "<frasa persis dari narasi>"` (dicek validator: V4).
 10. Hanya pakai nilai dan field yang ada di `referensi/visual.md` (dicek validator: S1, S2).

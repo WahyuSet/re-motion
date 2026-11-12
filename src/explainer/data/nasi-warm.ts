@@ -102,7 +102,7 @@ export const nasiWarm: ExplainerScript = {
         },
         {
           kind: 'prop',
-          src: 'props/meme-kucing-sinis.png',
+          src: 'props/meme-kucing-tutuphidung.png',
           x: 70,
           y: 56,
           width: 270,
@@ -154,7 +154,6 @@ export const nasiWarm: ExplainerScript = {
           y: 54,
           width: 340,
           masuk: 'pop',
-          sfx: 'boing',
           aksi: [{type: 'wiggle', di: 'jelasin', rotate: 12, durasi: 16}],
         },
       ],
@@ -295,7 +294,7 @@ export const nasiWarm: ExplainerScript = {
         },
         {
           kind: 'prop',
-          src: 'props/meme-kucing-titik.png',
+          src: 'props/meme-kucing-syok.png',
           x: 72,
           y: 62,
           width: 240,

@@ -199,3 +199,19 @@ test('aksi.di yang hanya muncul sebelum di item jadi error urutan', async () => 
   );
   assert.ok(errors.some((e) => e.includes('aksi[1].di') && e.includes('Botol') && e.includes('sebelum')), errors.join(' | '));
 });
+
+test('V1: bar awal diagram dihitung sebagai visual di kata pertama', async () => {
+  const {errors} = await validasiExplainer(
+    naskah({
+      type: 'diagram',
+      mode: 'potongan',
+      narasi: 'Gaji kamu lima juta, lalu dipotong pajak.',
+      awal: {label: 'Gaji', nilai: 'Rp5.000.000'},
+      langkah: [{label: 'Pajak', potong: '-Rp50.000', sisa: 'Rp4.950.000', di: 'dipotong'}],
+      hasil: {label: 'Sisa', nilai: 'Rp4.950.000', di: 'dipotong'},
+    }),
+    'uji-visual',
+    OPTS,
+  );
+  assert.ok(!errors.some((e) => e.includes('V1')), errors.join(' | '));
+});
