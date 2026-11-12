@@ -14,6 +14,7 @@ import {importTs, loadScript} from './lib/load-script.mjs';
 import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
+import {cekHook, cekRencana} from './lib/explainer-cek/hook.mjs';
 
 // Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
 export const LEGACY = new Set([
@@ -76,16 +77,8 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   if (script?.thumbnail?.latar && !(await existsPublic(script.thumbnail.latar))) {
     err('thumbnail', `File latar public/${script.thumbnail.latar} tidak ditemukan.`);
   }
-  for (const field of ['baris1', 'baris2']) {
-    const val = script?.thumbnail?.[field];
-    if (typeof val === 'string' && val.trim().length > 28) {
-      warn(
-        'thumbnail',
-        `${field} "${val}" terlalu panjang (${val.trim().length} karakter, batas 28).`,
-        'Ringkas menjadi 2–5 kata yang utuh secara logika agar teks thumbnail tetap besar dalam 1 baris.',
-      );
-    }
-  }
+  cekHook(script, kata, lapor, {legacy});
+  if (!legacy) cekRencana(await muatRencana(slug, opts), lapor);
 
   const props = legacy ? [] : await muatProps(slug, opts, lapor);
 
@@ -167,26 +160,6 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     if (scene.judulDi) cekKata('judulDi', scene.judulDi);
-    if (scene.type === 'hook') {
-      const legacyHookSlugs = new Set(['token-listrik', 'sadap-lims', 'gandum-tropis']);
-      if (!legacyHookSlugs.has(slug) && words.length > 15) {
-        warn(
-          where,
-          `Hook narasi terlalu panjang (${words.length} kata, batas 14 kata / ~3-4 detik).`,
-          'Ringkas jadi 1 kalimat stop-scroll (8-14 kata): "[Fakta/aksi 4 kata], kok/kenapa [kejanggalan 5 kata]?" tanpa kalimat pengantar.',
-        );
-      }
-      for (const field of ['baris1', 'baris2']) {
-        const val = scene[field];
-        if (typeof val === 'string' && val.trim().length > 28) {
-          warn(
-            where,
-            `${field} "${val}" terlalu panjang (${val.trim().length} karakter, batas 28).`,
-            'Ringkas menjadi 2-5 kata yang utuh secara logika agar banner hook tetap 1 baris.',
-          );
-        }
-      }
-    }
     if (scene.di) cekKata('di', scene.di);
     if (scene.rakitDi) cekKata('rakitDi', scene.rakitDi);
     if (scene.beban?.di) cekKata('beban.di', scene.beban.di);
@@ -287,6 +260,15 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   }
 
   return {errors, warnings};
+};
+
+const muatRencana = async (slug, opts) => {
+  if (opts.rencana !== undefined) return opts.rencana;
+  try {
+    return await fs.readFile(path.resolve('src/explainer/data', `${slug}.rencana.md`), 'utf8');
+  } catch {
+    return null;
+  }
 };
 
 const muatProps = async (slug, opts, lapor) => {
