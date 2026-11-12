@@ -1,3 +1,4 @@
+import {caraKerjaGps} from './data/cara-kerja-gps';
 import {cas80} from './data/cas-80';
 import {blackBox} from './data/black-box';
 import {bajuKuning} from './data/baju-kuning';
@@ -23,4 +24,5 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'BlackBox', script: blackBox},
   {id: 'Cas80', script: cas80},
   {id: 'RefleksKucing', script: refleksKucing},
+  {id: 'CaraKerjaGps', script: caraKerjaGps},
 ];

@@ -1,0 +1,28 @@
+PANDUAN TTS: cara-kerja-gps
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs cara-kerja-gps <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±3.3 detik
+Tanpa sinyal di hutan, kok GPS tetap jalan?
+
+[02] (stage) ±21.3 detik
+Banyak orang mengira HP harus memancarkan sinyal balik ke satelit, atau wajib memakai kuota internet untuk menentukan posisi kita di peta. Padahal penerima GPS di dalam HP itu hanya menangkap sinyal radio secara pasif, ibarat radio mobil: kita kan tidak pernah bisa membalas penyiarnya. Kuota baru terpakai untuk mengunduh gambar petanya.
+
+[03] (beat) ±2.5 detik
+Oke, sini gue jelasin cara kerjanya.
+
+[04] (stage) ±15.8 detik
+Di orbit bumi sudah ada lebih dari tiga puluh satelit yang terus-menerus memancarkan data posisi beserta catatan waktu dari jam atom. Ketelitian jam itu sampai hitungan nanodetik, sedangkan jam dinding di rumah kita telat lima menit pun dibiarkan.
+
+[05] (stage) ±13.8 detik
+Ketika HP kita dapat menangkap sinyal dari empat satelit sekaligus, selisih waktu tempuh tiap sinyal itu akan dihitung menjadi jarak ke masing-masing satelit. Titik perpotongan jarak tersebut menunjukkan posisi kita di permukaan bumi.
+
+Perkiraan total narasi: ±57 detik (belum termasuk jeda)
