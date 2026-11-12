@@ -214,13 +214,14 @@ Hasilnya `out/storyboard/<slug>-1.jpg`, `-2.jpg`, … (4 scene per halaman) + `o
    node scripts/paket-youtube.mjs <slug>
    ```
    Render final ±5–10 menit; jalankan di background. `paket-youtube` butuh ±1 menit.
-3. Lihat `out/youtube/<slug>/thumbnail.jpg` **dan** `thumbnail-kecil.jpg` dengan Read. Di versi kecil, judul harus terbaca dan stabilo kuning terlihat. Kalau tidak: perpendek `thumbnail.judul`, ganti foto (pilih yang bagian kirinya gelap/tenang; short: bagian bawahnya), atau atur `focus`, lalu ulangi `paket-youtube`.
+3. Lihat `out/sejarah/<slug>/thumbnail.jpg` **dan** `thumbnail-kecil.jpg` dengan Read. Di versi kecil, judul harus terbaca dan stabilo kuning terlihat. Kalau tidak: perpendek `thumbnail.judul`, ganti foto (pilih yang bagian kirinya gelap/tenang; short: bagian bawahnya), atau atur `focus`, lalu ulangi `paket-youtube`.
 4. Baca baris `⚠` di akhir output `paket-youtube` dan perbaiki sesuai isinya (lihat **Masalah umum**).
 
-Kirim ke user:
-- `out/<slug>.mp4` (1080p, untuk upload) dan `out/<slug>-720p.mp4` (versi kirim ≤28 MB).
-- Folder `out/youtube/<slug>/`: `thumbnail.jpg` (Thumbnail), `judul.txt` (kolom Judul), `deskripsi.txt` (kolom Deskripsi: sudah berisi chapter, kredit foto wajib CC BY / CC BY-SA, dan hashtag), `tags.txt` (kolom Tags), `subtitle.id.srt` (menu Subtitel → Unggah file → bahasa Indonesia).
-- Kredit saja (tanpa paket): `node scripts/kredit.mjs <slug>` → `out/<slug>-kredit.txt`.
+Kirim ke user folder `out/sejarah/<slug>/` (semua hasil satu video di satu folder):
+- `<slug>.mp4` (1080p, untuk upload) dan `<slug>-720p.mp4` (versi kirim ≤28 MB).
+- `youtube.txt`: bagian `=== JUDUL ===` (kolom Judul), `=== DESKRIPSI ===` (kolom Deskripsi: sudah berisi chapter, kredit foto wajib CC BY / CC BY-SA, dan hashtag), `=== TAGS ===` (kolom Tags).
+- `thumbnail.jpg` (Thumbnail) dan `subtitle.id.srt` (menu Subtitel → Unggah file → bahasa Indonesia).
+- Kredit saja (tanpa paket): `node scripts/kredit.mjs <slug>` → `out/sejarah/<slug>/kredit.txt`.
 - Kalau ukuran file 1080p dirasa terlalu besar, kurangi bintik film dengan `grain: 0.5` (atau `0` sampai `1`, default `1`) di `src/data/<slug>.ts`.
 
 ---
@@ -260,7 +261,7 @@ node scripts/buat-video.mjs <slug> --short                                     #
 ```bash
 node scripts/render.mjs <slug>
 ```
-File `out/<slug>.mp4` (1080×1920) dan `out/<slug>-720p.mp4` (720×1280, ≤28 MB) siap diunggah ke Shorts, TikTok, dan Reels.
+File `out/sejarah/<slug>/<slug>.mp4` (1080×1920) dan `out/sejarah/<slug>/<slug>-720p.mp4` (720×1280, ≤28 MB) siap diunggah ke Shorts, TikTok, dan Reels.
 
 Contoh short turunan lengkap: `src/data/borobudur-short.ts`.
 

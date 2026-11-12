@@ -2,12 +2,13 @@
 // Aset boleh berasal dari folder video lain (short turunan memakai aset video panjangnya).
 // Paket upload lengkap (thumbnail, chapter, subtitle): node scripts/paket-youtube.mjs <slug>
 //
-// Pakai: node scripts/kredit.mjs borobudur   -> out/borobudur-kredit.txt
+// Pakai: node scripts/kredit.mjs borobudur   -> out/sejarah/borobudur/kredit.txt
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {kreditFoto} from './lib/kredit.mjs';
 import {loadScript} from './lib/load-script.mjs';
+import {folderHasil, folderHasilRel} from './lib/folder-hasil.mjs';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -18,11 +19,11 @@ if (!slug) {
 const script = await loadScript(slug);
 const {entries, videoEntries, musik, missing, baris} = await kreditFoto(script);
 
-await fs.mkdir('out', {recursive: true});
-await fs.writeFile(path.join('out', `${slug}-kredit.txt`), baris.join('\n'));
+await fs.mkdir(folderHasil(slug), {recursive: true});
+await fs.writeFile(path.join(folderHasil(slug), 'kredit.txt'), baris.join('\n'));
 console.log(baris.join('\n'));
 const info = [`${entries.length} foto`, videoEntries.length && `${videoEntries.length} video`, musik && '1 musik'].filter(Boolean).join(', ');
-console.log(`\nTersimpan di out/${slug}-kredit.txt (${info})`);
+console.log(`\nTersimpan di ${folderHasilRel(slug)}/kredit.txt (${info})`);
 if (missing.length) {
   console.log(`⚠ ${missing.length} aset tanpa data kredit (bukan dari cari-foto/cari-video/cari-musik?): ${missing.join(', ')}`);
 }

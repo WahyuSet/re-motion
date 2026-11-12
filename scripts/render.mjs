@@ -14,6 +14,7 @@ import {parseArgs} from 'node:util';
 import {renderMedia} from '@remotion/renderer';
 import {ffmpeg} from './lib/ffmpeg.mjs';
 import {bukaKomposisi, tutup} from './lib/komposisi.mjs';
+import {folderHasil, folderHasilRel} from './lib/folder-hasil.mjs';
 
 const {values, positionals} = parseArgs({
   allowPositionals: true,
@@ -145,7 +146,9 @@ const buatVersiKirim = async (inputMp4, outputMp4, durasiDetik, short) => {
 };
 
 const main = async () => {
-  await fs.mkdir('out', {recursive: true});
+  const dir = folderHasil(slug);
+  const rel = folderHasilRel(slug);
+  await fs.mkdir(dir, {recursive: true});
   const tMulai = Date.now();
 
   try {
@@ -164,10 +167,10 @@ const main = async () => {
     };
 
     if (isPreview) {
-      const outPreview = path.resolve('out', `${slug}-preview.mp4`);
+      const outPreview = path.join(dir, `${slug}-preview.mp4`);
       const w = Math.round(composition.width * 0.5);
       const h = Math.round(composition.height * 0.5);
-      console.log(`Render PREVIEW ${composition.id} (${w}×${h}, CRF ${crf}, 10 fps) -> out/${slug}-preview.mp4 ...`);
+      console.log(`Render PREVIEW ${composition.id} (${w}×${h}, CRF ${crf}, 10 fps) -> ${rel}/${slug}-preview.mp4 ...`);
       await renderMedia({
         composition,
         serveUrl,
@@ -187,17 +190,17 @@ const main = async () => {
       const dtk = ((Date.now() - tMulai) / 1000).toFixed(1);
       console.log(`\nLaporan Render Preview (${slug})`);
       console.log(`  Durasi video : ${fmtDurasi(durasiDetik)} (${composition.durationInFrames} frame @ ${composition.fps} fps)`);
-      console.log(`  File preview : out/${slug}-preview.mp4 (${w}×${h}, ${fmtMb(size)})`);
+      console.log(`  File preview : ${rel}/${slug}-preview.mp4 (${w}×${h}, ${fmtMb(size)})`);
       console.log(`  Waktu render : ${dtk} dtk`);
       return;
     }
 
-    const rawMp4 = path.resolve('out', `${slug}.raw.mp4`);
-    const finalMp4 = path.resolve('out', `${slug}.mp4`);
-    const kirimMp4 = path.resolve('out', `${slug}-720p.mp4`);
+    const rawMp4 = path.join(dir, `${slug}.raw.mp4`);
+    const finalMp4 = path.join(dir, `${slug}.mp4`);
+    const kirimMp4 = path.join(dir, `${slug}-720p.mp4`);
 
     console.log(
-      `Render FINAL ${composition.id} (${composition.width}×${composition.height}, CRF ${crf}) -> out/${slug}.mp4 ...`,
+      `Render FINAL ${composition.id} (${composition.width}×${composition.height}, CRF ${crf}) -> ${rel}/${slug}.mp4 ...`,
     );
     await renderMedia({
       composition,
@@ -215,7 +218,7 @@ const main = async () => {
     console.log('Normalisasi audio 2-tahap (target -14 LUFS, TP -1.5 dBTP) ...');
     const loud = await normalisasiAudio(rawMp4, finalMp4);
 
-    console.log(`Membuat versi kirim 720p (≤ 28 MB) -> out/${slug}-720p.mp4 ...`);
+    console.log(`Membuat versi kirim 720p (≤ 28 MB) -> ${rel}/${slug}-720p.mp4 ...`);
     const kirimInfo = await buatVersiKirim(finalMp4, kirimMp4, durasiDetik, short);
 
     const [stFinal, stKirim] = await Promise.all([fs.stat(finalMp4), fs.stat(kirimMp4)]);
@@ -224,13 +227,13 @@ const main = async () => {
     console.log(`\nLaporan Render Final (${slug})`);
     console.log(`  Durasi video : ${fmtDurasi(durasiDetik)} (${composition.durationInFrames} frame @ ${composition.fps} fps)`);
     console.log(
-      `  File utama   : out/${slug}.mp4 (${composition.width}×${composition.height}, CRF ${crf}, ${fmtMb(stFinal.size)})`,
+      `  File utama   : ${rel}/${slug}.mp4 (${composition.width}×${composition.height}, CRF ${crf}, ${fmtMb(stFinal.size)})`,
     );
     if (loud) {
       console.log(`  Loudness     : ${loud.inputI} -> ${loud.outputI} LUFS (TP ${loud.outputTp} dBTP)`);
     }
     console.log(
-      `  Versi kirim  : out/${slug}-720p.mp4 (${kirimInfo.resolusi}, ${kirimInfo.videoKbps} kbps, ${fmtMb(stKirim.size)})`,
+      `  Versi kirim  : ${rel}/${slug}-720p.mp4 (${kirimInfo.resolusi}, ${kirimInfo.videoKbps} kbps, ${fmtMb(stKirim.size)})`,
     );
     console.log(`  Waktu total  : ${dtk} dtk`);
   } finally {

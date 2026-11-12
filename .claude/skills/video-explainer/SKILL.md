@@ -79,6 +79,8 @@ node scripts/paket-youtube.mjs <slug>
 ```
 Periksa `out/cek/<slug>-lembar.jpg` dan `out/storyboard/<slug>-1.jpg`: tidak ada visual menumpuk, keluar area aman, atau layar kosong.
 
+Semua hasil akhir ada di `out/explainer/<slug>/`: `<slug>.mp4`, `<slug>-720p.mp4`, `<slug>-preview.mp4`, `youtube.txt` (bagian `=== JUDUL ===`, `=== DESKRIPSI ===`, `=== TAGS ===` dalam 1 file), `subtitle.id.srt`, `thumbnail.jpg`, `thumbnail-kecil.jpg`.
+
 ## Definisi Selesai
 
 - `.rencana.md` lengkap tanpa `TODO`, hook terpilih skor >= 7.
