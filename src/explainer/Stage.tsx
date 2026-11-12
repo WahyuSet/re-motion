@@ -55,6 +55,14 @@ const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: strin
           <path d="M 34 62 L 52 80 L 88 42" fill="none" stroke={warna ?? explainerTheme.green} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
+    case 'silang':
+      return (
+        <svg width={width} height={width} viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="rgba(229, 57, 53, 0.14)" stroke={strokeRed} strokeWidth="10" />
+          <line x1="38" y1="38" x2="82" y2="82" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" />
+          <line x1="82" y1="38" x2="38" y2="82" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" />
+        </svg>
+      );
     case 'panah':
       return (
         <svg width={width} height={width * 0.6} viewBox="0 0 140 84">
@@ -222,7 +230,9 @@ export const Stage: React.FC<{
             ? null
             : item.simbol === 'centang'
               ? 'ding'
-              : isHeavy
+              : item.simbol === 'silang'
+                ? 'slap'
+                : isHeavy
                 ? 'dum'
                 : 'pop';
         const enterSfx = item.sfx === false ? null : (item.sfx ?? defaultEnterSfx);

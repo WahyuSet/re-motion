@@ -3,6 +3,7 @@ import type {TransitionType, WordTiming, YoutubeMeta} from '../types';
 export type StageSymbolType =
   | 'larang'
   | 'centang'
+  | 'silang'
   | 'panah'
   | 'tanya'
   | 'retak'
@@ -60,10 +61,13 @@ export type StageAction = {
   toScaleY?: number;
   /** Untuk 'dim' */
   toOpacity?: number;
+  /** Alias toOpacity untuk 'dim' */
+  to?: number;
   /** Untuk 'shake' */
   intensitas?: number;
   /** Untuk 'pulse' */
   sampai?: string;
+  skala?: number;
 };
 
 export type StageItem = {
