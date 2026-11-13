@@ -1,3 +1,4 @@
+import {mundurMakzul} from './data/mundur-makzul';
 import {caraKerjaGps} from './data/cara-kerja-gps';
 import {telurKulkas} from './data/telur-kulkas';
 import {kabelKendor} from './data/kabel-kendor';
@@ -35,4 +36,5 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'TelurKulkas', script: telurKulkas},
   {id: 'RefleksKucing', script: refleksKucing},
   {id: 'CaraKerjaGps', script: caraKerjaGps},
+  {id: 'MundurMakzul', script: mundurMakzul},
 ];

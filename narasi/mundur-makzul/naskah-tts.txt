@@ -1,0 +1,34 @@
+PANDUAN TTS: mundur-makzul
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs mundur-makzul <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±4.6 detik
+Wapres mundur cukup satu surat, kok dimakzulkan harus lewat tiga lembaga?
+
+[02] (stage) ±8.3 detik
+Banyak yang ngira mundur dan dimakzulkan itu sama aja, toh ujungnya lepas jabatan. Padahal bedanya ada di siapa yang mutusin.
+
+[03] (beat) ±2.1 detik
+Oke, sini gue jelasin bedanya.
+
+[04] (stage) ±9.6 detik
+Mundur itu kemauan sendiri. Cukup serahkan surat ke MPR, kursi wapres langsung kosong. Presiden lalu ajukan dua nama, dan MPR memilih salah satunya.
+
+[05] (stage) ±7.1 detik
+Dimakzulkan itu dipaksa berhenti, dan harus ada alasannya. Misalnya korupsi, atau gak lagi memenuhi syarat jadi wapres.
+
+[06] (stage) ±10.4 detik
+Jalurnya panjang. DPR butuh dukungan dua per tiga anggota yang hadir. Lalu MK periksa paling lama sembilan puluh hari. Kalau terbukti, MPR yang ketuk palu.
+
+[07] (stage) ±9.2 detik
+Jadi, mundur itu keluar lewat pintu sendiri. Dimakzulkan itu dikeluarkan lewat tiga pintu. Begitu kursinya kosong, usulan makzul di DPR ikut berhenti.
+
+Perkiraan total narasi: ±51 detik (belum termasuk jeda)
