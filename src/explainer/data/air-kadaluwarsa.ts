@@ -10,10 +10,12 @@ export const airKadaluwarsa: ExplainerScript = {
   format: 'short',
   watermark: '@okesini-id',
   gayaTeks: 'stiker',
+  narasiAudio: 'audio/air-kadaluwarsa',
+  narasiExt: 'wav',
   youtube: {
     judul: 'Air Putih Gak Bisa Basi, Kok Botolnya Ada Tanggal Kedaluwarsa?',
     deskripsi:
-      'Air minum dalam kemasan tetap dikasih tanggal kedaluwarsa karena aturan label BPOM mewajibkannya untuk hampir semua pangan kemasan; yang dibebaskan cuma minuman beralkohol, roti sehari, dan cuka. Menurut aturan itu, tanggal kedaluwarsa adalah batas mutu terjamin, bukan tanda basi. Masalahnya, botol plastik tidak rapat total: bau tajam seperti bensin bisa menembus dan memengaruhi rasa. Kalau botol kepanasan, misalnya ditinggal di mobil yang dijemur, zat dari plastik seperti antimoni lepas lebih cepat ke air. Simpan air botol di tempat sejuk, jauh dari matahari dan bau tajam; petunjuk ini sekarang wajib tercetak di label AMDK (Peraturan BPOM No. 6 Tahun 2024).',
+      'Air minum dalam kemasan tetap dikasih tanggal kedaluwarsa karena aturan label BPOM mewajibkannya untuk hampir semua pangan kemasan; yang dibebaskan cuma minuman beralkohol, roti sehari, dan cuka. Menurut aturan itu, tanggal kedaluwarsa adalah batas mutu terjamin, bukan tanda basi. Masalahnya, botol plastik tidak rapat total: bau tajam seperti bensin bisa menembus dan memengaruhi rasa. Kalau botol kepanasan, misalnya ditinggal di mobil yang dijemur, zat dari plastik seperti antimoni lepas lebih cepat ke air. Simpan air botol di tempat sejuk, jauh dari matahari dan bau tajam; Peraturan BPOM No. 6 Tahun 2024 mewajibkan petunjuk ini tercetak di label air minum dalam kemasan.',
     tags: ['air minum', 'kedaluwarsa', 'air botol', 'BPOM', 'plastik PET', 'antimoni', 'fakta unik', 'edukasi', 'okesini'],
   },
   thumbnail: {
