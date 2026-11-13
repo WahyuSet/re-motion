@@ -1,15 +1,17 @@
 // Render frame kunci setiap scene dan gabungkan jadi SATU lembar kontak bernomor, untuk dicek dengan mata.
 // Durasi scene diambil dari audio narasi (sama persis dengan hasil render).
 //
-// Pakai: node scripts/cek-frame.mjs borobudur
-// Hasil: out/cek/<slug>-lembar.jpg  (2 frame per scene: ±35% dan ±85% durasi scene)
-//        out/cek/<slug>-NN-<persen>.png  (frame satuan, kalau perlu dilihat lebih detail)
+// Pakai: node scripts/cek-frame.mjs borobudur            (2 frame per scene: ±35% dan ±85% durasi scene)
+//       node scripts/cek-frame.mjs borobudur --rapat    (explainer: + frame tiap item masuk dan serah-terima)
+// Hasil: out/cek/<slug>-lembar.jpg
+//        out/cek/<slug>-NN-<persen>.png  (frame satuan; mode --rapat: <slug>-NN-f<frame>.png)
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import {bukaKomposisi, tutup, waktuScene} from './lib/komposisi.mjs';
 import {importTs} from './lib/load-script.mjs';
+import {frameRapat} from './lib/frame-rapat.mjs';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -19,6 +21,8 @@ if (!slug) {
 
 const {SAFE_SHORT} = await importTs('src/lib/safe.ts');
 const POINTS = [0.35, 0.85];
+const rapat = process.argv.includes('--rapat');
+const {waktuItem} = rapat ? await importTs('src/explainer/timing.ts') : {};
 
 const outDir = path.resolve('out/cek');
 await fs.mkdir(outDir, {recursive: true});
@@ -27,13 +31,14 @@ try {
   const {composition, renderFrame} = await bukaKomposisi(slug);
   const waktu = await waktuScene(composition);
 
-  const shots = waktu.flatMap(({index, start, scene}) =>
-    POINTS.map((p) => ({scene: index + 1, type: scene.type, percent: Math.round(p * 100), frame: start + Math.round(scene.duration * p)})),
-  );
+  const shots = waktu.flatMap(({index, start, scene, words}) => {
+    const lokal = rapat ? frameRapat(scene, words, waktuItem) : POINTS.map((p) => Math.round(scene.duration * p));
+    return lokal.map((f) => ({scene: index + 1, type: scene.type, percent: Math.round((f / scene.duration) * 100), frame: start + f}));
+  });
 
   console.log(`${waktu.length} scene, ${composition.durationInFrames} frame. Render ${shots.length} frame ...`);
   for (const s of shots) {
-    s.file = path.join(outDir, `${slug}-${String(s.scene).padStart(2, '0')}-${s.percent}.png`);
+    s.file = path.join(outDir, `${slug}-${String(s.scene).padStart(2, '0')}-${rapat ? `f${String(s.frame).padStart(5, '0')}` : s.percent}.png`);
     await renderFrame(s.frame, s.file);
   }
 

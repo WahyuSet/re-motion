@@ -147,7 +147,10 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
           <Img
             src={staticFile(src)}
             style={{
-              width: 560,
+              // Prop potret tinggi dibatasi supaya tidak naik ke judul atau turun ke tepi bawah.
+              maxWidth: 560,
+              maxHeight: 880,
+              objectFit: 'contain',
               filter: 'drop-shadow(0 22px 34px rgba(0, 0, 0, 0.52))',
             }}
           />

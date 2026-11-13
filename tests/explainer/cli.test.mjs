@@ -63,7 +63,7 @@ test('validasiExplainer allows repeated trigger word when sampai appears again a
         duration: 60,
         latar: 'latar/gandum-tropis-2.png',
         narasi: 'Penjelasan selesai dengan rapi.',
-        items: [],
+        items: [{kind: 'teks', teks: 'OK', x: 50, y: 40, delay: 0}],
       },
     ],
   };

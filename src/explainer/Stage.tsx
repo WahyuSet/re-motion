@@ -40,6 +40,8 @@ const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: strin
   progress = 1,
 }) => {
   const strokeRed = warna ?? explainerTheme.red;
+  // ID filter unik per simbol supaya dua simbol 'tanya' di layar tidak saling menimpa.
+  const shadowId = `q-shadow-${React.useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   switch (simbol) {
     case 'larang':
       return (
@@ -55,6 +57,14 @@ const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: strin
           <path d="M 34 62 L 52 80 L 88 42" fill="none" stroke={warna ?? explainerTheme.green} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
+    case 'silang':
+      return (
+        <svg width={width} height={width} viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="rgba(229, 57, 53, 0.14)" stroke={strokeRed} strokeWidth="10" />
+          <line x1="38" y1="38" x2="82" y2="82" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" />
+          <line x1="82" y1="38" x2="38" y2="82" stroke={strokeRed} strokeWidth="12" strokeLinecap="round" />
+        </svg>
+      );
     case 'panah':
       return (
         <svg width={width} height={width * 0.6} viewBox="0 0 140 84">
@@ -66,10 +76,10 @@ const SymbolSvg: React.FC<{simbol: StageSymbolType; width: number; warna?: strin
       const qColor = warna ?? explainerTheme.red;
       return (
         <svg width={width} height={width * 1.25} viewBox="0 0 110 140" style={{overflow: 'visible'}}>
-          <filter id="q-shadow" x="-50%" y="-50%" width="200%" height="200%">
+          <filter id={shadowId} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="rgba(0,0,0,0.32)" />
           </filter>
-          <g filter="url(#q-shadow)">
+          <g filter={`url(#${shadowId})`}>
             <path
               d="M 55 18 C 33 18 23 32 23 46 C 23 52 27 56 34 56 C 41 56 46 51 46 45 C 46 38 49 32 55 32 C 61 32 67 35 67 42 C 67 50 60 56 53 62 C 47 68 42 76 43 88 C 43 92 47 96 52 96 C 57 96 61 92 61 87 C 61 79 65 74 72 68 C 80 61 88 53 88 40 C 88 24 74 18 55 18 Z M 52 105 C 46.5 105 42 109.5 42 115 C 42 120.5 46.5 125 52 125 C 57.5 125 62 120.5 62 115 C 62 109.5 57.5 105 52 105 Z"
               fill={qColor}
@@ -222,7 +232,9 @@ export const Stage: React.FC<{
             ? null
             : item.simbol === 'centang'
               ? 'ding'
-              : isHeavy
+              : item.simbol === 'silang'
+                ? 'slap'
+                : isHeavy
                 ? 'dum'
                 : 'pop';
         const enterSfx = item.sfx === false ? null : (item.sfx ?? defaultEnterSfx);

@@ -5,12 +5,35 @@
 // - koordinat x/y objek di dalam area aman YouTube Shorts (x: 8..92%, y: 12..76%)
 // - keberadaan file prop di public/
 //
-// Pakai: node scripts/cek-explainer.mjs token-listrik
+// Pakai: node scripts/cek-explainer.mjs token-listrik [--peta]
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {importTs, loadScript} from './lib/load-script.mjs';
+import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
+import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visual.mjs';
+import {cekNominal} from './lib/explainer-cek/diagram.mjs';
+import {cekDurasi, cekNarasiScene, cekNarasiVideo} from './lib/explainer-cek/narasi.mjs';
+import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
+import {cekHook, cekRencana, cekThumbnail} from './lib/explainer-cek/hook.mjs';
+import {formatPeta} from './lib/explainer-cek/peta.mjs';
+import {cekBeat, cekZona} from './lib/explainer-cek/layout.mjs';
+import {muatUkuran} from './lib/explainer-cek/kotak.mjs';
+
+// Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
+export const LEGACY = new Set([
+  'token-listrik',
+  'sadap-lims',
+  'gandum-tropis',
+  'baju-kuning',
+  'kamar-panas',
+  'bata-zigzag',
+  'bpa-free',
+  'efek-rumah-kaca',
+  'black-box',
+  'cas-80',
+]);
 
 const existsPublic = (rel) =>
   fs.access(path.resolve('public', rel)).then(
@@ -20,12 +43,16 @@ const existsPublic = (rel) =>
 
 const plain = (text) => text.replace(/\*/g, '');
 
-export const validasiExplainer = async (script, slug = 'explainer') => {
-  const {indexOfWord, parseWords} = await importTs('src/lib/kata.ts');
+export const validasiExplainer = async (script, slug = 'explainer', opts = {}) => {
+  const kata = await importTs('src/lib/kata.ts');
+  const {indexOfWord, parseWords} = kata;
+  const legacy = LEGACY.has(slug);
   const errors = [];
   const warnings = [];
-  const err = (where, msg, fix) => errors.push(`${where}: ${msg}${fix ? ` (${fix})` : ''}`);
-  const warn = (where, msg, fix) => warnings.push(`${where}: ${msg}${fix ? ` (${fix})` : ''}`);
+  const format = (where, msg, fix) => `${where}: ${msg}${fix ? ` → PERBAIKI: ${fix}` : ''}`;
+  const err = (where, msg, fix) => errors.push(format(where, msg, fix));
+  const warn = (where, msg, fix) => warnings.push(format(where, msg, fix));
+  const lapor = {err, warn};
 
   const scenes = script?.scenes ?? [];
   const short = (script?.format ?? 'short') === 'short';
@@ -55,16 +82,13 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
   if (script?.thumbnail?.latar && !(await existsPublic(script.thumbnail.latar))) {
     err('thumbnail', `File latar public/${script.thumbnail.latar} tidak ditemukan.`);
   }
-  for (const field of ['baris1', 'baris2']) {
-    const val = script?.thumbnail?.[field];
-    if (typeof val === 'string' && val.trim().length > 28) {
-      warn(
-        'thumbnail',
-        `${field} "${val}" terlalu panjang (${val.trim().length} karakter, batas 28).`,
-        'Ringkas menjadi 2–5 kata yang utuh secara logika agar teks thumbnail tetap besar dalam 1 baris.',
-      );
-    }
-  }
+  cekHook(script, kata, lapor, {legacy});
+  const rencana = legacy ? null : await muatRencana(slug, opts);
+  if (!legacy) cekRencana(rencana, lapor);
+
+  const props = legacy ? [] : await muatProps(slug, opts, lapor);
+  const ukuran = legacy ? new Map() : await muatUkuran(script);
+  if (!legacy) cekThumbnail(script, rencana, props, lapor);
 
   const seenLatar = new Map();
 
@@ -83,6 +107,10 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
     }
 
     const words = parseWords(narasi.trim());
+    if (!legacy) cekVisualScene(scene, where, words, kata, lapor, ukuran);
+    if (!legacy) cekUrutanAksi(scene, where, words, kata, lapor);
+    if (!legacy) cekNominal(scene, where, lapor);
+    if (!legacy) cekNarasiScene(scene, where, lapor);
     if (/\d/.test(plain(narasi))) {
       err(
         where,
@@ -143,26 +171,6 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
     }
 
     if (scene.judulDi) cekKata('judulDi', scene.judulDi);
-    if (scene.type === 'hook') {
-      const legacyHookSlugs = new Set(['token-listrik', 'sadap-lims', 'gandum-tropis']);
-      if (!legacyHookSlugs.has(slug) && words.length > 15) {
-        warn(
-          where,
-          `Hook narasi terlalu panjang (${words.length} kata, batas 14 kata / ~3-4 detik).`,
-          'Ringkas jadi 1 kalimat stop-scroll (8-14 kata): "[Fakta/aksi 4 kata], kok/kenapa [kejanggalan 5 kata]?" tanpa kalimat pengantar.',
-        );
-      }
-      for (const field of ['baris1', 'baris2']) {
-        const val = scene[field];
-        if (typeof val === 'string' && val.trim().length > 28) {
-          warn(
-            where,
-            `${field} "${val}" terlalu panjang (${val.trim().length} karakter, batas 28).`,
-            'Ringkas menjadi 2-5 kata yang utuh secara logika agar banner hook tetap 1 baris.',
-          );
-        }
-      }
-    }
     if (scene.di) cekKata('di', scene.di);
     if (scene.rakitDi) cekKata('rakitDi', scene.rakitDi);
     if (scene.beban?.di) cekKata('beban.di', scene.beban.di);
@@ -194,7 +202,10 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       }
     }
 
-    if ((scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
+    if (!legacy) cekMotionScene(scene, where, lapor);
+    if (!legacy) cekZona(scene, where, lapor, ukuran);
+    if (!legacy) cekBeat(scene, where, lapor);
+    if (legacy && (scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
       const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);
       if (totalAksi === 0) {
         warn(
@@ -207,6 +218,7 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
 
     for (const [ii, item] of allItems.entries()) {
       const itemLabel = `${where} item ${ii + 1}`;
+      cekSkemaItem(item, itemLabel, lapor);
       if (item.src && !(await existsPublic(item.src))) {
         err(itemLabel, `File prop public/${item.src} tidak ditemukan.`);
       }
@@ -234,7 +246,16 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
       }
 
       for (const [ai, aksi] of (item.aksi ?? []).entries()) {
-        if (aksi.di) cekKata(`${itemLabel} aksi[${ai + 1}].di`, aksi.di);
+        if (aksi.di) {
+          const idxAksi = cekKata(`${itemLabel} aksi[${ai + 1}].di`, aksi.di);
+          if (!legacy && idxAksi >= 0 && idxDi >= 0 && indexOfWord(words, aksi.di, idxDi + 1) < 0) {
+            err(
+              `${itemLabel} aksi[${ai + 1}].di`,
+              `Urutan waktu terbalik: aksi di "${aksi.di}" hanya muncul sebelum atau bersamaan dengan di "${item.di}", jadi engine menjalankannya 12 frame setelah item masuk.`,
+              'Pilih kata pemicu aksi yang diucapkan sesudah kata di item.',
+            );
+          }
+        }
         if (aksi.sampai) cekKata(`${itemLabel} aksi[${ai + 1}].sampai`, aksi.sampai);
         if (aksi.sfx && !(await existsPublic(`sfx/${aksi.sfx}.wav`))) {
           err(
@@ -255,7 +276,43 @@ export const validasiExplainer = async (script, slug = 'explainer') => {
     }
   }
 
+  if (!legacy) {
+    cekProps(script, props, kata, lapor);
+    cekMotionVideo(script, lapor);
+    cekNarasiVideo(script, lapor);
+    cekDurasi(script, kataJson, lapor);
+  }
+
   return {errors, warnings};
+};
+
+const muatRencana = async (slug, opts) => {
+  if (opts.rencana !== undefined) return opts.rencana;
+  try {
+    return await fs.readFile(path.resolve('src/explainer/data', `${slug}.rencana.md`), 'utf8');
+  } catch {
+    return null;
+  }
+};
+
+const muatProps = async (slug, opts, lapor) => {
+  if (Array.isArray(opts.props)) return opts.props;
+  let raw = opts.propsRaw;
+  if (raw === undefined) {
+    try {
+      raw = await fs.readFile(path.resolve('src/explainer/data', `${slug}.props.json`), 'utf8');
+    } catch {
+      return [];
+    }
+  }
+  try {
+    const data = JSON.parse(raw);
+    if (Array.isArray(data)) return data;
+    lapor.err('props.json', 'Isi props.json harus berupa array.', 'Bungkus entri dengan [ ... ].');
+  } catch (e) {
+    lapor.err('props.json', `File props.json bukan JSON valid (${e.message}).`, 'Perbaiki tanda koma/kurung di props.json.');
+  }
+  return [];
 };
 
 const isMain =
@@ -264,12 +321,15 @@ const isMain =
 if (isMain) {
   const slug = process.argv[2];
   if (!slug) {
-    console.error('Pakai: node scripts/cek-explainer.mjs <slug>');
+    console.error('Pakai: node scripts/cek-explainer.mjs <slug> [--peta]');
     process.exit(1);
   }
 
   try {
     const script = await loadScript(slug);
+    if (process.argv.includes('--peta')) {
+      console.log(formatPeta(script, await importTs('src/lib/kata.ts')));
+    }
     const {errors, warnings} = await validasiExplainer(script, slug);
 
     try {
@@ -289,10 +349,12 @@ if (isMain) {
     if (errors.length > 0) {
       console.error(`\n✗ GAGAL: ${errors.length} error, ${warnings.length} peringatan.`);
       process.exitCode = 1;
-    } else {
+    } else if (warnings.length > 0) {
       console.log(
-        `\n✓ LULUS: ${slug} (${script.scenes.length} scene, ${warnings.length} peringatan).`,
+        `\n⚠ BELUM SELESAI: ${slug} (${script.scenes.length} scene, 0 error, ${warnings.length} peringatan). Selesai = 0 error dan 0 peringatan; kerjakan setiap PERBAIKI di atas.`,
       );
+    } else {
+      console.log(`\n✓ LULUS: ${slug} (${script.scenes.length} scene, 0 error, 0 peringatan).`);
     }
   } catch (e) {
     console.error(`✗ Gagal membaca naskah "${slug}": ${e.message}`);

@@ -1,0 +1,31 @@
+PANDUAN TTS: potongan-gaji
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs potongan-gaji <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±5.0 detik
+Gaji lima juta, kok yang masuk rekening cuma empat juta delapan ratus?
+
+[02] (stage) ±7.9 detik
+Biasanya langsung curiga HRD main potong seenaknya. Padahal tiap potongan ada aturannya, dan sebagian malah balik ke kamu sendiri.
+
+[03] (beat) ±2.1 detik
+Oke, sini gue jelasin hitungannya.
+
+[04] (diagram) ±15.8 detik
+Dari lima juta, satu persen buat BPJS Kesehatan, dua persen buat Jaminan Hari Tua, dan satu persen buat Jaminan Pensiun. Pajaknya masih nol karena gajinya di bawah lima koma empat juta. Sisa bersihnya empat juta delapan ratus ribu.
+
+[05] (stage) ±10.8 detik
+Yang jarang orang tahu, kantor juga ikut bayar hampir lima ratus ribu tiap bulan. Uang Jaminan Hari Tua itu juga tetap milik kamu, bisa dicairkan nanti.
+
+[06] (stage) ±7.5 detik
+Jadi jangan cuma lihat angka akhirnya, cek slip gaji tiap bulan dan pantau saldo JHT lewat aplikasi JMO.
+
+Perkiraan total narasi: ±49 detik (belum termasuk jeda)

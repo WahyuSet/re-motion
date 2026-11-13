@@ -2,12 +2,10 @@
 // Waktu chapter & subtitle diambil dari komposisi (sama persis dengan hasil render).
 //
 // Pakai: node scripts/paket-youtube.mjs gunung-kawi
-// Hasil: out/youtube/<slug>/
+// Hasil: out/sejarah/<slug>/ atau out/explainer/<slug>/ (folder yang sama dengan MP4 hasil render)
 //   thumbnail.jpg        1280×720 (short: cover 1080×1920), dari Still <Id>Thumb
 //   thumbnail-kecil.jpg  320×180 (short: 180×320) untuk cek keterbacaan di ukuran kecil
-//   judul.txt            kolom Judul
-//   deskripsi.txt        kolom Deskripsi (paragraf, chapter, kredit foto, hashtag)
-//   tags.txt             kolom Tags (dipisah koma)
+//   youtube.txt          JUDUL, DESKRIPSI (paragraf, chapter, kredit, hashtag), dan TAGS dalam 1 file
 //   subtitle.id.srt      unggah di menu Subtitel, bahasa Indonesia
 
 import fs from 'node:fs/promises';
@@ -16,6 +14,7 @@ import sharp from 'sharp';
 import {bukaKomposisi, idDari, tutup, waktuScene} from './lib/komposisi.mjs';
 import {kreditFoto} from './lib/kredit.mjs';
 import {loadScript} from './lib/load-script.mjs';
+import {folderHasil, folderHasilRel, formatYoutubeTxt} from './lib/folder-hasil.mjs';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -38,8 +37,8 @@ if (!script.youtube?.judul) {
 }
 
 const short = script.format === 'short';
-const outDir = path.resolve('out/youtube', slug);
-await fs.rm(outDir, {recursive: true, force: true});
+const outDir = folderHasil(slug);
+// Folder tidak dihapus: MP4 hasil render ada di folder yang sama.
 await fs.mkdir(outDir, {recursive: true});
 const peringatan = [];
 const hasil = [];
@@ -107,15 +106,11 @@ try {
   if (judul.length > MAKS.judul) peringatan.push(`Judul ${judul.length} huruf, YouTube menolak lebih dari ${MAKS.judul}.`);
   if (deskripsi.length > MAKS.deskripsi) peringatan.push(`Deskripsi ${deskripsi.length} huruf, batas YouTube ${MAKS.deskripsi}.`);
   if (tagsTxt.length > MAKS.tags) peringatan.push(`Tags ${tagsTxt.length} huruf, batas YouTube ${MAKS.tags}. Kurangi tags.`);
-  if (!tags.length) peringatan.push('youtube.tags kosong: deskripsi tanpa hashtag, tags.txt kosong.');
+  if (!tags.length) peringatan.push('youtube.tags kosong: deskripsi tanpa hashtag, bagian TAGS kosong.');
 
-  await fs.writeFile(path.join(outDir, 'judul.txt'), judul);
-  await fs.writeFile(path.join(outDir, 'deskripsi.txt'), deskripsi);
-  await fs.writeFile(path.join(outDir, 'tags.txt'), tagsTxt);
+  await fs.writeFile(path.join(outDir, 'youtube.txt'), formatYoutubeTxt({judul, deskripsi, tags: tagsTxt}));
   hasil.push(
-    `judul.txt (${judul.length} huruf)`,
-    `deskripsi.txt (${chapter.length} chapter, ${entries.length} kredit foto${videoEntries.length ? `, ${videoEntries.length} kredit video` : ''}${musik ? ', 1 kredit musik' : ''})`,
-    `tags.txt (${tags.length} tag)`,
+    `youtube.txt (judul ${judul.length} huruf; deskripsi ${chapter.length} chapter, ${entries.length} kredit foto${videoEntries.length ? `, ${videoEntries.length} kredit video` : ''}${musik ? ', 1 kredit musik' : ''}; ${tags.length} tag)`,
   );
 
   // ---- Subtitle: teks naskah (bukan transkrip), dipotong per ≤6 kata / ≤42 huruf, pecah di akhir kalimat ----
@@ -168,7 +163,7 @@ try {
   await tutup();
 }
 
-console.log(`\nPaket YouTube: out/youtube/${slug}/`);
+console.log(`\nPaket YouTube: ${folderHasilRel(slug)}/`);
 for (const h of hasil) console.log(`  ${h}`);
 if (peringatan.length) {
   console.log(`\nPERINGATAN (${peringatan.length})`);

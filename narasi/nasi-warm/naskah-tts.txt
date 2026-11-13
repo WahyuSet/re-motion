@@ -1,0 +1,31 @@
+PANDUAN TTS: nasi-warm
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs nasi-warm <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±4.6 detik
+Nasinya cuma dihangatkan dua belas jam, kok warnanya kayak roti bakar?
+
+[02] (stage) ±11.7 detik
+Warnanya sih mirip nasi kuning syukuran, tapi banyak yang ngira itu tanda basi. Padahal mode warm justru menahan nasi di atas enam puluh derajat, jadi kuman gak betah.
+
+[03] (beat) ±2.1 detik
+Oke, sini gue jelasin penyebabnya.
+
+[04] (stage) ±9.6 detik
+Pemanasnya nyala terus, jadi gula dan protein di nasi pelan-pelan saling bereaksi. Namanya reaksi Maillard, reaksi yang sama bikin roti menguning di pemanggang.
+
+[05] (stage) ±7.9 detik
+Makin lama, air di nasi ikut menguap lewat tutup. Lewat dua belas jam, nasinya kering dan keras kayak kerupuk.
+
+[06] (stage) ±7.9 detik
+Jadi, warm cukup beberapa jam aja dan jangan tambahin nasi dingin ke nasi hangat. Sisanya mending simpan di kulkas.
+
+Perkiraan total narasi: ±44 detik (belum termasuk jeda)

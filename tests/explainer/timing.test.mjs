@@ -131,3 +131,26 @@ test('fitThumbFontSize keeps maxFont for short titles and scales down proportion
   assert.ok(longSize < 80 && longSize >= 52, `expected scaled font between 52 and 79, got ${longSize}`);
 });
 
+
+test('grow memakai toScale untuk X dan Y', async () => {
+  const {hitungTransformItem} = await importTs('src/explainer/timing.ts');
+  const item = {kind: 'prop', x: 50, y: 50, float: false, masuk: 'none', aksi: [{type: 'grow', delay: 0, toScale: 1.5, durasi: 10}]};
+  const tf = hitungTransformItem(item, 40, 30, [], 100);
+  assert.ok(Math.abs(tf.scaleX - 1.5) < 1e-6, `scaleX ${tf.scaleX}`);
+  assert.ok(Math.abs(tf.scaleY - 1.5) < 1e-6, `scaleY ${tf.scaleY}`);
+});
+
+test('grow: toScaleX menang atas toScale', async () => {
+  const {hitungTransformItem} = await importTs('src/explainer/timing.ts');
+  const item = {kind: 'prop', x: 50, y: 50, float: false, masuk: 'none', aksi: [{type: 'grow', delay: 0, toScale: 1.5, toScaleX: 2, durasi: 10}]};
+  const tf = hitungTransformItem(item, 40, 30, [], 100);
+  assert.ok(Math.abs(tf.scaleX - 2) < 1e-6, `scaleX ${tf.scaleX}`);
+  assert.ok(Math.abs(tf.scaleY - 1.5) < 1e-6, `scaleY ${tf.scaleY}`);
+});
+
+test('dim menerima alias to', async () => {
+  const {hitungTransformItem} = await importTs('src/explainer/timing.ts');
+  const item = {kind: 'prop', x: 50, y: 50, float: false, masuk: 'none', aksi: [{type: 'dim', delay: 0, to: 0.5, durasi: 10}]};
+  const tf = hitungTransformItem(item, 40, 30, [], 100);
+  assert.ok(Math.abs(tf.opacity - 0.5) < 1e-6, `opacity ${tf.opacity}`);
+});

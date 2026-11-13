@@ -3,6 +3,7 @@ import type {TransitionType, WordTiming, YoutubeMeta} from '../types';
 export type StageSymbolType =
   | 'larang'
   | 'centang'
+  | 'silang'
   | 'panah'
   | 'tanya'
   | 'retak'
@@ -60,10 +61,13 @@ export type StageAction = {
   toScaleY?: number;
   /** Untuk 'dim' */
   toOpacity?: number;
+  /** Alias toOpacity untuk 'dim' */
+  to?: number;
   /** Untuk 'shake' */
   intensitas?: number;
   /** Untuk 'pulse' */
   sampai?: string;
+  skala?: number;
 };
 
 export type StageItem = {
@@ -106,10 +110,6 @@ type BaseExplainerScene = {
   bab?: string;
   /** Path gambar latar lokasi hybrid di public/ (contoh: 'latar/token-kos.png') */
   latar?: string;
-  /** Opacity latar lokasi (default 0.28) */
-  latarOpacity?: number;
-  /** Blur piksel latar lokasi (default 5) */
-  latarBlur?: number;
 };
 
 export type HookScene = BaseExplainerScene & {

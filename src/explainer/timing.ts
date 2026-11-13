@@ -258,12 +258,14 @@ export const hitungTransformItem = (
         originY = 'bottom';
         const fromSX = scaleX;
         const fromSY = scaleY;
-        if (a.toScaleX !== undefined) scaleX = fromSX + (a.toScaleX - fromSX) * p;
-        if (a.toScaleY !== undefined) scaleY = fromSY + (a.toScaleY - fromSY) * p;
+        const targetX = a.toScaleX ?? a.toScale;
+        const targetY = a.toScaleY ?? a.toScale;
+        if (targetX !== undefined) scaleX = fromSX + (targetX - fromSX) * p;
+        if (targetY !== undefined) scaleY = fromSY + (targetY - fromSY) * p;
         break;
       }
       case 'dim': {
-        const target = a.toOpacity ?? 0.25;
+        const target = a.toOpacity ?? a.to ?? 0.25;
         opacity = opacity + (target - opacity) * p;
         break;
       }
@@ -277,7 +279,8 @@ export const hitungTransformItem = (
       }
       case 'pulse': {
         if (frame <= a.endAt) {
-          const s = 1 + 0.08 * Math.sin((frame - a.at) * 0.45);
+          const amp = a.skala !== undefined ? Math.max(0.01, a.skala - 1) : 0.08;
+          const s = 1 + amp * Math.sin((frame - a.at) * 0.45);
           scaleX *= s;
           scaleY *= s;
         }

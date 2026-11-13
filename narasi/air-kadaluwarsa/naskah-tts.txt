@@ -1,0 +1,31 @@
+PANDUAN TTS: air-kadaluwarsa
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs air-kadaluwarsa <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±3.8 detik
+Air putih gak pernah basi, kok botolnya ada kadaluwarsa?
+
+[02] (stage) ±8.8 detik
+Banyak yang ngira airnya bisa jamuran atau basi seperti susu, padahal umur air di bumi sudah jutaan tahun dan tetap segar.
+
+[03] (beat) ±2.5 detik
+Oke, sini gue jelasin alasan sebenarnya.
+
+[04] (stage) ±10.4 detik
+Tanggal di kemasan itu sebenarnya batas umur botol plastiknya. Lewat dari dua tahun, ikatan plastik mulai rapuh sehingga partikel mikroplastik ikut luruh ke dalam air.
+
+[05] (stage) ±10.8 detik
+Apalagi kalau botolnya keseringan kena panas matahari di dalam mobil, zat kimia antimoni dari dinding plastik akan larut dan mengubah rasa air jadi pahit seperti plastik.
+
+[06] (stage) ±8.8 detik
+Karena itu, simpan stok air minum di tempat teduh, atau tuang ke botol stainless supaya air putih kita tetap aman diminum.
+
+Perkiraan total narasi: ±45 detik (belum termasuk jeda)

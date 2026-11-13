@@ -1,0 +1,31 @@
+PANDUAN TTS: telur-kulkas
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs telur-kulkas <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±5.0 detik
+Semua kulkas punya rak telur di pintu, kok raknya gak boleh dipakai?
+
+[02] (stage) ±12.5 detik
+Banyak yang ngira rak pintu paling aman buat telur. Padahal tiap pintu kulkas dibuka, angin hangat dari luar langsung nabrak telur duluan. Belum lagi telurnya ikut keguncang tiap pintu dibanting.
+
+[03] (beat) ±4.6 detik
+Oke, sini gue jelasin kenapa rak pintu bikin telur cepat rusak.
+
+[04] (stage) ±11.7 detik
+Bagian dalam kulkas idealnya dingin stabil di empat derajat. Tapi suhu rak pintu terus naik-turun, bikin cangkang telur berembun. Saat cangkangnya lembap, belasan ribu pori gampang ditembus bakteri.
+
+[05] (stage) ±10.4 detik
+Selain bikin telur kemasukan bakteri, pori-porinya juga nyedot bau tajam makanan lain, kayak ikan asin. Kebayang gak kalau telur dadar pagimu mendadak rasa ikan asin.
+
+[06] (stage) ±11.3 detik
+Jadi taruh telur di rak bagian dalam kulkas yang paling dingin dan stabil. Simpan di wadah tertutup atau karton telur, supaya telurnya awet sampai tiga minggu lebih.
+
+Perkiraan total narasi: ±55 detik (belum termasuk jeda)
