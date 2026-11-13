@@ -14,7 +14,7 @@ Setiap pesan validator berbentuk `lokasi: masalah → PERBAIKI: langkah`. Kerjak
 1. Jangan sentuh engine sejarah: `src/HistoryVideo.tsx`, `src/Thumbnail.tsx`, `src/theme.ts`, `src/types.ts`, `src/scenes/*`, `src/components/*`, `src/data/*`.
 2. File yang boleh diedit hanya milik video itu: `src/explainer/data/<slug>.{ts,rencana.md,props.json,latar.json,sumber.md}` dan `src/explainer/daftar.ts`.
 3. Scene `hook`, `stage`, `diagram` wajib punya `latar: 'latar/<slug>-N.png'` yang unik per scene. Hanya `beat` yang tanpa latar. Jangan pakai `latarOpacity`/`latarBlur`.
-4. `watermark: '@okesini-id'` (nama channel final, tampil di pojok kiri atas). Video LEGACY lama boleh tetap `false`.
+4. `watermark: '@okesini-id'` (nama channel final, tampil di pojok kiri atas) dan `gayaTeks: 'stiker'` (semua item teks jadi stiker die-cut, lihat `referensi/visual.md` bagian "Gaya Teks"). Keduanya sudah diisi kerangka `baru:explainer`; jangan dihapus. Video LEGACY lama boleh tetap `watermark: false` dan tanpa `gayaTeks`.
 5. Angka di `narasi` wajib huruf (`seratus ribu`, bukan `100.000`). Digit hanya boleh di `baris1`/`baris2`/teks panggung.
 6. Posisi dicek dari **tepi kotak** prop (lebar = `width`, tinggi = `width` × rasio PNG asli), bukan titik tengahnya. Keempat tepi harus di area aman Shorts: kiri ≥ 7%, **kanan ≤ 86%** (sisi kanan tertutup tombol), atas ≥ 13%, bawah ≤ 78%. Tepi atas di bawah judul (hook ≥ 28%, stage berjudul ≥ 22%), tepi bawah di atas subtitle (≤ 73,5%). Prop potret tinggi (meteran, tiang, botol) butuh `width` kecil. `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180. (dicek validator: A1, L1, L2)
 7. Scene `beat` selalu: tanpa `latar`, `teks: 'Oke, sini gue jelasin.'` (persis), dan item `props/meme-kucing-jelasin.png` (`masuk: 'pop'`, **tanpa** `sfx`, karena banner sudah berbunyi pop). Narasinya boleh dilanjutkan: "Oke, *sini gue jelasin* penyebabnya." (dicek validator: B1-B4)
@@ -108,6 +108,8 @@ Tiga video ini lolos validator tanpa peringatan dan sudah dirender final. **Sebe
 Topik baru yang tidak cocok dengan ketiganya tetap boleh; ambil patokan terdekat dan sebutkan bedanya di `.rencana.md`. Ketiga patokan dijaga test `tests/explainer/patokan.test.mjs`: kalau aturan validator berubah dan patokan jadi gagal, perbaiki patokannya juga.
 
 Patokan dibuat sebelum aturan komedi K1-K3 (daftar `KOMEDI_LAMA` di `scripts/lib/explainer-cek/komedi.mjs`), jadi **jangan tiru narasinya untuk soal komedi**: ambil rumus joke dari `referensi/narasi.md`. Video baru tidak boleh dimasukkan ke `KOMEDI_LAMA`.
+
+Patokan juga dibuat sebelum gaya teks stiker, jadi teksnya masih kotak datar; video baru tetap pakai `gayaTeks: 'stiker'`. Contoh lengkap yang sudah memakai komedi tertulis **dan** stiker: `air-kadaluwarsa` (remake), lihat `referensi/contoh-scene.md`.
 
 ## Referensi
 

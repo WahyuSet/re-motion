@@ -52,8 +52,8 @@ test('A1: prop di tengah dengan width wajar lolos', async () => {
 });
 
 test('V6: serah-terima sampai = di di posisi sama jadi peringatan, kecuali keluar none', async () => {
-  const lama = {kind: 'prop', src: 'props/air-botol-retak.png', x: 40, y: 50, width: 260, delay: 0, sampai: 'rapuh'};
-  const baru = {kind: 'prop', src: 'props/air-galon-sejuk.png', x: 42, y: 52, width: 260, di: 'rapuh'};
+  const lama = {kind: 'prop', src: 'props/meme-kucing-jelasin.png', x: 40, y: 50, width: 260, delay: 0, sampai: 'rapuh'};
+  const baru = {kind: 'prop', src: 'props/meme-kucing-paw.png', x: 42, y: 52, width: 260, di: 'rapuh'};
   const tumpuk = await validasiExplainer(naskah([lama, baru]), 'uji-kotak', OPTS);
   assert.ok(ada(tumpuk.warnings, 'V6'), tumpuk.warnings.join(' | '));
   const bersih = await validasiExplainer(naskah([{...lama, keluar: 'none'}, baru]), 'uji-kotak', OPTS);
@@ -61,8 +61,9 @@ test('V6: serah-terima sampai = di di posisi sama jadi peringatan, kecuali kelua
 });
 
 test('V6: dua prop berjauhan tapi titik tengah dekat-sumbu tidak ditandai kalau kotaknya tidak bertumpuk', async () => {
-  const a = {kind: 'prop', src: 'props/air-botol-retak.png', x: 30, y: 40, width: 120, delay: 0};
-  const b = {kind: 'prop', src: 'props/air-galon-sejuk.png', x: 30, y: 54, width: 120, delay: 0};
+  // Meme dari library tetap (bukan prop video) supaya test tidak putus saat aset video dihapus.
+  const a = {kind: 'prop', src: 'props/meme-kucing-jelasin.png', x: 30, y: 40, width: 120, delay: 0};
+  const b = {kind: 'prop', src: 'props/meme-kucing-paw.png', x: 30, y: 54, width: 120, delay: 0};
   const {warnings} = await validasiExplainer(naskah([a, b]), 'uji-kotak', OPTS);
   assert.ok(!ada(warnings, 'V6'), warnings.join(' | '));
 });

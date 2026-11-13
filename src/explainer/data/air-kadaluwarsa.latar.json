@@ -1,27 +1,32 @@
 [
   {
     "name": "air-kadaluwarsa-1",
-    "prompt": "wide realistic modern photography of a bright convenience store cooler shelf filled with neatly organized clear bottled mineral water, clean lighting, full-bleed camera frame no border, high detail",
-    "utuh": true
+    "utuh": true,
+    "prompt": "plain deep teal painted wall with soft even daylight, empty, minimal, close view of the wall only"
   },
   {
     "name": "air-kadaluwarsa-2",
-    "prompt": "wide realistic modern nature photography of a crystal clear mountain spring stream flowing over clean river rocks in bright morning sunlight, lush green nature, full-bleed camera frame no border, high detail",
-    "utuh": true
-  },
-  {
-    "name": "air-kadaluwarsa-3",
-    "prompt": "wide realistic modern photography of a clean water quality testing laboratory workbench with microscope and glass beakers, bright soft daylight, full-bleed camera frame no border, high detail",
-    "utuh": true
+    "utuh": true,
+    "prompt": "plain warm terracotta painted wall with soft warm evening light, empty, minimal, close view of the wall only"
   },
   {
     "name": "air-kadaluwarsa-4",
-    "prompt": "wide realistic modern photography of a car interior backseat and trunk under hot bright midday sunlight shining through the window, warm sun flare, full-bleed camera frame no border, high detail",
-    "utuh": true
+    "utuh": true,
+    "prompt": "plain light grey painted wall with soft cool office daylight, empty, minimal, close view of the wall only"
   },
   {
     "name": "air-kadaluwarsa-5",
-    "prompt": "wide realistic modern photography of a cool shaded minimalist kitchen counter with clean wooden surface and soft natural light, full-bleed camera frame no border, high detail",
-    "utuh": true
+    "utuh": true,
+    "prompt": "plain dark slate blue painted wall with soft even light, empty, minimal, close view of the wall only"
+  },
+  {
+    "name": "air-kadaluwarsa-6",
+    "utuh": true,
+    "prompt": "blazing hot midday sky with a harsh white sun and strong heat haze, pale washed-out blue sky above a distant hazy horizon line, empty, minimal"
+  },
+  {
+    "name": "air-kadaluwarsa-7",
+    "utuh": true,
+    "prompt": "plain soft sky blue painted wall in cool shade, gentle diffused light, empty, minimal, close view of the wall only"
   }
 ]

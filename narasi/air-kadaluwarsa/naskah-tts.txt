@@ -10,22 +10,25 @@ Cara pakai:
 
 Daftar scene (untuk referensi, JANGAN ikut dibacakan):
 
-[01] (hook) ±3.8 detik
-Air putih gak pernah basi, kok botolnya ada kadaluwarsa?
+[01] (hook) ±4.2 detik
+Air putih gak bisa basi, kok botolnya dikasih tanggal kedaluwarsa?
 
-[02] (stage) ±8.8 detik
-Banyak yang ngira airnya bisa jamuran atau basi seperti susu, padahal umur air di bumi sudah jutaan tahun dan tetap segar.
+[02] (stage) ±7.1 detik
+Banyak yang langsung buang air botol lewat tanggal. Atau diterawang dulu ke lampu, kayak ngecek uang palsu.
 
-[03] (beat) ±2.5 detik
-Oke, sini gue jelasin alasan sebenarnya.
+[03] (beat) ±4.2 detik
+Oke, sini gue jelasin tanggal di botol itu buat apa.
 
-[04] (stage) ±10.4 detik
-Tanggal di kemasan itu sebenarnya batas umur botol plastiknya. Lewat dari dua tahun, ikatan plastik mulai rapuh sehingga partikel mikroplastik ikut luruh ke dalam air.
+[04] (stage) ±6.7 detik
+Tanggal itu wajib dari aturan label BPOM. Cuka aja bebas tanggal, air putih malah kena tilang.
 
-[05] (stage) ±10.8 detik
-Apalagi kalau botolnya keseringan kena panas matahari di dalam mobil, zat kimia antimoni dari dinding plastik akan larut dan mengubah rasa air jadi pahit seperti plastik.
+[05] (stage) ±9.2 detik
+Tanggalnya batas mutu terjamin, bukan batas basi. Masalahnya, botol plastik gak rapat total. Taruh dekat jeriken bensin, airnya bisa rasa pom bensin.
 
-[06] (stage) ±8.8 detik
-Karena itu, simpan stok air minum di tempat teduh, atau tuang ke botol stainless supaya air putih kita tetap aman diminum.
+[06] (stage) ±10.0 detik
+Apalagi kalau botolnya nginep di mobil. Kabin yang dijemur bisa tembus enam puluh derajat. Di suhu segitu, zat plastik namanya antimoni makin cepat lepas.
 
-Perkiraan total narasi: ±45 detik (belum termasuk jeda)
+[07] (stage) ±9.6 detik
+Jadi, simpan di tempat sejuk, jauh dari matahari dan bau tajam. BPOM udah wajibin pesan itu di label. Gak usah diterawang, cukup dibaca.
+
+Perkiraan total narasi: ±51 detik (belum termasuk jeda)

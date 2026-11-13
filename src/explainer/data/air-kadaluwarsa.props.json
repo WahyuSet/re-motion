@@ -1,42 +1,16 @@
 [
-  {
-    "name": "air-botol-expired",
-    "prompt": "clear plastic mineral water bottle with a bold red expiration date stamp label on the middle, studio product photography cutout, isolated on clean background, high detail",
-    "untuk": "kok botolnya ada kadaluwarsa"
-  },
-  {
-    "name": "air-susu-basi",
-    "prompt": "bloated white milk carton box with greenish sour spoiled stains, studio product photography cutout, isolated on clean background, crisp edges",
-    "untuk": "basi seperti susu"
-  },
-  {
-    "name": "air-tetes-murni",
-    "prompt": "3D glossy crystal clear pure blue water droplet with fresh sparkle glint, studio product photography cutout, isolated on clean background",
-    "untuk": "umur air di bumi sudah jutaan tahun"
-  },
-  {
-    "name": "air-botol-retak",
-    "prompt": "aged crumpled clear plastic water bottle with fine microscopic cracks and degraded texture, studio product photography cutout, isolated on clean background",
-    "untuk": "batas umur botol plastiknya"
-  },
-  {
-    "name": "air-mikroplastik",
-    "prompt": "magnifying glass zooming in on tiny colorful microplastic particles floating in water droplet, studio product photography cutout, isolated on clean background",
-    "untuk": "partikel mikroplastik ikut luruh"
-  },
-  {
-    "name": "air-panas-matahari",
-    "prompt": "warped plastic water bottle glowing warm orange under intense heat radiation, studio product photography cutout, isolated on clean background",
-    "untuk": "panas matahari di dalam mobil"
-  },
-  {
-    "name": "air-galon-sejuk",
-    "prompt": "neatly stored mineral water bottles and dispenser gallon in a cool shaded rack, studio product photography cutout, isolated on clean background",
-    "untuk": "simpan stok air minum di tempat teduh"
-  },
-  {
-    "name": "air-tumbler-stainless",
-    "prompt": "sleek modern silver stainless steel insulated water tumbler bottle with fresh cold condensation drops, studio product photography cutout, isolated on clean background",
-    "untuk": "tuang ke botol stainless"
-  }
+  {"name": "air-kadaluwarsa-botol", "untuk": "botolnya dikasih tanggal kedaluwarsa", "merek": "AIR OKE SINI", "prompt": "a single clear plastic 600ml mineral drinking water bottle with a blue screw cap, full of clear water, a bright red and yellow printed front label that reads exactly \"AIR OKE SINI\" in bold capital letters, below the brand a large bold red rectangular rubber stamp mark that reads \"EXP\", whole bottle in view, front view, upright"},
+  {"name": "air-kadaluwarsa-tong-sampah", "untuk": "buang air botol lewat tanggal", "prompt": "a grey plastic household trash bin with its lid open, several unopened clear plastic water bottles full of water being thrown in and sticking out of the top, whole bin in view, no logos, no text"},
+  {"name": "air-kadaluwarsa-terawang-botol", "untuk": "diterawang dulu ke lampu", "prompt": "a person's hand holding a clear plastic water bottle full of water up high against a glowing round ceiling lamp, inspecting the water against the light, light shining through the water, side view, hand, bottle and lamp all visible, no logos, no text"},
+  {"name": "air-kadaluwarsa-uang-terawang", "untuk": "kayak ngecek uang palsu", "prompt": "a person's hand holding a single red Indonesian one hundred thousand rupiah banknote up against a bright glowing light bulb to check the watermark, light shining through the paper, realistic paper texture, hand, banknote and bulb all visible"},
+  {"name": "air-kadaluwarsa-buku-aturan", "untuk": "aturan label BPOM", "prompt": "a thick official government regulation document booklet with a plain dark green cover and a round red rubber stamp mark on the cover, lying slightly open with a few bookmark tabs, no readable words, no logos"},
+  {"name": "air-kadaluwarsa-cuka", "untuk": "Cuka aja bebas tanggal", "prompt": "a single tall clear glass bottle of white vinegar with a plain red screw cap and a plain white label with no text, whole bottle in view, upright, front view"},
+  {"name": "air-kadaluwarsa-botol-tilang", "untuk": "air putih malah kena tilang", "prompt": "a single clear plastic water bottle full of water with a pink paper traffic violation ticket slip tied to its neck with a string, a silver police whistle hanging next to the ticket, whole bottle in view, upright, no logos, no readable text"},
+  {"name": "air-kadaluwarsa-jeriken", "untuk": "Taruh dekat jeriken bensin", "prompt": "a single red plastic fuel jerry can for gasoline with a black screw cap and handle, whole can in view, three quarter view, no logos, no text"},
+  {"name": "air-kadaluwarsa-gelas-bensin", "untuk": "airnya bisa rasa pom bensin", "prompt": "a tall clear drinking glass full of water with a black gas station fuel pump nozzle and its black hose dipped into the glass, as if fueling the glass of water, whole glass and nozzle in view, side view, no logos, no text"},
+  {"name": "air-kadaluwarsa-dasbor", "untuk": "kalau botolnya", "prompt": "a single clear plastic water bottle full of water with a blue cap lying on its side, harsh bright sunlight glare on it, whole bottle in view, no logos, no text"},
+  {"name": "air-kadaluwarsa-mobil", "untuk": "nginep di mobil", "prompt": "a small silver hatchback city car parked, full side view of the whole car, bright harsh sunlight glare on the roof and windows, no logos, no text, no license plate"},
+  {"name": "air-kadaluwarsa-termometer", "untuk": "tembus enam puluh derajat", "prompt": "a single tall glass laboratory thermometer standing upright, red liquid column risen almost to the top, glowing hot red tip, no readable numbers, whole thermometer in view"},
+  {"name": "air-kadaluwarsa-botol-panas", "untuk": "zat plastik namanya antimoni makin cepat lepas", "prompt": "a single clear plastic water bottle half full of water, slightly warped and dented from heat, glowing warm orange heat haze around it, tiny particles floating in the water, whole bottle in view, upright, no logos, no text"},
+  {"name": "air-kadaluwarsa-lemari-sejuk", "untuk": "simpan di tempat sejuk", "prompt": "an open cardboard case of clear plastic water bottles placed on the bottom shelf of an open wooden pantry cabinet, cool shaded interior, whole cabinet and case in view, no logos, no text"}
 ]

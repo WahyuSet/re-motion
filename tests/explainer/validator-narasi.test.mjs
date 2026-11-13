@@ -87,7 +87,7 @@ test('D3: video pendek lolos', async () => {
 
 test('CLI mencetak BELUM SELESAI selama masih ada peringatan', async () => {
   const {execFileSync} = await import('node:child_process');
-  const out = execFileSync(process.execPath, ['scripts/cek-explainer.mjs', 'air-kadaluwarsa'], {encoding: 'utf8'});
+  const out = execFileSync(process.execPath, ['scripts/cek-explainer.mjs', 'kamar-panas'], {encoding: 'utf8'});
   assert.ok(out.includes('BELUM SELESAI') && !out.includes('✓ LULUS'), out.slice(-300));
   const bersih = execFileSync(process.execPath, ['scripts/cek-explainer.mjs', 'kabel-kendor'], {encoding: 'utf8'});
   assert.ok(bersih.includes('✓ LULUS'), bersih.slice(-300));
