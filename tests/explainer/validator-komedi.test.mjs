@@ -53,3 +53,17 @@ test('slug di KOMEDI_LAMA tidak dicek aturan K', async () => {
   const lama = await validasiExplainer(naskah([prop({delay: 0})]), 'bensin-pagi', {props: [], rencana: rencana([])});
   assert.ok(!ada(lama.warnings, 'K1'), lama.warnings.join(' | '));
 });
+
+test('K4: gag punchline di ujung scene harus tertahan minimal 1,2 detik', async () => {
+  const items = [prop({delay: 0, aksi: [{type: 'shake', di: 'subuh', sfx: 'boom'}]}), prop({x: 70, di: 'sarung', sfx: 'womp'})];
+  const mepet = await cek(items, [JOKE, JOKE2]);
+  assert.ok(ada(mepet.warnings, 'K4 visual gag punchline "sarung"'), mepet.warnings.join(' | '));
+  const tertahan = await validasiExplainer(
+    {...naskah(items), scenes: [{...naskah(items).scenes[0], duration: 220}, naskah(items).scenes[1]]},
+    'uji-komedi',
+    {props: [], rencana: rencana([JOKE, JOKE2])},
+  );
+  assert.ok(!ada(tertahan.warnings, 'K4'), tertahan.warnings.join(' | '));
+  const keburu = await cek([items[0], prop({x: 70, di: 'pakai', sampai: 'sarung', sfx: 'womp'})], [JOKE, JOKE2]);
+  assert.ok(ada(keburu.warnings, 'K3') || ada(keburu.warnings, 'K4'), keburu.warnings.join(' | '));
+});

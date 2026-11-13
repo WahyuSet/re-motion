@@ -1,4 +1,4 @@
-// Aturan komedi tertulis (K1-K3). Meme, SFX, dan teks celetukan (M4-M6) cuma dekorasi;
+// Aturan komedi tertulis (K1-K4). Meme, SFX, dan teks celetukan (M4-M6) cuma dekorasi;
 // yang bikin penonton ketawa adalah kalimat joke di narasi + visual gag tepat di kata punchline.
 // Joke direncanakan di bagian "## Komedi" rencana.md, lalu dicek ke naskah.
 
@@ -26,6 +26,16 @@ const MIN_WIDTH_GAG = 240;
 const SFX_KOMEDI = new Set(['boing', 'boom', 'womp', 'slap', 'ding', 'fahh', 'ack']);
 const SFX_DEFAULT_AKSI = {jump: 'boing', peek: 'boing', squash: 'slap', shake: 'dum'};
 const SFX_DEFAULT_SIMBOL = {centang: 'ding', silang: 'slap', larang: 'dum', retak: 'dum'};
+
+/** Visual gag minimal tampil selama ini (detik) setelah kata punchline mulai diucapkan. */
+const MIN_TAMPIL_GAG = 1.2;
+/** Perkiraan kecepatan TTS kalau kata.json belum ada (sama dengan narasi.mjs). */
+const KATA_PER_DETIK = 2.4;
+/** NARASI_TAIL (12 frame) dan TAHAN_AKHIR scene terakhir (30 frame) di engine, dalam detik @30fps. */
+const EKOR_SCENE = 12 / 30;
+const TAHAN_AKHIR = 30 / 30;
+/** Narasi mulai NARASI_DELAY (8 frame) setelah scene mulai. */
+const NARASI_DELAY = 8 / 30;
 
 const PANDUAN = 'Lihat referensi/narasi.md bagian "Komedi".';
 
@@ -61,9 +71,10 @@ const kejadianKomedi = (scene, words, kata) => {
     }
     const kind = item.kind ?? (item.simbol ? 'simbol' : item.teks ? 'teks' : 'prop');
     const besar = kind !== 'prop' || (item.width ?? 340) >= MIN_WIDTH_GAG;
+    const keluar = item.sampai ? kata.indexOfWord(words, item.sampai, cursor) : -1;
     if (masuk >= 0) {
       const sfx = item.sfx === false ? null : (item.sfx ?? SFX_DEFAULT_SIMBOL[item.simbol] ?? null);
-      hasil.push({idx: masuk, sfx, besar, label: item.src ?? item.teks ?? item.simbol});
+      hasil.push({idx: masuk, sfx, besar, keluar, label: item.src ?? item.teks ?? item.simbol});
     }
     let ac = cursor;
     for (const a of item.aksi ?? []) {
@@ -73,13 +84,13 @@ const kejadianKomedi = (scene, words, kata) => {
       if (idx < 0) continue;
       ac = idx + 1;
       const sfx = a.sfx === false ? null : (a.sfx ?? SFX_DEFAULT_AKSI[a.type] ?? null);
-      hasil.push({idx, sfx, besar, label: `${a.type}@${a.di}`});
+      hasil.push({idx, sfx, besar, keluar, label: `${a.type}@${a.di}`});
     }
   }
   return hasil;
 };
 
-export const cekKomedi = (script, rencana, kata, lapor) => {
+export const cekKomedi = (script, rencana, kata, lapor, kataJson = null) => {
   if (rencana === null || rencana === undefined) return; // sudah dilaporkan R1
   const jokes = bacaTabelKomedi(rencana);
   if (!jokes || jokes.length < MIN_JOKE) {
@@ -93,6 +104,14 @@ export const cekKomedi = (script, rencana, kata, lapor) => {
 
   const scenes = script?.scenes ?? [];
   const wordsPerScene = scenes.map((s) => (s.narasi ? kata.parseWords(s.narasi.trim()) : []));
+  const waktu = (si, idx) => (Array.isArray(kataJson?.[si]?.[idx]) ? kataJson[si][idx][0] : idx / KATA_PER_DETIK);
+  const akhirScene = (si) => {
+    const n = wordsPerScene[si].length;
+    const akhir = Array.isArray(kataJson?.[si]?.[n - 1]) ? kataJson[si][n - 1][1] : n / KATA_PER_DETIK;
+    // `duration` naskah adalah durasi minimum; kalau lebih panjang dari audio, scene ikut tertahan.
+    const minimum = (scenes[si].duration ?? 0) / 30 - NARASI_DELAY;
+    return Math.max(akhir + EKOR_SCENE, minimum) + (si === scenes.length - 1 ? TAHAN_AKHIR : 0);
+  };
 
   for (const j of jokes) {
     const where = `komedi #${j.no}`;
@@ -130,7 +149,20 @@ export const cekKomedi = (script, rencana, kata, lapor) => {
       );
     }
     const gag = kejadianKomedi(scenes[si], words, kata).filter((k) => k.idx === p);
-    const kena = gag.some((k) => k.besar && SFX_KOMEDI.has(k.sfx));
+    const lucu = gag.filter((k) => k.besar && SFX_KOMEDI.has(k.sfx));
+    if (lucu.length) {
+      // K4: gag yang keluar tepat di kata sesudah punchline cuma lewat sekilas (TTS nyaris tanpa jeda).
+      const tPunch = waktu(si, p);
+      const tampil = Math.max(...lucu.map((k) => (k.keluar >= 0 ? waktu(si, k.keluar) : akhirScene(si)) - tPunch));
+      if (tampil < MIN_TAMPIL_GAG) {
+        lapor.warn(
+          `scene ${si + 1} (${scenes[si].type})`,
+          `K4 visual gag punchline "${j.punchline}" (komedi #${j.no}) cuma tampil ${tampil.toFixed(1)} detik (minimal ${MIN_TAMPIL_GAG}).`,
+          'Pindahkan sampai item gag ke kata yang lebih belakang (sekitar 3 kata setelah punchline) atau hapus sampai-nya. Kalau punchline di ujung scene, naikkan duration scene itu sekitar 30 frame di atas panjang narasinya supaya ada jeda ketawa sebelum scene berganti.',
+        );
+      }
+    }
+    const kena = lucu.length > 0;
     if (!kena) {
       lapor.warn(
         `scene ${si + 1} (${scenes[si].type})`,

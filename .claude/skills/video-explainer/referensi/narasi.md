@@ -16,7 +16,7 @@ Narasi dibacakan TTS dan didengar sekali lewat. Penonton tidak bisa membaca ulan
 
 Setiap scene stage/diagram: 2-3 kalimat, 20-35 kata.
 
-## Komedi (dicek validator K1-K3)
+## Komedi (dicek validator K1-K4)
 
 Penonton channel ini ketawa karena **kalimat**, bukan karena ada suara "boing". Tiap video wajib 2-3 joke tertulis di narasi, idealnya 1 di scene salah kaprah, 1 saat fakta terbongkar, 1 di penutup.
 
@@ -34,7 +34,8 @@ Aturan joke:
 2. Satu joke = satu kalimat pendek tersendiri, jangan diselipkan di tengah kalimat fakta.
 3. Joke harus nyambung ke fakta, bukan lelucon acak. Angka/harga di joke wajib ada di `sumber.md`.
 4. Lucu dari kebiasaan lokal ("Indonesia banget": sarung, parkir, antre, emak-emak, ojol), bukan dari merendahkan orang, agama, suku, atau fisik.
-5. Visual gag di kata punchline: prop/meme **besar di tengah** (bukan pojok), masuk tepat di kata itu, SFX `womp`/`boom`/`boing`/`slap` (dan `shake`/`squash` kalau perlu).
+5. Visual gag di kata punchline: prop/meme **besar di tengah** (bukan pojok), masuk tepat di kata itu, SFX `fahh`/`ack`/`womp`/`boom`/`boing`/`slap` (dan `shake`/`squash` kalau perlu).
+6. **Gag harus tertahan minimal 1,2 detik setelah punchline** (validator K4). TTS hampir tidak memberi jeda, jadi gag yang `sampai`-nya di kata tepat sesudah punchline cuma lewat sekilas. Taruh `sampai` sekitar 3 kata setelah punchline atau hapus. Punchline di ujung scene: naikkan `duration` scene itu sekitar 30 frame di atas panjang narasinya. Scene terakhir otomatis ditahan 1 detik oleh engine.
 
 ## Dari Sumber ke Narasi
 
