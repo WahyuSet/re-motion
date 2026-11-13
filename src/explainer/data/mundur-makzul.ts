@@ -8,14 +8,14 @@ const P = (nama: string) => `props/mundur-makzul-${nama}.png`;
 
 export const mundurMakzul: ExplainerScript = {
   format: 'short',
-  watermark: false,
+  watermark: '@okesini-id',
   narasiAudio: 'audio/mundur-makzul',
   narasiExt: 'wav',
   youtube: {
     judul: 'Wapres Mundur Cukup 1 Surat, Kok Makzul Harus Lewat 3 Lembaga?',
     deskripsi:
       'Mundur dan dimakzulkan sama-sama bikin pejabat lepas jabatan, tapi jalurnya beda. Mundur itu kemauan sendiri: wapres menyerahkan surat ke MPR dan kursinya kosong, lalu Presiden mengajukan dua nama dan MPR memilih salah satunya paling lama 60 hari (Pasal 8 ayat 2 UUD 1945). Dimakzulkan itu diberhentikan dan harus ada alasannya, misalnya korupsi atau tidak lagi memenuhi syarat (Pasal 7A). Jalurnya lewat tiga lembaga: DPR dengan dukungan 2/3 anggota yang hadir, MK yang memutus paling lama 90 hari, lalu MPR (Pasal 7B).',
-    tags: ['makzul', 'pemakzulan', 'wakil presiden', 'uud 1945', 'mpr', 'dpr', 'mahkamah konstitusi', 'edukasi', 'nahhgini'],
+    tags: ['makzul', 'pemakzulan', 'wakil presiden', 'uud 1945', 'mpr', 'dpr', 'mahkamah konstitusi', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'BEDANYA MUNDUR DAN',
@@ -38,7 +38,7 @@ export const mundurMakzul: ExplainerScript = {
         x: 34,
         y: 52,
         width: 380,
-        masuk: 'drop',
+        masuk: 'none',
         delay: 0,
         aksi: [
           {type: 'wiggle', di: 'mundur', rotate: 8, durasi: 16},

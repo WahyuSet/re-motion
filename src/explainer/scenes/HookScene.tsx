@@ -29,11 +29,15 @@ export const HookSceneView: React.FC<{
 }> = ({scene, words}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const s1 = spring({frame, fps, config: {damping: 14, mass: 0.7}});
-  const s2 = spring({frame: frame - 4, fps, config: {damping: 14, mass: 0.7}});
+  // Judul sudah utuh di frame 0 (penonton feed memutuskan geser di detik pertama);
+  // setelah narasi mulai, judul cuma berdenyut kecil sekali supaya tetap terasa hidup.
+  const denyut = spring({frame: frame - 10, fps, config: {damping: 10, mass: 0.6}});
+  const s1 = 1 + 0.04 * Math.sin(Math.PI * Math.min(1, denyut));
+  const s2 = 1 + 0.04 * Math.sin(Math.PI * Math.min(1, Math.max(0, denyut - 0.15)));
 
-  const f1 = fitThumbFontSize(scene.baris1, 74, 912);
-  const f2 = scene.baris2 ? fitThumbFontSize(scene.baris2, 68, 888) : 68;
+  // Batas lebar 960 px; judul pendek otomatis lebih besar. Total tinggi 2 baris tetap di bawah ~28%.
+  const f1 = fitThumbFontSize(scene.baris1, 92, 960);
+  const f2 = scene.baris2 ? fitThumbFontSize(scene.baris2, 84, 936) : 84;
   const stroke1 = Math.max(10, Math.round(f1 * 0.16));
   const stroke2 = Math.max(9, Math.round(f2 * 0.15));
 
@@ -72,8 +76,7 @@ export const HookSceneView: React.FC<{
             paintOrder: 'stroke fill',
             textShadow: outlineShadow(stroke1),
             filter: 'drop-shadow(0 10px 0 rgba(0, 0, 0, 0.9)) drop-shadow(0 16px 20px rgba(0, 0, 0, 0.55))',
-            transform: `scale(${0.85 + 0.15 * s1})`,
-            opacity: Math.min(1, s1 * 2),
+            transform: `scale(${s1})`,
           }}
         >
           {scene.baris1}
@@ -85,8 +88,7 @@ export const HookSceneView: React.FC<{
               padding: '12px 30px',
               borderRadius: 16,
               boxShadow: '0 10px 0 rgba(0, 0, 0, 0.55), 0 18px 24px rgba(0, 0, 0, 0.35)',
-              transform: `rotate(-1deg) scale(${0.85 + 0.15 * s2})`,
-              opacity: Math.min(1, s2 * 2),
+              transform: `rotate(-1deg) scale(${s2})`,
               display: 'inline-flex',
               justifyContent: 'center',
               alignItems: 'center',

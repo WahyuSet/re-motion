@@ -8,7 +8,7 @@ export const refleksKucing: ExplainerScript = {
   youtube: {
     judul: 'Kenapa Kucing Bisa Mendarat dengan Kaki Duluan?',
     deskripsi: 'Refleks membalik tubuh kucing saat jatuh melibatkan tulang belakang lentur dan gerakan bagian depan-belakang tubuh. Ini bukan berarti setiap jatuh aman.',
-    tags: ['kucing', 'fisika', 'refleks kucing', 'sains', 'edukasi', 'nahhgini'],
+    tags: ['kucing', 'fisika', 'refleks kucing', 'sains', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'KUCING JATUH',
@@ -21,7 +21,7 @@ export const refleksKucing: ExplainerScript = {
       type: 'hook', duration: 105, latar: 'latar/refleks-kucing-1.png',
       baris1: 'KUCING JATUH', baris2: 'KOK BISA MUTER?',
       narasi: 'Kucing jatuh telentang, kok bisa muter dan mendarat pakai kaki?',
-      utama: {kind: 'prop', src: 'props/meme-kucing-paw.png', x: 34, y: 54, width: 320, masuk: 'drop', aksi: [{type: 'wiggle', di: 'telentang', durasi: 16}, {type: 'move', di: 'muter', toX: 28, toY: 55, durasi: 16}, {type: 'jump', di: 'pakai kaki', durasi: 16}]},
+      utama: {kind: 'prop', src: 'props/meme-kucing-paw.png', x: 34, y: 54, width: 320, masuk: 'none', aksi: [{type: 'wiggle', di: 'telentang', durasi: 16}, {type: 'move', di: 'muter', toX: 28, toY: 55, durasi: 16}, {type: 'jump', di: 'pakai kaki', durasi: 16}]},
       items: [
         {kind: 'simbol', simbol: 'tanya', x: 72, y: 35, width: 130, delay: 0, aksi: [{type: 'peek', di: 'kok bisa', sfx: 'boing'}]},
         {kind: 'teks', teks: 'GRAVITASI: BUKAN TOMBOL PUTAR', x: 62, y: 68, ukuran: 27, warna: '#fff', kotak: '#111a22', masuk: 'slide-left', di: 'muter'},

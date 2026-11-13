@@ -15,7 +15,7 @@ export const telurKulkas: ExplainerScript = {
     judul: 'Rak Telur di Pintu Kulkas, Kok Gak Boleh Dipakai?',
     deskripsi:
       'Hampir semua kulkas punya rak telur di pintu, padahal pakar keamanan pangan justru menyarankan jangan simpan telur di situ. Setiap kali pintu kulkas dibuka, udara hangat membuat suhu di rak pintu naik-turun di atas batas aman 4°C dan memicu pengembunan pada belasan ribu pori cangkang telur. Akibatnya bakteri lebih mudah masuk dan telur cepat menyerap bau kulkas. Simpan telur di rak bagian dalam kulkas dalam wadah tertutup atau kartonnya agar lebih tahan lama.',
-    tags: ['telur kulkas', 'keamanan pangan', 'tips dapur', 'sains sehari-hari', 'edukasi', 'nahhgini'],
+    tags: ['telur kulkas', 'keamanan pangan', 'tips dapur', 'sains sehari-hari', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'RAK TELUR DI PINTU KULKAS',
@@ -38,7 +38,7 @@ export const telurKulkas: ExplainerScript = {
         x: 34,
         y: 55,
         width: 320,
-        masuk: 'drop',
+        masuk: 'none',
         delay: 0,
         aksi: [
           {type: 'wiggle', di: 'telur', rotate: 10, durasi: 16},

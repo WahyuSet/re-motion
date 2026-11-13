@@ -13,7 +13,7 @@ export const blackBox: ExplainerScript = {
     judul: 'Fungsi Asli Black Box Pesawat: Kenapa Selalu Dicari Pertama Kali?',
     deskripsi:
       'Kenapa setiap kali ada pesawat jatuh, tim SAR selalu sibuk mencari black box yang warnanya justru oranye terang? Ini fungsi nyata dua alat di dalamnya: Flight Data Recorder (FDR) dan Cockpit Voice Recorder (CVR).',
-    tags: ['black box', 'pesawat', 'aviasi', 'fdr', 'cvr', 'edukasi', 'nahhgini'],
+    tags: ['black box', 'pesawat', 'aviasi', 'fdr', 'cvr', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'FUNGSI BLACK BOX',

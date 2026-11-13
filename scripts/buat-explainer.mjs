@@ -49,14 +49,14 @@ const template = `import type {ExplainerScript} from '../types';
 // Cek dengan: npm run cek:explainer -- ${slug} --peta
 export const ${varName}: ExplainerScript = {
   format: 'short',
-  watermark: false,
+  watermark: '@okesini-id',
   // Isi dua baris ini SETELAH audio narasi dipotong (node scripts/potong-narasi.mjs ${slug} <file-audio>):
   // narasiAudio: 'audio/${slug}',
   // narasiExt: 'wav',
   youtube: {
     judul: 'TODO Judul ${title}',
     deskripsi: 'TODO Deskripsi singkat topik ${title}.',
-    tags: ['edukasi', 'explainer'],
+    tags: ['edukasi', 'explainer', 'okesini'],
   },
   // Judul 2 baris utuh dan natural (<= 28 huruf per baris). Baris 1 = sticker putih, Baris 2 = stabilo kuning + sticker putih.
   thumbnail: {

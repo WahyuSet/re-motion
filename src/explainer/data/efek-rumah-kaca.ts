@@ -20,7 +20,7 @@ export const efekRumahKaca: ExplainerScript = {
       'sains populer',
       'fisika',
       'edukasi',
-      'nahhgini',
+      'okesini',
     ],
   },
   thumbnail: {

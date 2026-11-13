@@ -95,3 +95,15 @@ test('R2: kurang dari 5 kandidat jadi peringatan', async () => {
   const {warnings} = await cek(naskah({}), empat);
   assert.ok(ada(warnings, 'R2'), warnings.join(' | '));
 });
+
+test('H6: prop utama hook harus tampil penuh di frame 0', async () => {
+  const utama = (u) => ({utama: {kind: 'prop', src: 'props/meme-kucing-paw.png', x: 34, y: 54, width: 300, ...u}});
+  const tanpa = await cek(naskah({}));
+  assert.ok(ada(tanpa.warnings, 'H6 hook belum punya utama'), tanpa.warnings.join(' | '));
+  const drop = await cek(naskah(utama({masuk: 'drop', delay: 0})));
+  assert.ok(ada(drop.warnings, "H6 prop utama hook belum tampil penuh di frame 0 (masuk 'drop')"), drop.warnings.join(' | '));
+  const telat = await cek(naskah(utama({masuk: 'none', di: 'botolnya'})));
+  assert.ok(ada(telat.warnings, "di 'botolnya'"), telat.warnings.join(' | '));
+  const ok = await cek(naskah(utama({masuk: 'none', delay: 0})));
+  assert.ok(!ada(ok.warnings, 'H6'), ok.warnings.join(' | '));
+});

@@ -18,7 +18,7 @@ export const bajuKuning: ExplainerScript = {
       'deodoran',
       'sains sehari-hari',
       'edukasi',
-      'nahhgini',
+      'okesini',
     ],
   },
   thumbnail: {

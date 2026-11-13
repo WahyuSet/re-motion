@@ -18,7 +18,7 @@ export const airKadaluwarsa: ExplainerScript = {
       'mikroplastik',
       'sains sehari-hari',
       'edukasi',
-      'nahhgini',
+      'okesini',
     ],
   },
   thumbnail: {
@@ -42,7 +42,7 @@ export const airKadaluwarsa: ExplainerScript = {
         x: 32,
         y: 52,
         width: 310,
-        masuk: 'pop',
+        masuk: 'none',
         delay: 0,
         aksi: [
           {type: 'wiggle', di: 'basi', rotate: 12, durasi: 16},

@@ -21,7 +21,7 @@ export const penggunaanPajak: ExplainerScript = {
       'cukai',
       'edukasi keuangan',
       'ekonomi indonesia',
-      'nahhgini',
+      'okesini',
     ],
   },
   thumbnail: {
@@ -46,7 +46,7 @@ export const penggunaanPajak: ExplainerScript = {
         x: 32,
         y: 52,
         width: 290,
-        masuk: 'drop',
+        masuk: 'none',
         delay: 0,
         sfx: 'boom',
         aksi: [

@@ -32,8 +32,9 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
   const latar = thumb?.latar ?? (hook?.type === 'hook' ? hook.latar : undefined);
   const stabilo = thumb?.stabilo ?? STABILO_DEFAULT;
 
-  const f1 = fitThumbFontSize(baris1, 80, 912);
-  const f2 = baris2 ? fitThumbFontSize(baris2, 74, 888) : 74;
+  // Thumbnail dilihat kecil di grid channel/penelusuran: judul sebesar mungkin, dibatasi lebar 980 px.
+  const f1 = fitThumbFontSize(baris1, 112, 980);
+  const f2 = baris2 ? fitThumbFontSize(baris2, 100, 956) : 100;
   const s1 = Math.max(10, Math.round(f1 * 0.16));
   const s2 = Math.max(9, Math.round(f2 * 0.15));
 
@@ -52,7 +53,8 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
       <AbsoluteFill
         style={{
           background:
-            'linear-gradient(180deg, rgba(11, 19, 27, 0.88) 0%, rgba(11, 19, 27, 0.62) 45%, rgba(11, 19, 27, 0.88) 100%)',
+            // Gelap hanya di pita judul atas; tengah dibiarkan terang supaya thumbnail tidak tenggelam di grid.
+            'linear-gradient(180deg, rgba(11, 19, 27, 0.7) 0%, rgba(11, 19, 27, 0.25) 38%, rgba(11, 19, 27, 0.1) 70%, rgba(11, 19, 27, 0.35) 100%)',
         }}
       />
 

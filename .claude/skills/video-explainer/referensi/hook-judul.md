@@ -37,6 +37,8 @@ Pilih Total tertinggi (seri: pilih yang lebih pendek). **Minimal 7.** Di bawah 7
 
 ## Judul (`baris1`, `baris2`)
 
+Ukuran huruf judul otomatis menyesuaikan lebar: makin pendek baris, makin besar hurufnya (hook maks. 92 px, thumbnail maks. 112 px). Usahakan `baris1` <= 18 karakter supaya judul tetap terbaca di grid channel dan feed.
+
 Diturunkan dari hook terpilih; dipakai di `thumbnail` dan scene `hook`.
 - `baris1` = subjek atau angka besar. `baris2` = kejanggalannya (tampil di stabilo kuning).
 - Maks. **28 karakter** per baris, 2-5 kata, utuh secara logika (bukan potongan telegram).

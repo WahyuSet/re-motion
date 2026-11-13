@@ -1,4 +1,4 @@
-// Aturan hook, judul, dan file rencana (H1-H4, R1-R2) untuk naskah explainer.
+// Aturan hook, judul, dan file rencana (H1-H6, R1-R3, T1) untuk naskah explainer.
 
 export const KATA_KONTRAS = ['kok', 'kenapa', 'padahal', 'cuma', 'ternyata', 'malah', 'bukan'];
 const MAX_BARIS = 28;
@@ -54,6 +54,22 @@ export const cekHook = (script, kata, lapor, {legacy}) => {
     if (!punyaKontras(scene.narasi.replace(/\*/g, ''))) {
       lapor.warn(where, 'H2 hook belum punya kata kontras.', `Masukkan salah satu: ${KATA_KONTRAS.join(', ')}.`);
     }
+    cekFrameNol(scene.utama, where, lapor);
+  }
+};
+
+// H6: hampir semua penonton Shorts datang dari feed dan memutuskan geser di detik pertama,
+// jadi frame 0 hook harus sudah lengkap: judul (statis di HookScene) + prop utama tanpa animasi masuk.
+const cekFrameNol = (u, where, lapor) => {
+  const fix = "Pakai masuk: 'none' dan delay: 0 tanpa di; pindahkan gerakan ke aksi (wiggle, pulse, shake) yang terikat kata.";
+  if (!u) {
+    lapor.warn(where, 'H6 hook belum punya utama, frame 0 belum menampilkan subjek.', `Tambah utama: {kind: 'prop', src: '<prop subjek>', ...}. ${fix}`);
+    return;
+  }
+  const masuk = u.masuk ?? 'pop';
+  if (masuk !== 'none' || u.di || (u.delay ?? 0) > 0) {
+    const sebab = [`masuk '${masuk}'`, u.di ? `di '${u.di}'` : '', u.delay ? `delay ${u.delay}` : ''].filter(Boolean).join(', ');
+    lapor.warn(where, `H6 prop utama hook belum tampil penuh di frame 0 (${sebab}).`, fix);
   }
 };
 

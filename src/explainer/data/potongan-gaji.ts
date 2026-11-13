@@ -15,7 +15,7 @@ export const potonganGaji: ExplainerScript = {
     judul: 'Gaji 5 Juta, Kok yang Masuk Rekening Cuma 4,8 Juta?',
     deskripsi:
       'Gaji Rp5 juta dipotong BPJS Kesehatan 1%, Jaminan Hari Tua 2%, dan Jaminan Pensiun 1%. PPh 21 kategori A masih 0% untuk gaji sampai Rp5,4 juta per bulan (PP 58/2023). Kantor juga ikut membayar 9,7% atau sekitar Rp485 ribu untuk iuran yang sama, dan saldo JHT tetap milik pekerja, bisa dicek lewat aplikasi JMO.',
-    tags: ['potongan gaji', 'bpjs', 'jht', 'gaji umr', 'pph 21', 'edukasi', 'nahhgini'],
+    tags: ['potongan gaji', 'bpjs', 'jht', 'gaji umr', 'pph 21', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'GAJI 5 JUTA',
@@ -38,7 +38,7 @@ export const potonganGaji: ExplainerScript = {
         x: 30,
         y: 56,
         width: 320,
-        masuk: 'drop',
+        masuk: 'none',
         delay: 0,
         aksi: [
           {type: 'wiggle', di: 'juta', rotate: 10, durasi: 16},

@@ -15,7 +15,7 @@ export const kabelKendor: ExplainerScript = {
     judul: 'Kabel Listrik di Depan Rumah Ternyata Memanjang Tiap Siang?',
     deskripsi:
       'Kabel listrik di tiang sengaja dipasang melengkung. Lengkungan ini disebut andongan. Kawat logam memuai saat siang karena panas matahari dan panas dari arus listrik, lalu menyusut saat malam. Kalau dipasang terlalu kencang, tarikan saat menyusut bisa memutus kabel atau menarik tiang. Asal masih di atas jarak aman ke tanah, lengkungan itu justru tanda kabel dipasang dengan benar.',
-    tags: ['kabel listrik', 'andongan', 'pemuaian', 'fisika sehari-hari', 'pln', 'edukasi', 'nahhgini'],
+    tags: ['kabel listrik', 'andongan', 'pemuaian', 'fisika sehari-hari', 'pln', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'KABEL DEPAN RUMAH',
@@ -38,7 +38,7 @@ export const kabelKendor: ExplainerScript = {
         x: 40,
         y: 56,
         width: 440,
-        masuk: 'grow-up',
+        masuk: 'none',
         delay: 0,
         aksi: [
           {type: 'wiggle', di: 'depan', rotate: 6, durasi: 16},

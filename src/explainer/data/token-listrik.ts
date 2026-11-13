@@ -9,7 +9,7 @@ export const tokenListrik: ExplainerScript = {
     judul: 'Kenapa Beli Token Listrik Rp100.000 Dapetnya Cuma 61,3 kWh?',
     deskripsi:
       'Beli token listrik Rp100.000 tapi yang masuk ke meteran cuma sekitar 61,3 kWh? Dan kenapa beli di kota lain hasilnya bisa beda? Ini rincian potongan biaya admin, Pajak Penerangan Jalan (PPJ), dan pembagian tarif dasar listrik per kWh.',
-    tags: ['token listrik', 'pln', 'listrik prabayar', 'kwh listrik', 'edukasi', 'nahhgini'],
+    tags: ['token listrik', 'pln', 'listrik prabayar', 'kwh listrik', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'TOKEN 100 RIBU',

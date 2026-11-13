@@ -10,7 +10,7 @@ export const bataZigzag: ExplainerScript = {
     judul: 'Kenapa Tukang Nggak Pernah Pasang Bata Lurus Sejajar?',
     deskripsi:
       'Kenapa pemasangan batu bata selalu dibuat selang-seling zig-zag alias running bond? Ini rahasia fisika konstruksi: distribusi beban piramida, kelemahan sambungan nat semen vertikal, dan cara dinding bata mengunci beban agar tidak mudah roboh.',
-    tags: ['batu bata', 'teknik sipil', 'konstruksi', 'fisika bangunan', 'edukasi', 'nahhgini'],
+    tags: ['batu bata', 'teknik sipil', 'konstruksi', 'fisika bangunan', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'PASANG BATA LURUS?',

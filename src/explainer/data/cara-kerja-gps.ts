@@ -12,7 +12,7 @@ export const caraKerjaGps: ExplainerScript = {
     judul: 'Tanpa Sinyal HP, Kok GPS Tetap Tahu Lokasi Kita?',
     deskripsi:
       'Di tengah hutan tanpa sinyal seluler, titik GPS di HP kita tetap jalan. Penerima GPS hanya menangkap sinyal radio dari satelit secara pasif, sementara kuota internet dipakai untuk mengunduh gambar peta.',
-    tags: ['cara kerja gps', 'satelit gps', 'sains populer', 'teknologi hp', 'edukasi', 'nahhgini'],
+    tags: ['cara kerja gps', 'satelit gps', 'sains populer', 'teknologi hp', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'TANPA SINYAL HP',
@@ -35,7 +35,7 @@ export const caraKerjaGps: ExplainerScript = {
         x: 32,
         y: 52,
         width: 290,
-        masuk: 'drop',
+        masuk: 'none',
         delay: 0,
         aksi: [
           {type: 'wiggle', di: 'hutan', rotate: 12, durasi: 16},

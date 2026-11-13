@@ -9,7 +9,7 @@ export const bpaFree: ExplainerScript = {
     judul: 'Botol Berlabel "BPA Free"? Ternyata Cuma Trik Marketing!',
     deskripsi:
       'Pernah beli botol air mineral sekali pakai karena ada stiker "BPA Free"? Ternyata plastik PET (kode nomor satu) dari awal memang nol persen BPA! Yuk bongkar mitos BPA, kapan BPA benar-benar berbahaya (plastik nomor tujuh dan panas ekstrem mobil), serta cara aman cek kode daur ulang di bawah botol minuman.',
-    tags: ['bpa free', 'botol plastik', 'air mineral', 'kesehatan', 'sains populer', 'edukasi', 'nahhgini'],
+    tags: ['bpa free', 'botol plastik', 'air mineral', 'kesehatan', 'sains populer', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'BOTOL "BPA FREE"?',

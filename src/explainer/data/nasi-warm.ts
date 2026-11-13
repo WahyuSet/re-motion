@@ -14,7 +14,7 @@ export const nasiWarm: ExplainerScript = {
     judul: 'Nasi Cuma Di-Warm, Kok Bisa Kuning Kayak Roti Bakar?',
     deskripsi:
       'Nasi yang kelamaan di mode warm rice cooker bisa menguning, kering, dan keras. Penyebabnya bukan basi, tapi reaksi Maillard antara gula dan protein karena dipanaskan terus, ditambah air yang menguap. Produsen rice cooker menyarankan mode warm tidak lebih dari 12 jam, dan sisa nasi sebaiknya disimpan di kulkas.',
-    tags: ['nasi', 'rice cooker', 'reaksi maillard', 'sains dapur', 'edukasi', 'nahhgini'],
+    tags: ['nasi', 'rice cooker', 'reaksi maillard', 'sains dapur', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'NASI DI-WARM 12 JAM',
@@ -37,7 +37,7 @@ export const nasiWarm: ExplainerScript = {
         x: 32,
         y: 56,
         width: 340,
-        masuk: 'drop',
+        masuk: 'none',
         delay: 0,
         aksi: [
           {type: 'wiggle', di: 'dihangatkan', rotate: 10, durasi: 16},

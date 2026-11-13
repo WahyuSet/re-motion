@@ -13,7 +13,7 @@ export const cas80: ExplainerScript = {
     judul: 'Kenapa HP Sekarang Disarankan Dicas Cuma Sampai 80%?',
     deskripsi:
       'Kenapa iPhone dan HP Android modern sekarang menyarankan batas pengisian daya cuma sampai 80 persen? Bukan karena takut meledak, tapi ini rahasia kimia baterai lithium-ion agar tetap awet bertahun-tahun.',
-    tags: ['baterai hp', 'tips hp', 'lithium ion', 'iphone', 'samsung', 'gadget', 'edukasi', 'nahhgini'],
+    tags: ['baterai hp', 'tips hp', 'lithium ion', 'iphone', 'samsung', 'gadget', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'CAS HP CUMA 80%',

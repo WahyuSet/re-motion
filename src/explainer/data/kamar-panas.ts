@@ -20,7 +20,7 @@ export const kamarPanas: ExplainerScript = {
       'fisika bangunan',
       'tips rumah',
       'edukasi',
-      'nahhgini',
+      'okesini',
     ],
   },
   thumbnail: {

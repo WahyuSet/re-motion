@@ -146,26 +146,30 @@ export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) =>
   return (
     <SfxContext.Provider value={script.sfx !== false}>
       <AbsoluteFill style={{backgroundColor: script.bg ?? explainerTheme.bg}}>
+        <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
         {watermarkText ? (
+          // Di atas semua scene (latar foto menutup lapisan di bawahnya). Pojok kiri atas, tepat di atas
+          // area aman Shorts: sisi kanan atas dipakai ikon aplikasi, judul hook mulai sekitar 13%.
           <div
             style={{
               position: 'absolute',
-              left: '50%',
-              top: '50%',
-              transform: 'translate(-50%, -50%)',
+              left: '7%',
+              top: '8.5%',
               fontFamily: explainerTheme.fontBody,
               fontWeight: 700,
-              fontSize: 34,
-              color: 'rgba(29, 24, 18, 0.09)',
-              letterSpacing: 1,
-              zIndex: 1,
+              fontSize: 28,
+              color: 'rgba(255, 255, 255, 0.92)',
+              backgroundColor: 'rgba(0, 0, 0, 0.32)',
+              padding: '6px 16px',
+              borderRadius: 999,
+              letterSpacing: 0.5,
+              zIndex: 50,
               pointerEvents: 'none',
             }}
           >
             {watermarkText}
           </div>
         ) : null}
-        <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
         {script.music ? (
           <Audio
             src={staticFile(script.music)}

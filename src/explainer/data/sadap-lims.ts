@@ -11,7 +11,7 @@ export const sadapLims: ExplainerScript = {
     judul: 'Heboh Penyadapan LIMS di Indonesia, Kok HP Gak Kerasa Apa-apa?',
     deskripsi:
       'Isu penyadapan LIMS (Lawful Interception Management System) lagi ramai dibahas di Indonesia. Apa itu LIMS, bagaimana cara kerjanya di operator telekomunikasi, dan kenapa aplikasi seperti WhatsApp tetap aman? Simak penjelasannya.',
-    tags: ['lims', 'penyadapan', 'telekomunikasi', 'keamanan siber', 'edukasi', 'nahhgini'],
+    tags: ['lims', 'penyadapan', 'telekomunikasi', 'keamanan siber', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'HP DISADAP',

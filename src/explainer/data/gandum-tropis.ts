@@ -11,7 +11,7 @@ export const gandumTropis: ExplainerScript = {
     judul: 'Kenapa Gandum Tidak Tumbuh di Indonesia? Padahal Kita Juara Makan Mie!',
     deskripsi:
       'Indonesia adalah salah satu konsumen mie instan dan tepung terigu terbesar di dunia, tapi kenapa hampir tidak ada sawah gandum komersial di negeri kita yang subur? Ini penjelasan ilmiah seputar fenomena vernalisasi, fotoperiodisme, dan iklim tropis.',
-    tags: ['gandum', 'pertanian', 'mie instan', 'terigu', 'vernalisasi', 'fotoperiodisme', 'sains', 'edukasi', 'nahhgini'],
+    tags: ['gandum', 'pertanian', 'mie instan', 'terigu', 'vernalisasi', 'fotoperiodisme', 'sains', 'edukasi', 'okesini'],
   },
   thumbnail: {
     baris1: 'KENAPA BAHAN BAKU TEPUNG',

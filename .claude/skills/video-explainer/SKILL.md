@@ -14,13 +14,14 @@ Setiap pesan validator berbentuk `lokasi: masalah → PERBAIKI: langkah`. Kerjak
 1. Jangan sentuh engine sejarah: `src/HistoryVideo.tsx`, `src/Thumbnail.tsx`, `src/theme.ts`, `src/types.ts`, `src/scenes/*`, `src/components/*`, `src/data/*`.
 2. File yang boleh diedit hanya milik video itu: `src/explainer/data/<slug>.{ts,rencana.md,props.json,latar.json,sumber.md}` dan `src/explainer/daftar.ts`.
 3. Scene `hook`, `stage`, `diagram` wajib punya `latar: 'latar/<slug>-N.png'` yang unik per scene. Hanya `beat` yang tanpa latar. Jangan pakai `latarOpacity`/`latarBlur`.
-4. `watermark: false` sampai nama channel final ditentukan.
+4. `watermark: '@okesini-id'` (nama channel final, tampil di pojok kiri atas). Video LEGACY lama boleh tetap `false`.
 5. Angka di `narasi` wajib huruf (`seratus ribu`, bukan `100.000`). Digit hanya boleh di `baris1`/`baris2`/teks panggung.
 6. Posisi dicek dari **tepi kotak** prop (lebar = `width`, tinggi = `width` × rasio PNG asli), bukan titik tengahnya. Keempat tepi harus di area aman Shorts: kiri ≥ 7%, **kanan ≤ 86%** (sisi kanan tertutup tombol), atas ≥ 13%, bawah ≤ 78%. Tepi atas di bawah judul (hook ≥ 28%, stage berjudul ≥ 22%), tepi bawah di atas subtitle (≤ 73,5%). Prop potret tinggi (meteran, tiang, botol) butuh `width` kecil. `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180. (dicek validator: A1, L1, L2)
 7. Scene `beat` selalu: tanpa `latar`, `teks: 'Oke, sini gue jelasin.'` (persis), dan item `props/meme-kucing-jelasin.png` (`masuk: 'pop'`, **tanpa** `sfx`, karena banner sudah berbunyi pop). Narasinya boleh dilanjutkan: "Oke, *sini gue jelasin* penyebabnya." (dicek validator: B1-B4)
 8. Setiap klausa narasi punya visual yang **menggambarkan isi klausa itu** (dicek validator: V1, V3, V4). Kata benda yang disebut (mobil, tanggal, botol) harus kelihatan di layar saat diucapkan.
 9. Setiap prop di `props.json` punya `untuk: "<frasa persis dari narasi>"` (dicek validator: V4).
 10. Hanya pakai nilai dan field yang ada di `referensi/visual.md` (dicek validator: S1, S2).
+11. Frame 0 hook harus lengkap: `utama` wajib ada dengan `masuk: 'none'`, `delay: 0`, tanpa `di`; gerakannya lewat `aksi`. Judul hook sudah statis di frame 0. Alasannya data channel: 88,8% penonton datang dari feed Shorts dan ±48% menggeser di detik pertama (dicek validator: H6).
 
 ## Alur Kerja
 
