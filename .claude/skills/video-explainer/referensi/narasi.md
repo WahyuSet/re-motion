@@ -9,12 +9,32 @@ Narasi dibacakan TTS dan didengar sekali lewat. Penonton tidak bisa membaca ulan
 | Scene | Isi | Komedi |
 |---|---|---|
 | 1 hook | 1 kalimat dari `referensi/hook-judul.md` | - |
-| 2 stage | Salah kaprah yang umum ("Banyak yang ngira ..., padahal ...") | 1 celetukan relatable / hiperbola |
+| 2 stage | Salah kaprah yang umum ("Banyak yang ngira ..., padahal ...") | 1 joke sindiran / hiperbola |
 | 3 beat | "Oke, *sini gue jelasin* ..." | meme kucing jelasin |
 | 4-5 stage/diagram | Fakta inti, angka, sebab-akibat | 1 punchline saat fakta terbongkar |
 | 6 stage | Solusi / kesimpulan praktis | meme jempol / centang |
 
 Setiap scene stage/diagram: 2-3 kalimat, 20-35 kata.
+
+## Komedi (dicek validator K1-K3)
+
+Penonton channel ini ketawa karena **kalimat**, bukan karena ada suara "boing". Tiap video wajib 2-3 joke tertulis di narasi, idealnya 1 di scene salah kaprah, 1 saat fakta terbongkar, 1 di penutup.
+
+| Jenis | Rumus | Contoh (topik bensin pagi) |
+|---|---|---|
+| `sindiran` | gambarkan kebiasaan penonton secara spesifik dan sedikit memalukan | Sampai rela antre di SPBU masih pakai *sarung*. |
+| `hiperbola` | lebih-lebihkan akibat sampai absurd | Nunggu bonusnya kerasa, motormu keburu *pensiun*. |
+| `perbandingan-absurd` | ubah angka jadi benda/harga sehari-hari yang kecil (rupiah wajib bersumber) | Kalau dirupiahin, bonusnya kalah sama *uang parkir*. |
+| `personifikasi` | benda diberi sifat orang | Bensinnya di bawah tanah, gak tahu sekarang subuh atau siang. Hidupnya *gelap terus*. |
+| `twist` | penutup membalik anggapan di hook | Yang hemat bukan bensinnya, tapi *jam tidurmu* yang boros. |
+| `callback` | ulang benda/kata lucu dari scene awal di penutup | Jadi, sarungnya pakai buat tidur aja, bukan buat antre *bensin*. |
+
+Aturan joke:
+1. **Punchline di ujung kalimat** (1-3 kata terakhir), lalu titik. TTS berhenti sebentar setelah titik, itu jeda ketawanya.
+2. Satu joke = satu kalimat pendek tersendiri, jangan diselipkan di tengah kalimat fakta.
+3. Joke harus nyambung ke fakta, bukan lelucon acak. Angka/harga di joke wajib ada di `sumber.md`.
+4. Lucu dari kebiasaan lokal ("Indonesia banget": sarung, parkir, antre, emak-emak, ojol), bukan dari merendahkan orang, agama, suku, atau fisik.
+5. Visual gag di kata punchline: prop/meme **besar di tengah** (bukan pojok), masuk tepat di kata itu, SFX `womp`/`boom`/`boing`/`slap` (dan `shake`/`squash` kalau perlu).
 
 ## Dari Sumber ke Narasi
 

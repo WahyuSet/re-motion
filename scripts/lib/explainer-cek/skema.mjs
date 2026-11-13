@@ -5,7 +5,7 @@
 export const MASUK = ['pop', 'drop', 'slide-left', 'slide-right', 'slide-up', 'grow-up', 'fade', 'none'];
 export const KELUAR = ['fade', 'pop-out', 'slide-left', 'slide-right', 'slide-down', 'none'];
 export const SIMBOL = ['larang', 'centang', 'silang', 'panah', 'tanya', 'retak', 'tetes-air', 'gelombang-air'];
-export const SFX = ['whoosh', 'dum', 'tik', 'pop', 'swell', 'boing', 'boom', 'womp', 'slap', 'ding'];
+export const SFX = ['whoosh', 'dum', 'tik', 'pop', 'swell', 'boing', 'boom', 'womp', 'slap', 'ding', 'fahh', 'ack'];
 export const TIPE_AKSI = ['move', 'peek', 'grow', 'dim', 'shake', 'pulse', 'jump', 'wiggle', 'squash'];
 
 const FIELD_UMUM = ['type', 'di', 'delay', 'durasi', 'sfx'];

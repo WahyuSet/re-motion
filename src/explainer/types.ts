@@ -38,7 +38,9 @@ export type ExplainerSfxName =
   | 'boom'
   | 'womp'
   | 'slap'
-  | 'ding';
+  | 'ding'
+  | 'fahh'
+  | 'ack';
 
 export type StageAction = {
   type: 'move' | 'peek' | 'grow' | 'dim' | 'shake' | 'pulse' | 'jump' | 'wiggle' | 'squash';

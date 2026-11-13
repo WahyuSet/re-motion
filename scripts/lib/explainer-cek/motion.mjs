@@ -1,6 +1,6 @@
 // Aturan kepadatan motion dan komedi (M1-M6) untuk naskah explainer.
 
-const SFX_KOMEDI = new Set(['boing', 'boom', 'womp', 'slap', 'ding']);
+const SFX_KOMEDI = new Set(['boing', 'boom', 'womp', 'slap', 'ding', 'fahh', 'ack']);
 const SFX_DEFAULT_AKSI = {jump: 'boing', peek: 'boing', squash: 'slap'};
 const SFX_DEFAULT_SIMBOL = {centang: 'ding', silang: 'slap'};
 
@@ -47,7 +47,7 @@ export const cekMotionVideo = (script, lapor) => {
   }
   const sfx = hitungSfxKomedi(script);
   if (sfx < 3) {
-    lapor.warn('video', `M5 hanya ${sfx} SFX komedi (minimal 3).`, "Pasang sfx 'boing', 'boom', 'womp', 'slap', atau 'ding' pada item/aksi di momen punchline.");
+    lapor.warn('video', `M5 hanya ${sfx} SFX komedi (minimal 3).`, "Pasang sfx 'fahh', 'ack', 'boing', 'boom', 'womp', 'slap', atau 'ding' pada item/aksi di momen punchline.");
   }
   const adaCeletukan = items.some((it) => it.teks && (it.ukuran ?? 56) <= 32 && (it.rotate ?? 0) !== 0);
   if (!adaCeletukan) {

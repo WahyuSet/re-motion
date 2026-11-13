@@ -57,11 +57,13 @@ Field umum semua aksi: `type`, `di`, `delay`, `durasi` (default 18), `sfx`. Aksi
 
 ## SFX
 
-Nama: `whoosh`, `dum`, `tik`, `pop`, `swell`, `boing`, `boom`, `womp`, `slap`, `ding`. `sfx: false` = bisu.
+Nama: `whoosh`, `dum`, `tik`, `pop`, `swell`, `boing`, `boom`, `womp`, `slap`, `ding`, `fahh`, `ack`. `sfx: false` = bisu.
 
 Default bunyi masuk item: `pop`; `centang` → `ding`; `silang` → `slap`; `larang`/`retak` → `dum`; item yang masuk di frame 0-2 tanpa `sfx` = bisu.
 
 Komedi (minimal 3 per video, validator M5):
+- `fahh` (teriakan meme "FAHHH", 1,8 dtk): punchline paling keras, salah kaprah konyol terbongkar, "gagal total". Maks. 1x per video supaya tidak basi; jangan ditumpuk SFX lain di kata yang sama.
+- `ack` ("ack" kaget/keselek, 1,4 dtk): kegep, kaget kecil, fakta yang bikin keselek. Cocok dengan meme kucing kaget/syok.
 - `boing`: prop nongol nyeleneh, `peek`, `jump`.
 - `womp`: salah kaprah terbongkar, uang terpotong, gagal.
 - `boom`: fakta mengejutkan, beban jatuh.

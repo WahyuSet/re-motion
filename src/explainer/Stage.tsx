@@ -17,6 +17,8 @@ const EXPLAINER_SFX_VOL: Record<ExplainerSfxName, number> = {
   womp: 0.32,
   slap: 0.3,
   ding: 0.28,
+  fahh: 0.32,
+  ack: 0.32,
 };
 
 export const ExplainerSfx: React.FC<{name: ExplainerSfxName; at?: number; volume?: number}> = ({

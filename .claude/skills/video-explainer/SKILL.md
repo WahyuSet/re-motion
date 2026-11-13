@@ -40,12 +40,15 @@ Baca `referensi/hook-judul.md`. Tulis 5 kandidat, 1 per rumus, beri skor 5 krite
 ### Langkah 3: Narasi (di `.rencana.md`, bagian `## Narasi`)
 Baca `referensi/narasi.md`. Tulis narasi per scene (5-7 scene: hook → stage salah kaprah → beat → stage/diagram fakta → stage penutup). Lalu jalankan checklist "uji baca keras" di `referensi/narasi.md`. **Jangan pakai skill `humanizer-indonesia`**: skill itu dikalibrasi untuk tulisan akademik dan justru membuat naskah lisan kaku. (dicek validator: N1-N5)
 
+### Langkah 3b: Komedi (di `.rencana.md`, bagian `## Komedi`)
+Meme dan SFX bukan komedi; yang bikin ketawa adalah **kalimat joke di narasi**. Tulis 2-3 joke ke narasi pakai rumus di `referensi/narasi.md` bagian "Komedi", lalu isi tabel `| # | Jenis | Kalimat joke | Punchline | Visual gag |`. Punchline = kata lucu di **1-3 kata terakhir** kalimat. Setiap punchline wajib punya visual gag besar (prop/meme width >= 240 atau teks) dengan `di` di kata punchline dan SFX komedi. (dicek validator: K1-K3)
+
 ### Langkah 4: Peta visual (di `.rencana.md`, bagian `## Peta Visual`)
 Pecah narasi tiap scene per klausa (dipotong di `, . ? ! ; :`). Untuk **setiap** klausa tulis 1 baris: `Klausa | Visual | File | Aksi`.
 - Visual = benda/karakter yang **disebut atau dimaksud** klausa itu. "di dalam mobil" → prop mobil. "Tanggal di kemasan" → prop label tanggal.
 - File = nama file prop/simbol/teks. Prop baru tulis `props/<slug>-<nama>.png`.
 - Aksi = gerak di kata pemicu, contoh `jump@botol`.
-Tambahkan 2-3 momen komedi (meme reaksi, `peek`, teks celetukan). Lihat `referensi/visual.md`.
+Baris klausa punchline memakai visual gag dari tabel `## Komedi`. Meme reaksi, `peek`, dan teks celetukan cuma bumbu tambahan. Lihat `referensi/visual.md`.
 
 ### Langkah 5: Props & latar dari peta
 Isi `<slug>.props.json` dari kolom File peta: `{"name", "prompt", "untuk"}`. `untuk` = frasa klausa yang diilustrasikan. Isi `<slug>.latar.json` 1 latar per scene non-beat. **Latar tidak boleh memuat benda yang juga jadi prop** (rice cooker, kulkas, tiang listrik, dsb.), karena prop akan menyatu dengan foto. Flow **mengabaikan larangan** seperti "no utility poles"; gambarkan pemandangan yang memang tidak punya benda itu (langit di atas atap, dinding polos), dan pilih latar yang kontras dengan warna prop. Lalu generate:
@@ -84,7 +87,7 @@ Semua hasil akhir ada di `out/explainer/<slug>/`: `<slug>.mp4`, `<slug>-720p.mp4
 
 ## Definisi Selesai
 
-- `.rencana.md` lengkap tanpa `TODO`, hook terpilih skor >= 7.
+- `.rencana.md` lengkap tanpa `TODO`, hook terpilih skor >= 7, minimal 2 joke di `## Komedi`.
 - `npm run cek:explainer -- <slug>` → `✓ LULUS: <slug> (... 0 error, 0 peringatan)`. Kalau yang muncul `⚠ BELUM SELESAI`, belum selesai: kerjakan setiap PERBAIKI.
 - Total durasi ≤ 60 detik (dicek validator: D3).
 - `--peta` tidak menampilkan `(kosong) ✗`, dan setiap benda yang disebut narasi kelihatan di klausanya.
@@ -101,6 +104,8 @@ Tiga video ini lolos validator tanpa peringatan dan sudah dirender final. **Sebe
 | `kabel-kendor` | fisika/teknik di jalan, dua keadaan | taruhan | siang vs malam, kendor vs kencang, latar langit/dinding polos supaya prop tipis tetap kontras |
 
 Topik baru yang tidak cocok dengan ketiganya tetap boleh; ambil patokan terdekat dan sebutkan bedanya di `.rencana.md`. Ketiga patokan dijaga test `tests/explainer/patokan.test.mjs`: kalau aturan validator berubah dan patokan jadi gagal, perbaiki patokannya juga.
+
+Patokan dibuat sebelum aturan komedi K1-K3 (daftar `KOMEDI_LAMA` di `scripts/lib/explainer-cek/komedi.mjs`), jadi **jangan tiru narasinya untuk soal komedi**: ambil rumus joke dari `referensi/narasi.md`. Video baru tidak boleh dimasukkan ke `KOMEDI_LAMA`.
 
 ## Referensi
 

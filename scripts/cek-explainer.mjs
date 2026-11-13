@@ -20,6 +20,7 @@ import {cekHook, cekRencana, cekThumbnail} from './lib/explainer-cek/hook.mjs';
 import {formatPeta} from './lib/explainer-cek/peta.mjs';
 import {cekBeat, cekZona} from './lib/explainer-cek/layout.mjs';
 import {muatUkuran} from './lib/explainer-cek/kotak.mjs';
+import {cekKomedi, KOMEDI_LAMA} from './lib/explainer-cek/komedi.mjs';
 
 // Video lama yang dibuat sebelum aturan V/M/H/R. Aturan skema (S) tetap berlaku.
 export const LEGACY = new Set([
@@ -88,6 +89,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   const props = legacy ? [] : await muatProps(slug, opts, lapor);
   const ukuran = legacy ? new Map() : await muatUkuran(script);
   if (!legacy) cekThumbnail(script, rencana, props, lapor);
+  if (!legacy && !KOMEDI_LAMA.has(slug)) cekKomedi(script, rencana, kata, lapor);
 
   const seenLatar = new Map();
 
