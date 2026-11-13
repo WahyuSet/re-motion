@@ -1,0 +1,27 @@
+[
+  {
+    "name": "bensin-pagi-1",
+    "utuh": true,
+    "prompt": "early dawn sky over an Indonesian neighborhood, soft pink and orange sky taking most of the frame, dark silhouettes of house rooftops at the bottom edge"
+  },
+  {
+    "name": "bensin-pagi-2",
+    "utuh": true,
+    "prompt": "plain light teal painted wall with warm morning sunlight falling diagonally, empty, minimal, close view of the wall only"
+  },
+  {
+    "name": "bensin-pagi-4",
+    "utuh": true,
+    "prompt": "clean light grey concrete floor texture seen from above, smooth with subtle joints, evenly lit, empty"
+  },
+  {
+    "name": "bensin-pagi-5",
+    "utuh": true,
+    "prompt": "plain pale yellow painted wall with soft even daylight, empty, minimal, close view of the wall only"
+  },
+  {
+    "name": "bensin-pagi-6",
+    "utuh": true,
+    "prompt": "(turunan lokal dari bensin-pagi-2: dicerminkan, hue digeser ke biru; Flow timeout 5x) plain light blue painted wall, soft daylight, empty"
+  }
+]
