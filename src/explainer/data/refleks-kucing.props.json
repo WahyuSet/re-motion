@@ -1,4 +1,13 @@
 [
-  {"name":"refleks-kucing-depan-belakang","prompt":"realistic orange cat body cutout shown in two clear connected sections front and rear twisting in opposite directions mid air, educational physics pose, full body, isolated transparent background"},
-  {"name":"refleks-kucing-mendarat","prompt":"realistic orange tabby cat upright in a four-paw landing pose just above a soft rug, full body visible, calm expression, isolated transparent background, no motion blur"}
+  {"name": "refleks-kucing-telentang", "untuk": "Kucing jatuh telentang", "prompt": "orange tabby cat falling upside down in mid-air, belly facing up, back facing the ground, all four paws pointing up, surprised wide eyes, full body"},
+  {"name": "refleks-kucing-mendarat", "untuk": "mendarat pakai kaki", "prompt": "realistic orange tabby cat upright in a four-paw landing pose just above a soft rug, full body visible, calm expression, isolated transparent background, no motion blur"},
+  {"name": "refleks-kucing-jilat", "untuk": "dia langsung jilat badan", "prompt": "orange tabby cat sitting and calmly licking its raised front paw, grooming, eyes half closed, full body"},
+  {"name": "refleks-kucing-kulit-pisang", "untuk": "kepeleset di depan gebetan", "prompt": "a yellow banana peel lying flat with three peeled flaps spread open, top view at an angle"},
+  {"name": "refleks-kucing-kepala", "untuk": "telinga dalamnya langsung tahu mana arah bawah", "prompt": "orange tabby cat head close-up in side profile, ears perked up, alert eyes looking down"},
+  {"name": "refleks-kucing-depan-belakang", "untuk": "badannya nekuk di pinggang", "prompt": "realistic orange cat body cutout shown in two clear connected sections front and rear twisting in opposite directions mid air, educational physics pose, full body, isolated transparent background"},
+  {"name": "refleks-kucing-lipat-depan", "untuk": "Kaki depannya dilipat", "prompt": "orange tabby cat twisting in mid-air, front legs tucked tightly against its chest, hind legs stretched out straight behind, body bent in the middle, full body"},
+  {"name": "refleks-kucing-kursi-kantor", "untuk": "muter di kursi kantor", "prompt": "black ergonomic swivel office chair with armrests and five wheels, three-quarter view"},
+  {"name": "refleks-kucing-parasut", "untuk": "ngembangin kaki kayak parasut", "prompt": "orange tabby cat falling belly down in mid-air with all four legs spread wide out to the sides like a flying squirrel, seen from slightly below, full body"},
+  {"name": "refleks-kucing-jendela", "untuk": "jadi tutup jendela", "prompt": "a closed white window frame with fine grey insect mesh screen, front view"},
+  {"name": "refleks-kucing-gendut", "untuk": "kucing oren yang hobi makan", "prompt": "very chubby round fat orange tabby cat sitting, huge round belly, short legs, smug face, full body"}
 ]

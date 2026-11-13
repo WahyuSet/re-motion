@@ -10,19 +10,22 @@ Cara pakai:
 
 Daftar scene (untuk referensi, JANGAN ikut dibacakan):
 
-[01] (hook) ±4.2 detik
-Kucing jatuh telentang, kok bisa muter dan mendarat pakai kaki?
+[01] (hook) ±3.3 detik
+Kucing jatuh telentang, kok bisa mendarat pakai kaki?
 
-[02] (stage) ±10.4 detik
-Ada refleks bawaan yang membantu kucing mengenali posisi tubuhnya. Kepala berputar dulu, lalu tulang belakangnya melentur. Badannya bisa menekuk, bukan papan triplek yang jatuh kaku.
+[02] (stage) ±9.6 detik
+Banyak yang ngira kucing punya sembilan nyawa. Habis jatuh, dia langsung jilat badan, pura-pura gak kenapa-napa. Persis kayak kita kepeleset di depan gebetan.
 
-[03] (beat) ±2.1 detik
-Oke, sini gue jelasin gerakannya.
+[03] (beat) ±3.8 detik
+Oke, sini gue jelasin cara kucing muter di udara.
 
-[04] (stage) ±12.9 detik
-Bagian depan dan belakang tubuh bergerak berlawanan arah. Kaki dirapatkan atau direntangkan untuk mengatur putaran. Momentum sudut total tetap terjaga; kucing mengubah bentuk tubuhnya untuk berputar, bukan menciptakan putaran dari nol.
+[04] (stage) ±8.8 detik
+Pertama, telinga dalamnya langsung tahu mana arah bawah. Lalu badannya nekuk di pinggang, jadi badan depan dan belakang bisa muter sendiri-sendiri.
 
-[05] (stage) ±10.4 detik
-Jadi rahasianya refleks membalik tubuh dan badan yang lentur. Tapi jangan dites dari balkon, ya. Refleks bukan sabuk pengaman; jatuh tetap bisa bikin kucing cedera.
+[05] (stage) ±12.1 detik
+Kaki depannya dilipat, jadi badan depan muter duluan. Lalu gantian, badan belakang nyusul. Mirip kamu muter di kursi kantor, kaki dilipat biar makin kencang. Apalagi pas bos gak lihat.
 
-Perkiraan total narasi: ±40 detik (belum termasuk jeda)
+[06] (stage) ±10.8 detik
+Dari tempat tinggi, kucing juga ngembangin kaki kayak parasut. Tapi kucing tetap bisa cedera, jadi tutup jendela. Apalagi kucing oren yang hobi makan, muternya suka telat.
+
+Perkiraan total narasi: ±48 detik (belum termasuk jeda)
