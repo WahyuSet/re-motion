@@ -31,11 +31,9 @@ const SFX_DEFAULT_SIMBOL = {centang: 'ding', silang: 'slap', larang: 'dum', reta
 const MIN_TAMPIL_GAG = 1.2;
 /** Perkiraan kecepatan TTS kalau kata.json belum ada (sama dengan narasi.mjs). */
 const KATA_PER_DETIK = 2.4;
-/** NARASI_TAIL (12 frame) dan TAHAN_AKHIR scene terakhir (30 frame) di engine, dalam detik @30fps. */
-const EKOR_SCENE = 12 / 30;
+/** EKOR_EXPLAINER (6 frame) dan TAHAN_AKHIR scene terakhir (30 frame) di src/explainer/prep.ts, dalam detik @30fps. */
+const EKOR_SCENE = 6 / 30;
 const TAHAN_AKHIR = 30 / 30;
-/** Narasi mulai NARASI_DELAY (8 frame) setelah scene mulai. */
-const NARASI_DELAY = 8 / 30;
 
 const PANDUAN = 'Lihat referensi/narasi.md bagian "Komedi".';
 
@@ -108,9 +106,10 @@ export const cekKomedi = (script, rencana, kata, lapor, kataJson = null) => {
   const akhirScene = (si) => {
     const n = wordsPerScene[si].length;
     const akhir = Array.isArray(kataJson?.[si]?.[n - 1]) ? kataJson[si][n - 1][1] : n / KATA_PER_DETIK;
-    // `duration` naskah adalah durasi minimum; kalau lebih panjang dari audio, scene ikut tertahan.
-    const minimum = (scenes[si].duration ?? 0) / 30 - NARASI_DELAY;
-    return Math.max(akhir + EKOR_SCENE, minimum) + (si === scenes.length - 1 ? TAHAN_AKHIR : 0);
+    // Sama dengan prep.ts: kata terakhir + EKOR_EXPLAINER + tahan (+ TAHAN_AKHIR di scene terakhir).
+    // `duration` naskah diabaikan engine untuk scene bernarasi.
+    const tahan = (scenes[si].tahan ?? 0) / 30;
+    return akhir + EKOR_SCENE + tahan + (si === scenes.length - 1 ? TAHAN_AKHIR : 0);
   };
 
   for (const j of jokes) {
@@ -158,7 +157,7 @@ export const cekKomedi = (script, rencana, kata, lapor, kataJson = null) => {
         lapor.warn(
           `scene ${si + 1} (${scenes[si].type})`,
           `K4 visual gag punchline "${j.punchline}" (komedi #${j.no}) cuma tampil ${tampil.toFixed(1)} detik (minimal ${MIN_TAMPIL_GAG}).`,
-          'Pindahkan sampai item gag ke kata yang lebih belakang (sekitar 3 kata setelah punchline) atau hapus sampai-nya. Kalau punchline di ujung scene, naikkan duration scene itu sekitar 30 frame di atas panjang narasinya supaya ada jeda ketawa sebelum scene berganti.',
+          'Pindahkan sampai item gag ke kata yang lebih belakang (sekitar 3 kata setelah punchline) atau hapus sampai-nya. Kalau punchline di ujung scene, beri scene itu tahan: 30 (frame) supaya ada jeda ketawa sebelum scene berganti.',
         );
       }
     }

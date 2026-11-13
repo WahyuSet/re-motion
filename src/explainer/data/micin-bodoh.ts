@@ -74,6 +74,8 @@ export const micinBodoh: ExplainerScript = {
     {
       type: 'stage',
       duration: 190,
+      // Jeda ketawa setelah punchline 'gurih' di ujung scene (aturan K4).
+      tahan: 24,
       latar: 'latar/micin-bodoh-2.png',
       narasi: 'Temen salah jawab dikit, langsung dicap *generasi micin*. Micin jadi kambing hitam paling *gurih*.',
       items: [

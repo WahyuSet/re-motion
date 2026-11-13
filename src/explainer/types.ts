@@ -104,7 +104,13 @@ export type StageItem = {
 };
 
 type BaseExplainerScene = {
+  /**
+   * Durasi perkiraan (frame). Untuk scene bernarasi diabaikan: engine menghitung dari kata terakhir
+   * narasi + jeda pendek. Dipakai hanya untuk scene tanpa narasi.
+   */
   duration: number;
+  /** Jeda tambahan (frame) setelah narasi scene ini selesai, misalnya jeda ketawa setelah punchline. */
+  tahan?: number;
   transition?: TransitionType;
   narasi?: string;
   kata?: WordTiming[];

@@ -59,7 +59,7 @@ test('K4: gag punchline di ujung scene harus tertahan minimal 1,2 detik', async 
   const mepet = await cek(items, [JOKE, JOKE2]);
   assert.ok(ada(mepet.warnings, 'K4 visual gag punchline "sarung"'), mepet.warnings.join(' | '));
   const tertahan = await validasiExplainer(
-    {...naskah(items), scenes: [{...naskah(items).scenes[0], duration: 220}, naskah(items).scenes[1]]},
+    {...naskah(items), scenes: [{...naskah(items).scenes[0], tahan: 30}, naskah(items).scenes[1]]},
     'uji-komedi',
     {props: [], rencana: rencana([JOKE, JOKE2])},
   );

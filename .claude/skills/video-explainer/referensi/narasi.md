@@ -35,7 +35,9 @@ Aturan joke:
 3. Joke harus nyambung ke fakta, bukan lelucon acak. Angka/harga di joke wajib ada di `sumber.md`.
 4. Lucu dari kebiasaan lokal ("Indonesia banget": sarung, parkir, antre, emak-emak, ojol), bukan dari merendahkan orang, agama, suku, atau fisik.
 5. Visual gag di kata punchline: prop/meme **besar di tengah** (bukan pojok), masuk tepat di kata itu, SFX `fahh`/`ack`/`womp`/`boom`/`boing`/`slap` (dan `shake`/`squash` kalau perlu).
-6. **Gag harus tertahan minimal 1,2 detik setelah punchline** (validator K4). TTS hampir tidak memberi jeda, jadi gag yang `sampai`-nya di kata tepat sesudah punchline cuma lewat sekilas. Taruh `sampai` sekitar 3 kata setelah punchline atau hapus. Punchline di ujung scene: naikkan `duration` scene itu sekitar 30 frame di atas panjang narasinya. Scene terakhir otomatis ditahan 1 detik oleh engine.
+6. **Gag harus tertahan minimal 1,2 detik setelah punchline** (validator K4). TTS hampir tidak memberi jeda, jadi gag yang `sampai`-nya di kata tepat sesudah punchline cuma lewat sekilas. Taruh `sampai` sekitar 3 kata setelah punchline atau hapus. Punchline di ujung scene: beri scene itu `tahan: 24`-`30` (frame jeda setelah narasi selesai). Scene terakhir otomatis ditahan 1 detik oleh engine.
+
+**Tempo antar scene.** Durasi scene bernarasi dihitung engine dari kata terakhir narasi + 6 frame, jadi jeda antar scene sekitar 0,5 detik. Angka `duration` di naskah hanya perkiraan dan **diabaikan** untuk scene bernarasi; jangan dinaikkan untuk memberi jeda. Jeda yang disengaja selalu lewat `tahan`.
 
 ## Dari Sumber ke Narasi
 
