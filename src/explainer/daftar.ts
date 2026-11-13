@@ -1,3 +1,4 @@
+import {micinBodoh} from './data/micin-bodoh';
 import {bensinPagi} from './data/bensin-pagi';
 import {mundurMakzul} from './data/mundur-makzul';
 import {caraKerjaGps} from './data/cara-kerja-gps';
@@ -41,4 +42,5 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'PenggunaanPajak', script: penggunaanPajak},
   {id: 'MundurMakzul', script: mundurMakzul},
   {id: 'BensinPagi', script: bensinPagi},
+  {id: 'MicinBodoh', script: micinBodoh},
 ];

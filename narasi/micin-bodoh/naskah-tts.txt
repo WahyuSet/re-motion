@@ -1,0 +1,31 @@
+PANDUAN TTS: micin-bodoh
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs micin-bodoh <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±5.0 detik
+Kamu kira micin bikin bodoh, padahal ASI juga penuh zat yang sama.
+
+[02] (stage) ±5.8 detik
+Temen salah jawab dikit, langsung dicap generasi micin. Micin jadi kambing hitam paling gurih.
+
+[03] (beat) ±2.5 detik
+Oke, sini gue jelasin asal tuduhannya.
+
+[04] (stage) ±11.3 detik
+Tuduhan ini mulai dari satu surat dokter, lebih dari lima puluh tahun lalu. Isinya cuma keluhan habis makan. Lalu ada riset tikus yang disuntik micin dosis jumbo.
+
+[05] (stage) ±8.8 detik
+Masalahnya, kamu makan micin pakai sendok, bukan jarum suntik. Lagian glutamat di micin sama persis kayak di tomat, keju, bahkan ASI.
+
+[06] (stage) ±10.0 detik
+Yang perlu dijaga itu garamnya. Natrium micin aja cuma sepertiga garam dapur. Jadi kalau temenmu lemot, jangan salahin micin. Mungkin dia cuma kurang tidur.
+
+Perkiraan total narasi: ±43 detik (belum termasuk jeda)
