@@ -198,6 +198,8 @@ export type ExplainerScript = {
   format?: 'short' | 'landscape';
   bg?: string;
   watermark?: string | false;
+  /** Gaya item teks panggung: 'kotak' (default) atau 'stiker' (die-cut, pinggiran putih, miring). */
+  gayaTeks?: 'kotak' | 'stiker';
   scenes: ExplainerScene[];
   music?: string;
   musicVolume?: number;

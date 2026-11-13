@@ -11,7 +11,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {importTs, loadScript} from './lib/load-script.mjs';
-import {cekSkemaItem} from './lib/explainer-cek/skema.mjs';
+import {cekSkemaItem, cekSkemaNaskah} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 import {cekNominal} from './lib/explainer-cek/diagram.mjs';
 import {cekDurasi, cekNarasiScene, cekNarasiVideo} from './lib/explainer-cek/narasi.mjs';
@@ -57,6 +57,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
 
   const scenes = script?.scenes ?? [];
   const short = (script?.format ?? 'short') === 'short';
+  cekSkemaNaskah(script, lapor);
 
   if (scenes.length < 3) {
     err('naskah', `Hanya ${scenes.length} scene.`, 'Buat minimal 4–6 scene untuk explainer.');
@@ -205,7 +206,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     if (!legacy) cekMotionScene(scene, where, lapor);
-    if (!legacy) cekZona(scene, where, lapor, ukuran);
+    if (!legacy) cekZona(scene, where, lapor, ukuran, script?.gayaTeks);
     if (!legacy) cekBeat(scene, where, lapor);
     if (legacy && (scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
       const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);

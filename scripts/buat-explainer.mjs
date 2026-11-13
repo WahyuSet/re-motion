@@ -50,6 +50,7 @@ const template = `import type {ExplainerScript} from '../types';
 export const ${varName}: ExplainerScript = {
   format: 'short',
   watermark: '@okesini-id',
+  gayaTeks: 'stiker',
   // Isi dua baris ini SETELAH audio narasi dipotong (node scripts/potong-narasi.mjs ${slug} <file-audio>):
   // narasiAudio: 'audio/${slug}',
   // narasiExt: 'wav',

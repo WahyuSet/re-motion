@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
 import {CHANNEL} from '../channel';
-import {Stage} from './Stage';
+import {GayaTeksContext, Stage} from './Stage';
 import {explainerTheme} from './theme';
 import {fitThumbFontSize} from './timing';
 import type {ExplainerScript} from './types';
@@ -158,7 +158,11 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
           />
         </AbsoluteFill>
       ) : null}
-      {thumb?.items ? <Stage items={thumb.items} words={[]} duration={100} /> : null}
+      {thumb?.items ? (
+        <GayaTeksContext.Provider value={script.gayaTeks ?? 'kotak'}>
+          <Stage items={thumb.items} words={[]} duration={100} />
+        </GayaTeksContext.Provider>
+      ) : null}
     </AbsoluteFill>
   );
 };

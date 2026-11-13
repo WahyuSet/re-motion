@@ -6,7 +6,8 @@ export const MASUK = ['pop', 'drop', 'slide-left', 'slide-right', 'slide-up', 'g
 export const KELUAR = ['fade', 'pop-out', 'slide-left', 'slide-right', 'slide-down', 'none'];
 export const SIMBOL = ['larang', 'centang', 'silang', 'panah', 'tanya', 'retak', 'tetes-air', 'gelombang-air'];
 export const SFX = ['whoosh', 'dum', 'tik', 'pop', 'swell', 'boing', 'boom', 'womp', 'slap', 'ding', 'fahh', 'ack'];
-export const TIPE_AKSI = ['move', 'peek', 'grow', 'dim', 'shake', 'pulse', 'jump', 'wiggle', 'squash'];
+export const GAYA_TEKS = ['kotak', 'stiker'];
+export const TIPE_AKSI =['move', 'peek', 'grow', 'dim', 'shake', 'pulse', 'jump', 'wiggle', 'squash'];
 
 const FIELD_UMUM = ['type', 'di', 'delay', 'durasi', 'sfx'];
 
@@ -32,6 +33,11 @@ const cekEnum = (nilai, daftar, nama, where, lapor) => {
 const cekSfx = (nilai, where, lapor) => {
   if (nilai === undefined || nilai === false) return;
   cekEnum(nilai, SFX, 'sfx', where, lapor);
+};
+
+/** Field tingkat naskah (ExplainerScript) yang punya nilai enum. */
+export const cekSkemaNaskah = (script, lapor) => {
+  cekEnum(script?.gayaTeks, GAYA_TEKS, 'gayaTeks', 'naskah', lapor);
 };
 
 export const cekSkemaItem = (item, where, lapor) => {

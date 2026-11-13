@@ -20,11 +20,11 @@ const zonaAtas = (scene) => {
   return null;
 };
 
-export const cekZona = (scene, where, lapor, ukuran = new Map()) => {
+export const cekZona = (scene, where, lapor, ukuran = new Map(), gayaTeks = 'kotak') => {
   const atas = zonaAtas(scene);
   for (const [i, item] of semuaItem(scene).entries()) {
     if (typeof item.x !== 'number' || typeof item.y !== 'number') continue;
-    const k = kotakItem(item, ukuran.get(item.src));
+    const k = kotakItem(item, ukuran.get(item.src), gayaTeks);
     if (!k) continue;
     const label = `${where} item ${i + 1}`;
 

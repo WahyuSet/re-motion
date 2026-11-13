@@ -15,6 +15,7 @@ import {BeatSceneView} from './scenes/BeatScene';
 import {DiagramSceneView} from './scenes/DiagramScene';
 import {HookSceneView} from './scenes/HookScene';
 import {StageSceneView} from './scenes/StageScene';
+import {GayaTeksContext} from './Stage';
 import {ExplainerSubtitle} from './Subtitle';
 import {explainerTheme} from './theme';
 import type {ExplainerScene, ExplainerScript} from './types';
@@ -145,42 +146,44 @@ export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) =>
 
   return (
     <SfxContext.Provider value={script.sfx !== false}>
-      <AbsoluteFill style={{backgroundColor: script.bg ?? explainerTheme.bg}}>
-        <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
-        {watermarkText ? (
-          // Di atas semua scene (latar foto menutup lapisan di bawahnya). Pojok kiri atas, tepat di atas
-          // area aman Shorts: sisi kanan atas dipakai ikon aplikasi, judul hook mulai sekitar 13%.
-          <div
-            style={{
-              position: 'absolute',
-              left: '7%',
-              top: '8.5%',
-              fontFamily: explainerTheme.fontBody,
-              fontWeight: 700,
-              fontSize: 28,
-              color: 'rgba(255, 255, 255, 0.92)',
-              backgroundColor: 'rgba(0, 0, 0, 0.32)',
-              padding: '6px 16px',
-              borderRadius: 999,
-              letterSpacing: 0.5,
-              zIndex: 50,
-              pointerEvents: 'none',
-            }}
-          >
-            {watermarkText}
-          </div>
-        ) : null}
-        {script.music ? (
-          <Audio
-            src={staticFile(script.music)}
-            loop
-            volume={(f) =>
-              volumeMusik(f, durationInFrames, fps, suara, script.musicVolume, Boolean(script.voiceover))
-            }
-          />
-        ) : null}
-        {script.voiceover ? <Audio src={staticFile(script.voiceover)} /> : null}
-      </AbsoluteFill>
+      <GayaTeksContext.Provider value={script.gayaTeks ?? 'kotak'}>
+        <AbsoluteFill style={{backgroundColor: script.bg ?? explainerTheme.bg}}>
+          <TransitionSeries>{children.filter(Boolean)}</TransitionSeries>
+          {watermarkText ? (
+            // Di atas semua scene (latar foto menutup lapisan di bawahnya). Pojok kiri atas, tepat di atas
+            // area aman Shorts: sisi kanan atas dipakai ikon aplikasi, judul hook mulai sekitar 13%.
+            <div
+              style={{
+                position: 'absolute',
+                left: '7%',
+                top: '8.5%',
+                fontFamily: explainerTheme.fontBody,
+                fontWeight: 700,
+                fontSize: 28,
+                color: 'rgba(255, 255, 255, 0.92)',
+                backgroundColor: 'rgba(0, 0, 0, 0.32)',
+                padding: '6px 16px',
+                borderRadius: 999,
+                letterSpacing: 0.5,
+                zIndex: 50,
+                pointerEvents: 'none',
+              }}
+            >
+              {watermarkText}
+            </div>
+          ) : null}
+          {script.music ? (
+            <Audio
+              src={staticFile(script.music)}
+              loop
+              volume={(f) =>
+                volumeMusik(f, durationInFrames, fps, suara, script.musicVolume, Boolean(script.voiceover))
+              }
+            />
+          ) : null}
+          {script.voiceover ? <Audio src={staticFile(script.voiceover)} /> : null}
+        </AbsoluteFill>
+      </GayaTeksContext.Provider>
     </SfxContext.Provider>
   );
 };

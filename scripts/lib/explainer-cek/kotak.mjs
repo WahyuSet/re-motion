@@ -44,12 +44,24 @@ export const muatUkuran = async (script) => {
   return peta;
 };
 
-/** {kiri, kanan, atas, bawah} dalam persen, atau null kalau ukuran gambar tidak diketahui. */
-export const kotakItem = (item, ukuran) => {
+/** Sama dengan STIKER di src/explainer/stiker.ts (pinggiran putih + padding stiker die-cut). */
+const STIKER = {pinggir: 8, padX: 28, padY: 12};
+/** Font stiker (Baloo 2 ExtraBold) sedikit lebih lebar per huruf daripada Inter Black. */
+const LEBAR_HURUF_STIKER = 0.6;
+
+/**
+ * {kiri, kanan, atas, bawah} dalam persen, atau null kalau ukuran gambar tidak diketahui.
+ * `gayaTeks` = ExplainerScript.gayaTeks ('kotak' default, atau 'stiker').
+ */
+export const kotakItem = (item, ukuran, gayaTeks = 'kotak') => {
   const kind = item.kind ?? (item.simbol ? 'simbol' : item.teks ? 'teks' : 'prop');
   let wPx;
   let hPx;
-  if (kind === 'teks') {
+  if (kind === 'teks' && gayaTeks === 'stiker') {
+    const u = item.ukuran ?? 56;
+    wPx = String(item.teks ?? '').length * u * LEBAR_HURUF_STIKER + 2 * (STIKER.padX + STIKER.pinggir);
+    hPx = u * 1.15 + 2 * (STIKER.padY + STIKER.pinggir);
+  } else if (kind === 'teks') {
     const u = item.ukuran ?? 56;
     const berkotak = item.kotak ? 1 : 0;
     wPx = String(item.teks ?? '').length * u * 0.56 + berkotak * 48;

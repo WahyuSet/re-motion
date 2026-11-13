@@ -1,10 +1,43 @@
 import React, {useContext} from 'react';
 import {Audio, Img, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {loadFont} from '@remotion/google-fonts/Baloo2';
 import {SfxContext} from '../components/Sfx';
 import {parseWords, type TimedWord} from '../lib/kata';
+import {miringStiker, STIKER} from './stiker';
 import {explainerTheme} from './theme';
 import {hitungTransformItem, waktuItem} from './timing';
-import type {ExplainerSfxName, StageItem, StageSymbolType} from './types';
+import type {ExplainerScript, ExplainerSfxName, StageItem, StageSymbolType} from './types';
+
+const {fontFamily: fontStiker} = loadFont('normal', {weights: ['800'], subsets: ['latin']});
+
+type GayaTeks = NonNullable<ExplainerScript['gayaTeks']>;
+
+/** Gaya item teks untuk seluruh video; diisi ExplainerVideo/ExplainerThumb dari script.gayaTeks. */
+export const GayaTeksContext = React.createContext<GayaTeks>('kotak');
+
+const gayaTeksKotak = (item: StageItem): React.CSSProperties => ({
+  fontFamily: explainerTheme.fontBody,
+  fontWeight: 900,
+  color: item.warna ?? (item.kotak ? explainerTheme.bannerText : explainerTheme.ink),
+  background: item.kotak,
+  padding: item.kotak ? '10px 24px' : 0,
+  borderRadius: item.kotak ? 8 : 0,
+  letterSpacing: -0.5,
+});
+
+const gayaTeksStiker = (item: StageItem): React.CSSProperties => ({
+  fontFamily: fontStiker,
+  fontWeight: 800,
+  lineHeight: 1.15,
+  color: item.warna ?? (item.kotak ? explainerTheme.bannerText : explainerTheme.ink),
+  background: item.kotak ?? '#ffffff',
+  padding: `${STIKER.padY}px ${STIKER.padX}px`,
+  border: `${STIKER.pinggir}px solid #ffffff`,
+  borderRadius: STIKER.radius,
+  boxShadow: '0 10px 18px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.25)',
+  // Miring otomatis hanya kalau naskah tidak menentukan rotate sendiri.
+  transform: item.rotate === undefined ? `rotate(${miringStiker(item.teks ?? '')}deg)` : undefined,
+});
 
 const EXPLAINER_SFX_VOL: Record<ExplainerSfxName, number> = {
   whoosh: 0.22,
@@ -145,6 +178,7 @@ const StageItemView: React.FC<{
 }> = ({item, words, duration}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const gayaTeks = useContext(GayaTeksContext);
   const tf = hitungTransformItem(item, frame, fps, words, duration);
   if (!tf.visible) return null;
 
@@ -181,15 +215,9 @@ const StageItemView: React.FC<{
       {kind === 'teks' && item.teks ? (
         <div
           style={{
-            fontFamily: explainerTheme.fontBody,
-            fontWeight: 900,
+            ...(gayaTeks === 'stiker' ? gayaTeksStiker(item) : gayaTeksKotak(item)),
             fontSize: item.ukuran ?? 56,
-            color: item.warna ?? (item.kotak ? explainerTheme.bannerText : explainerTheme.ink),
-            background: item.kotak,
-            padding: item.kotak ? '10px 24px' : 0,
-            borderRadius: item.kotak ? 8 : 0,
             whiteSpace: 'nowrap',
-            letterSpacing: -0.5,
           }}
         >
           {parseWords(item.teks).map((w, idx) => (

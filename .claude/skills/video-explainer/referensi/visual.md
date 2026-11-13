@@ -2,6 +2,10 @@
 
 Semua nilai di sini sama dengan kode `src/explainer/` (`types.ts`, `timing.ts`, `Stage.tsx`). Nilai/field lain ditolak validator (S1) atau diabaikan engine (S2).
 
+## Gaya Teks (`gayaTeks` di naskah)
+
+**Video baru wajib `gayaTeks: 'stiker'`** (sudah diisi kerangka `baru:explainer`). Field ini di tingkat naskah (sejajar `watermark`) dan mengubah semua item `kind: 'teks'` jadi stiker die-cut: isi warna `kotak` (tanpa `kotak` = stiker putih), pinggiran putih tebal, sudut membulat, bayangan, font Baloo 2. Item tanpa `rotate` otomatis miring 3-5° (arahnya dari isi teks). Default `'kotak'` = kotak datar lama. Judul hook, banner beat, dan subtitle tidak terpengaruh. Stiker lebih lebar dari kotak biasa; validator A1 sudah menghitungnya.
+
 ## StageItem
 
 | Field | Isi |
