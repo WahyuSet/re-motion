@@ -1,0 +1,31 @@
+PANDUAN TTS: air-es
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs air-es <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±4.6 detik
+Air es gak bawa virus, kok habis jajan es malah sakit?
+
+[02] (stage) ±6.7 detik
+Banyak yang ngira air es bikin tenggorokan radang. Baru pegang gelasnya, udah diceramahin kayak minum racun.
+
+[03] (beat) ±1.7 detik
+Oke, sini gue jelasin.
+
+[04] (stage) ±9.6 detik
+Pilek itu ulah lebih dari dua ratus virus. Gejalanya muncul satu sampai tiga hari setelah tertular. Suhu es cuma bikin tenggorokan kaget sebentar.
+
+[05] (stage) ±8.8 detik
+Yang bahaya justru es batu dari air mentah yang tercemar bakteri. Suhu nol derajat gak bunuh kuman, mereka cuma numpang ngadem.
+
+[06] (stage) ±7.5 detik
+Lagi batuk, tahan dulu esnya. Pas sehat, pakai es air matang. Biar yang ngadem cuma kamu, bukan kumannya.
+
+Perkiraan total narasi: ±39 detik (belum termasuk jeda)

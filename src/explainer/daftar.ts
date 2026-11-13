@@ -1,3 +1,4 @@
+import {airEs} from './data/air-es';
 import {micinBodoh} from './data/micin-bodoh';
 import {bensinPagi} from './data/bensin-pagi';
 import {mundurMakzul} from './data/mundur-makzul';
@@ -43,4 +44,5 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'MundurMakzul', script: mundurMakzul},
   {id: 'BensinPagi', script: bensinPagi},
   {id: 'MicinBodoh', script: micinBodoh},
+  {id: 'AirEs', script: airEs},
 ];
