@@ -1,0 +1,31 @@
+PANDUAN TTS: klip-roti
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs klip-roti <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±3.8 detik
+Warna klip roti itu bukan hiasan, tapi kode rahasia.
+
+[02] (stage) ±7.1 detik
+Selama ini klip roti cuma kita anggap penjepit. Habis rotinya, klipnya naik pangkat jadi tambalan sandal jepit.
+
+[03] (beat) ±2.5 detik
+Oke, sini gue jelasin arti warnanya.
+
+[04] (stage) ±8.3 detik
+Di banyak pabrik roti, warna klip itu kode hari dipanggang. Biru Senin, hijau Selasa, merah Kamis, putih Jumat, kuning Sabtu.
+
+[05] (stage) ±11.7 detik
+Roti tawar toko cuma tahan sekitar tujuh hari. Nah, kodenya buat petugas, biar roti lama cepat ditarik dari rak. Bukan buat kamu yang ngubek rak sampai paling belakang.
+
+[06] (stage) ±8.3 detik
+Tapi kodenya bisa beda tiap merek. Jadi, cek tanggal di klipnya. Klip bekasnya? Balikin ke tugas mulianya, nambal sandal jepit.
+
+Perkiraan total narasi: ±42 detik (belum termasuk jeda)
