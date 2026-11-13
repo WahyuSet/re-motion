@@ -1,22 +1,8 @@
 [
-  {
-    "name": "bata-cetok",
-    "prompt": "a professional steel construction bricklaying trowel with wooden handle scooping fresh cement mortar, clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
-  },
-  {
-    "name": "bata-retak",
-    "prompt": "two stacked red clay construction bricks with a jagged split crack in the middle, clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
-  },
-  {
-    "name": "bata-gembok",
-    "prompt": "a solid heavy brass padlock locked tightly with keyhole, clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
-  },
-  {
-    "name": "bata-beban",
-    "prompt": "a heavy industrial concrete square weight block marked with weight indicator, clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
-  },
-  {
-    "name": "bata-tukang",
-    "prompt": "a stylized friendly construction worker with bright yellow safety hardhat pointing finger up having an idea, clean realistic studio product photography cutout, crisp edges, natural colors, soft even lighting, high detail"
-  }
+  {"name": "bata-zigzag-tembok-zigzag", "untuk": "kok tukang malah pasang zigzag", "prompt": "a partially built wall of Indonesian red clay bricks laid in running bond, each course offset by half a brick so the vertical mortar joints are staggered, grey cement mortar joints, stepped unfinished top edge, a steel bricklaying trowel resting on top, front view"},
+  {"name": "bata-zigzag-tembok-lurus", "untuk": "pasang lurus aja", "prompt": "a small wall of red clay bricks laid in stack bond: bricks stacked directly on top of each other in perfectly aligned vertical columns, every vertical mortar joint forms one continuous straight line from top to bottom, grey cement mortar, front view"},
+  {"name": "bata-zigzag-tembok-retak", "untuk": "yang cepat juga retaknya", "prompt": "a small wall of red clay bricks laid in stack bond with perfectly aligned vertical columns, a long dramatic crack splitting the wall straight down along one vertical mortar joint from top to bottom, the two halves slightly separated, small crumbs of mortar falling, front view"},
+  {"name": "bata-zigzag-cetok-semen", "untuk": "sambungan semen itu bagian paling lemah", "prompt": "a steel bricklaying trowel with wooden handle holding a scoop of wet grey cement mortar, side view"},
+  {"name": "bata-zigzag-uang-harian", "untuk": "tukangnya dibayar harian", "prompt": "neat stack of Indonesian rupiah banknotes, red one hundred thousand rupiah notes on top with blue fifty thousand rupiah notes underneath, slightly fanned out, realistic paper texture"},
+  {"name": "bata-zigzag-kecap-sachet", "untuk": "kayak nyobek kecap sachet", "merek": "KECAP OKE SINI", "prompt": "a small single-serving plastic sachet of Indonesian sweet soy sauce torn open at the top corner along a straight tear line, a drop of thick dark soy sauce dripping, with a bright red and yellow printed front label that reads exactly \"KECAP OKE SINI\" in bold capital letters, front view"}
 ]

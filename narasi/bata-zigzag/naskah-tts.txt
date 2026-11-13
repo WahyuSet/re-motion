@@ -10,19 +10,25 @@ Cara pakai:
 
 Daftar scene (untuk referensi, JANGAN ikut dibacakan):
 
-[01] (hook) ±12.1 detik
-Pernah kepikiran gak, kenapa tukang bangunan selalu pasang batu bata selang-seling zig-zag? Padahal kalau dipasang lurus sejajar, masangnya jauh lebih gampang. Tapi cara itu malah diharamkan di dunia konstruksi!
+[01] (hook) ±4.2 detik
+Masang bata lurus lebih gampang, kok tukang malah pasang zigzag?
 
-[02] (stage) ±15.4 detik
-Masalahnya ada di sambungan spesi semen. Kalau dipasang sejajar, nat vertikalnya membentuk satu garis lurus tanpa putus. Susunan begini kayak teman kelompok yang cuma numpang nama, pas ditekan beban dari atas, dindingnya langsung retak dan gampang ambyar.
+[02] (stage) ±9.6 detik
+Banyak yang ngira zigzag itu cuma biar tembok kelihatan rapi. Ada yang nyuruh tukang pasang lurus aja, biar cepat. Maklum, tukangnya dibayar harian.
 
 [03] (beat) ±3.8 detik
-Nah, kenapa kalau dipasang zig-zag malah jadi super kokoh?
+Oke, sini gue jelasin kenapa bata lurus gampang retak.
 
-[04] (diagram) ±16.3 detik
-Waktu dipasang zig-zag, satu bata di atas akan duduk di atas dua bata di bawahnya. Beban dari atap tidak turun di satu titik, melainkan terbagi dua ke bawah membentuk segitiga piramida. Makin ke bawah, tekanannya menyebar merata ke fondasi.
+[04] (diagram) ±7.5 detik
+Kalau dipasang lurus, sambungan semennya jadi satu garis panjang. Beban dari atas turun lurus, gak nyebar ke samping.
 
-[05] (stage) ±12.1 detik
-Ikatan silang ini juga mengunci dinding dari gaya geser samping dan getaran. Jadi kalau tukang di rumahmu lagi pasang bata zig-zag, jangan disuruh lurusin, biar rumahmu tetap berdiri tegak!
+[05] (stage) ±11.3 detik
+Masalahnya, sambungan semen itu bagian paling lemah di tembok. Kena dorongan dari samping, tembok lurus cuma kuat sepertiganya. Retaknya tinggal ikut garis sambungan, kayak nyobek kecap sachet.
 
-Perkiraan total narasi: ±60 detik (belum termasuk jeda)
+[06] (diagram) ±10.8 detik
+Nah, kalau zigzag, satu bata duduk di atas dua bata. Bebannya dibagi dua, lalu dibagi lagi, kayak patungan. Retak juga susah merambat, karena garis sambungannya putus-putus.
+
+[07] (stage) ±5.8 detik
+Jadi biarin tukangmu pasang zigzag. Kalau dipasang lurus biar cepat, yang cepat juga retaknya.
+
+Perkiraan total narasi: ±53 detik (belum termasuk jeda)
