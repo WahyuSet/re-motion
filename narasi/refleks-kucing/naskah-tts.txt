@@ -1,0 +1,28 @@
+PANDUAN TTS: refleks-kucing
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs refleks-kucing <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±4.2 detik
+Kucing jatuh telentang, kok bisa muter dan mendarat pakai kaki?
+
+[02] (stage) ±10.4 detik
+Ada refleks bawaan yang membantu kucing mengenali posisi tubuhnya. Kepala berputar dulu, lalu tulang belakangnya melentur. Badannya bisa menekuk, bukan papan triplek yang jatuh kaku.
+
+[03] (beat) ±2.1 detik
+Oke, sini gue jelasin gerakannya.
+
+[04] (stage) ±12.9 detik
+Bagian depan dan belakang tubuh bergerak berlawanan arah. Kaki dirapatkan atau direntangkan untuk mengatur putaran. Momentum sudut total tetap terjaga; kucing mengubah bentuk tubuhnya untuk berputar, bukan menciptakan putaran dari nol.
+
+[05] (stage) ±10.4 detik
+Jadi rahasianya refleks membalik tubuh dan badan yang lentur. Tapi jangan dites dari balkon, ya. Refleks bukan sabuk pengaman; jatuh tetap bisa bikin kucing cedera.
+
+Perkiraan total narasi: ±40 detik (belum termasuk jeda)

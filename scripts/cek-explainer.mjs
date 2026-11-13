@@ -27,7 +27,6 @@ export const LEGACY = new Set([
   'sadap-lims',
   'gandum-tropis',
   'baju-kuning',
-  'kamar-panas',
   'bata-zigzag',
   'bpa-free',
   'efek-rumah-kaca',

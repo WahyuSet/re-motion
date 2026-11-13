@@ -1,26 +1,52 @@
 [
   {
-    "name": "kamar-gerah",
-    "prompt": "a 3D stylized expressive man sweating profusely and fanning himself in extreme heat, waist-up portrait cutout"
+    "name": "kamar-panas-kamar-pengap",
+    "untuk": "kamar tidur",
+    "prompt": "a cozy minimalist wooden single bed with messy crumpled beige blanket and pillow, glowing warm orange-red wavy heat shimmer mist rising above the mattress, compact isolated bedroom furniture object"
+  },
+  {
+    "name": "kamar-panas-kukusan",
+    "untuk": "kukusan bolu",
+    "prompt": "a traditional stainless steel round food steamer pot with glass lid slightly lifted and thick puffs of hot white steam billowing out from inside"
+  },
+  {
+    "name": "kamar-jendela",
+    "untuk": "satu jendela",
+    "prompt": "a clean wooden house window frame with open glass casement shutters"
   },
   {
     "name": "kamar-kipas",
+    "untuk": "nyalain kipas",
     "prompt": "a modern white standing electric desk fan with protective grille and blades"
   },
   {
+    "name": "kamar-panas-uap",
+    "untuk": "muterin udara panas dan uap keringatmu",
+    "prompt": "translucent swirling warm glowing orange-red heat vapor cloud and curling steam waves floating together as one compact stylized vapor cluster"
+  },
+  {
     "name": "kamar-tembok",
+    "untuk": "tembok bata",
     "prompt": "a solid red brick wall section with plaster corner showing thick masonry construction"
   },
   {
     "name": "kamar-termometer",
+    "untuk": "nyimpen panas",
     "prompt": "a large wall thermometer with bright red mercury column at maximum hot temperature"
   },
   {
-    "name": "kamar-jendela",
-    "prompt": "a clean wooden house window frame with open glass casement shutters"
+    "name": "kabel-kendor-matahari",
+    "untuk": "kena matahari",
+    "prompt": "a bright glowing golden yellow sun with radiating sunbeams"
   },
   {
-    "name": "kucing-jelasin",
-    "prompt": "a funny expressive cat meme standing upright wearing geeky round glasses and holding a wooden pointer stick like a teacher explaining something, waist-up portrait cutout"
+    "name": "kabel-kendor-bulan",
+    "untuk": "malam hari",
+    "prompt": "a glowing silver-gold crescent moon surrounded by stars"
+  },
+  {
+    "name": "kamar-panas-pintu",
+    "untuk": "celah pintu",
+    "prompt": "a clean modern light oak wooden bedroom door inside a matching door frame, slightly ajar with a visible vertical opening gap on the latch side for airflow"
   }
 ]

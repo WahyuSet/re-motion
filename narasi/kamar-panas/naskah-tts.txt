@@ -10,22 +10,22 @@ Cara pakai:
 
 Daftar scene (untuk referensi, JANGAN ikut dibacakan):
 
-[01] (hook) ±10.8 detik
-Pernah gak sih di luar udah malam dan adem, tapi pas masuk kamar tidur rasanya malah pengap kayak kukusan bolu? Padahal kipas angin udah muter kenceng!
+[01] (hook) ±5.0 detik
+Di luar udah adem, kenapa kamar tidur malah pengap kayak kukusan bolu?
 
-[02] (stage) ±10.8 detik
-Banyak yang mengira cukup buka satu jendela dan nyalain kipas, kamar langsung sejuk. Padahal tanpa jalur keluar, kipas cuma muterin udara panas dan uap keringatmu sendiri.
+[02] (stage) ±10.4 detik
+Banyak yang ngira cukup buka satu jendela dan nyalain kipas, kamar langsung sejuk. Tanpa jalur keluar, kipas cuma muterin udara panas dan uap keringatmu sendiri.
 
-[03] (beat) ±2.5 detik
-Nah, ini dua biang kerok fisikanya.
+[03] (beat) ±3.3 detik
+Oke, sini gue jelasin dua biang kerok fisikanya.
 
-[04] (stage) ±10.0 detik
-Pertama, tembok bata itu kayak temen yang suka nyimpen dendam. Seharian dipanggang matahari, panasnya merambat pelan dan baru dilepas ke kamar pas malam hari.
+[04] (stage) ±7.5 detik
+Pertama, tembok bata itu suka nyimpen panas. Seharian kena matahari, panasnya baru dilepas ke kamar pas malam hari.
 
-[05] (stage) ±11.7 detik
-Kedua, udara panas dan uap napas kita itu sifatnya naik ke plafon. Kalau kamar cuma punya satu celah tanpa ventilasi silang, hawa pengapnya terkunci rapat di atas kepalamu.
+[05] (stage) ±10.0 detik
+Kedua, udara panas dan uap napas itu sifatnya naik ke plafon. Kalau cuma ada satu bukaan tanpa ventilasi silang, hawanya terkunci di atas kepalamu.
 
-[06] (stage) ±12.5 detik
-Solusinya, buka dua jalur udara seperti jendela dan sedikit celah pintu. Atau hadapkan kipas ke arah luar jendela sebentar untuk membuang hawa panas, biar udara malam yang sejuk tersedot masuk.
+[06] (stage) ±9.6 detik
+Solusinya, buat dua jalur udara lewat jendela dan celah pintu. Atau hadapkan kipas ke arah luar jendela sebentar untuk menyedot keluar hawa panasnya.
 
-Perkiraan total narasi: ±58 detik (belum termasuk jeda)
+Perkiraan total narasi: ±46 detik (belum termasuk jeda)

@@ -1,0 +1,31 @@
+PANDUAN TTS: penggunaan-pajak
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs penggunaan-pajak <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±5.4 detik
+Gaji lo kena potong tiap bulan, kok gak tahu pajak dipakai buat apa?
+
+[02] (stage) ±9.6 detik
+Banyak yang ngira pajak cuma buat gaji birokrat sama kemewahan gedung. Padahal pajak itu mesin utama negara: dia yang nendangin semua belanja APBN!
+
+[03] (beat) ±2.5 detik
+Oke, sini gue jelasin uangnya kemana.
+
+[04] (diagram) ±19.6 detik
+Kita ambil contoh gaji seratus ribu. Pas gajian, langsung dipotong Pajak Penghasilan, buat penghasilan tinggi bisa sampai tiga puluh persen. Belum kalau belanja: semua transaksi kena Pajak Pertambahan Nilai sebelas persen, plus cukai rokok sama bensin nambah lagi. Ujung-ujungnya separuh lebih duit lo ternyata jalan ke negara.
+
+[05] (stage) ±13.3 detik
+Uang itu baru nyata pas jalan dibangun, sekolah dibangun, rumah sakit dibuka, sama bansos yang nyelametin banyak keluarga. Ibarat dompet: iuran bareng sama jutaan orang, biar semuanya dapet jalan mulus sama layanan.
+
+[06] (stage) ±15.0 detik
+Jadi kalau ada yang bilang pajak cuma buat kemewahan, inget: dari duit lo yang terpotong, negara tetap berputar. Hasilnya Jalan, sekolah, rumah sakit, semuanya dari situ. Bagikan ke temen yang masih mikir pajak cuma buang duit!
+
+Perkiraan total narasi: ±65 detik (belum termasuk jeda)
