@@ -130,8 +130,8 @@ Sebab-akibat pada kata yang sama: A `masuk: 'drop'` di `'tertimpa'` → B `{type
 Angka ini sama dengan `PROFIL.landscape` di `src/explainer/format.ts`; validator memakai angka yang sama.
 
 - Area aman (A1): kiri ≥ 3%, kanan ≤ 97%, atas ≥ 5%, bawah ≤ 95%. YouTube biasa tidak menutup layar dengan tombol seperti Shorts, jadi area aman jauh lebih lebar.
-- Judul (L1): tepi atas item di hook ≥ 34%, stage berjudul ≥ 16%, beat ≥ 18%.
+- Judul (L1): tepi atas item di hook ≥ 36%, stage berjudul ≥ 18%, beat ≥ 20%. Judul stage/beat/diagram mulai di 10%, tepat di bawah banner bab dan watermark.
 - Subtitle (L2): tepi bawah item ≤ 85%.
 - `width` tetap piksel, tapi tinggi kanvas cuma 1080 px: prop potret `width` 340 rasio 1:1,5 tingginya 510 px = 47% layar. Pakai prop utama 320-480, pendamping 220-320, simbol 100-180.
-- Layar lebar: susun dua keadaan berdampingan di `x` 25 dan 75 (sebelum/sesudah, salah/benar), bukan atas-bawah. Ruang tengah yang aman untuk prop: `y` sekitar 17-85%.
+- Layar lebar: susun dua keadaan berdampingan di `x` 25 dan 75 (sebelum/sesudah, salah/benar), bukan atas-bawah. Ruang tengah yang aman untuk prop: `y` sekitar 20-85%.
 - Pojok kanan atas dipakai banner bab ("BAB N · JUDUL", 3 detik pertama scene pembuka bab), pojok kiri atas watermark. Jangan taruh item penting di kedua pojok itu (`y` < 12).

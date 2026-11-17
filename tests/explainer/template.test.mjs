@@ -30,7 +30,7 @@ import {templateLatar, templateNaskah} from '../../scripts/lib/explainer-templat
 
 // Template short lama, diambil dari buat-explainer.mjs sebelum template dipindah (acuan "tidak berubah").
 const templateLama = (slug, varName, title) => {
-  const src = execFileSync('git', ['show', 'cf394b4:scripts/buat-explainer.mjs'], {encoding: 'utf8'});
+  const src = execFileSync('git', ['show', '9a63feb:scripts/buat-explainer.mjs'], {encoding: 'utf8'});
   const isi = src.split('const template = `')[1].split('`;\n\nawait fs.writeFile(dataFile')[0];
   return new Function('slug', 'varName', 'title', `return \`${isi}\`;`)(slug, varName, title);
 };

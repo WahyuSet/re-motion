@@ -37,3 +37,29 @@ test('jokeMinimal mengikuti durasi di landscape', () => {
   assert.equal(F.jokeMinimal(F.PROFIL.landscape, 200), 4);
   assert.equal(F.jokeMinimal(F.PROFIL.landscape, 400), 7);
 });
+
+const persen = (s) => parseFloat(s) / 100;
+
+test('landscape: banner bab selesai di atas judul stage, beat, dan diagram', () => {
+  const p = F.PROFIL.landscape;
+  const h = p.kanvas.h;
+  // BabBanner: padding 10 px atas-bawah, tinggi baris ±1,2 em.
+  const babBawah = persen(p.bab.top) * h + p.bab.fontSize * 1.2 + 20;
+  for (const top of [p.bannerStage.top, p.beat.topBerItem, p.diagram.top]) {
+    assert.ok(babBawah <= persen(top) * h, `banner bab sampai ${babBawah} px, judul mulai ${persen(top) * h} px`);
+  }
+});
+
+test('prop thumbnail muat di kanvas thumbnail', async () => {
+  const {THUMB_SIZE} = await importTs('src/lib/safe.ts');
+  assert.deepEqual([F.PROFIL.short.thumb.propTop, F.PROFIL.short.thumb.propMaxW, F.PROFIL.short.thumb.propMaxH], [220, 560, 880]);
+  const t = F.PROFIL.landscape.thumb;
+  assert.ok(t.propTop + t.propMaxH <= THUMB_SIZE.landscape.height, `${t.propTop} + ${t.propMaxH} > ${THUMB_SIZE.landscape.height}`);
+});
+
+test('landscape: judul hook mulai di bawah watermark', () => {
+  const p = F.PROFIL.landscape;
+  // Watermark: font 28, padding 6 px atas-bawah, tinggi baris ±1,2 em.
+  const wmBawah = persen(p.watermark.top) * p.kanvas.h + 28 * 1.2 + 12;
+  assert.ok(wmBawah <= persen(p.hook.top) * p.kanvas.h, `watermark sampai ${wmBawah} px, judul hook mulai ${persen(p.hook.top) * p.kanvas.h} px`);
+});

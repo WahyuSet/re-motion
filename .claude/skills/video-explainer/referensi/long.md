@@ -37,7 +37,7 @@ Total 15-40 scene. Satu scene tetap satu gagasan (narasi 1-4 kalimat). Jangan bi
 
 ## Tata letak
 
-Lihat `referensi/visual.md` bagian "Tata letak landscape". Ringkasnya: area aman 3-97% × 5-95%, item di hook mulai ≥ 34%, subtitle mulai 85%, dua keadaan berdampingan di `x` 25 / 75.
+Lihat `referensi/visual.md` bagian "Tata letak landscape". Ringkasnya: area aman 3-97% × 5-95%, item di hook mulai ≥ 36%, subtitle mulai 85%, dua keadaan berdampingan di `x` 25 / 75.
 
 Untuk melihat tata letak landscape sebelum ada audio, atau mengecek video short dalam versi landscape:
 

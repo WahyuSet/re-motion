@@ -148,13 +148,13 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
       </div>
 
       {src ? (
-        <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', paddingTop: 220}}>
+        <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', paddingTop: tata.propTop}}>
           <Img
             src={staticFile(src)}
             style={{
               // Prop potret tinggi dibatasi supaya tidak naik ke judul atau turun ke tepi bawah.
-              maxWidth: 560,
-              maxHeight: 880,
+              maxWidth: tata.propMaxW,
+              maxHeight: tata.propMaxH,
               objectFit: 'contain',
               filter: 'drop-shadow(0 22px 34px rgba(0, 0, 0, 0.52))',
             }}
