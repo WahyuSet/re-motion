@@ -3,6 +3,8 @@
 //
 // Pakai: node scripts/cek-frame.mjs borobudur            (2 frame per scene: ±35% dan ±85% durasi scene)
 //       node scripts/cek-frame.mjs borobudur --rapat    (explainer: + frame tiap item masuk dan serah-terima)
+//       node scripts/cek-frame.mjs nasi-warm --format landscape   (pratinjau naskah dalam format lain;
+//                                                     hasil diberi akhiran -landscape, tidak menimpa hasil asli)
 // Hasil: out/cek/<slug>-lembar.jpg
 //        out/cek/<slug>-NN-<persen>.png  (frame satuan; mode --rapat: <slug>-NN-f<frame>.png)
 
@@ -10,7 +12,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import {bukaKomposisi, tutup, waktuScene} from './lib/komposisi.mjs';
-import {importTs} from './lib/load-script.mjs';
+import {importTs, loadScript} from './lib/load-script.mjs';
 import {frameRapat} from './lib/frame-rapat.mjs';
 
 const slug = process.argv[2];
@@ -22,13 +24,21 @@ if (!slug) {
 const {SAFE_SHORT} = await importTs('src/lib/safe.ts');
 const POINTS = [0.35, 0.85];
 const rapat = process.argv.includes('--rapat');
+const iFormat = process.argv.indexOf('--format');
+const format = iFormat > 0 ? process.argv[iFormat + 1] : null;
+if (format && !['short', 'landscape'].includes(format)) {
+  console.error(`--format harus short atau landscape, bukan "${format}".`);
+  process.exit(1);
+}
+const nama = format ? `${slug}-${format}` : slug;
 const {waktuItem} = rapat ? await importTs('src/explainer/timing.ts') : {};
 
 const outDir = path.resolve('out/cek');
 await fs.mkdir(outDir, {recursive: true});
 
 try {
-  const {composition, renderFrame} = await bukaKomposisi(slug);
+  const inputProps = format ? {script: {...(await loadScript(slug)), format}} : {};
+  const {composition, renderFrame} = await bukaKomposisi(slug, inputProps);
   const waktu = await waktuScene(composition);
 
   const shots = waktu.flatMap(({index, start, scene, words}) => {
@@ -38,7 +48,7 @@ try {
 
   console.log(`${waktu.length} scene, ${composition.durationInFrames} frame. Render ${shots.length} frame ...`);
   for (const s of shots) {
-    s.file = path.join(outDir, `${slug}-${String(s.scene).padStart(2, '0')}-${rapat ? `f${String(s.frame).padStart(5, '0')}` : s.percent}.png`);
+    s.file = path.join(outDir, `${nama}-${String(s.scene).padStart(2, '0')}-${rapat ? `f${String(s.frame).padStart(5, '0')}` : s.percent}.png`);
     await renderFrame(s.frame, s.file);
   }
 
@@ -65,13 +75,13 @@ try {
       return {input: img, left: (n % cols) * (W + 8), top: Math.floor(n / cols) * (H + 8)};
     }),
   );
-  const sheet = path.join(outDir, `${slug}-lembar.jpg`);
+  const sheet = path.join(outDir, `${nama}-lembar.jpg`);
   await sharp({create: {width: cols * (W + 8), height: rows * (H + 8), channels: 3, background: '#000'}})
     .composite(tiles)
     .jpeg({quality: 82})
     .toFile(sheet);
 
-  console.log(`\nLembar kontak: out/cek/${slug}-lembar.jpg`);
+  console.log(`\nLembar kontak: out/cek/${nama}-lembar.jpg`);
   console.log('Cek tiap kotak: subtitle terbaca? tag/judul tidak tertutup? anotasi menunjuk objek yang benar? tidak ada layar hitam/kosong?');
   if (vertical) console.log('Video short: tidak boleh ada teks/objek penting di area merah (tertutup tombol & caption aplikasi).');
 } finally {

@@ -4,6 +4,7 @@ import {Sfx} from '../../components/Sfx';
 import {frameOfWord, type TimedWord} from '../../lib/kata';
 import {hitungBebanBata, hitungPotongan} from '../diagram';
 import {Stage} from '../Stage';
+import {useProfil} from '../useProfil';
 import {explainerTheme} from '../theme';
 import type {DiagramBataScene, DiagramPotonganScene, DiagramScene} from '../types';
 
@@ -17,6 +18,7 @@ const PotonganView: React.FC<{
 }> = ({scene, words}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const profil = useProfil();
   const steps = hitungPotongan(scene.awal.nilai, scene.langkah, words);
   const lastStepAt = steps.length ? steps[steps.length - 1].at : 20;
   const pembagiAt =
@@ -42,9 +44,11 @@ const PotonganView: React.FC<{
       <div
         style={{
           position: 'absolute',
-          top: '16%',
-          left: 80,
-          right: 80,
+          top: profil.diagram.top,
+          left: profil.diagram.side,
+          right: profil.diagram.side,
+          // Skala 1 (short) tanpa transform supaya hasil render short tetap sama persis.
+          ...(profil.diagram.skala !== 1 ? {transform: `scale(${profil.diagram.skala})`, transformOrigin: 'top center'} : {}),
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -208,6 +212,7 @@ const GridBataView: React.FC<{
 }> = ({scene, words}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const profil = useProfil();
   const baris = scene.baris ?? 6;
   const kolom = scene.kolom ?? 5;
   const nilaiBeban = scene.beban?.nilai ?? 100;
@@ -235,7 +240,7 @@ const GridBataView: React.FC<{
         <div
           style={{
             position: 'absolute',
-            top: '14%',
+            top: profil.format === 'short' ? '14%' : profil.diagram.top,
             left: 0,
             right: 0,
             display: 'flex',

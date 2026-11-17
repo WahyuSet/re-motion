@@ -3,6 +3,7 @@ import {AbsoluteFill, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {Sfx} from '../../components/Sfx';
 import {frameOfWord, type TimedWord} from '../../lib/kata';
 import {Stage} from '../Stage';
+import {useProfil} from '../useProfil';
 import {explainerTheme} from '../theme';
 import type {BeatScene} from '../types';
 
@@ -12,6 +13,7 @@ export const BeatSceneView: React.FC<{
 }> = ({scene, words}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const {beat: tata} = useProfil();
   const at = (scene.di ? frameOfWord(words, scene.di) : null) ?? 4;
   const s = spring({frame: frame - at, fps, config: {damping: 12, mass: 0.7}});
   const hasItems = Boolean(scene.items?.length);
@@ -24,9 +26,9 @@ export const BeatSceneView: React.FC<{
           <div
             style={{
               position: 'absolute',
-              top: hasItems ? '18%' : '38%',
-              left: 60,
-              right: 60,
+              top: hasItems ? tata.topBerItem : tata.topKosong,
+              left: tata.side,
+              right: tata.side,
               display: 'flex',
               justifyContent: 'center',
               zIndex: 30,

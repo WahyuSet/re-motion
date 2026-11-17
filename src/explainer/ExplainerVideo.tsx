@@ -18,6 +18,7 @@ import {StageSceneView} from './scenes/StageScene';
 import {GayaTeksContext} from './Stage';
 import {ExplainerSubtitle} from './Subtitle';
 import {explainerTheme} from './theme';
+import {profilDari} from './format';
 import type {ExplainerScene, ExplainerScript} from './types';
 
 export {explainerTransitionFrames, getExplainerDuration, prepareExplainerScript};
@@ -122,7 +123,8 @@ const renderTransition = (type: TransitionType = 'none', key: string) => {
 };
 
 export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) => {
-  const {fps, durationInFrames} = useVideoConfig();
+  const {fps, durationInFrames, width, height} = useVideoConfig();
+  const {watermark: posWatermark} = profilDari(width, height);
   const suara = rentangSuara(script.scenes as unknown as HistoryScene[], fps);
   const watermarkText =
     typeof script.watermark === 'string' && script.watermark.trim() ? script.watermark : null;
@@ -155,8 +157,8 @@ export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) =>
             <div
               style={{
                 position: 'absolute',
-                left: '7%',
-                top: '8.5%',
+                left: posWatermark.left,
+                top: posWatermark.top,
                 fontFamily: explainerTheme.fontBody,
                 fontWeight: 700,
                 fontSize: 28,

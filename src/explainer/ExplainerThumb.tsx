@@ -1,9 +1,10 @@
 import React from 'react';
-import {AbsoluteFill, Img, staticFile} from 'remotion';
+import {AbsoluteFill, Img, staticFile, useVideoConfig} from 'remotion';
 import {CHANNEL} from '../channel';
 import {GayaTeksContext, Stage} from './Stage';
 import {explainerTheme} from './theme';
 import {fitThumbFontSize} from './timing';
+import {profilDari} from './format';
 import type {ExplainerScript} from './types';
 
 const STABILO_DEFAULT = '#f5c518';
@@ -33,8 +34,10 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
   const stabilo = thumb?.stabilo ?? STABILO_DEFAULT;
 
   // Thumbnail dilihat kecil di grid channel/penelusuran: judul sebesar mungkin, dibatasi lebar 980 px.
-  const f1 = fitThumbFontSize(baris1, 112, 980);
-  const f2 = baris2 ? fitThumbFontSize(baris2, 100, 956) : 100;
+  const {width, height} = useVideoConfig();
+  const {thumb: tata} = profilDari(width, height);
+  const f1 = fitThumbFontSize(baris1, tata.font1, tata.lebar1);
+  const f2 = baris2 ? fitThumbFontSize(baris2, tata.font2, tata.lebar2) : tata.font2;
   const s1 = Math.max(10, Math.round(f1 * 0.16));
   const s2 = Math.max(9, Math.round(f2 * 0.15));
 
@@ -79,9 +82,9 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
       <div
         style={{
           position: 'absolute',
-          top: '15%',
-          left: 56,
-          right: 56,
+          top: tata.top,
+          left: tata.side,
+          right: tata.side,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
