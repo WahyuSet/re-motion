@@ -1,6 +1,6 @@
 ---
 name: video-explainer
-description: Membuat video Cutout Motion Explainer 9:16 ("nahh gini") di src/explainer/ tanpa menyentuh engine sejarah. Alurnya rencana dulu (5 kandidat hook berskor, narasi, peta visual per klausa), baru props dan naskah; validator cek:explainer memaksa setiap klausa narasi punya visual. Narasi lisan diperiksa validator (kalimat pendek, tanpa gaya buku pelajaran, tanpa rujukan kabur), props cutout dari Google Flow Bridge, latar foto real per scene, subtitle kata-per-kata (faster-whisper). Pakai skill ini setiap kali user minta video explainer baru ("kenapa...", "kok bisa...", hitungan biaya, fisika/teknik sehari-hari).
+description: Membuat video Cutout Motion Explainer 9:16 (short) atau 16:9 long (3-12 menit, chapter) ("nahh gini") di src/explainer/ tanpa menyentuh engine sejarah. Alurnya rencana dulu (5 kandidat hook berskor, narasi, peta visual per klausa), baru props dan naskah; validator cek:explainer memaksa setiap klausa narasi punya visual. Narasi lisan diperiksa validator (kalimat pendek, tanpa gaya buku pelajaran, tanpa rujukan kabur), props cutout dari Google Flow Bridge, latar foto real per scene, subtitle kata-per-kata (faster-whisper). Pakai skill ini setiap kali user minta video explainer baru ("kenapa...", "kok bisa...", hitungan biaya, fisika/teknik sehari-hari).
 ---
 
 # Video Explainer "nahh gini" (`src/explainer/`)
@@ -9,6 +9,11 @@ Kerjakan langkah 0-8 **berurutan**. Jangan lompat ke menulis `.ts` sebelum `.ren
 Validator adalah hakim: kerjaan selesai kalau `npm run cek:explainer -- <slug>` hasilnya **0 error dan 0 peringatan**.
 Setiap pesan validator berbentuk `lokasi: masalah → PERBAIKI: langkah`. Kerjakan langkah PERBAIKI-nya persis.
 
+## Pilih Format
+
+- **Short 9:16 (default)**: Shorts/TikTok/Reels, maks. 60 detik. Semua aturan di bawah ditulis untuk short.
+- **Long 16:9**: pilih kalau user minta video long, YouTube biasa, atau landscape, atau materinya butuh lebih dari 60 detik. Baca `referensi/long.md` dulu, lalu pakai `npm run baru:explainer -- <slug> --long`. Alur langkah 0-8 tetap sama; yang berbeda: struktur bab, durasi, jumlah joke, dan angka tata letak (lihat Aturan Keras 6).
+
 ## Aturan Keras
 
 1. Jangan sentuh engine sejarah: `src/HistoryVideo.tsx`, `src/Thumbnail.tsx`, `src/theme.ts`, `src/types.ts`, `src/scenes/*`, `src/components/*`, `src/data/*`.
@@ -16,7 +21,7 @@ Setiap pesan validator berbentuk `lokasi: masalah → PERBAIKI: langkah`. Kerjak
 3. Scene `hook`, `stage`, `diagram` wajib punya `latar: 'latar/<slug>-N.png'` yang unik per scene. Hanya `beat` yang tanpa latar. Jangan pakai `latarOpacity`/`latarBlur`.
 4. `watermark: '@okesini-id'` (nama channel final, tampil di pojok kiri atas) dan `gayaTeks: 'stiker'` (semua item teks jadi stiker die-cut, lihat `referensi/visual.md` bagian "Gaya Teks"). Keduanya sudah diisi kerangka `baru:explainer`; jangan dihapus. Video LEGACY lama boleh tetap `watermark: false` dan tanpa `gayaTeks`.
 5. Angka di `narasi` wajib huruf (`seratus ribu`, bukan `100.000`). Digit hanya boleh di `baris1`/`baris2`/teks panggung.
-6. Posisi dicek dari **tepi kotak** prop (lebar = `width`, tinggi = `width` × rasio PNG asli), bukan titik tengahnya. Keempat tepi harus di area aman Shorts: kiri ≥ 7%, **kanan ≤ 86%** (sisi kanan tertutup tombol), atas ≥ 13%, bawah ≤ 78%. Tepi atas di bawah judul (hook ≥ 28%, stage berjudul ≥ 22%), tepi bawah di atas subtitle (≤ 73,5%). Prop potret tinggi (meteran, tiang, botol) butuh `width` kecil. `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180. (dicek validator: A1, L1, L2)
+6. Posisi dicek dari **tepi kotak** prop (lebar = `width`, tinggi = `width` × rasio PNG asli), bukan titik tengahnya. Keempat tepi harus di area aman Shorts: kiri ≥ 7%, **kanan ≤ 86%** (sisi kanan tertutup tombol), atas ≥ 13%, bawah ≤ 78%. Tepi atas di bawah judul (hook ≥ 28%, stage berjudul ≥ 22%), tepi bawah di atas subtitle (≤ 73,5%). Prop potret tinggi (meteran, tiang, botol) butuh `width` kecil. `width` dalam piksel: prop utama 300-420, pendamping 220-280, simbol 100-180. **Long (16:9)**: kiri ≥ 3%, kanan ≤ 97%, atas ≥ 5%, bawah ≤ 95%; tepi atas hook ≥ 34%, stage berjudul ≥ 16%, beat ≥ 18%; tepi bawah ≤ 85%; `width` prop utama 320-480, pendamping 220-320, simbol 100-180 (lihat `referensi/visual.md` bagian "Tata letak landscape"). (dicek validator: A1, L1, L2)
 7. Scene `beat` selalu: tanpa `latar`, `teks: 'Oke, sini gue jelasin.'` (persis), dan item `props/meme-kucing-jelasin.png` (`masuk: 'pop'`, **tanpa** `sfx`, karena banner sudah berbunyi pop). Narasinya boleh dilanjutkan: "Oke, *sini gue jelasin* penyebabnya." (dicek validator: B1-B4)
 8. Setiap klausa narasi punya visual yang **menggambarkan isi klausa itu** (dicek validator: V1, V3, V4). Kata benda yang disebut (mobil, tanggal, botol) harus kelihatan di layar saat diucapkan.
 9. Setiap prop di `props.json` punya `untuk: "<frasa persis dari narasi>"` (dicek validator: V4).
@@ -38,7 +43,7 @@ Tulis setiap fakta dan angka di `<slug>.sumber.md`, minimal 2 URL sumber. Fakta 
 Baca `referensi/hook-judul.md`. Tulis 5 kandidat, 1 per rumus, beri skor 5 kriteria (0-2), isi `Total`, lalu tulis `Terpilih: #N` untuk Total tertinggi (minimal 7). Lalu isi bagian `## Thumbnail`: **Subjek lengkap** (benda + tempatnya), **Gambar** (prop yang menampilkan subjek lengkap, bukan potongannya), dan **Uji 1 detik**. Judul wajib memuat semua kata penting subjek, jadi bisa dipahami tanpa video. (dicek validator: R1-R3, H1-H5, T1)
 
 ### Langkah 3: Narasi (di `.rencana.md`, bagian `## Narasi`)
-Baca `referensi/narasi.md`. Tulis narasi per scene (5-7 scene: hook → stage salah kaprah → beat → stage/diagram fakta → stage penutup). Lalu jalankan checklist "uji baca keras" di `referensi/narasi.md`. **Jangan pakai skill `humanizer-indonesia`**: skill itu dikalibrasi untuk tulisan akademik dan justru membuat naskah lisan kaku. (dicek validator: N1-N5)
+Baca `referensi/narasi.md`. Tulis narasi per scene (short 5-7 scene: hook → stage salah kaprah → beat → stage/diagram fakta → stage penutup; long 15-40 scene dalam 3-6 bab, lihat `referensi/long.md`). Lalu jalankan checklist "uji baca keras" di `referensi/narasi.md`. **Jangan pakai skill `humanizer-indonesia`**: skill itu dikalibrasi untuk tulisan akademik dan justru membuat naskah lisan kaku. (dicek validator: N1-N5)
 
 ### Langkah 3b: Komedi (di `.rencana.md`, bagian `## Komedi`)
 Meme dan SFX bukan komedi; yang bikin ketawa adalah **kalimat joke di narasi**. Tulis 2-3 joke ke narasi pakai rumus di `referensi/narasi.md` bagian "Komedi", lalu isi tabel `| # | Jenis | Kalimat joke | Punchline | Visual gag |`. Punchline = kata lucu di **1-3 kata terakhir** kalimat. Setiap punchline wajib punya visual gag besar (prop/meme width >= 240 atau teks) dengan `di` di kata punchline dan SFX komedi, dan gag itu tertahan minimal 1,2 detik. (dicek validator: K1-K4)
@@ -68,7 +73,7 @@ Salin peta ke `src/explainer/data/<slug>.ts`. Setiap baris peta = 1 item atau 1 
 ```bash
 npm run cek:explainer -- <slug> --peta
 ```
-`--peta` mencetak tiap klausa dan visualnya; klausa bertanda `(kosong) ✗` wajib diisi. Ulangi sampai **0 error, 0 peringatan**. Lalu `node scripts/narasi.mjs <slug>` untuk naskah TTS.
+`--peta` mencetak tiap klausa dan visualnya; klausa bertanda `(kosong) ✗` wajib diisi. Ulangi sampai **0 error, 0 peringatan**. Video long: cek tata letak sebelum ada audio dengan `node scripts/cek-frame.mjs <slug> --format landscape --rapat`. Lalu `node scripts/narasi.mjs <slug>` untuk naskah TTS.
 
 ### Langkah 8: Audio, cek frame, render
 Setelah user memberi file audio TTS:
@@ -91,7 +96,7 @@ Semua hasil akhir ada di `out/explainer/<slug>/`: `<slug>.mp4`, `<slug>-720p.mp4
 
 - `.rencana.md` lengkap tanpa `TODO`, hook terpilih skor >= 7, minimal 2 joke di `## Komedi`.
 - `npm run cek:explainer -- <slug>` → `✓ LULUS: <slug> (... 0 error, 0 peringatan)`. Kalau yang muncul `⚠ BELUM SELESAI`, belum selesai: kerjakan setiap PERBAIKI.
-- Total durasi ≤ 60 detik (dicek validator: D3).
+- Total durasi short ≤ 60 detik (D3); long 180-720 detik (D3/D4), tanpa peringatan bab C1-C3.
 - `--peta` tidak menampilkan `(kosong) ✗`, dan setiap benda yang disebut narasi kelihatan di klausanya.
 - `cek-frame --rapat` dan storyboard dicek visual (setelah audio ada): tidak ada prop di area merah, menumpuk, atau menabrak judul/subtitle.
 
@@ -109,6 +114,8 @@ Topik baru yang tidak cocok dengan ketiganya tetap boleh; ambil patokan terdekat
 
 Patokan dibuat sebelum aturan komedi K1-K3 (daftar `KOMEDI_LAMA` di `scripts/lib/explainer-cek/komedi.mjs`), jadi **jangan tiru narasinya untuk soal komedi**: ambil rumus joke dari `referensi/narasi.md`. Video baru tidak boleh dimasukkan ke `KOMEDI_LAMA`.
 
+Belum ada patokan video long; untuk long ikuti struktur di `referensi/long.md` dan ambil pola scene dari patokan short di atas.
+
 Patokan juga dibuat sebelum gaya teks stiker, jadi teksnya masih kotak datar; video baru tetap pakai `gayaTeks: 'stiker'`. Contoh lengkap yang sudah memakai komedi tertulis **dan** stiker: `air-kadaluwarsa` (remake), lihat `referensi/contoh-scene.md`.
 
 ## Referensi
@@ -117,3 +124,4 @@ Patokan juga dibuat sebelum gaya teks stiker, jadi teksnya masih kotak datar; vi
 - `referensi/narasi.md`: aturan narasi lisan (N1-N5), arti kata penghubung, contoh sebelum/sesudah dari video nyata.
 - `referensi/visual.md`: katalog masuk/keluar/aksi/simbol/SFX/meme sesuai engine, pola koreografi, tata letak.
 - `referensi/contoh-scene.md`: 1 scene lengkap yang lolos validator, untuk ditiru.
+- `referensi/long.md`: video long 16:9: struktur bab, ritme, aturan C0-C3, TTS panjang.
