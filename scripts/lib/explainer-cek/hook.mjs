@@ -34,7 +34,7 @@ const cekBaris = (obj, where, lapor, {cekBaris2}) => {
   }
 };
 
-export const cekHook = (script, kata, lapor, {legacy}) => {
+export const cekHook = (script, kata, lapor, {legacy, profil = null}) => {
   const scenes = script?.scenes ?? [];
   if (script?.thumbnail) cekBaris(script.thumbnail, 'thumbnail', lapor, {cekBaris2: !legacy});
 
@@ -45,11 +45,15 @@ export const cekHook = (script, kata, lapor, {legacy}) => {
     if (legacy || !scene.narasi?.trim()) continue;
 
     const n = kata.parseWords(scene.narasi.trim()).length;
-    const rumus = 'Pakai salah satu rumus di referensi/hook-judul.md, 1 kalimat 7-14 kata.';
-    if (n > MAX_KATA_HOOK) {
-      lapor.warn(where, `H1 Hook narasi terlalu panjang (${n} kata, batas ${MAX_KATA_HOOK} kata / ~3-4 detik).`, rumus);
-    } else if (n < MIN_KATA_HOOK) {
-      lapor.warn(where, `H1 Hook narasi terlalu pendek (${n} kata, minimal ${MIN_KATA_HOOK}).`, rumus);
+    const {min, max} = profil?.hookKata ?? {min: MIN_KATA_HOOK, max: MAX_KATA_HOOK};
+    const long = profil?.format === 'landscape';
+    const rumus = long
+      ? `Pakai salah satu rumus di referensi/hook-judul.md; cold open video long ${min}-${max} kata (±5-20 detik).`
+      : 'Pakai salah satu rumus di referensi/hook-judul.md, 1 kalimat 7-14 kata.';
+    if (n > max) {
+      lapor.warn(where, `H1 Hook narasi terlalu panjang (${n} kata, batas ${max} kata${long ? '' : ' / ~3-4 detik'}).`, rumus);
+    } else if (n < min) {
+      lapor.warn(where, `H1 Hook narasi terlalu pendek (${n} kata, minimal ${min}).`, rumus);
     }
     if (!punyaKontras(scene.narasi.replace(/\*/g, ''))) {
       lapor.warn(where, 'H2 hook belum punya kata kontras.', `Masukkan salah satu: ${KATA_KONTRAS.join(', ')}.`);

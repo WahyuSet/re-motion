@@ -1,18 +1,18 @@
-// Kotak sebenarnya tiap StageItem di kanvas short 1080x1920, dalam persen layar.
+// Kotak sebenarnya tiap StageItem dalam persen layar, di kanvas sesuai format (default short 1080x1920).
 // Prop dihitung dari ukuran PNG asli (tinggi = width * rasio gambar), simbol dari viewBox SymbolSvg,
 // teks dari perkiraan lebar huruf. Dipakai aturan A1 (area aman), L1/L2 (judul & subtitle), dan V6 (tumpuk).
 import path from 'node:path';
 import sharp from 'sharp';
 
-const W = 1080;
-const H = 1920;
+const W_SHORT = 1080;
+const H_SHORT = 1920;
 
 /** Sama dengan SAFE_SHORT di src/lib/safe.ts (dijaga test validator-kotak). */
 export const BATAS_AMAN = {
-  kiri: (70 / W) * 100,
-  kanan: 100 - (150 / W) * 100,
-  atas: (240 / H) * 100,
-  bawah: 100 - (420 / H) * 100,
+  kiri: (70 / W_SHORT) * 100,
+  kanan: 100 - (150 / W_SHORT) * 100,
+  atas: (240 / H_SHORT) * 100,
+  bawah: 100 - (420 / H_SHORT) * 100,
 };
 
 /** Tinggi/lebar SymbolSvg di src/explainer/Stage.tsx */
@@ -52,8 +52,11 @@ const LEBAR_HURUF_STIKER = 0.6;
 /**
  * {kiri, kanan, atas, bawah} dalam persen, atau null kalau ukuran gambar tidak diketahui.
  * `gayaTeks` = ExplainerScript.gayaTeks ('kotak' default, atau 'stiker').
+ * `profil` = ProfilFormat dari src/explainer/format.ts; tanpa profil = kanvas short.
  */
-export const kotakItem = (item, ukuran, gayaTeks = 'kotak') => {
+export const kotakItem = (item, ukuran, gayaTeks = 'kotak', profil = null) => {
+  const W = profil?.kanvas.w ?? W_SHORT;
+  const H = profil?.kanvas.h ?? H_SHORT;
   const kind = item.kind ?? (item.simbol ? 'simbol' : item.teks ? 'teks' : 'prop');
   let wPx;
   let hPx;

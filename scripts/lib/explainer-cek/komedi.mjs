@@ -88,14 +88,15 @@ const kejadianKomedi = (scene, words, kata) => {
   return hasil;
 };
 
-export const cekKomedi = (script, rencana, kata, lapor, kataJson = null) => {
+// `minJoke` = jokeMinimal(profil, durasi) dari src/explainer/format.ts (video long butuh lebih banyak joke).
+export const cekKomedi = (script, rencana, kata, lapor, kataJson = null, minJoke = MIN_JOKE) => {
   if (rencana === null || rencana === undefined) return; // sudah dilaporkan R1
   const jokes = bacaTabelKomedi(rencana);
-  if (!jokes || jokes.length < MIN_JOKE) {
+  if (!jokes || jokes.length < minJoke) {
     lapor.warn(
       'rencana.md',
-      `K1 bagian "## Komedi" baru berisi ${jokes?.length ?? 0} joke (minimal ${MIN_JOKE}).`,
-      `Tulis tabel | # | Jenis | Kalimat joke | Punchline | Visual gag | dengan ${MIN_JOKE}-3 joke dari narasi. Jenis: ${JENIS_JOKE.join(', ')}. ${PANDUAN}`,
+      `K1 bagian "## Komedi" baru berisi ${jokes?.length ?? 0} joke (minimal ${minJoke}).`,
+      `Tulis tabel | # | Jenis | Kalimat joke | Punchline | Visual gag | dengan ${minJoke}-${minJoke + 1} joke dari narasi. Jenis: ${JENIS_JOKE.join(', ')}. ${PANDUAN}`,
     );
     if (!jokes?.length) return;
   }
