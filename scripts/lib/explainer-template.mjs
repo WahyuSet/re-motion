@@ -29,7 +29,8 @@ export const templateRencana = (title, {long = false} = {}) =>
           '| 1 | Pembuka | 1-2 | TODO |',
           '| 2 | TODO | TODO | TODO |',
           '| 3 | TODO | TODO | TODO |',
-          '| 4 | Kesimpulan | TODO | TODO |',
+          '| 4 | TODO | TODO | TODO |',
+          '| 5 | Kesimpulan | TODO | TODO |',
           '',
         ]
       : []),
