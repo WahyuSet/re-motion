@@ -152,3 +152,64 @@ test('cek-frame menolak flag --format tanpa nilai', () => {
     (err) => err.status === 1 && err.stderr.includes('--format harus short atau landscape'),
   );
 });
+
+test('K1 landscape mengikuti batas jokeMinimal sesuai durasi', async () => {
+  const mkRencana = (n) =>
+    [
+      '# Rencana: Uji',
+      '## Komedi',
+      '| # | Jenis | Kalimat joke | Punchline | Visual gag |',
+      '|---|---|---|---|---|',
+      ...Array.from({length: n}, (_, i) => `| ${i + 1} | sindiran | Botol plastik itu rapuh. | rapuh | x |`),
+    ].join('\n');
+  const script = {format: 'landscape', scenes: [stage(kata(160)), stage(kata(160)), stage(kata(160)), beat]};
+  const kurang = await validasiExplainer(script, 'uji-komedi-long', {props: [], rencana: mkRencana(3)});
+  assert.ok(kurang.warnings.some((w) => w.includes('K1') && w.includes('minimal 4')), kurang.warnings.join('\n'));
+  const cukup = await validasiExplainer(script, 'uji-komedi-long', {props: [], rencana: mkRencana(4)});
+  assert.ok(!cukup.warnings.some((w) => w.includes('K1 bagian "## Komedi"')), cukup.warnings.join('\n'));
+});
+
+test('L1 zona judul mengikuti profil format', async () => {
+  const hook = (format, y) => ({
+    format,
+    scenes: [
+      {
+        type: 'hook',
+        duration: 90,
+        latar: LATAR,
+        baris1: 'BOTOL PLASTIK',
+        baris2: 'KOK RAPUH?',
+        narasi: 'Kok botol plastik ini gampang rapuh kalau kena panas terus?',
+        utama: {kind: 'prop', src: MEME, x: 50, y: 60, width: 120, masuk: 'none', delay: 0},
+        items: [{kind: 'simbol', simbol: 'centang', x: 50, y, width: 100}],
+      },
+      beat,
+    ],
+  });
+  assert.ok(ada((await validasiExplainer(hook('landscape', 36), 'uji-format', OPTS)).warnings, 'L1'));
+  assert.ok(!ada((await validasiExplainer(hook('short', 36), 'uji-format', OPTS)).warnings, 'L1'));
+  assert.ok(!ada((await validasiExplainer(hook('landscape', 42), 'uji-format', OPTS)).warnings, 'L1'));
+
+  const stageJudul = (format) => ({
+    format,
+    scenes: [stage('Botol plastik itu rapuh.', {judul: 'TES', items: [{kind: 'simbol', simbol: 'centang', x: 50, y: 24, width: 100}]}), beat],
+  });
+  assert.ok(!ada((await validasiExplainer(stageJudul('landscape'), 'uji-format', OPTS)).warnings, 'L1'));
+  assert.ok(ada((await validasiExplainer(stageJudul('short'), 'uji-format', OPTS)).warnings, 'L1'));
+});
+
+test('V6 tumpang-tindih prop dihitung di kanvas sesuai format', async () => {
+  const prop = (src, x, width = 300) => ({kind: 'prop', src, x, y: 50, width, delay: 0});
+  const bersebelahan = (format) => ({
+    format,
+    scenes: [stage('Botol plastik itu rapuh.', {items: [prop(MEME, 40), prop('props/meme-kucing-paw.png', 54)]}), beat],
+  });
+  assert.ok(!ada((await validasiExplainer(bersebelahan('landscape'), 'uji-format', OPTS)).warnings, 'V6'));
+  assert.ok(ada((await validasiExplainer(bersebelahan('short'), 'uji-format', OPTS)).warnings, 'V6'));
+
+  const tumpuk = {
+    format: 'landscape',
+    scenes: [stage('Botol plastik itu rapuh.', {items: [prop(MEME, 45, 400), prop('props/meme-kucing-paw.png', 50, 400)]}), beat],
+  };
+  assert.ok(ada((await validasiExplainer(tumpuk, 'uji-format', OPTS)).warnings, 'V6'));
+});
