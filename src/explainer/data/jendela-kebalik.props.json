@@ -1,0 +1,7 @@
+[
+  {
+    "name": "jendela-kebalik-jendela",
+    "untuk": "Jendela engsel bawah",
+    "prompt": "DIRENDER BLENDER, bukan Flow: npm run 3d:render -- jendela-kebalik (jendela kayu low-poly, daun miring terbuka di atas, engsel kuning di bawah, latar transparan)"
+  }
+]

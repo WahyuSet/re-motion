@@ -1,0 +1,54 @@
+{
+  "slug": "jendela-kebalik",
+  "klip": [
+    {
+      "scene": 1,
+      "set": "rumah-luar",
+      "kamera": "depan-dua",
+      "isi": {"jendela": "dua", "awal": "terbuka"},
+      "gerak": [{"jenis": "kayang", "di": "kebalik"}]
+    },
+    {
+      "scene": 2,
+      "set": "rumah-luar",
+      "kamera": "dekat-engsel",
+      "isi": {"jendela": "kebalik", "awal": "tertutup"},
+      "gerak": [
+        {"jenis": "engsel-nyala", "di": "engselnya"},
+        {"jenis": "buka-jendela", "di": "bukaannya"},
+        {"jenis": "kayang", "di": "kayang"}
+      ]
+    },
+    {
+      "scene": 4,
+      "set": "rumah-luar",
+      "kamera": "dekat-jendela",
+      "isi": {"jendela": "kebalik", "awal": "terbuka"},
+      "gerak": [
+        {"jenis": "karung-datang", "di": "Maling", "ke": 2},
+        {"jenis": "karung-nyangkut", "di": "nyangkut"}
+      ]
+    },
+    {
+      "scene": 5,
+      "set": "potongan-udara",
+      "kamera": "potongan-tengah",
+      "isi": {},
+      "gerak": [
+        {"jenis": "panas-naik", "di": "naik"},
+        {"jenis": "panas-keluar", "di": "keluar"},
+        {"jenis": "sejuk-masuk", "di": "sejuk"}
+      ]
+    },
+    {
+      "scene": 6,
+      "set": "rumah-luar",
+      "kamera": "serong-debu",
+      "isi": {"jendela": "kebalik", "awal": "terbuka"},
+      "gerak": [{"jenis": "debu-masuk", "di": "debu"}]
+    }
+  ],
+  "gambar": [
+    {"nama": "jendela-kebalik-jendela", "set": "rumah-luar", "kamera": "prop-jendela", "isi": {"jendela": "kebalik", "awal": "terbuka"}}
+  ]
+}
