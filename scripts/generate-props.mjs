@@ -8,11 +8,14 @@
 //   node scripts/generate-props.mjs --cek                       (cek Flow Bridge saja, tanpa generate)
 //
 // File JSON: [{"name": "kompas", "prompt": "ancient bronze compass"}, ...]
-// Opsi: --style "<gaya>"  --bg green|magenta  --concurrency 4
+// Opsi: --style "<gaya>"  --bg green|magenta  --concurrency 4  --format short|landscape
+// Format otomatis terbaca dari naskah <slug>.ts kalau memakai --file <slug>.latar.json / .props.json.
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {parseArgs} from 'node:util';
+import sharp from 'sharp';
+import {formatDariFile, masalahLatarLong, UKURAN_FLOW} from './lib/flow-format.mjs';
 import {removeBackground} from './lib/remove-bg.mjs';
 
 const BRIDGE_URL = process.env.FLOW_BRIDGE_URL ?? 'http://127.0.0.1:8001';
@@ -45,6 +48,7 @@ const {values} = parseArgs({
     concurrency: {type: 'string', default: '4'},
     'remove-bg-only': {type: 'boolean', default: false},
     utuh: {type: 'boolean', default: false},
+    format: {type: 'string'},
     cek: {type: 'boolean', default: false},
   },
 });
@@ -104,13 +108,13 @@ const checkBridge = async () => {
   return health;
 };
 
-const generateOne = async ({name, prompt, utuh}, style, bg, forceUtuh = false) => {
+const generateOne = async ({name, prompt, utuh}, style, bg, forceUtuh = false, format = 'short') => {
   const isUtuh = Boolean(utuh || forceUtuh);
   const fullPrompt = buildPrompt(prompt, style, bg, isUtuh);
   const res = await fetch(`${BRIDGE_URL}/v1/images/generations`, {
     method: 'POST',
     headers: headers(),
-    body: JSON.stringify({prompt: fullPrompt, model: 'nano-banana-2', size: '1024x1024', response_format: 'b64_json'}),
+    body: JSON.stringify({prompt: fullPrompt, model: 'nano-banana-2', size: UKURAN_FLOW[format], response_format: 'b64_json'}),
     signal: AbortSignal.timeout(200_000),
   });
   if (!res.ok) {
@@ -121,9 +125,16 @@ const generateOne = async ({name, prompt, utuh}, style, bg, forceUtuh = false) =
   if (!b64) throw new Error('Response tidak berisi b64_json');
 
   if (isUtuh) {
+    const gambar = Buffer.from(b64, 'base64');
+    if (format === 'landscape') {
+      const masalah = masalahLatarLong(await sharp(gambar).metadata());
+      if (masalah) {
+        throw new FatalBridgeError(`Latar video long ditolak: ${masalah}. Ubah rasio di Google Flow ke 16:9 (tombol pengaturan di samping tombol generate), lalu ulangi.`);
+      }
+    }
     await fs.mkdir(LATAR_DIR, {recursive: true});
     const latarPath = path.join(LATAR_DIR, `${name}.png`);
-    await fs.writeFile(latarPath, Buffer.from(b64, 'base64'));
+    await fs.writeFile(latarPath, gambar);
     return latarPath;
   }
 
@@ -190,10 +201,14 @@ const main = async () => {
     throw new Error('Isi --name dan --prompt, atau --file <props.json>');
   }
 
+  const format = values.format ?? (await formatDariFile(values.file)) ?? 'short';
+  if (!UKURAN_FLOW[format]) throw new Error(`--format harus short atau landscape, bukan "${format}".`);
+
   await checkBridge();
-  console.log(`Generate ${items.length} props lewat ${BRIDGE_URL} ...`);
+  console.log(`Generate ${items.length} props lewat ${BRIDGE_URL} (format ${format}) ...`);
+  if (format === 'landscape') console.log('Video long: pastikan rasio di Google Flow sudah 16:9.');
   const results = await runPool(items, Number(values.concurrency), (item) =>
-    generateOne(item, values.style, values.bg, values.utuh),
+    generateOne(item, values.style, values.bg, values.utuh, format),
   );
 
   const failed = results.filter((r) => !r.ok);

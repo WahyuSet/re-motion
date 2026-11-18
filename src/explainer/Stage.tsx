@@ -5,7 +5,8 @@ import {SfxContext} from '../components/Sfx';
 import {parseWords, type TimedWord} from '../lib/kata';
 import {miringStiker, STIKER} from './stiker';
 import {explainerTheme} from './theme';
-import {hitungTransformItem, waktuItem} from './timing';
+import {hitungTransformItem, jangkarItem, waktuItem} from './timing';
+import {useProfil} from './useProfil';
 import type {ExplainerScript, ExplainerSfxName, StageItem, StageSymbolType} from './types';
 
 const {fontFamily: fontStiker} = loadFont('normal', {weights: ['800'], subsets: ['latin']});
@@ -179,20 +180,20 @@ const StageItemView: React.FC<{
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const gayaTeks = useContext(GayaTeksContext);
-  const tf = hitungTransformItem(item, frame, fps, words, duration);
+  const {gerak} = useProfil();
+  const tf = hitungTransformItem(item, frame, fps, words, duration, gerak);
   if (!tf.visible) return null;
 
   const kind = item.kind ?? (item.simbol ? 'simbol' : item.teks ? 'teks' : 'prop');
   const width = item.width ?? (kind === 'simbol' ? 170 : 340);
-  const origin = tf.originY === 'bottom' ? '50% 100%' : '50% 50%';
-  const anchorTranslate = tf.originY === 'bottom' ? 'translate(-50%, -100%)' : 'translate(-50%, -50%)';
+  const {left, top, anchor: anchorTranslate, origin} = jangkarItem(item, tf);
 
   return (
     <div
       style={{
         position: 'absolute',
-        left: `${tf.x}%`,
-        top: `${tf.y}%`,
+        left,
+        top,
         zIndex: item.zIndex ?? 10,
         opacity: tf.opacity,
         transformOrigin: origin,
@@ -250,12 +251,13 @@ export const Stage: React.FC<{
   words: TimedWord[];
   duration: number;
 }> = ({items, words, duration}) => {
+  const {gerak} = useProfil();
   if (!items?.length) return null;
 
   return (
     <>
       {items.map((item, i) => {
-        const {masukAt, aksi} = waktuItem(item, words, duration);
+        const {masukAt, aksi} = waktuItem(item, words, duration, gerak);
         const isHeavy = item.simbol === 'larang' || item.simbol === 'retak';
         const defaultEnterSfx: ExplainerSfxName | null =
           item.masuk === 'none' || masukAt <= 2

@@ -1,8 +1,9 @@
 import React from 'react';
-import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {useCurrentFrame} from 'remotion';
 import type {TimedWord} from '../lib/kata';
 import {explainerTheme} from './theme';
 import {potongFrasa} from './timing';
+import {useProfil} from './useProfil';
 
 export const ExplainerSubtitle: React.FC<{
   words: TimedWord[];
@@ -10,8 +11,7 @@ export const ExplainerSubtitle: React.FC<{
   overPhoto?: boolean;
 }> = ({words, accentColor, overPhoto = false}) => {
   const frame = useCurrentFrame();
-  const {width, height} = useVideoConfig();
-  const vertical = height > width;
+  const {subtitle: tata} = useProfil();
   if (!words.length) return null;
 
   const frasaList = potongFrasa(words, 5, 34);
@@ -24,9 +24,9 @@ export const ExplainerSubtitle: React.FC<{
     <div
       style={{
         position: 'absolute',
-        left: vertical ? 72 : 140,
-        right: vertical ? 72 : 140,
-        bottom: vertical ? 430 : 90,
+        left: tata.side,
+        right: tata.side,
+        bottom: tata.bottom,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -45,7 +45,7 @@ export const ExplainerSubtitle: React.FC<{
           textAlign: 'center',
           fontFamily: explainerTheme.fontBody,
           fontWeight: 700,
-          fontSize: vertical ? 40 : 36,
+          fontSize: tata.fontSize,
           lineHeight: 1.25,
           color: explainerTheme.ink,
           background: overPhoto ? 'rgba(244, 239, 230, 0.94)' : undefined,

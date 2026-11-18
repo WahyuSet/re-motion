@@ -11,6 +11,7 @@ import {rentangSuara, sceneWords, TRANSITION_FRAMES, volumeMusik} from '../lib/k
 import {NARASI_DELAY, narasiFile} from '../lib/narasi';
 import type {Scene as HistoryScene, TransitionType, VideoScript} from '../types';
 import {explainerTransitionFrames, getExplainerDuration, prepareExplainerScript} from './prep';
+import {gerakLatar} from './timing';
 import {BeatSceneView} from './scenes/BeatScene';
 import {DiagramSceneView} from './scenes/DiagramScene';
 import {HookSceneView} from './scenes/HookScene';
@@ -20,16 +21,16 @@ import {ExplainerSubtitle} from './Subtitle';
 import {nomorBab, tampilBanner} from './bab';
 import {BabBanner} from './BabBanner';
 import {explainerTheme} from './theme';
-import {profilDari} from './format';
+import {profilDari, type FormatExplainer} from './format';
 import type {ExplainerScene, ExplainerScript} from './types';
 
 export {explainerTransitionFrames, getExplainerDuration, prepareExplainerScript};
 
-const FullSceneBackdrop: React.FC<{scene: ExplainerScene}> = ({scene}) => {
+const FullSceneBackdrop: React.FC<{scene: ExplainerScene; index: number; format: FormatExplainer}> = ({scene, index, format}) => {
   const frame = useCurrentFrame();
   if (!scene.latar) return null;
   const p = Math.min(1, Math.max(0, frame / Math.max(1, scene.duration)));
-  const scale = 1.02 + p * 0.08;
+  const {scale, geserX} = gerakLatar(index, p, format);
 
   return (
     <AbsoluteFill style={{zIndex: 0, overflow: 'hidden', pointerEvents: 'none'}}>
@@ -40,18 +41,18 @@ const FullSceneBackdrop: React.FC<{scene: ExplainerScene}> = ({scene}) => {
           height: '100%',
           objectFit: 'cover',
           opacity: 1,
-          transform: `scale(${scale})`,
+          transform: geserX ? `translateX(${geserX}%) scale(${scale})` : `scale(${scale})`,
         }}
       />
     </AbsoluteFill>
   );
 };
 
-const renderExplainerScene = (scene: ExplainerScene, fps: number) => {
+const renderExplainerScene = (scene: ExplainerScene, fps: number, index: number, format: FormatExplainer) => {
   const words = sceneWords(scene, fps);
   return (
     <AbsoluteFill>
-      <FullSceneBackdrop scene={scene} />
+      <FullSceneBackdrop scene={scene} index={index} format={format} />
       {scene.type === 'hook' ? <HookSceneView scene={scene} words={words} /> : null}
       {scene.type === 'beat' ? <BeatSceneView scene={scene} words={words} /> : null}
       {scene.type === 'stage' ? <StageSceneView scene={scene} words={words} /> : null}
@@ -138,7 +139,7 @@ export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) =>
     return [
       i === 0 ? null : renderTransition(trans, `t-${i}`),
       <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={scene.duration}>
-        {renderExplainerScene(scene, fps)}
+        {renderExplainerScene(scene, fps, i, profil.format)}
         {tampilBanner(i, scene, profil.format) ? <BabBanner nomor={nomorBab(script.scenes, i) ?? 0} judul={scene.bab ?? ''} /> : null}
         {i > 0 && trans !== 'none' ? <Sfx name="whoosh" at={0} /> : null}
         {narasi ? (

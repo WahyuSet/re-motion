@@ -20,7 +20,8 @@ Semua nilai di sini sama dengan kode `src/explainer/` (`types.ts`, `timing.ts`, 
 | `di` / `delay` | masuk di kata `di`, atau `delay` frame dari awal scene (tanpa `di` dan tanpa `delay` = frame 0) |
 | `sampai` / `endFrame` | keluar di kata `sampai` (dicari setelah `di`) |
 | `masuk`, `keluar`, `sfx`, `aksi` | lihat tabel di bawah |
-| `float` | goyang halus otomatis (default `true` untuk prop/simbol, `false` untuk teks) |
+| `float` | goyang halus otomatis (default `true` untuk prop/simbol, `false` untuk teks dan item `nempel`) |
+| `nempel` | khusus long: `'kiri-bawah'`, `'kanan-bawah'`, `'bawah'`. Sisi potongan gambar menempel ke tepi layar. `x`/`y` tetap diisi; `'bawah'` memakai `x`, dua lainnya mengabaikan keduanya |
 
 ## Masuk & Keluar
 
@@ -55,7 +56,7 @@ Field umum semua aksi: `type`, `di`, `delay`, `durasi` (default 18), `sfx`. Aksi
 | `peek` | `dx` (-14), `dy` (0) dalam **persen layar**, `rotate` (-15, derajat), `tahan` (35, frame) | nongol miring, tahan, ngumpet | `boing` |
 | `move` | `toX`, `toY` (posisi **persen layar**, sama seperti `x`/`y`), `toScale`, `toRotate` | pindah posisi permanen | - |
 | `shake` | `intensitas` (10, piksel) | getar horizontal | `dum` |
-| `pulse` | `skala` (1.08), `sampai` | denyut; `skala: 1.18` untuk denyut kuat; tanpa `durasi` berdenyut sampai akhir scene | - |
+| `pulse` | `skala` (1.08), `sampai` | denyut; `skala: 1.18` untuk denyut kuat. Short: selalu isi `durasi` (tanpa itu berdenyut sampai akhir scene). Long: tanpa `durasi` = 24 frame lalu melemah | - |
 | `grow` | `toScale`, atau `toScaleX`/`toScaleY` | ubah skala permanen dari bawah | - |
 | `dim` | `toOpacity` atau `to` (0.25) | redupkan | - |
 
@@ -97,10 +98,25 @@ Meme **menemani**, bukan menggantikan. Kalau klausa menyebut benda, benda itu te
 
 Karakter reaksi **selalu** dari tabel ini, jangan digenerate lewat Flow Bridge (ciri khas channel). Kalau ekspresi yang dibutuhkan belum ada (misalnya jijik, syok/kaget), pakai meme terdekat sementara dan **sebutkan ke user** ekspresi yang kurang supaya user yang mencarikan.
 
-## Kepadatan Motion (validator M1-M6)
+### Meme untuk video long
+
+Di layar lebar potongan rata dan bagian tembus jauh lebih kelihatan (validator V7, V8). Tempel meme ke tepi yang sesuai:
+
+| Pemakaian di long | File |
+|---|---|
+| `nempel: 'kiri-bawah'` | `meme-kucing-kaget`, `meme-kucing-sinis`, `meme-kucing-merenung`, `meme-kucing-nangis` |
+| `nempel: 'kanan-bawah'` | `meme-kucing-judes` |
+| `nempel: 'bawah'` di `x` ≤ 12 atau ≥ 88 | `meme-kucing-jempol`, `meme-kucing-syok`, `meme-kucing-senyum`, `meme-monyet-mikir` |
+| bebas di panggung | `meme-kucing-jelasin`, `meme-kucing-guru` |
+| **hindari, ada bagian tembus** | `meme-kucing-paw`, `meme-kucing-titik`, `meme-kucing-think`, `meme-kucing-tutuphidung` |
+
+Lebar meme `nempel` maksimal 25% layar (±460 px) supaya tidak masuk kolom subtitle (L2).
+
+## Kepadatan Motion (validator M1-M6, long juga M7-M10)
 
 - Scene `hook`/`stage`: minimal 3 aksi, minimal 2 jenis `masuk`, scene `stage` minimal 1 `move`.
-- Per video: minimal 1 `peek`, 3 SFX komedi, 1 teks celetukan (`ukuran` 28-32, `rotate: -6`).
+- Per video: minimal 1 `peek`, 3 SFX komedi, 1 teks celetukan (short `ukuran` 28-32, long 44-48, `rotate: -6`).
+- Long: ritme, jarak `move`, variasi komposisi, dan peragaan proses mengikuti `referensi/long.md` bagian "Ritme".
 - Prop yang tampil > 3 detik: 2-3 aksi berantai (`wiggle` → `move` → `jump`).
 
 ## Pola Koreografi
@@ -130,8 +146,10 @@ Sebab-akibat pada kata yang sama: A `masuk: 'drop'` di `'tertimpa'` → B `{type
 Angka ini sama dengan `PROFIL.landscape` di `src/explainer/format.ts`; validator memakai angka yang sama.
 
 - Area aman (A1): kiri ≥ 3%, kanan ≤ 97%, atas ≥ 5%, bawah ≤ 95%. YouTube biasa tidak menutup layar dengan tombol seperti Shorts, jadi area aman jauh lebih lebar.
-- Judul (L1): tepi atas item di hook ≥ 36%, stage berjudul ≥ 18%, beat ≥ 20%. Judul stage/beat/diagram mulai di 10%, tepat di bawah banner bab dan watermark.
-- Subtitle (L2): tepi bawah item ≤ 85%.
+- Judul (L1): tepi atas item di hook ≥ 36%, stage berjudul ≥ 20%, beat ≥ 21%. Judul stage/beat/diagram mulai di 10%, tepat di bawah banner bab dan watermark.
+- Subtitle (L2): tepi bawah item ≤ 85%. Item `nempel` boleh sampai tepi bawah selama berada di luar kolom subtitle (`x` 25-75%).
+- Teks (L3): `ukuran` minimal 44, utamakan 48-56. Video long banyak ditonton di HP, dan 34 px di kanvas 1920 tinggal ±7 px saat HP tegak. Kalau tidak muat, pendekkan teksnya.
+- Simbol garis tipis seperti `retak` pakai `width` ≥ 220 supaya terbaca.
 - `width` tetap piksel, tapi tinggi kanvas cuma 1080 px: prop potret `width` 340 rasio 1:1,5 tingginya 510 px = 47% layar. Pakai prop utama 320-480, pendamping 220-320, simbol 100-180.
 - Layar lebar: susun dua keadaan berdampingan di `x` 25 dan 75 (sebelum/sesudah, salah/benar), bukan atas-bawah. Ruang tengah yang aman untuk prop: `y` sekitar 20-85%.
 - Pojok kanan atas dipakai banner bab ("BAB N · JUDUL", 3 detik pertama scene pembuka bab), pojok kiri atas watermark. Jangan taruh item penting di kedua pojok itu (`y` < 12).

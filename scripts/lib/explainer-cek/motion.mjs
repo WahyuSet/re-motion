@@ -1,5 +1,6 @@
-// Aturan kepadatan motion dan komedi (M1-M6) untuk naskah explainer.
+// Aturan kepadatan motion dan komedi (M1-M6), plus ritme video long (M7-M10).
 
+const KATA_PER_DETIK = 2.4;
 const SFX_KOMEDI = new Set(['boing', 'boom', 'womp', 'slap', 'ding', 'fahh', 'ack']);
 const SFX_DEFAULT_AKSI = {jump: 'boing', peek: 'boing', squash: 'slap'};
 const SFX_DEFAULT_SIMBOL = {centang: 'ding', silang: 'slap'};
@@ -20,7 +21,38 @@ export const hitungSfxKomedi = (script) => {
   return n;
 };
 
-export const cekMotionScene = (scene, where, lapor) => {
+/** Jarak `move` terjauh tiap item, dalam persen lebar kanvas. */
+const jarakMove = (item, kanvas) => {
+  let x = item.x;
+  let y = item.y;
+  let maks = 0;
+  for (const a of item.aksi ?? []) {
+    if (a.type !== 'move') continue;
+    const nx = a.toX ?? x;
+    const ny = a.toY ?? y;
+    maks = Math.max(maks, Math.hypot(nx - x, ((ny - y) * kanvas.h) / kanvas.w));
+    x = nx;
+    y = ny;
+  }
+  return maks;
+};
+
+const berperaga = (item, ritme, kanvas) =>
+  item.src &&
+  (item.masuk === 'grow-up' || (item.aksi ?? []).some((a) => a.type === 'grow') || jarakMove(item, kanvas) >= ritme.moveMin);
+
+/** Scene yang memperagakan proses: diagram, atau minimal dua prop yang benar-benar berubah posisi/ukuran. */
+const adaPeragaan = (scene, ritme, kanvas) =>
+  scene.type === 'diagram' || semuaItem(scene).filter((it) => berperaga(it, ritme, kanvas)).length >= 2;
+
+const sisiUtama = (scene) => {
+  const props = semuaItem(scene).filter((it) => it.src && !it.nempel);
+  if (!props.length) return null;
+  const utama = props.reduce((a, b) => ((b.width ?? 340) > (a.width ?? 340) ? b : a));
+  return utama.x < 42 ? 'kiri' : utama.x > 58 ? 'kanan' : 'tengah';
+};
+
+export const cekMotionScene = (scene, where, lapor, profil = null) => {
   if (scene.type !== 'hook' && scene.type !== 'stage') return;
   const items = semuaItem(scene);
   if (!items.length) return;
@@ -36,9 +68,23 @@ export const cekMotionScene = (scene, where, lapor) => {
   if (scene.type === 'stage' && !aksi.some((a) => a.type === 'move')) {
     lapor.warn(where, 'M3 scene stage tanpa aksi move.', "Tambah {type: 'move', di: '<kata>', toX, toY} agar objek berpindah posisi di panggung.");
   }
+
+  const ritme = profil?.ritme;
+  if (!ritme) return;
+  const detik = (scene.narasi ?? '').trim().split(/\s+/).filter(Boolean).length / KATA_PER_DETIK;
+  const minimal = Math.ceil(detik * ritme.kejadianPerDetik);
+  if (items.length + aksi.length < minimal) {
+    lapor.warn(where, `M7 baru ${items.length + aksi.length} kejadian visual untuk ±${Math.round(detik)} detik narasi (minimal ${minimal}).`, 'Tambah item atau aksi di kata kunci, atau pecah scene ini jadi dua.');
+  }
+  if (scene.type === 'stage' && aksi.some((a) => a.type === 'move')) {
+    const terjauh = Math.max(...items.map((it) => jarakMove(it, profil.kanvas)));
+    if (terjauh < ritme.moveMin) {
+      lapor.warn(where, `M8 move terjauh cuma ${terjauh.toFixed(1).replace('.', ',')}% lebar layar (minimal ${ritme.moveMin}%).`, 'Geser objek melintasi panggung sesuai isi narasi, jangan cuma bergeser sedikit.');
+    }
+  }
 };
 
-export const cekMotionVideo = (script, lapor) => {
+export const cekMotionVideo = (script, lapor, profil = null) => {
   const items = semuaItemVideo(script);
   const aksi = items.flatMap((it) => it.aksi ?? []);
 
@@ -49,8 +95,38 @@ export const cekMotionVideo = (script, lapor) => {
   if (sfx < 3) {
     lapor.warn('video', `M5 hanya ${sfx} SFX komedi (minimal 3).`, "Pasang sfx 'fahh', 'ack', 'boing', 'boom', 'womp', 'slap', atau 'ding' pada item/aksi di momen punchline.");
   }
-  const adaCeletukan = items.some((it) => it.teks && (it.ukuran ?? 56) <= 32 && (it.rotate ?? 0) !== 0);
+  const celetukanMaks = profil?.teks.celetukanMaks ?? 32;
+  const adaCeletukan = items.some((it) => it.teks && (it.ukuran ?? 56) <= celetukanMaks && (it.rotate ?? 0) !== 0);
   if (!adaCeletukan) {
-    lapor.warn('video', 'M6 belum ada teks celetukan mikro.', "Tambah item {kind: 'teks', teks: '<komentar singkat>', ukuran: 30, rotate: -6} di dekat prop.");
+    lapor.warn('video', 'M6 belum ada teks celetukan mikro.', `Tambah item {kind: 'teks', teks: '<komentar singkat>', ukuran: ${Math.min(30 + (celetukanMaks - 32), celetukanMaks)}, rotate: -6} di dekat prop.`);
+  }
+
+  const ritme = profil?.ritme;
+  if (!ritme) return;
+  const scenes = script?.scenes ?? [];
+
+  // M9: objek utama jangan terus di sisi yang sama.
+  let sisiLalu = null;
+  let beruntun = 0;
+  scenes.forEach((scene, i) => {
+    const sisi = scene.type === 'stage' ? sisiUtama(scene) : null;
+    beruntun = sisi && sisi === sisiLalu ? beruntun + 1 : sisi ? 1 : 0;
+    sisiLalu = sisi;
+    if (beruntun === ritme.polaBerulangMaks + 1) {
+      lapor.warn(`scene ${i + 1} (stage)`, `M9 objek utama sudah ${beruntun} scene berturut-turut di ${sisi}.`, 'Variasikan komposisi: objek besar di tengah, pindah ke sisi lain, atau dua keadaan di x 25 dan 75.');
+    }
+  });
+
+  // M10: setiap bab isi memperagakan prosesnya, bukan hanya menampilkan gambar diam.
+  const bab = [];
+  for (const scene of scenes) {
+    const judul = typeof scene.bab === 'string' ? scene.bab.trim() : '';
+    if (judul || !bab.length) bab.push({judul, scenes: []});
+    bab[bab.length - 1].scenes.push(scene);
+  }
+  for (const b of bab.slice(1, -1)) {
+    if (!b.scenes.some((s) => adaPeragaan(s, ritme, profil.kanvas))) {
+      lapor.warn(`bab "${b.judul}"`, 'M10 belum ada scene yang memperagakan proses.', "Pakai scene diagram, atau pecah objek jadi minimal 2 prop yang bergerak (move jauh, grow, atau masuk: 'grow-up').");
+    }
   }
 };

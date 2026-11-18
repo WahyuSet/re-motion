@@ -190,12 +190,13 @@ test('L1 zona judul mengikuti profil format', async () => {
   assert.ok(!ada((await validasiExplainer(hook('short', 36), 'uji-format', OPTS)).warnings, 'L1'));
   assert.ok(!ada((await validasiExplainer(hook('landscape', 42), 'uji-format', OPTS)).warnings, 'L1'));
 
-  const stageJudul = (format) => ({
+  const stageJudul = (format, y) => ({
     format,
-    scenes: [stage('Botol plastik itu rapuh.', {judul: 'TES', items: [{kind: 'simbol', simbol: 'centang', x: 50, y: 24, width: 100}]}), beat],
+    scenes: [stage('Botol plastik itu rapuh.', {judul: 'TES', items: [{kind: 'simbol', simbol: 'centang', x: 50, y, width: 100}]}), beat],
   });
-  assert.ok(!ada((await validasiExplainer(stageJudul('landscape'), 'uji-format', OPTS)).warnings, 'L1'));
-  assert.ok(ada((await validasiExplainer(stageJudul('short'), 'uji-format', OPTS)).warnings, 'L1'));
+  assert.ok(!ada((await validasiExplainer(stageJudul('landscape', 26), 'uji-format', OPTS)).warnings, 'L1'));
+  assert.ok(ada((await validasiExplainer(stageJudul('landscape', 24), 'uji-format', OPTS)).warnings, 'L1'));
+  assert.ok(ada((await validasiExplainer(stageJudul('short', 24), 'uji-format', OPTS)).warnings, 'L1'));
 });
 
 test('V6 tumpang-tindih prop dihitung di kanvas sesuai format', async () => {

@@ -8,6 +8,7 @@ export const SIMBOL = ['larang', 'centang', 'silang', 'panah', 'tanya', 'retak',
 export const SFX = ['whoosh', 'dum', 'tik', 'pop', 'swell', 'boing', 'boom', 'womp', 'slap', 'ding', 'fahh', 'ack'];
 export const GAYA_TEKS = ['kotak', 'stiker'];
 export const FORMAT = ['short', 'landscape'];
+export const NEMPEL = ['bawah', 'kiri-bawah', 'kanan-bawah'];
 export const TIPE_AKSI =['move', 'peek', 'grow', 'dim', 'shake', 'pulse', 'jump', 'wiggle', 'squash'];
 
 const FIELD_UMUM = ['type', 'di', 'delay', 'durasi', 'sfx'];
@@ -46,6 +47,7 @@ export const cekSkemaItem = (item, where, lapor) => {
   cekEnum(item.masuk, MASUK, 'masuk', where, lapor);
   cekEnum(item.keluar, KELUAR, 'keluar', where, lapor);
   cekEnum(item.simbol, SIMBOL, 'simbol', where, lapor);
+  cekEnum(item.nempel, NEMPEL, 'nempel', where, lapor);
   cekSfx(item.sfx, where, lapor);
 
   for (const [ai, aksi] of (item.aksi ?? []).entries()) {

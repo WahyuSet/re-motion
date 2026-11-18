@@ -15,12 +15,13 @@ import {cekSkemaItem, cekSkemaNaskah} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 import {cekNominal} from './lib/explainer-cek/diagram.mjs';
 import {cekDurasi, cekNarasiScene, cekNarasiVideo, perkiraanDurasi} from './lib/explainer-cek/narasi.mjs';
-import {cekBab} from './lib/explainer-cek/bab.mjs';
+import {cekAlurLong, cekBab} from './lib/explainer-cek/bab.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
 import {cekHook, cekRencana, cekThumbnail} from './lib/explainer-cek/hook.mjs';
 import {formatPeta} from './lib/explainer-cek/peta.mjs';
-import {cekBeat, cekZona} from './lib/explainer-cek/layout.mjs';
-import {muatUkuran} from './lib/explainer-cek/kotak.mjs';
+import {cekBeat, cekPotongan, cekZona} from './lib/explainer-cek/layout.mjs';
+import {muatAlpha, muatUkuran, ukuranGambar} from './lib/explainer-cek/kotak.mjs';
+import {masalahLatarLong} from './lib/flow-format.mjs';
 import {cekKomedi, KOMEDI_LAMA} from './lib/explainer-cek/komedi.mjs';
 import {cekMerek} from './lib/explainer-cek/merek.mjs';
 
@@ -44,6 +45,15 @@ const existsPublic = (rel) =>
   );
 
 const plain = (text) => text.replace(/\*/g, '');
+
+// G1: video long butuh latar 16:9; latar potret terpotong dan pecah saat diperbesar.
+const cekLatarLong = async (src, where, lapor) => {
+  const u = await ukuranGambar(src);
+  const masalah = u && masalahLatarLong({width: u.w, height: u.h});
+  if (masalah) {
+    lapor.warn(where, `G1 latar ${src}: ${masalah}.`, 'Set Google Flow ke 16:9, lalu generate ulang dengan generate-props --file <slug>.latar.json --utuh.');
+  }
+};
 
 export const validasiExplainer = async (script, slug = 'explainer', opts = {}) => {
   const kata = await importTs('src/lib/kata.ts');
@@ -86,6 +96,8 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   }
   if (script?.thumbnail?.latar && !(await existsPublic(script.thumbnail.latar))) {
     err('thumbnail', `File latar public/${script.thumbnail.latar} tidak ditemukan.`);
+  } else if (script?.thumbnail?.latar && !short && !legacy) {
+    await cekLatarLong(script.thumbnail.latar, 'thumbnail', lapor);
   }
   cekHook(script, kata, lapor, {legacy, profil});
   const rencana = legacy ? null : await muatRencana(slug, opts);
@@ -93,6 +105,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
 
   const props = legacy ? [] : await muatProps(slug, opts, lapor);
   const ukuran = legacy ? new Map() : await muatUkuran(script);
+  const alpha = legacy || short ? new Map() : await muatAlpha(script);
   if (!legacy) cekThumbnail(script, rencana, props, lapor);
   if (!legacy && !KOMEDI_LAMA.has(slug)) cekKomedi(script, rencana, kata, lapor, kataJson, jokeMinimal(profil, perkiraanDurasi(script, kataJson)));
 
@@ -167,6 +180,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
         );
       } else {
         seenLatar.set(scene.latar, i + 1);
+        if (!short && !legacy) await cekLatarLong(scene.latar, where, lapor);
       }
     } else if (scene.type !== 'beat') {
       err(
@@ -208,8 +222,9 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
       }
     }
 
-    if (!legacy) cekMotionScene(scene, where, lapor);
+    if (!legacy) cekMotionScene(scene, where, lapor, profil);
     if (!legacy) cekZona(scene, where, lapor, ukuran, script?.gayaTeks, profil);
+    if (!legacy) cekPotongan(scene, where, lapor, alpha, profil);
     if (!legacy) cekBeat(scene, where, lapor);
     if (legacy && (scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
       const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);
@@ -285,10 +300,11 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   if (!legacy) {
     cekProps(script, props, kata, lapor);
     cekMerek(props, lapor);
-    cekMotionVideo(script, lapor);
+    cekMotionVideo(script, lapor, profil);
     cekNarasiVideo(script, lapor, profil);
     cekDurasi(script, kataJson, lapor, profil);
     cekBab(script, kataJson, lapor, profil);
+    cekAlurLong(script, rencana, kataJson, lapor, profil);
   }
 
   return {errors, warnings};

@@ -26,18 +26,26 @@ export const cekZona = (scene, where, lapor, ukuran = new Map(), gayaTeks = 'kot
   const tepiSubtitle = profil?.subtitleAtas ?? TEPI_BAWAH_SUBTITLE;
   const namaAman = profil?.format === 'landscape' ? 'area aman' : 'area aman Shorts';
   const atas = zonaAtas(scene, profil?.zonaJudul ?? TEPI_ATAS_ZONA);
+  const landscape = profil?.format === 'landscape';
   for (const [i, item] of semuaItem(scene).entries()) {
+    const label = `${where} item ${i + 1}`;
+    if (item.nempel && !landscape) {
+      lapor.warn(label, 'L4 nempel hanya untuk video long.', 'Hapus nempel; di Shorts tepi bawah layar tertutup caption aplikasi.');
+    }
+    if (item.teks && (item.ukuran ?? 56) < (profil?.teks.min ?? 0)) {
+      lapor.warn(label, `L3 teks ukuran ${item.ukuran} terlalu kecil dibaca di HP (minimal ${profil.teks.min}).`, `Naikkan ukuran ke ${profil.teks.min}-56 dan pendekkan teksnya kalau tidak muat.`);
+    }
     if (typeof item.x !== 'number' || typeof item.y !== 'number') continue;
     const k = kotakItem(item, ukuran.get(item.src), gayaTeks, profil);
     if (!k) continue;
-    const label = `${where} item ${i + 1}`;
+    const nempel = landscape ? item.nempel : undefined;
 
     // A1: keempat tepi kotak di dalam area aman (bukan titik tengahnya).
     const keluar = [
-      k.kiri < aman.kiri && `kiri ${f(k.kiri)}% (min ${f(aman.kiri)})`,
-      k.kanan > aman.kanan && `kanan ${f(k.kanan)}% (maks ${f(aman.kanan)})`,
+      k.kiri < aman.kiri && nempel !== 'kiri-bawah' && `kiri ${f(k.kiri)}% (min ${f(aman.kiri)})`,
+      k.kanan > aman.kanan && nempel !== 'kanan-bawah' && `kanan ${f(k.kanan)}% (maks ${f(aman.kanan)})`,
       k.atas < aman.atas && `atas ${f(k.atas)}% (min ${f(aman.atas)})`,
-      k.bawah > aman.bawah && `bawah ${f(k.bawah)}% (maks ${f(aman.bawah)})`,
+      k.bawah > aman.bawah && !nempel && `bawah ${f(k.bawah)}% (maks ${f(aman.bawah)})`,
     ].filter(Boolean);
     if (keluar.length) {
       lapor.warn(label, `A1 tepi ${keluar.join(', ')} keluar ${namaAman}.`, 'Geser x/y ke tengah atau kecilkan width sampai keempat tepinya masuk area aman.');
@@ -48,8 +56,36 @@ export const cekZona = (scene, where, lapor, ukuran = new Map(), gayaTeks = 'kot
       lapor.warn(label, `L1 tepi atas ${f(k.atas)}% menabrak judul scene ${scene.type} (judul sampai ${atas}%).`, `Turunkan y atau kecilkan width sampai tepi atasnya >= ${atas}%.`);
     }
     // L2: tepi bawah kotak di atas subtitle.
-    if (k.bawah > tepiSubtitle) {
+    if (nempel) {
+      const {kiri, kanan} = profil.kolomSubtitle;
+      if (k.kiri < kanan && k.kanan > kiri) {
+        lapor.warn(label, `L2 item nempel masuk kolom subtitle (${kiri}-${kanan}% lebar layar).`, 'Kecilkan width, atau pakai nempel kiri-bawah / kanan-bawah.');
+      }
+    } else if (k.bawah > tepiSubtitle) {
       lapor.warn(label, `L2 tepi bawah ${f(k.bawah)}% menabrak subtitle (mulai ${tepiSubtitle}%).`, `Naikkan y atau kecilkan width sampai tepi bawahnya <= ${tepiSubtitle}%.`);
+    }
+  }
+};
+
+const NEMPEL_UNTUK_SISI = {bawah: ['bawah', 'kiri-bawah', 'kanan-bawah'], kiri: ['kiri-bawah'], kanan: ['kanan-bawah'], atas: []};
+/** Meme dengan pixel setengah tembus sebanyak ini terlihat bolong di atas foto. */
+const MEME_TEMBUS_MAKS = 10;
+
+// V7, V8 (long): di layar lebar potongan rata dan bagian tembus pada cutout jauh lebih kelihatan.
+export const cekPotongan = (scene, where, lapor, alpha, profil) => {
+  if (profil?.format !== 'landscape') return;
+  for (const [i, item] of semuaItem(scene).entries()) {
+    const info = alpha.get(item.src);
+    if (!info || item.bingkai) continue;
+    const label = `${where} item ${i + 1}`;
+    const nama = item.src.split('/').pop();
+    const lepas = Object.keys(info.potong).filter((sisi) => info.potong[sisi] && !NEMPEL_UNTUK_SISI[sisi].includes(item.nempel));
+    if (lepas.length) {
+      const saran = info.potong.kiri ? 'kiri-bawah' : info.potong.kanan ? 'kanan-bawah' : 'bawah';
+      lapor.warn(label, `V7 ${nama} terpotong rata di sisi ${lepas.join(', ')} dan melayang di layar.`, info.potong.atas ? 'Pakai bingkai: true, atau ganti gambar yang utuh.' : `Pakai nempel: '${saran}' supaya potongannya menempel ke tepi layar.`);
+    }
+    if (item.src.startsWith('props/meme-') && info.tembus >= MEME_TEMBUS_MAKS) {
+      lapor.warn(label, `V8 ${nama} punya bagian tembus pandang (${Math.round(info.tembus)}% pixel).`, 'Pilih meme lain di tabel referensi/visual.md bagian "Meme untuk video long".');
     }
   }
 };

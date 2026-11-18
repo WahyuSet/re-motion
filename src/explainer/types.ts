@@ -72,6 +72,8 @@ export type StageAction = {
   skala?: number;
 };
 
+export type StageNempel = 'bawah' | 'kiri-bawah' | 'kanan-bawah';
+
 export type StageItem = {
   kind?: 'prop' | 'teks' | 'simbol';
   /** Untuk kind 'prop': path di public/, contoh 'props/token-meteran.svg' */
@@ -91,6 +93,11 @@ export type StageItem = {
   rotate?: number;
   zIndex?: number;
   float?: boolean;
+  /**
+   * Long: tempelkan sisi potongan gambar ke tepi layar (meme yang terpotong rata).
+   * 'kiri-bawah' dan 'kanan-bawah' mengabaikan x dan y; 'bawah' mengabaikan y.
+   */
+  nempel?: StageNempel;
   /** Kata di narasi saat objek masuk */
   di?: string;
   delay?: number;

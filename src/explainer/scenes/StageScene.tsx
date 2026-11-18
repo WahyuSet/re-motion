@@ -37,7 +37,7 @@ export const StageSceneView: React.FC<{
               padding: '12px 26px',
               fontFamily: explainerTheme.fontBody,
               fontWeight: 900,
-              fontSize: 48,
+              fontSize: tata.fontSize,
               textTransform: 'uppercase',
               letterSpacing: 0.8,
               transform: `scale(${0.85 + 0.15 * s})`,

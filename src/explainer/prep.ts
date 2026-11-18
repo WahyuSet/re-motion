@@ -1,5 +1,6 @@
 import {estimateSeconds, NARASI_DELAY, spreadWords, transitionFrames} from '../lib/kata';
 import {applyNarasi} from '../lib/narasi';
+import {tampilBanner} from './bab';
 import type {VideoScript, WordTiming} from '../types';
 import type {ExplainerScene, ExplainerScript} from './types';
 
@@ -15,6 +16,8 @@ export const TAHAN_AKHIR = 30;
  * panjang file audio, jadi hening sisa potongan TTS tidak ikut memperlambat.
  */
 export const EKOR_EXPLAINER = 6;
+
+const TRANSISI_BAB = 'whip' as const;
 
 const tahanAkhir = (scenes: ExplainerScene[]): ExplainerScene[] =>
   scenes.map((s, i) => (i === scenes.length - 1 ? {...s, duration: s.duration + TAHAN_AKHIR} : s));
@@ -44,10 +47,12 @@ export const prepareExplainerScript = async (
   script: ExplainerScript,
   fps: number,
 ): Promise<ExplainerScript> => {
-  // Default transisi explainer adalah 'none' (cut langsung khas @NahhJadi)
-  const normalizedScenes = script.scenes.map((s) => ({
+  // Default transisi explainer adalah 'none' (cut langsung khas @NahhJadi).
+  // Video long: pergantian bab diberi transisi supaya terasa sebagai babak baru.
+  const format = script.format === 'landscape' ? 'landscape' : 'short';
+  const normalizedScenes = script.scenes.map((s, i) => ({
     ...s,
-    transition: s.transition ?? ('none' as const),
+    transition: s.transition ?? (tampilBanner(i, s, format) ? TRANSISI_BAB : ('none' as const)),
   }));
   const nextTransition = (i: number) =>
     i + 1 < normalizedScenes.length ? explainerTransitionFrames(normalizedScenes[i + 1]) : 0;

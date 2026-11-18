@@ -43,7 +43,7 @@ export const BeatSceneView: React.FC<{
                 boxShadow: '0 12px 28px rgba(0,0,0,0.22)',
                 fontFamily: explainerTheme.fontBody,
                 fontWeight: 900,
-                fontSize: hasItems || scene.teks.length > 8 ? 52 : 72,
+                fontSize: hasItems || scene.teks.length > 8 ? tata.fontSize : 72,
                 lineHeight: 1.2,
                 textAlign: 'center',
                 textTransform: 'uppercase',

@@ -33,6 +33,64 @@ export const ukuranGambar = async (src) => {
   return cache.get(src);
 };
 
+/** Sisi dianggap terpotong kalau bagian buramnya menyentuh tepi PNG sepanjang minimal 12% sisi itu. */
+const PORSI_SISI_POTONG = 0.12;
+const ALPHA_BURAM = 200;
+const ALPHA_PENUH = 240;
+const ALPHA_KOSONG = 15;
+
+const cacheAlpha = new Map();
+
+/** Sisi PNG yang terpotong rata dan persentase pixel setengah tembus: {potong, tembus}, atau null. */
+export const infoAlpha = async (src) => {
+  if (!src) return null;
+  if (!cacheAlpha.has(src)) {
+    cacheAlpha.set(
+      src,
+      sharp(path.resolve('public', src))
+        .ensureAlpha()
+        .extractChannel(3)
+        .raw()
+        .toBuffer({resolveWithObject: true})
+        .then(({data, info: {width: W, height: H}}) => {
+          let penuh = 0;
+          let semi = 0;
+          for (const a of data) {
+            if (a >= ALPHA_PENUH) penuh++;
+            else if (a > ALPHA_KOSONG) semi++;
+          }
+          const sisi = (n, ambil) => {
+            let c = 0;
+            for (let i = 0; i < n; i++) if (ambil(i) >= ALPHA_BURAM) c++;
+            return c / n >= PORSI_SISI_POTONG;
+          };
+          return {
+            potong: {
+              kiri: sisi(H, (y) => data[y * W]),
+              kanan: sisi(H, (y) => data[y * W + W - 1]),
+              atas: sisi(W, (x) => data[x]),
+              bawah: sisi(W, (x) => data[(H - 1) * W + x]),
+            },
+            tembus: penuh + semi ? (semi / (penuh + semi)) * 100 : 0,
+          };
+        })
+        .catch(() => null),
+    );
+  }
+  return cacheAlpha.get(src);
+};
+
+/** Muat info alpha semua prop yang dipakai naskah: Map<src, info|null>. */
+export const muatAlpha = async (script) => {
+  const srcs = new Set();
+  for (const s of script?.scenes ?? []) {
+    for (const it of [...(s.utama ? [s.utama] : []), ...(s.items ?? [])]) if (it.src) srcs.add(it.src);
+  }
+  const peta = new Map();
+  await Promise.all([...srcs].map(async (src) => peta.set(src, await infoAlpha(src))));
+  return peta;
+};
+
 /** Muat ukuran semua gambar yang dipakai naskah: Map<src, {w,h}|null>. */
 export const muatUkuran = async (script) => {
   const srcs = new Set();
@@ -80,6 +138,11 @@ export const kotakItem = (item, ukuran, gayaTeks = 'kotak', profil = null) => {
       wPx += 12;
       hPx += 12;
     }
+  }
+  if (item.nempel) {
+    const lebar = (wPx / W) * 100;
+    const pusat = item.nempel === 'kiri-bawah' ? lebar / 2 : item.nempel === 'kanan-bawah' ? 100 - lebar / 2 : item.x;
+    return {kiri: pusat - lebar / 2, kanan: pusat + lebar / 2, atas: 100 - (hPx / H) * 100, bawah: 100};
   }
   const cx = (item.x / 100) * W;
   const cy = (item.y / 100) * H;

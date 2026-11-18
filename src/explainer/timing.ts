@@ -1,7 +1,10 @@
 // Timing & transformasi objek panggung (StageItem) serta potongan frasa subtitle.
 // Sengaja tanpa import React/Remotion agar dapat diuji langsung di Node via importTs.
 import {indexOfWord, type TimedWord} from '../lib/kata';
+import {PROFIL, type FormatExplainer, type GerakProfil} from './format';
 import type {StageAction, StageItem} from './types';
+
+const GERAK_SHORT = PROFIL.short.gerak;
 
 export type FrasaSubtitle = {
   mulai: number;
@@ -66,6 +69,7 @@ export const waktuItem = (
   item: StageItem,
   words: TimedWord[],
   duration: number,
+  gerak: GerakProfil = GERAK_SHORT,
 ): {masukAt: number; keluarAt: number; aksi: ResolvedAction[]} => {
   let cursorIdx = 0;
   let masukAt = item.delay ?? 0;
@@ -96,7 +100,7 @@ export const waktuItem = (
       if (sIdx >= 0) endAt = words[sIdx].start;
       else endAt = duration;
     } else if (a.type === 'pulse' && a.durasi === undefined) {
-      endAt = duration;
+      endAt = gerak.pulseFrame === null ? duration : at + gerak.pulseFrame;
     }
     return {...a, at, endAt};
   });
@@ -146,8 +150,9 @@ export const hitungTransformItem = (
   _fps: number,
   words: TimedWord[],
   duration: number,
+  gerak: GerakProfil = GERAK_SHORT,
 ): ItemTransform => {
-  const {masukAt, keluarAt, aksi} = waktuItem(item, words, duration);
+  const {masukAt, keluarAt, aksi} = waktuItem(item, words, duration, gerak);
   const keluarMode = item.keluar ?? 'pop-out';
   const exitDur = keluarMode === 'none' ? 0 : keluarMode === 'pop-out' ? 8 : 10;
 
@@ -196,10 +201,10 @@ export const hitungTransformItem = (
       break;
     }
     case 'slide-left':
-      tx = (1 - enterEase) * 520;
+      tx = (1 - enterEase) * gerak.slideX;
       break;
     case 'slide-right':
-      tx = (1 - enterEase) * -520;
+      tx = (1 - enterEase) * -gerak.slideX;
       break;
     case 'slide-up':
       ty = (1 - enterEase) * 420;
@@ -280,7 +285,9 @@ export const hitungTransformItem = (
       case 'pulse': {
         if (frame <= a.endAt) {
           const amp = a.skala !== undefined ? Math.max(0.01, a.skala - 1) : 0.08;
-          const s = 1 + amp * Math.sin((frame - a.at) * 0.45);
+          const lama = Math.max(1, a.endAt - a.at);
+          const redam = gerak.pulseHalus ? 1 - clamp01((frame - a.at) / lama) : 1;
+          const s = 1 + amp * redam * Math.sin((frame - a.at) * 0.45);
           scaleX *= s;
           scaleY *= s;
         }
@@ -319,7 +326,7 @@ export const hitungTransformItem = (
 
   // Living cutout idle motion: aktif otomatis untuk prop & simbol (kecuali float: false)
   const isTextItem = item.kind === 'teks' || (!item.kind && Boolean(item.teks));
-  const shouldFloat = item.float ?? !isTextItem;
+  const shouldFloat = item.float ?? (!isTextItem && !item.nempel);
   if (shouldFloat) {
     const t = Math.max(0, frame - masukAt);
     const phase = (item.x * 0.13 + item.y * 0.19) % (Math.PI * 2);
@@ -340,10 +347,10 @@ export const hitungTransformItem = (
         scaleY *= 1 - outP * 0.6;
         break;
       case 'slide-left':
-        tx -= outP * 480;
+        tx -= outP * gerak.keluarX;
         break;
       case 'slide-right':
-        tx += outP * 480;
+        tx += outP * gerak.keluarX;
         break;
       case 'slide-down':
         ty += outP * 420;
@@ -364,6 +371,46 @@ export const hitungTransformItem = (
     shakeX,
     originY,
   };
+};
+
+/** Posisi CSS item: titik jangkar di tengah, atau menempel ke tepi layar untuk item `nempel`. */
+export const jangkarItem = (
+  item: StageItem,
+  tf: Pick<ItemTransform, 'x' | 'y' | 'originY'>,
+): {left: string; top: string; anchor: string; origin: string} => {
+  if (item.nempel) {
+    const geserX = tf.x - item.x;
+    const top = `${100 + tf.y - item.y}%`;
+    if (item.nempel === 'kiri-bawah') return {left: `${geserX}%`, top, anchor: 'translate(0, -100%)', origin: '0% 100%'};
+    if (item.nempel === 'kanan-bawah') return {left: `${100 + geserX}%`, top, anchor: 'translate(-100%, -100%)', origin: '100% 100%'};
+    return {left: `${tf.x}%`, top, anchor: 'translate(-50%, -100%)', origin: '50% 100%'};
+  }
+  const bawah = tf.originY === 'bottom';
+  return {
+    left: `${tf.x}%`,
+    top: `${tf.y}%`,
+    anchor: bawah ? 'translate(-50%, -100%)' : 'translate(-50%, -50%)',
+    origin: bawah ? '50% 100%' : '50% 50%',
+  };
+};
+
+/**
+ * Gerak foto latar sepanjang scene (`p` 0..1). Short selalu zoom-in pelan; long bergantian
+ * zoom-in, geser ke kanan, zoom-out, geser ke kiri supaya scene panjang tidak terasa sama.
+ */
+export const gerakLatar = (index: number, p: number, format: FormatExplainer): {scale: number; geserX: number} => {
+  const zoomMasuk = {scale: 1.02 + p * 0.08, geserX: 0};
+  if (format !== 'landscape') return zoomMasuk;
+  switch (index % 4) {
+    case 1:
+      return {scale: 1.1, geserX: -3 + p * 6};
+    case 2:
+      return {scale: 1.1 - p * 0.08, geserX: 0};
+    case 3:
+      return {scale: 1.1, geserX: 3 - p * 6};
+    default:
+      return zoomMasuk;
+  }
 };
 
 export const fitThumbFontSize = (

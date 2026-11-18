@@ -24,13 +24,15 @@ export const templateRencana = (title, {long = false} = {}) =>
       ? [
           '## Bab',
           'Video long dibagi 3-6 bab. Bab 1 selalu Pembuka (scene 1). Panduan: referensi/long.md',
-          '| # | Judul bab | Scene | Pertanyaan yang dijawab |',
-          '|---|---|---|---|',
-          '| 1 | Pembuka | 1-2 | TODO |',
-          '| 2 | TODO | TODO | TODO |',
-          '| 3 | TODO | TODO | TODO |',
-          '| 4 | TODO | TODO | TODO |',
-          '| 5 | Kesimpulan | TODO | TODO |',
+          'Jawaban hook: scene TODO (taruh di 55-85% durasi video)',
+          '',
+          '| # | Judul bab | Scene | Pertanyaan yang dijawab | Kail ke bab berikutnya |',
+          '|---|---|---|---|---|',
+          '| 1 | Pembuka | 1-2 | TODO | TODO |',
+          '| 2 | TODO | TODO | TODO | TODO |',
+          '| 3 | TODO | TODO | TODO | TODO |',
+          '| 4 | TODO | TODO | TODO | TODO |',
+          '| 5 | Kesimpulan | TODO | TODO | |',
           '',
         ]
       : []),
@@ -224,7 +226,7 @@ const sceneLong = (slug, [type, bab, n]) => {
       bab: '${bab}',
       duration: 300,
       latar: 'latar/${slug}-${n}.png',
-      // Bab = mini-explainer: pertanyaan -> salah kaprah -> fakta -> joke -> recap 1 kalimat. Pecah jadi beberapa scene.
+      // Bab = mini-explainer: pertanyaan -> salah kaprah -> peragaan -> joke -> kail ke bab berikutnya. Pecah jadi beberapa scene.
       narasi: 'TODO narasi bab ini dengan kata kunci *penting*.',
       items: [],
     },`;
