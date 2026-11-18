@@ -1,3 +1,4 @@
+import {jakartaTenggelam} from './data/jakarta-tenggelam';
 import {klipRoti} from './data/klip-roti';
 import {airEs} from './data/air-es';
 import {micinBodoh} from './data/micin-bodoh';
@@ -47,4 +48,5 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'MicinBodoh', script: micinBodoh},
   {id: 'AirEs', script: airEs},
   {id: 'KlipRoti', script: klipRoti},
+  {id: 'JakartaTenggelam', script: jakartaTenggelam},
 ];

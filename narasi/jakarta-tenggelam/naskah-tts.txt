@@ -1,0 +1,103 @@
+PANDUAN TTS: jakarta-tenggelam
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs jakarta-tenggelam <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±11.7 detik
+Laut cuma naik beberapa milimeter setahun, kok tanah Jakarta Utara bisa turun sampai empat meter? Di video ini kita cari siapa pelakunya, dan kenapa tanggul aja gak cukup.
+
+[02] (beat) ±2.5 detik
+Oke, sini gue jelasin dari awal.
+
+[03] (stage) ±9.6 detik
+Banyak yang ngira Jakarta tenggelam gara-gara air laut naik. Lautnya memang naik, sekitar empat milimeter setahun. Di penggaris, itu cuma empat garis kecil.
+
+[04] (stage) ±8.8 detik
+Sekarang lihat tanahnya. Menurut BRIN, tanah Jakarta turun rata-rata tiga koma lima sentimeter setahun. Itu hampir sepuluh kali kecepatan laut naik.
+
+[05] (stage) ±7.1 detik
+Jadi ini balapan yang aneh. Lautnya jalan santai, tanahnya malah lari maraton. Dan garis finisnya rumah orang.
+
+[06] (stage) ±11.7 detik
+Dalam empat puluh tahun, sebagian Jakarta Utara turun sampai empat meter. Itu kira-kira setinggi rumah satu lantai. Sekarang, sekitar empat puluh persen Jakarta ada di bawah permukaan laut.
+
+[07] (stage) ±12.1 detik
+Di Muara Baru, Masjid Wal Adhuna sudah lama gak dipakai karena kerendam air laut. Warganya sekarang tinggal di balik tanggul beton. Terus, siapa yang narik tanah Jakarta ke bawah?
+
+[08] (stage) ±8.3 detik
+Tersangka pertama, tanahnya sendiri. Jakarta berdiri di dataran delta, isinya endapan sungai yang lunak. Lapisan lunak ini memadat sendiri, pelan-pelan.
+
+[09] (stage) ±7.5 detik
+Kalau gak ketambahan lumpur baru, permukaannya turun. Sekarang kotanya penuh aspal. Air hujan susah meresap ke dalam tanah.
+
+[10] (stage) ±8.3 detik
+Tersangka kedua, beban bangunan. Gedung, jalan, dan kendaraan ikut nekan tanah lunak di bawahnya. Makin padat kotanya, makin berat bebannya.
+
+[11] (stage) ±5.4 detik
+Lama-lama yang di bawah capek juga. Gedungnya nambah terus, tanahnya yang kena encok.
+
+[12] (stage) ±10.4 detik
+Tapi dua tersangka ini susah dihentikan. Tanah lunak gak bisa diganti, gedung gak bisa disuruh pindah. Ada tersangka ketiga, dan dia kerja di bawah dapur.
+
+[13] (stage) ±9.6 detik
+Tersangka ketiga namanya sumur bor. Di pesisir Jakarta Utara, banyak warga belum kebagian air pipa. Jadi mereka ngebor sampai seratus lima puluh meter.
+
+[14] (stage) ±8.3 detik
+Kenapa harus sedalam itu? Soalnya sumur dangkal di pesisir airnya asin. Satu sumur dalam bisa dipakai sekitar lima puluh rumah.
+
+[15] (stage) ±9.2 detik
+Pilihan lainnya, beli air jeriken dari gerobak. Buat keluarga berpenghasilan rendah, biayanya bisa makan sekitar seperlima penghasilan. Jadi jangan buru-buru nyalahin warganya.
+
+[16] (stage) ±13.8 detik
+Yang nyedot bukan cuma warga. Hotel, mal, dan gedung besar juga punya sumur. Akhir tahun enam puluhan, sumur dalam belum sampai empat ratus. Akhir sembilan puluhan, sudah lebih dari tiga ribu enam ratus.
+
+[17] (stage) ±11.3 detik
+Nah, di bawah tanah ada lapisan lempung. Pori-porinya berisi air, dan air itu ikut nahan beban. Begitu airnya disedot, pori-porinya kempes, dan tanah di atasnya ikut turun.
+
+[18] (stage) ±7.9 detik
+Bedanya sama spons dapur, lempung ini gak gampang balik lagi. Spons masih bisa mekar, lempung Jakarta udah pensiun dini.
+
+[19] (stage) ±15.0 detik
+Seberapa besar peran sumur? Badan Geologi pernah nyebut dua puluh sampai tiga puluh persen. Peneliti lain nyebut air tanah penyebab utama. Angkanya beda-beda, tapi ini faktor yang bisa kita kontrol. Terus, tanggul raksasa itu buat apa?
+
+[20] (stage) ±10.0 detik
+Tanggul pantai Jakarta direncanakan empat puluh enam kilometer. Baru sekitar dua puluh kilometer yang berdiri. Tingginya dibikin empat koma delapan meter di atas laut.
+
+[21] (stage) ±12.5 detik
+Menko Infrastruktur bilang tanggul itu bisa ngelindungin sampai dua ribu tiga puluh tiga. Soalnya tanah di bawah tanggul juga terus turun. Ditinggiin, turun, ditinggiin lagi. Ceritanya kayak sinetron, gak tamat-tamat.
+
+[22] (stage) ±10.4 detik
+Masalah lainnya, air hujan. Tanah yang lebih rendah dari laut susah ngalirin air ke laut. Buat pulang ke laut aja, air hujan harus nebeng pompa.
+
+[23] (stage) ±9.6 detik
+Peneliti BRIN bilang, tanggul gak nyentuh akar masalahnya. Kalau air tanah masih disedot, tanggul raksasa pun terbatas gunanya. Terus, ada kota yang berhasil?
+
+[24] (stage) ±8.8 detik
+Ada, Tokyo. Sebagian Tokyo pernah turun sampai empat koma enam meter. Angkanya mirip sama Jakarta Utara. Bedanya, Tokyo udah tobat duluan.
+
+[25] (stage) ±9.6 detik
+Jepang bikin aturan ketat soal air tanah. Mereka juga nyediain air sungai dan waduk sebagai gantinya. Hasilnya, penurunan tanah berhenti atau jauh melambat.
+
+[26] (stage) ±14.6 detik
+Jakarta mulai ke arah yang sama. Sejak Agustus dua ribu dua puluh tiga, ada zona bebas air tanah buat gedung besar. Air pipa sudah sekitar delapan puluh persen, targetnya penuh tahun dua ribu tiga puluh.
+
+[27] (stage) ±13.3 detik
+Data Badan Geologi ngasih sedikit harapan. Tahun dua ribu lima belas sampai dua ribu dua puluh dua, lajunya paling tinggi enam koma tiga sentimeter. Periode lama bisa lima belas sampai dua puluh.
+
+[28] (stage) ±6.7 detik
+Tapi jangan lega dulu. Di pesisir, citra satelit masih nangkep penurunan lebih dari sepuluh sentimeter setahun.
+
+[29] (stage) ±11.3 detik
+Jadi Jakarta turun bukan gara-gara laut doang. Tanah lunak, beban gedung, dan sedotan air tanah main bareng. Tanggul beli waktu, air pipa yang ngurangin alasan buat nyedot.
+
+[30] (stage) ±6.7 detik
+Kalau sedotannya berhenti, tanah Jakarta gak perlu koyo lagi. Subscribe kalau mau bongkar kejanggalan kota berikutnya.
+
+Perkiraan total narasi: ±292 detik (belum termasuk jeda)
