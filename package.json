@@ -25,7 +25,8 @@
     "cek-frame": "node scripts/cek-frame.mjs",
     "grid-foto": "node scripts/grid-foto.mjs",
     "storyboard": "node scripts/storyboard.mjs",
-    "uji": "node scripts/uji-regresi.mjs"
+    "uji": "node scripts/uji-regresi.mjs",
+    "3d:katalog": "node scripts/3d/katalog-md.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.539",

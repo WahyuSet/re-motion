@@ -1,0 +1,75 @@
+{
+  "versi": 1,
+  "set": {
+    "rumah-luar": {
+      "file": "rumah_luar.py",
+      "cocok_untuk": "benda di dinding luar rumah: jendela, engsel, bukaan atas",
+      "langit": "#CFE3EE",
+      "isi": {
+        "jendela": {"pilihan": ["kebalik", "biasa", "dua"], "bawaan": "kebalik"},
+        "awal": {"pilihan": ["tertutup", "terbuka"], "bawaan": "tertutup"}
+      },
+      "syarat_hook": {"awal": "terbuka"},
+      "kamera": {
+        "depan-dua": {"dari": [0.1, -6.0, 1.7], "ke": [0.1, -5.4, 1.7], "lihat": [0.07, 0, 1.6], "lensa": 30, "zona_subjek": [10, 38, 86, 62], "hook": true},
+        "dekat-jendela": {"dari": [1.2, -3.4, 1.5], "ke": [0.9, -3.0, 1.55], "lihat": [0, 0, 1.6], "lensa": 30, "zona_subjek": [20, 30, 80, 62], "hook": false},
+        "dekat-engsel": {"dari": [0.7, -3.0, 1.2], "ke": [0.5, -2.6, 1.25], "lihat": [0, 0, 1.35], "lensa": 30, "zona_subjek": [18, 30, 82, 62], "hook": false},
+        "serong-debu": {"dari": [-1.1, -3.6, 1.5], "ke": [-0.8, -3.1, 1.6], "lihat": [0, 0, 1.9], "lensa": 30, "zona_subjek": [18, 28, 82, 62], "hook": false},
+        "prop-jendela": {"dari": [1.6, -3.4, 1.9], "ke": [1.6, -3.4, 1.9], "lihat": [0, 0, 1.6], "lensa": 50, "prop": true}
+      },
+      "gerak": {
+        "buka-jendela": {"detik": 1.2, "arti": "daun jendela membuka sampai miring", "syarat_isi": {"awal": ["tertutup"]}},
+        "kayang": {"detik": 0.8, "arti": "daun jendela kebalik terdorong makin miring lalu memantul", "syarat_isi": {"jendela": ["kebalik", "dua"]}},
+        "engsel-nyala": {"detik": 0.5, "arti": "engsel menyala terang", "terus": true},
+        "karung-datang": {"detik": 1.0, "arti": "karung melayang menuju celah atas", "syarat_isi": {"jendela": ["kebalik"], "awal": ["terbuka"]}},
+        "karung-nyangkut": {"detik": 0.8, "arti": "karung masuk celah lalu goyang", "butuh": ["karung-datang"], "terus": true},
+        "debu-masuk": {"detik": 1.5, "arti": "debu terbang masuk lewat celah atas", "syarat_isi": {"jendela": ["kebalik"], "awal": ["terbuka"]}, "terus": true}
+      }
+    },
+    "potongan-udara": {
+      "file": "potongan_udara.py",
+      "cocok_untuk": "aliran udara di dalam rumah, dilihat sebagai potongan",
+      "langit": "#CFE3EE",
+      "isi": {},
+      "syarat_hook": {},
+      "kamera": {
+        "potongan-tengah": {"dari": [0.3, -8.4, 1.5], "ke": [0.3, -7.8, 1.5], "lihat": [0.3, 0, 1.5], "lensa": 30, "zona_subjek": [10, 30, 86, 62], "hook": false}
+      },
+      "gerak": {
+        "panas-naik": {"detik": 1.5, "arti": "panah merah naik dari lantai ke atas", "terus": true},
+        "panas-keluar": {"detik": 1.5, "arti": "panah merah keluar lewat bukaan atas", "butuh": ["panas-naik"], "terus": true},
+        "sejuk-masuk": {"detik": 1.5, "arti": "panah biru masuk dari bawah", "terus": true}
+      }
+    },
+    "potongan-keramik": {
+      "file": "potongan_keramik.py",
+      "cocok_untuk": "lantai keramik dilihat sebagai potongan: lapisan, pemuaian, keramik terangkat",
+      "langit": "#F3EBDD",
+      "isi": {
+        "panah": {"pilihan": ["ada", "tanpa"], "bawaan": "ada"}
+      },
+      "syarat_hook": {},
+      "kamera": {
+        "potongan-lantai": {"dari": [0.9, -4.4, 1.2], "ke": [0.6, -3.8, 0.9], "lihat": [0, 0, -0.35], "lensa": 20, "zona_subjek": [12, 30, 86, 66], "hook": true}
+      },
+      "gerak": {
+        "dorong-samping": {"detik": 1.2, "arti": "panah merah mendorong dari kedua sisi", "syarat_isi": {"panah": ["ada"]}},
+        "keramik-naik": {"detik": 1.5, "arti": "dua keramik tengah terangkat membentuk tenda"}
+      }
+    },
+    "ruang-primitif": {
+      "file": "ruang_primitif.py",
+      "cocok_untuk": "ruangan sederhana dengan meja, kursi, dan benda yang bergerak",
+      "langit": "#F3EBDD",
+      "isi": {},
+      "syarat_hook": {},
+      "kamera": {
+        "sudut-ruang": {"dari": [2.6, -3.2, 2.4], "ke": [2.0, -2.4, 2.1], "lihat": [-0.6, 1.6, 0.9], "lensa": 26, "zona_subjek": [12, 30, 86, 66], "hook": true}
+      },
+      "gerak": {
+        "bola-gelinding": {"detik": 1.5, "arti": "bola menggelinding di lantai"},
+        "kardus-jatuh": {"detik": 0.8, "arti": "kardus jatuh dari meja"}
+      }
+    }
+  }
+}
