@@ -10,10 +10,6 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import sharp from 'sharp';
-import {bukaKomposisi, tutup, waktuScene} from './lib/komposisi.mjs';
-import {importTs, loadScript} from './lib/load-script.mjs';
-import {frameRapat} from './lib/frame-rapat.mjs';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -21,16 +17,24 @@ if (!slug) {
   process.exit(1);
 }
 
-const {SAFE_SHORT} = await importTs('src/lib/safe.ts');
 const POINTS = [0.35, 0.85];
 const rapat = process.argv.includes('--rapat');
 const iFormat = process.argv.indexOf('--format');
-const format = iFormat > 0 ? process.argv[iFormat + 1] : null;
+const format = iFormat >= 0 ? process.argv[iFormat + 1] : null;
 if (iFormat >= 0 && !['short', 'landscape'].includes(format)) {
   console.error(`--format harus short atau landscape, bukan "${format ?? '(kosong)'}".`);
   process.exit(1);
 }
 const nama = format ? `${slug}-${format}` : slug;
+
+// Muat modul berat (@remotion/bundler, renderer, sharp, esbuild) setelah argumen CLI valid.
+const [{default: sharp}, {bukaKomposisi, tutup, waktuScene}, {importTs, loadScript}, {frameRapat}] = await Promise.all([
+  import('sharp'),
+  import('./lib/komposisi.mjs'),
+  import('./lib/load-script.mjs'),
+  import('./lib/frame-rapat.mjs'),
+]);
+const {SAFE_SHORT} = await importTs('src/lib/safe.ts');
 const {waktuItem} = rapat ? await importTs('src/explainer/timing.ts') : {};
 
 const outDir = path.resolve('out/cek');
