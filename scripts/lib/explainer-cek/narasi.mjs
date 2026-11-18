@@ -86,36 +86,55 @@ export const cekNarasiScene = (scene, where, lapor) => {
   }
 };
 
-export const cekNarasiVideo = (script, lapor) => {
-  const semua = (script?.scenes ?? []).map((s) => polos(s.narasi ?? '')).join(' ');
-  for (const frasa of ['padahal', 'banyak yang ngira']) {
-    const n = hitung(semua, frasa);
-    if (n > 1) {
-      lapor.warn('video', `N3 "${frasa}" dipakai ${n} kali.`, `Pakai sekali saja untuk salah kaprah utama. "Padahal" hanya untuk kebalikan; untuk sebab pakai "masalahnya", untuk kesimpulan pakai "jadi".`);
+/** Narasi dikelompokkan per segmen: short = 1 segmen (seluruh video), landscape = 1 segmen per bab. */
+const segmenNarasi = (script, profil) => {
+  const scenes = script?.scenes ?? [];
+  if (profil?.format !== 'landscape') return [{where: 'video', teks: scenes.map((s) => polos(s.narasi ?? '')).join(' ')}];
+  const segmen = [];
+  for (const s of scenes) {
+    const judul = typeof s.bab === 'string' ? s.bab.trim() : '';
+    if (judul || !segmen.length) segmen.push({where: judul ? `bab "${judul}"` : 'video', teks: ''});
+    segmen[segmen.length - 1].teks += ` ${polos(s.narasi ?? '')}`;
+  }
+  return segmen;
+};
+
+export const cekNarasiVideo = (script, lapor, profil = null) => {
+  const perBab = profil?.format === 'landscape';
+  for (const {where, teks} of segmenNarasi(script, profil)) {
+    for (const frasa of ['padahal', 'banyak yang ngira']) {
+      const n = hitung(teks, frasa);
+      if (n > 1) {
+        lapor.warn(where, `N3 "${frasa}" dipakai ${n} kali${perBab ? ' dalam satu bab' : ''}.`, `Pakai sekali saja${perBab ? ' per bab' : ''} untuk salah kaprah utama. "Padahal" hanya untuk kebalikan; untuk sebab pakai "masalahnya", untuk kesimpulan pakai "jadi".`);
+      }
     }
   }
 };
 
-// D3: total durasi video. Dari kata.json kalau audio sudah dipotong, kalau belum dari perkiraan
+// D3/D4: total durasi video. Dari kata.json kalau audio sudah dipotong, kalau belum dari perkiraan
 // 2,4 kata per detik (sama dengan scripts/narasi.mjs), plus jeda sekitar 0,5 detik per scene.
 const KATA_PER_DETIK = 2.4;
 const JEDA_SCENE = 0.5;
-const MAX_DETIK = 60;
+/** Batas kalau profil tidak diberikan (= short). */
+const DURASI_SHORT = {min: 0, max: 60};
 
-export const perkiraanDurasi = (script, kataJson) =>
-  (script?.scenes ?? []).reduce((total, s, i) => {
+/** Perkiraan durasi tiap scene (detik), memakai kata.json kalau ada. */
+export const detikScene = (script, kataJson) =>
+  (script?.scenes ?? []).map((s, i) => {
     const kata = kataJson?.[i];
     const detik = Array.isArray(kata) && kata.length ? kata[kata.length - 1][1] : polos(s.narasi ?? '').split(/\s+/).filter(Boolean).length / KATA_PER_DETIK;
-    return total + detik + JEDA_SCENE;
-  }, 0);
+    return detik + JEDA_SCENE;
+  });
 
-export const cekDurasi = (script, kataJson, lapor) => {
+export const perkiraanDurasi = (script, kataJson) => detikScene(script, kataJson).reduce((a, b) => a + b, 0);
+
+export const cekDurasi = (script, kataJson, lapor, profil = null) => {
+  const {min, max} = profil?.durasi ?? DURASI_SHORT;
   const detik = perkiraanDurasi(script, kataJson);
-  if (detik > MAX_DETIK) {
-    lapor.warn(
-      'video',
-      `D3 ${kataJson ? 'durasi' : 'perkiraan durasi'} ${Math.round(detik)} detik (batas ${MAX_DETIK}).`,
-      'Pangkas narasi: buang kalimat yang tidak membawa fakta baru, atau gabungkan dua scene fakta.',
-    );
+  const jenis = kataJson ? 'durasi' : 'perkiraan durasi';
+  if (detik > max) {
+    lapor.warn('video', `D3 ${jenis} ${Math.ceil(detik)} detik (batas ${max}).`, 'Pangkas narasi: buang kalimat yang tidak membawa fakta baru, atau gabungkan dua scene fakta.');
+  } else if (detik < min) {
+    lapor.warn('video', `D4 ${jenis} ${Math.floor(detik)} detik terlalu pendek untuk video long (minimal ${min}).`, 'Tambah bab, atau pakai format short.');
   }
 };

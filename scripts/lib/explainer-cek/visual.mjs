@@ -124,7 +124,7 @@ const frasaKunci = (words) => {
 
 const SCENE_VISUAL = new Set(['hook', 'stage', 'diagram']);
 
-export const cekVisualScene = (scene, where, words, kata, lapor, ukuran = new Map()) => {
+export const cekVisualScene = (scene, where, words, kata, lapor, ukuran = new Map(), profil = null) => {
   if (!SCENE_VISUAL.has(scene.type) || !words.length) return;
   const kejadian = kejadianScene(scene, words, kata);
   const ada = (mulai, akhir) => kejadian.some((k) => k.idx >= mulai && k.idx <= akhir);
@@ -180,8 +180,8 @@ export const cekVisualScene = (scene, where, words, kata, lapor, ukuran = new Ma
         (rb.keluar === ra.masuk && (b.keluar ?? 'pop-out') !== 'none');
       const bersamaan = (ra.masuk < rb.keluar && rb.masuk < ra.keluar) || serahTerima;
       if (!bersamaan) continue;
-      const ka = kotakItem(a, ukuran.get(a.src));
-      const kb = kotakItem(b, ukuran.get(b.src));
+      const ka = kotakItem(a, ukuran.get(a.src), undefined, profil);
+      const kb = kotakItem(b, ukuran.get(b.src), undefined, profil);
       const tumpuk = ka && kb ? porsiTumpuk(ka, kb) > PORSI_TUMPUK : Math.abs(a.x - b.x) < DEKAT_X && Math.abs(a.y - b.y) < DEKAT_Y;
       if (!tumpuk) continue;
       lapor.warn(

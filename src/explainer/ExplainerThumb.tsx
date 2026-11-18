@@ -1,9 +1,10 @@
 import React from 'react';
-import {AbsoluteFill, Img, staticFile} from 'remotion';
+import {AbsoluteFill, Img, staticFile, useVideoConfig} from 'remotion';
 import {CHANNEL} from '../channel';
 import {GayaTeksContext, Stage} from './Stage';
 import {explainerTheme} from './theme';
 import {fitThumbFontSize} from './timing';
+import {profilDari} from './format';
 import type {ExplainerScript} from './types';
 
 const STABILO_DEFAULT = '#f5c518';
@@ -33,8 +34,10 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
   const stabilo = thumb?.stabilo ?? STABILO_DEFAULT;
 
   // Thumbnail dilihat kecil di grid channel/penelusuran: judul sebesar mungkin, dibatasi lebar 980 px.
-  const f1 = fitThumbFontSize(baris1, 112, 980);
-  const f2 = baris2 ? fitThumbFontSize(baris2, 100, 956) : 100;
+  const {width, height} = useVideoConfig();
+  const {thumb: tata} = profilDari(width, height);
+  const f1 = fitThumbFontSize(baris1, tata.font1, tata.lebar1);
+  const f2 = baris2 ? fitThumbFontSize(baris2, tata.font2, tata.lebar2) : tata.font2;
   const s1 = Math.max(10, Math.round(f1 * 0.16));
   const s2 = Math.max(9, Math.round(f2 * 0.15));
 
@@ -79,9 +82,9 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
       <div
         style={{
           position: 'absolute',
-          top: '15%',
-          left: 56,
-          right: 56,
+          top: tata.top,
+          left: tata.side,
+          right: tata.side,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -145,13 +148,13 @@ export const ExplainerThumb: React.FC<{script: ExplainerScript}> = ({script}) =>
       </div>
 
       {src ? (
-        <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', paddingTop: 220}}>
+        <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', paddingTop: tata.propTop}}>
           <Img
             src={staticFile(src)}
             style={{
               // Prop potret tinggi dibatasi supaya tidak naik ke judul atau turun ke tepi bawah.
-              maxWidth: 560,
-              maxHeight: 880,
+              maxWidth: tata.propMaxW,
+              maxHeight: tata.propMaxH,
               objectFit: 'contain',
               filter: 'drop-shadow(0 22px 34px rgba(0, 0, 0, 0.52))',
             }}

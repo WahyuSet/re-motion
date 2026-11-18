@@ -17,7 +17,10 @@ import {HookSceneView} from './scenes/HookScene';
 import {StageSceneView} from './scenes/StageScene';
 import {GayaTeksContext} from './Stage';
 import {ExplainerSubtitle} from './Subtitle';
+import {nomorBab, tampilBanner} from './bab';
+import {BabBanner} from './BabBanner';
 import {explainerTheme} from './theme';
+import {profilDari} from './format';
 import type {ExplainerScene, ExplainerScript} from './types';
 
 export {explainerTransitionFrames, getExplainerDuration, prepareExplainerScript};
@@ -122,7 +125,9 @@ const renderTransition = (type: TransitionType = 'none', key: string) => {
 };
 
 export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) => {
-  const {fps, durationInFrames} = useVideoConfig();
+  const {fps, durationInFrames, width, height} = useVideoConfig();
+  const profil = profilDari(width, height);
+  const posWatermark = profil.watermark;
   const suara = rentangSuara(script.scenes as unknown as HistoryScene[], fps);
   const watermarkText =
     typeof script.watermark === 'string' && script.watermark.trim() ? script.watermark : null;
@@ -134,6 +139,7 @@ export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) =>
       i === 0 ? null : renderTransition(trans, `t-${i}`),
       <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={scene.duration}>
         {renderExplainerScene(scene, fps)}
+        {tampilBanner(i, scene, profil.format) ? <BabBanner nomor={nomorBab(script.scenes, i) ?? 0} judul={scene.bab ?? ''} /> : null}
         {i > 0 && trans !== 'none' ? <Sfx name="whoosh" at={0} /> : null}
         {narasi ? (
           <Sequence from={NARASI_DELAY} layout="none">
@@ -155,8 +161,8 @@ export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) =>
             <div
               style={{
                 position: 'absolute',
-                left: '7%',
-                top: '8.5%',
+                left: posWatermark.left,
+                top: posWatermark.top,
                 fontFamily: explainerTheme.fontBody,
                 fontWeight: 700,
                 fontSize: 28,

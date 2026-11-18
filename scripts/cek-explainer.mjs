@@ -14,7 +14,8 @@ import {importTs, loadScript} from './lib/load-script.mjs';
 import {cekSkemaItem, cekSkemaNaskah} from './lib/explainer-cek/skema.mjs';
 import {cekProps, cekUrutanAksi, cekVisualScene} from './lib/explainer-cek/visual.mjs';
 import {cekNominal} from './lib/explainer-cek/diagram.mjs';
-import {cekDurasi, cekNarasiScene, cekNarasiVideo} from './lib/explainer-cek/narasi.mjs';
+import {cekDurasi, cekNarasiScene, cekNarasiVideo, perkiraanDurasi} from './lib/explainer-cek/narasi.mjs';
+import {cekBab} from './lib/explainer-cek/bab.mjs';
 import {cekMotionScene, cekMotionVideo} from './lib/explainer-cek/motion.mjs';
 import {cekHook, cekRencana, cekThumbnail} from './lib/explainer-cek/hook.mjs';
 import {formatPeta} from './lib/explainer-cek/peta.mjs';
@@ -56,7 +57,9 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   const lapor = {err, warn};
 
   const scenes = script?.scenes ?? [];
-  const short = (script?.format ?? 'short') === 'short';
+  const {profilNaskah, jokeMinimal} = await importTs('src/explainer/format.ts');
+  const profil = profilNaskah(script);
+  const short = profil.format === 'short';
   cekSkemaNaskah(script, lapor);
 
   if (scenes.length < 3) {
@@ -84,14 +87,14 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
   if (script?.thumbnail?.latar && !(await existsPublic(script.thumbnail.latar))) {
     err('thumbnail', `File latar public/${script.thumbnail.latar} tidak ditemukan.`);
   }
-  cekHook(script, kata, lapor, {legacy});
+  cekHook(script, kata, lapor, {legacy, profil});
   const rencana = legacy ? null : await muatRencana(slug, opts);
   if (!legacy) cekRencana(rencana, lapor);
 
   const props = legacy ? [] : await muatProps(slug, opts, lapor);
   const ukuran = legacy ? new Map() : await muatUkuran(script);
   if (!legacy) cekThumbnail(script, rencana, props, lapor);
-  if (!legacy && !KOMEDI_LAMA.has(slug)) cekKomedi(script, rencana, kata, lapor, kataJson);
+  if (!legacy && !KOMEDI_LAMA.has(slug)) cekKomedi(script, rencana, kata, lapor, kataJson, jokeMinimal(profil, perkiraanDurasi(script, kataJson)));
 
   const seenLatar = new Map();
 
@@ -110,7 +113,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     const words = parseWords(narasi.trim());
-    if (!legacy) cekVisualScene(scene, where, words, kata, lapor, ukuran);
+    if (!legacy) cekVisualScene(scene, where, words, kata, lapor, ukuran, profil);
     if (!legacy) cekUrutanAksi(scene, where, words, kata, lapor);
     if (!legacy) cekNominal(scene, where, lapor);
     if (!legacy) cekNarasiScene(scene, where, lapor);
@@ -206,7 +209,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     }
 
     if (!legacy) cekMotionScene(scene, where, lapor);
-    if (!legacy) cekZona(scene, where, lapor, ukuran, script?.gayaTeks);
+    if (!legacy) cekZona(scene, where, lapor, ukuran, script?.gayaTeks, profil);
     if (!legacy) cekBeat(scene, where, lapor);
     if (legacy && (scene.type === 'hook' || scene.type === 'stage') && allItems.length > 0) {
       const totalAksi = allItems.reduce((sum, it) => sum + (it.aksi?.length ?? 0), 0);
@@ -283,8 +286,9 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
     cekProps(script, props, kata, lapor);
     cekMerek(props, lapor);
     cekMotionVideo(script, lapor);
-    cekNarasiVideo(script, lapor);
-    cekDurasi(script, kataJson, lapor);
+    cekNarasiVideo(script, lapor, profil);
+    cekDurasi(script, kataJson, lapor, profil);
+    cekBab(script, kataJson, lapor, profil);
   }
 
   return {errors, warnings};

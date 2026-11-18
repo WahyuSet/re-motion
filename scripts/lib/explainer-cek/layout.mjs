@@ -13,30 +13,34 @@ const TEPI_BAWAH_SUBTITLE = 73.5;
 const semuaItem = (scene) => [...(scene.utama ? [scene.utama] : []), ...(scene.items ?? [])];
 const f = (n) => n.toFixed(1).replace('.', ',');
 
-const zonaAtas = (scene) => {
-  if (scene.type === 'hook') return TEPI_ATAS_ZONA.hook;
-  if (scene.type === 'beat') return TEPI_ATAS_ZONA.beat;
-  if (scene.type === 'stage' && scene.judul) return TEPI_ATAS_ZONA.stageBerjudul;
+const zonaAtas = (scene, zona) => {
+  if (scene.type === 'hook') return zona.hook;
+  if (scene.type === 'beat') return zona.beat;
+  if (scene.type === 'stage' && scene.judul) return zona.stageBerjudul;
   return null;
 };
 
-export const cekZona = (scene, where, lapor, ukuran = new Map(), gayaTeks = 'kotak') => {
-  const atas = zonaAtas(scene);
+// `profil` = ProfilFormat (src/explainer/format.ts); tanpa profil = angka short di atas.
+export const cekZona = (scene, where, lapor, ukuran = new Map(), gayaTeks = 'kotak', profil = null) => {
+  const aman = profil?.aman ?? BATAS_AMAN;
+  const tepiSubtitle = profil?.subtitleAtas ?? TEPI_BAWAH_SUBTITLE;
+  const namaAman = profil?.format === 'landscape' ? 'area aman' : 'area aman Shorts';
+  const atas = zonaAtas(scene, profil?.zonaJudul ?? TEPI_ATAS_ZONA);
   for (const [i, item] of semuaItem(scene).entries()) {
     if (typeof item.x !== 'number' || typeof item.y !== 'number') continue;
-    const k = kotakItem(item, ukuran.get(item.src), gayaTeks);
+    const k = kotakItem(item, ukuran.get(item.src), gayaTeks, profil);
     if (!k) continue;
     const label = `${where} item ${i + 1}`;
 
     // A1: keempat tepi kotak di dalam area aman (bukan titik tengahnya).
     const keluar = [
-      k.kiri < BATAS_AMAN.kiri && `kiri ${f(k.kiri)}% (min ${f(BATAS_AMAN.kiri)})`,
-      k.kanan > BATAS_AMAN.kanan && `kanan ${f(k.kanan)}% (maks ${f(BATAS_AMAN.kanan)})`,
-      k.atas < BATAS_AMAN.atas && `atas ${f(k.atas)}% (min ${f(BATAS_AMAN.atas)})`,
-      k.bawah > BATAS_AMAN.bawah && `bawah ${f(k.bawah)}% (maks ${f(BATAS_AMAN.bawah)})`,
+      k.kiri < aman.kiri && `kiri ${f(k.kiri)}% (min ${f(aman.kiri)})`,
+      k.kanan > aman.kanan && `kanan ${f(k.kanan)}% (maks ${f(aman.kanan)})`,
+      k.atas < aman.atas && `atas ${f(k.atas)}% (min ${f(aman.atas)})`,
+      k.bawah > aman.bawah && `bawah ${f(k.bawah)}% (maks ${f(aman.bawah)})`,
     ].filter(Boolean);
     if (keluar.length) {
-      lapor.warn(label, `A1 tepi ${keluar.join(', ')} keluar area aman Shorts.`, 'Geser x/y ke tengah atau kecilkan width sampai keempat tepinya masuk area aman.');
+      lapor.warn(label, `A1 tepi ${keluar.join(', ')} keluar ${namaAman}.`, 'Geser x/y ke tengah atau kecilkan width sampai keempat tepinya masuk area aman.');
     }
 
     // L1: tepi atas kotak di bawah judul scene.
@@ -44,8 +48,8 @@ export const cekZona = (scene, where, lapor, ukuran = new Map(), gayaTeks = 'kot
       lapor.warn(label, `L1 tepi atas ${f(k.atas)}% menabrak judul scene ${scene.type} (judul sampai ${atas}%).`, `Turunkan y atau kecilkan width sampai tepi atasnya >= ${atas}%.`);
     }
     // L2: tepi bawah kotak di atas subtitle.
-    if (k.bawah > TEPI_BAWAH_SUBTITLE) {
-      lapor.warn(label, `L2 tepi bawah ${f(k.bawah)}% menabrak subtitle (mulai ${TEPI_BAWAH_SUBTITLE}%).`, `Naikkan y atau kecilkan width sampai tepi bawahnya <= ${TEPI_BAWAH_SUBTITLE}%.`);
+    if (k.bawah > tepiSubtitle) {
+      lapor.warn(label, `L2 tepi bawah ${f(k.bawah)}% menabrak subtitle (mulai ${tepiSubtitle}%).`, `Naikkan y atau kecilkan width sampai tepi bawahnya <= ${tepiSubtitle}%.`);
     }
   }
 };

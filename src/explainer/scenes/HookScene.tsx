@@ -2,6 +2,7 @@ import React from 'react';
 import {AbsoluteFill, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import type {TimedWord} from '../../lib/kata';
 import {Stage} from '../Stage';
+import {useProfil} from '../useProfil';
 import {explainerTheme} from '../theme';
 import {fitThumbFontSize} from '../timing';
 import type {HookScene} from '../types';
@@ -29,6 +30,7 @@ export const HookSceneView: React.FC<{
 }> = ({scene, words}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const {hook: tata} = useProfil();
   // Judul sudah utuh di frame 0 (penonton feed memutuskan geser di detik pertama);
   // setelah narasi mulai, judul cuma berdenyut kecil sekali supaya tetap terasa hidup.
   const denyut = spring({frame: frame - 10, fps, config: {damping: 10, mass: 0.6}});
@@ -36,8 +38,8 @@ export const HookSceneView: React.FC<{
   const s2 = 1 + 0.04 * Math.sin(Math.PI * Math.min(1, Math.max(0, denyut - 0.15)));
 
   // Batas lebar 960 px; judul pendek otomatis lebih besar. Total tinggi 2 baris tetap di bawah ~28%.
-  const f1 = fitThumbFontSize(scene.baris1, 92, 960);
-  const f2 = scene.baris2 ? fitThumbFontSize(scene.baris2, 84, 936) : 84;
+  const f1 = fitThumbFontSize(scene.baris1, tata.font1, tata.lebar1);
+  const f2 = scene.baris2 ? fitThumbFontSize(scene.baris2, tata.font2, tata.lebar2) : tata.font2;
   const stroke1 = Math.max(10, Math.round(f1 * 0.16));
   const stroke2 = Math.max(9, Math.round(f2 * 0.15));
 
@@ -51,9 +53,9 @@ export const HookSceneView: React.FC<{
       <div
         style={{
           position: 'absolute',
-          top: '15%',
-          left: 56,
-          right: 56,
+          top: tata.top,
+          left: tata.side,
+          right: tata.side,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

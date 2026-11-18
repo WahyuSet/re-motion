@@ -2,6 +2,7 @@ import React from 'react';
 import {AbsoluteFill, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {frameOfWord, type TimedWord} from '../../lib/kata';
 import {Stage} from '../Stage';
+import {useProfil} from '../useProfil';
 import {explainerTheme} from '../theme';
 import type {StageScene} from '../types';
 
@@ -11,6 +12,7 @@ export const StageSceneView: React.FC<{
 }> = ({scene, words}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const {bannerStage: tata} = useProfil();
   const judulAt = (scene.judulDi ? frameOfWord(words, scene.judulDi) : null) ?? 4;
   const s = spring({frame: frame - judulAt, fps, config: {damping: 15, mass: 0.7}});
 
@@ -20,9 +22,9 @@ export const StageSceneView: React.FC<{
         <div
           style={{
             position: 'absolute',
-            top: '16%',
-            left: 72,
-            right: 72,
+            top: tata.top,
+            left: tata.side,
+            right: tata.side,
             display: 'flex',
             justifyContent: 'center',
             zIndex: 30,
