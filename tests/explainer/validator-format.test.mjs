@@ -95,3 +95,45 @@ test('N3 landscape dihitung per bab', async () => {
   const sama = await validasiExplainer({format: 'landscape', scenes: [stage('Padahal botol itu rapuh. Padahal tutupnya kuat.', {bab: 'A'}), beat, stage('Botol itu kuat.', {bab: 'B'})]}, 'uji-format', OPTS);
   assert.ok(ada(sama.warnings, 'N3'), sama.warnings.join('\n'));
 });
+
+test('bab spasi-saja kena C1 dan judul bab > 30 huruf kena C4', () => {
+  const spasi = kumpul();
+  cekBab(
+    {format: 'landscape', scenes: [stage(kata(40), {bab: '   '}), stage(kata(40), {bab: 'Isi'}), stage(kata(40), {bab: 'Akhir'})]},
+    null,
+    spasi.lapor,
+    PROFIL.landscape,
+  );
+  assert.ok(ada(spasi.warnings, 'C1'), spasi.warnings.join('\n'));
+
+  const panjang = kumpul();
+  cekBab(
+    {
+      format: 'landscape',
+      scenes: [
+        stage(kata(40), {bab: 'Pembuka'}),
+        stage(kata(40), {bab: 'Judul bab ini terlalu panjang melebihi tiga puluh huruf'}),
+        stage(kata(40), {bab: 'Akhir'}),
+      ],
+    },
+    null,
+    panjang.lapor,
+    PROFIL.landscape,
+  );
+  assert.ok(ada(panjang.warnings, 'C4'), panjang.warnings.join('\n'));
+});
+
+test('pesan batas durasi C3 dan D4/D3 tidak membulatkan ke angka batas', () => {
+  const c3 = kumpul();
+  cekBab(
+    {format: 'landscape', scenes: [stage('Botol plastik itu.', {bab: 'Pendek'}), stage(kata(40), {bab: 'B'}), stage(kata(40), {bab: 'C'})]},
+    [[[0, 9.2]], [[0, 20]], [[0, 20]]],
+    c3.lapor,
+    PROFIL.landscape,
+  );
+  assert.ok(c3.warnings.some((w) => w.includes('C3') && !w.includes('cuma 10 detik')), c3.warnings.join('\n'));
+
+  const d4 = kumpul();
+  cekDurasi({format: 'landscape', scenes: [stage('Botol.')]}, [[[0, 179.2]]], d4.lapor, PROFIL.landscape);
+  assert.ok(d4.warnings.some((w) => w.includes('D4') && !w.includes('180 detik terlalu')), d4.warnings.join('\n'));
+});

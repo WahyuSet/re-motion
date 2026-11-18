@@ -126,7 +126,8 @@ const renderTransition = (type: TransitionType = 'none', key: string) => {
 
 export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) => {
   const {fps, durationInFrames, width, height} = useVideoConfig();
-  const {watermark: posWatermark} = profilDari(width, height);
+  const profil = profilDari(width, height);
+  const posWatermark = profil.watermark;
   const suara = rentangSuara(script.scenes as unknown as HistoryScene[], fps);
   const watermarkText =
     typeof script.watermark === 'string' && script.watermark.trim() ? script.watermark : null;
@@ -138,7 +139,7 @@ export const ExplainerVideo: React.FC<{script: ExplainerScript}> = ({script}) =>
       i === 0 ? null : renderTransition(trans, `t-${i}`),
       <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={scene.duration}>
         {renderExplainerScene(scene, fps)}
-        {tampilBanner(i, scene) ? <BabBanner nomor={nomorBab(script.scenes, i) ?? 0} judul={scene.bab ?? ''} /> : null}
+        {tampilBanner(i, scene, profil.format) ? <BabBanner nomor={nomorBab(script.scenes, i) ?? 0} judul={scene.bab ?? ''} /> : null}
         {i > 0 && trans !== 'none' ? <Sfx name="whoosh" at={0} /> : null}
         {narasi ? (
           <Sequence from={NARASI_DELAY} layout="none">

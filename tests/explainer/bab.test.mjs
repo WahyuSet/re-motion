@@ -20,3 +20,11 @@ test('banner bab tidak tampil di scene 1', () => {
   assert.equal(tampilBanner(3, {bab: 'X'}), true);
   assert.equal(tampilBanner(3, {}), false);
 });
+
+test('bab spasi-saja diabaikan dan banner tidak tampil di format short', () => {
+  assert.equal(nomorBab([{bab: '   '}, {bab: 'Isi'}], 0), null);
+  assert.equal(nomorBab([{bab: '   '}, {bab: 'Isi'}], 1), 1);
+  assert.equal(tampilBanner(2, {bab: '   '}), false);
+  assert.equal(tampilBanner(2, {bab: 'Isi'}, 'short'), false);
+  assert.equal(tampilBanner(2, {bab: 'Isi'}, 'landscape'), true);
+});

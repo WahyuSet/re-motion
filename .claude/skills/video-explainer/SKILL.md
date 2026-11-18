@@ -96,7 +96,7 @@ Semua hasil akhir ada di `out/explainer/<slug>/`: `<slug>.mp4`, `<slug>-720p.mp4
 
 - `.rencana.md` lengkap tanpa `TODO`, hook terpilih skor >= 7, minimal 2 joke di `## Komedi`.
 - `npm run cek:explainer -- <slug>` → `✓ LULUS: <slug> (... 0 error, 0 peringatan)`. Kalau yang muncul `⚠ BELUM SELESAI`, belum selesai: kerjakan setiap PERBAIKI.
-- Total durasi short ≤ 60 detik (D3); long 180-720 detik (D3/D4), tanpa peringatan bab C1-C3.
+- Total durasi short ≤ 60 detik (D3); long 180-720 detik (D3/D4), tanpa peringatan bab C1-C4.
 - `--peta` tidak menampilkan `(kosong) ✗`, dan setiap benda yang disebut narasi kelihatan di klausanya.
 - `cek-frame --rapat` dan storyboard dicek visual (setelah audio ada): tidak ada prop di area merah, menumpuk, atau menabrak judul/subtitle.
 

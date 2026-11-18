@@ -33,12 +33,13 @@ export const BabBanner: React.FC<{nomor: number; judul: string}> = ({nomor, judu
         fontSize: tata.fontSize,
         letterSpacing: 0.8,
         textTransform: 'uppercase',
+        whiteSpace: 'nowrap',
         boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
         transform: `translateX(${(1 - masuk) * 120}%)`,
         opacity,
       }}
     >
-      <span style={{color: '#f5c518'}}>Bab {nomor}</span> · {judul}
+      <span style={{color: '#f5c518'}}>Bab {nomor}</span> · {judul.trim()}
     </div>
   );
 };

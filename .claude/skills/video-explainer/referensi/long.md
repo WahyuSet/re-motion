@@ -18,7 +18,7 @@ Kerangka ini memberi `format: 'landscape'`, 5 bab (Pembuka, 3 bab isi, Kesimpula
 
 Total 15-40 scene. Satu scene tetap satu gagasan (narasi 1-4 kalimat). Jangan bikin scene 1 menit.
 
-## Bab (dicek validator: C0-C3)
+## Bab (dicek validator: C0-C4)
 
 - Isi `bab: '<Judul>'` **hanya di scene pertama** setiap bab. Scene berikutnya dalam bab yang sama tanpa `bab`.
 - Scene 1 wajib `bab: 'Pembuka'` (C1), karena chapter YouTube harus mulai di 0:00.

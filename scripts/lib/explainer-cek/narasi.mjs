@@ -92,7 +92,8 @@ const segmenNarasi = (script, profil) => {
   if (profil?.format !== 'landscape') return [{where: 'video', teks: scenes.map((s) => polos(s.narasi ?? '')).join(' ')}];
   const segmen = [];
   for (const s of scenes) {
-    if (s.bab || !segmen.length) segmen.push({where: s.bab ? `bab "${s.bab}"` : 'video', teks: ''});
+    const judul = typeof s.bab === 'string' ? s.bab.trim() : '';
+    if (judul || !segmen.length) segmen.push({where: judul ? `bab "${judul}"` : 'video', teks: ''});
     segmen[segmen.length - 1].teks += ` ${polos(s.narasi ?? '')}`;
   }
   return segmen;
@@ -132,8 +133,8 @@ export const cekDurasi = (script, kataJson, lapor, profil = null) => {
   const detik = perkiraanDurasi(script, kataJson);
   const jenis = kataJson ? 'durasi' : 'perkiraan durasi';
   if (detik > max) {
-    lapor.warn('video', `D3 ${jenis} ${Math.round(detik)} detik (batas ${max}).`, 'Pangkas narasi: buang kalimat yang tidak membawa fakta baru, atau gabungkan dua scene fakta.');
+    lapor.warn('video', `D3 ${jenis} ${Math.ceil(detik)} detik (batas ${max}).`, 'Pangkas narasi: buang kalimat yang tidak membawa fakta baru, atau gabungkan dua scene fakta.');
   } else if (detik < min) {
-    lapor.warn('video', `D4 ${jenis} ${Math.round(detik)} detik terlalu pendek untuk video long (minimal ${min}).`, 'Tambah bab, atau pakai format short.');
+    lapor.warn('video', `D4 ${jenis} ${Math.floor(detik)} detik terlalu pendek untuk video long (minimal ${min}).`, 'Tambah bab, atau pakai format short.');
   }
 };
