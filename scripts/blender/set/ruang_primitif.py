@@ -38,7 +38,7 @@ def bangun(isi):
         _ruangan()
     _perabot()
     return {
-        "bola": bola("bola", (0.8, 0.4, 0.3), 0.3, "#F2B134"),
+        "bola": bola("bola", (1.2, 1.0, 0.3), 0.3, "#F2B134"),
         "kardus": kotak("kardus", (-0.75, 1.5, 0.94), (0.4, 0.3, 0.3), "#C48A52"),
     }
 
@@ -46,7 +46,7 @@ def bangun(isi):
 @gerak("bola-gelinding")
 def bola_gelinding(obj, mulai, selesai, frame_akhir):
     b = obj["bola"]
-    ubah(b, "location", (0.0, 1.1, 0.3), mulai, selesai)
+    ubah(b, "location", (0.45, 0.75, 0.3), mulai, selesai)
     ubah(b, "rotation_euler", (math.radians(-240), 0, math.radians(-120)), mulai, selesai)
 
 

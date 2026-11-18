@@ -27,7 +27,7 @@ const salinAsli = (src, dst) => {
 };
 
 /** Tiap frame diberi persegi zona_subjek, supaya subjek yang keluar area langsung terlihat. */
-const lembarUjiAsli = async (folder, jpg, [kiri, atas, kanan, bawah]) => {
+export const lembarUjiAsli = async (folder, jpg, [kiri, atas, kanan, bawah]) => {
   const tinggiSel = Math.round((LEBAR_SEL * KANVAS.tinggi) / KANVAS.lebar);
   const persegi = Buffer.from(
     `<svg width="${LEBAR_SEL}" height="${tinggiSel}"><rect x="${(kiri / 100) * LEBAR_SEL}" y="${(atas / 100) * tinggiSel}" width="${((kanan - kiri) / 100) * LEBAR_SEL}" height="${((bawah - atas) / 100) * tinggiSel}" fill="none" stroke="#ff00aa" stroke-width="2"/></svg>`,

@@ -11,10 +11,10 @@
       },
       "syarat_hook": {"awal": "terbuka"},
       "kamera": {
-        "depan-dua": {"dari": [0.1, -6.0, 1.7], "ke": [0.1, -5.4, 1.7], "lihat": [0.07, 0, 1.6], "lensa": 30, "zona_subjek": [10, 38, 86, 62], "hook": true},
-        "dekat-jendela": {"dari": [1.2, -3.4, 1.5], "ke": [0.9, -3.0, 1.55], "lihat": [0, 0, 1.6], "lensa": 30, "zona_subjek": [20, 30, 80, 62], "hook": false},
-        "dekat-engsel": {"dari": [0.7, -3.0, 1.2], "ke": [0.5, -2.6, 1.25], "lihat": [0, 0, 1.35], "lensa": 30, "zona_subjek": [18, 30, 82, 62], "hook": false},
-        "serong-debu": {"dari": [-1.1, -3.6, 1.5], "ke": [-0.8, -3.1, 1.6], "lihat": [0, 0, 1.9], "lensa": 30, "zona_subjek": [18, 28, 82, 62], "hook": false},
+        "depan-dua": {"dari": [-1.4, -5.6, 2.4], "ke": [-1.1, -5.1, 2.3], "lihat": [0.05, 0, 1.6], "lensa": 30, "zona_subjek": [10, 36, 86, 64], "hook": true},
+        "dekat-jendela": {"dari": [1.3, -3.9, 2.4], "ke": [1.0, -3.5, 2.3], "lihat": [0, 0, 1.45], "lensa": 30, "zona_subjek": [14, 24, 84, 64], "hook": false},
+        "dekat-engsel": {"dari": [0.9, -3.9, 1.05], "ke": [0.7, -3.5, 1.1], "lihat": [0, 0, 1.3], "lensa": 30, "zona_subjek": [14, 24, 84, 64], "hook": false},
+        "serong-debu": {"dari": [-1.2, -4.0, 1.5], "ke": [-0.9, -3.6, 1.6], "lihat": [0, 0, 1.5], "lensa": 30, "zona_subjek": [14, 20, 84, 64], "hook": false},
         "prop-jendela": {"dari": [1.6, -3.4, 1.9], "ke": [1.6, -3.4, 1.9], "lihat": [0, 0, 1.6], "lensa": 50, "prop": true}
       },
       "gerak": {
@@ -33,7 +33,7 @@
       "isi": {},
       "syarat_hook": {},
       "kamera": {
-        "potongan-tengah": {"dari": [0.3, -8.4, 1.5], "ke": [0.3, -7.8, 1.5], "lihat": [0.3, 0, 1.5], "lensa": 30, "zona_subjek": [10, 30, 86, 62], "hook": false}
+        "potongan-tengah": {"dari": [0.12, -8.4, 1.5], "ke": [0.12, -7.8, 1.5], "lihat": [0.12, 0, 1.5], "lensa": 30, "zona_subjek": [10, 30, 86, 62], "hook": false}
       },
       "gerak": {
         "panas-naik": {"detik": 1.5, "arti": "panah merah naik dari lantai ke atas", "terus": true},
@@ -50,7 +50,7 @@
       },
       "syarat_hook": {},
       "kamera": {
-        "potongan-lantai": {"dari": [0.9, -4.4, 1.2], "ke": [0.6, -3.8, 0.9], "lihat": [0, 0, -0.35], "lensa": 20, "zona_subjek": [12, 30, 86, 66], "hook": true}
+        "potongan-lantai": {"dari": [0.9, -4.4, 1.2], "ke": [0.6, -3.8, 0.9], "lihat": [0, 0, -0.35], "lensa": 20, "zona_subjek": [12, 28, 86, 70], "hook": true}
       },
       "gerak": {
         "dorong-samping": {"detik": 1.2, "arti": "panah merah mendorong dari kedua sisi", "syarat_isi": {"panah": ["ada"]}},

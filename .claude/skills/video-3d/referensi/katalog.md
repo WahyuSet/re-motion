@@ -21,10 +21,10 @@ Syarat kalau dipakai di scene 1: `awal`: `terbuka`
 
 | Nama | Boleh di scene 1 | Area subjek (kiri, atas, kanan, bawah, persen layar) |
 |---|---|---|
-| `depan-dua` | ya | 10, 38, 86, 62 |
-| `dekat-jendela` | tidak | 20, 30, 80, 62 |
-| `dekat-engsel` | tidak | 18, 30, 82, 62 |
-| `serong-debu` | tidak | 18, 28, 82, 62 |
+| `depan-dua` | ya | 10, 36, 86, 64 |
+| `dekat-jendela` | tidak | 14, 24, 84, 64 |
+| `dekat-engsel` | tidak | 14, 24, 84, 64 |
+| `serong-debu` | tidak | 14, 20, 84, 64 |
 | `prop-jendela` | tidak | hanya untuk `gambar` |
 
 ### Gerak
@@ -78,7 +78,7 @@ Syarat kalau dipakai di scene 1: -
 
 | Nama | Boleh di scene 1 | Area subjek (kiri, atas, kanan, bawah, persen layar) |
 |---|---|---|
-| `potongan-lantai` | ya | 12, 30, 86, 66 |
+| `potongan-lantai` | ya | 12, 28, 86, 70 |
 
 ### Gerak
 
