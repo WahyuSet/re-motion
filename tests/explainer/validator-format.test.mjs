@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 import {importTs} from '../../scripts/lib/load-script.mjs';
 import {validasiExplainer} from '../../scripts/cek-explainer.mjs';
 import {cekBab} from '../../scripts/lib/explainer-cek/bab.mjs';
 import {cekDurasi} from '../../scripts/lib/explainer-cek/narasi.mjs';
+import {cekSkemaNaskah} from '../../scripts/lib/explainer-cek/skema.mjs';
 
 const {PROFIL} = await importTs('src/explainer/format.ts');
 const OPTS = {props: [], rencana: null};
@@ -136,4 +138,17 @@ test('pesan batas durasi C3 dan D4/D3 tidak membulatkan ke angka batas', () => {
   const d4 = kumpul();
   cekDurasi({format: 'landscape', scenes: [stage('Botol.')]}, [[[0, 179.2]]], d4.lapor, PROFIL.landscape);
   assert.ok(d4.warnings.some((w) => w.includes('D4') && !w.includes('180 detik terlalu')), d4.warnings.join('\n'));
+});
+
+test('S1: format naskah tidak dikenal ditolak cekSkemaNaskah', () => {
+  const errors = [];
+  cekSkemaNaskah({format: 'long'}, {err: (w, m) => errors.push(`${w}: ${m}`), warn: () => {}});
+  assert.ok(errors.some((e) => e.includes('S1') && e.includes('format')), errors.join('\n'));
+});
+
+test('cek-frame menolak flag --format tanpa nilai', () => {
+  assert.throws(
+    () => execFileSync(process.execPath, ['scripts/cek-frame.mjs', 'nasi-warm', '--format'], {encoding: 'utf8', stdio: 'pipe', timeout: 5000}),
+    (err) => err.status === 1 && err.stderr.includes('--format harus short atau landscape'),
+  );
 });

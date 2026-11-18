@@ -26,8 +26,8 @@ const POINTS = [0.35, 0.85];
 const rapat = process.argv.includes('--rapat');
 const iFormat = process.argv.indexOf('--format');
 const format = iFormat > 0 ? process.argv[iFormat + 1] : null;
-if (format && !['short', 'landscape'].includes(format)) {
-  console.error(`--format harus short atau landscape, bukan "${format}".`);
+if (iFormat >= 0 && !['short', 'landscape'].includes(format)) {
+  console.error(`--format harus short atau landscape, bukan "${format ?? '(kosong)'}".`);
   process.exit(1);
 }
 const nama = format ? `${slug}-${format}` : slug;

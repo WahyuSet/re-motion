@@ -7,6 +7,7 @@ export const KELUAR = ['fade', 'pop-out', 'slide-left', 'slide-right', 'slide-do
 export const SIMBOL = ['larang', 'centang', 'silang', 'panah', 'tanya', 'retak', 'tetes-air', 'gelombang-air'];
 export const SFX = ['whoosh', 'dum', 'tik', 'pop', 'swell', 'boing', 'boom', 'womp', 'slap', 'ding', 'fahh', 'ack'];
 export const GAYA_TEKS = ['kotak', 'stiker'];
+export const FORMAT = ['short', 'landscape'];
 export const TIPE_AKSI =['move', 'peek', 'grow', 'dim', 'shake', 'pulse', 'jump', 'wiggle', 'squash'];
 
 const FIELD_UMUM = ['type', 'di', 'delay', 'durasi', 'sfx'];
@@ -37,6 +38,7 @@ const cekSfx = (nilai, where, lapor) => {
 
 /** Field tingkat naskah (ExplainerScript) yang punya nilai enum. */
 export const cekSkemaNaskah = (script, lapor) => {
+  cekEnum(script?.format, FORMAT, 'format', 'naskah', lapor);
   cekEnum(script?.gayaTeks, GAYA_TEKS, 'gayaTeks', 'naskah', lapor);
 };
 
