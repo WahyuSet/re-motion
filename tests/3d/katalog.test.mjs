@@ -52,6 +52,15 @@ test('isiLengkap mengisi nilai bawaan', () => {
   assert.deepEqual(isiLengkap(katalog.set['rumah-luar'], {awal: 'terbuka'}), {jendela: 'kebalik', awal: 'terbuka'});
 });
 
+test('nama @gerak di file set sama persis dengan katalog', () => {
+  for (const [nama, set] of daftarSet) {
+    const file = `scripts/blender/set/${set.file}`;
+    if (!fs.existsSync(file)) continue;
+    const tertulis = [...fs.readFileSync(file, 'utf8').matchAll(/@gerak\("([^"]+)"\)/g)].map((m) => m[1]).sort();
+    assert.deepEqual(tertulis, Object.keys(set.gerak).sort(), nama);
+  }
+});
+
 test('referensi/katalog.md sama dengan hasil generator', () => {
   assert.equal(fs.readFileSync(FILE_MD, 'utf8').replaceAll('\r\n', '\n'), buatMarkdown(katalog));
 });

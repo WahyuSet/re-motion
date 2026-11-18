@@ -4,6 +4,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {cekHook} from './lib/aturan/hook.mjs';
 import {cekKatalog} from './lib/aturan/katalog.mjs';
+import {cekPasang} from './lib/aturan/pasang.mjs';
 import {cekSkema} from './lib/aturan/skema.mjs';
 import {cekTata} from './lib/aturan/tata.mjs';
 import {cekWaktu} from './lib/aturan/waktu.mjs';
@@ -18,10 +19,11 @@ export const cek3dKonteks = async (ktx, {pasang = Boolean(ktx.lock)} = {}) => {
     warn: (where, msg, fix) => warnings.push(format(where, msg, fix)),
   };
   if (!cekSkema(ktx, lapor)) return {errors, warnings};
-  const {klip} = cekKatalog(ktx, lapor);
+  const {klip, gambar} = cekKatalog(ktx, lapor);
   cekHook(ktx, klip, lapor);
   const klipWaktu = cekWaktu(ktx, klip, lapor);
   cekTata(ktx, klipWaktu, lapor);
+  if (pasang && ktx.lock) cekPasang(ktx, klipWaktu, gambar, lapor);
   return {errors, warnings};
 };
 
