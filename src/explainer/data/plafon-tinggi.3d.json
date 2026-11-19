@@ -1,0 +1,52 @@
+{
+  "slug": "plafon-tinggi",
+  "klip": [
+    {
+      "scene": 1,
+      "set": "potongan-plafon",
+      "kamera": "potongan-dua",
+      "isi": {"plafon": "dua"},
+      "gerak": []
+    },
+    {
+      "scene": 2,
+      "set": "potongan-plafon",
+      "kamera": "dekat-tinggi",
+      "isi": {"plafon": "tinggi"},
+      "gerak": []
+    },
+    {
+      "scene": 4,
+      "set": "potongan-plafon",
+      "kamera": "potongan-dua",
+      "isi": {"plafon": "dua"},
+      "gerak": [
+        {"jenis": "panas-naik", "di": "naik"},
+        {"jenis": "panas-menumpuk", "di": "numpuk"},
+        {"jenis": "garis-kepala", "di": "kepala"}
+      ]
+    },
+    {
+      "scene": 5,
+      "set": "potongan-plafon",
+      "kamera": "dekat-tinggi",
+      "isi": {"plafon": "tinggi"},
+      "gerak": [
+        {"jenis": "genteng-panas", "di": "genteng"},
+        {"jenis": "panas-naik", "di": "Siang"},
+        {"jenis": "sejuk-masuk", "di": "adem"},
+        {"jenis": "lubang-angin", "di": "lubang"}
+      ]
+    },
+    {
+      "scene": 6,
+      "set": "potongan-plafon",
+      "kamera": "dekat-rendah",
+      "isi": {"plafon": "rendah"},
+      "gerak": [{"jenis": "sejuk-masuk", "di": "AC"}]
+    }
+  ],
+  "gambar": [
+    {"nama": "plafon-tinggi-potongan", "set": "potongan-plafon", "kamera": "prop-potongan", "isi": {"plafon": "dua"}}
+  ]
+}

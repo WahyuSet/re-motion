@@ -6,7 +6,7 @@ import {durasiScene, muatKataJson, muatModulWaktu} from '../../scripts/3d/lib/wa
 
 after(tutup);
 
-for (const [id, slug] of [['AirEs', 'air-es'], ['JendelaKebalik', 'jendela-kebalik']]) {
+for (const [id, slug] of [['AirEs', 'air-es'], ['JendelaKebalik', 'jendela-kebalik'], ['PlafonTinggi', 'plafon-tinggi']]) {
   test(`durasi ${slug} sama dengan komposisi Remotion`, async () => {
     const modul = await muatModulWaktu();
     const script = await loadScript(slug);

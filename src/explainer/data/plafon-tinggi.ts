@@ -10,9 +10,8 @@ export const plafonTinggi: ExplainerScript = {
   format: 'short',
   watermark: '@okesini-id',
   gayaTeks: 'stiker',
-  // Isi dua baris ini SETELAH audio narasi dipotong (node scripts/potong-narasi.mjs plafon-tinggi <file-audio>):
-  // narasiAudio: 'audio/plafon-tinggi',
-  // narasiExt: 'wav',
+  narasiAudio: 'audio/plafon-tinggi',
+  narasiExt: 'wav',
   youtube: {
     judul: 'Kenapa Plafon Rumah Zaman Dulu Tinggi Banget? Ternyata Biar Adem',
     deskripsi:
