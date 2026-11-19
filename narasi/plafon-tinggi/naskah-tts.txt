@@ -1,0 +1,31 @@
+PANDUAN TTS: plafon-tinggi
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs plafon-tinggi <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±4.2 detik
+Plafon rumah zaman dulu tinggi banget, kok malah bikin adem?
+
+[02] (stage) ±6.7 detik
+Banyak yang ngira biar kelihatan mewah. Biar tamu yang datang langsung minder. Padahal alasannya soal panas.
+
+[03] (beat) ±3.3 detik
+Oke, sini gue jelasin kenapa plafonnya dibikin tinggi.
+
+[04] (stage) ±10.8 detik
+Udara panas lebih ringan, jadi naik ke atas. Panasnya numpuk di bawah plafon. Kalau plafonnya rendah, panasnya turun sampai kepala. Kalau tinggi, panasnya ngekos di atas.
+
+[05] (stage) ±11.3 detik
+Alasan kedua, genteng. Siang hari genteng panas banget, terus panasnya mancar ke bawah. Makin jauh dari genteng, makin adem. Ada lubang angin juga, buat buang panasnya keluar.
+
+[06] (stage) ±10.4 detik
+Kalau rumahnya pakai AC, plafon tinggi malah bikin AC kerja lebih berat. Jadi plafon tinggi itu bukan biar tamu minder. Tapi biar penghuninya gak kepanasan.
+
+Perkiraan total narasi: ±47 detik (belum termasuk jeda)

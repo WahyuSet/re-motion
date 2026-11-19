@@ -1,0 +1,7 @@
+[
+  {
+    "name": "plafon-tinggi-potongan",
+    "prompt": "DIRENDER BLENDER, bukan Flow: npm run 3d:render -- plafon-tinggi (potongan dua rumah low-poly, plafon rendah di kiri dan plafon tinggi di kanan, latar transparan)",
+    "untuk": "Jadi plafon tinggi itu"
+  }
+]

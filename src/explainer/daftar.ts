@@ -1,3 +1,4 @@
+import {plafonTinggi} from './data/plafon-tinggi';
 import {jendelaKebalik} from './data/jendela-kebalik';
 import {klipRoti} from './data/klip-roti';
 import {airEs} from './data/air-es';
@@ -49,4 +50,5 @@ export const daftarExplainer: {id: string; script: ExplainerScript}[] = [
   {id: 'AirEs', script: airEs},
   {id: 'KlipRoti', script: klipRoti},
   {id: 'JendelaKebalik', script: jendelaKebalik},
+  {id: 'PlafonTinggi', script: plafonTinggi},
 ];
