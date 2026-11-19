@@ -1,0 +1,65 @@
+{
+  "slug": "jendela-kebalik",
+  "fps": 30,
+  "lebar": 1080,
+  "tinggi": 1920,
+  "klip": [
+    {
+      "nama": "01",
+      "durasi": 6,
+      "set": "rumah-luar",
+      "langit": "#CFE3EE",
+      "jendela": [
+        {"jenis": "biasa", "x": -0.9, "buka_mulai": 0.05, "buka_puncak": 0.35},
+        {"jenis": "kebalik", "x": 0.9, "buka_mulai": 0.05, "buka_puncak": 0.35}
+      ],
+      "kamera": {"dari": [0.4, -5.6, 1.7], "ke": [0.3, -4.9, 1.7], "lihat": [0, 0, 1.65], "lensa": 30}
+    },
+    {
+      "nama": "02",
+      "durasi": 10,
+      "set": "rumah-luar",
+      "langit": "#CFE3EE",
+      "jendela": [
+        {"jenis": "biasa", "x": -0.9, "terbuka_awal": true},
+        {"jenis": "kebalik", "x": 0.9, "engsel_menyala": true, "buka_mulai": 0.1, "buka_puncak": 0.4}
+      ],
+      "kamera": {"dari": [1.5, -3.8, 1.5], "ke": [1.2, -3.1, 1.55], "lihat": [0.9, 0, 1.55], "lensa": 30}
+    },
+    {
+      "nama": "04",
+      "durasi": 14,
+      "set": "rumah-luar",
+      "langit": "#CFE3EE",
+      "jendela": [{"jenis": "kebalik", "x": 0, "terbuka_awal": true}],
+      "maling": {"dari": [2.2, -1.8, 2.6], "lewat": [0.9, -1.1, 2.3], "ke": [0.0, -0.5, 2.25], "ukuran": [0.44, 0.3, 0.38], "tiba": 0.5},
+      "kamera": {"dari": [1.4, -4.8, 1.5], "ke": [0.9, -4.1, 1.6], "lihat": [0, 0, 1.75], "lensa": 30}
+    },
+    {
+      "nama": "05",
+      "durasi": 14,
+      "set": "potongan-udara",
+      "langit": "#CFE3EE",
+      "kamera": {"dari": [0.1, -7.6, 1.5], "ke": [0.3, -6.9, 1.5], "lihat": [0.2, 0, 1.45], "lensa": 30}
+    },
+    {
+      "nama": "06",
+      "durasi": 15,
+      "set": "rumah-luar",
+      "langit": "#CFE3EE",
+      "jendela": [{"jenis": "kebalik", "x": 0, "terbuka_awal": true}],
+      "debu": {"jumlah": 40},
+      "kamera": {"dari": [-1.3, -4.6, 1.4], "ke": [-0.8, -4.0, 1.5], "lihat": [0, 0, 1.8], "lensa": 30}
+    },
+    {
+      "nama": "jendela",
+      "durasi": 0.04,
+      "set": "rumah-luar",
+      "hanya_jendela": true,
+      "transparan": true,
+      "gambar": "props/jendela-kebalik-jendela.png",
+      "jendela": [{"jenis": "kebalik", "x": 0, "terbuka_awal": true}],
+      "kamera": {"dari": [1.6, -3.4, 1.9], "ke": [1.6, -3.4, 1.9], "lihat": [0, 0, 1.6], "lensa": 50}
+    }
+  ]
+}

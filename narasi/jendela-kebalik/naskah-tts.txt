@@ -1,0 +1,31 @@
+PANDUAN TTS: jendela-kebalik
+
+Cara pakai:
+- Paste isi naskah-full.txt ke aplikasi TTS dan generate SATU file audio utuh.
+- Setiap paragraf = satu scene bernarasi. Beri JEDA PANJANG (±1,5 detik) di antara paragraf:
+  pakai fitur pause/break di aplikasi TTS, atau baris kosong kalau aplikasinya otomatis memberi jeda.
+  Jeda antar paragraf harus lebih panjang dari jeda antar kalimat, karena di situ audio dipotong per scene.
+- Jangan tambahkan intro/outro atau kalimat lain di luar naskah.
+- Hasilnya kirim ke Claude, atau jalankan: node scripts/potong-narasi.mjs jendela-kebalik <file-audio>
+
+Daftar scene (untuk referensi, JANGAN ikut dibacakan):
+
+[01] (hook) ±3.8 detik
+Di Jawa banyak jendela dipasang kebalik, kok malah dibiarin?
+
+[02] (stage) ±7.5 detik
+Banyak yang ngira tukangnya salah pasang. Soalnya engselnya di bawah, bukaannya malah di atas. Jendelanya kayak lagi kayang.
+
+[03] (beat) ±3.3 detik
+Oke, sini gue jelasin kenapa jendelanya sengaja dibalik.
+
+[04] (stage) ±11.7 detik
+Alasan pertama, biar aman dari maling. Engselnya di bawah, jadi jendelanya cuma kebuka miring. Maling yang nekat masuk malah nyangkut kayak jemuran. Anak kecil juga susah manjat keluar.
+
+[05] (stage) ±10.8 detik
+Alasan kedua, udara panas. Udara panas lebih ringan, jadi naik ke atas. Udara panas keluar lewat bukaan atas. Udara sejuk masuk gantiin. Sirkulasi udaranya jadi lancar.
+
+[06] (stage) ±10.4 detik
+Jendela engsel bawah dulu umum di Indonesia. Sejak tahun sembilan puluhan, pelan-pelan ditinggal. Kekurangannya, debu gampang masuk. Jadi bukan salah pasang, jendelanya cuma beda angkatan.
+
+Perkiraan total narasi: ±48 detik (belum termasuk jeda)
