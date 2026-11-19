@@ -87,6 +87,38 @@ Syarat kalau dipakai di scene 1: -
 | `dorong-samping` | 1.2 | panah merah mendorong dari kedua sisi | - | `panah`: `ada` | tidak |
 | `keramik-naik` | 1.5 | dua keramik tengah terangkat membentuk tenda | - | - | tidak |
 
+## potongan-plafon
+
+Cocok untuk: tinggi plafon dan panas di dalam rumah: potongan rumah plafon rendah dan plafon tinggi.
+
+Syarat kalau dipakai di scene 1: -
+
+### Isi
+
+| Kunci | Pilihan | Bawaan |
+|---|---|---|
+| `plafon` | `dua`, `tinggi`, `rendah` | `dua` |
+
+### Kamera
+
+| Nama | Boleh di scene 1 | Area subjek (kiri, atas, kanan, bawah, persen layar) |
+|---|---|---|
+| `potongan-dua` | ya | 10, 28, 86, 72 |
+| `dekat-tinggi` | tidak | 14, 22, 84, 68 |
+| `dekat-rendah` | tidak | 14, 24, 84, 66 |
+| `prop-potongan` | tidak | hanya untuk `gambar` |
+
+### Gerak
+
+| Nama | Detik | Arti | Butuh | Syarat isi | Terus sampai akhir |
+|---|---|---|---|---|---|
+| `panas-naik` | 1.5 | panah merah naik dari lantai ke bawah plafon di setiap ruang | - | - | ya |
+| `panas-menumpuk` | 2 | lapisan panas merah menebal di bawah plafon; di plafon rendah turun sampai garis kepala | `panas-naik` | - | ya |
+| `garis-kepala` | 0.5 | garis putus-putus muncul setinggi kepala orang dewasa | - | - | tidak |
+| `genteng-panas` | 1 | atap berpendar merah, panah oranye panas turun dari plafon | - | - | ya |
+| `lubang-angin` | 1 | lubang angin di dinding atas ruang tinggi terbuka, panah merah keluar | `panas-naik` | `plafon`: `tinggi` / `dua` | ya |
+| `sejuk-masuk` | 1.5 | panah biru masuk lewat pintu di bagian bawah | - | - | ya |
+
 ## ruang-primitif
 
 Cocok untuk: ruangan sederhana dengan meja, kursi, dan benda yang bergerak.

@@ -67,7 +67,7 @@ export const rencanaAsap = (katalog) =>
 const katalog = muatKatalog();
 const daftar = rencanaAsap(katalog);
 
-test('file Python keempat set ada', () => {
+test('file Python setiap set ada', () => {
   for (const set of Object.values(katalog.set)) assert.ok(fs.existsSync(`scripts/blender/set/${set.file}`), set.file);
 });
 

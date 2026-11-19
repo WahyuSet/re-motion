@@ -57,6 +57,29 @@
         "keramik-naik": {"detik": 1.5, "arti": "dua keramik tengah terangkat membentuk tenda"}
       }
     },
+    "potongan-plafon": {
+      "file": "potongan_plafon.py",
+      "cocok_untuk": "tinggi plafon dan panas di dalam rumah: potongan rumah plafon rendah dan plafon tinggi",
+      "langit": "#CFE3EE",
+      "isi": {
+        "plafon": {"pilihan": ["dua", "tinggi", "rendah"], "bawaan": "dua"}
+      },
+      "syarat_hook": {},
+      "kamera": {
+        "potongan-dua": {"dari": [0.32, -9.2, 2.2], "ke": [0.32, -8.6, 2.2], "lihat": [0.32, 0, 2.2], "lensa": 30, "zona_subjek": [10, 28, 86, 72], "hook": true},
+        "dekat-tinggi": {"dari": [1.6, -8.4, 2.0], "ke": [1.4, -7.8, 1.9], "lihat": [1.25, 0, 1.72], "lensa": 30, "zona_subjek": [14, 22, 84, 68], "hook": false},
+        "dekat-rendah": {"dari": [-1.3, -6.9, 1.5], "ke": [-1.1, -6.3, 1.4], "lihat": [-1.05, 0, 1.25], "lensa": 30, "zona_subjek": [14, 24, 84, 66], "hook": false},
+        "prop-potongan": {"dari": [0.6, -9.0, 2.6], "ke": [0.6, -9.0, 2.6], "lihat": [0.2, 0, 2.2], "lensa": 30, "prop": true}
+      },
+      "gerak": {
+        "panas-naik": {"detik": 1.5, "arti": "panah merah naik dari lantai ke bawah plafon di setiap ruang", "terus": true},
+        "panas-menumpuk": {"detik": 2.0, "arti": "lapisan panas merah menebal di bawah plafon; di plafon rendah turun sampai garis kepala", "butuh": ["panas-naik"], "terus": true},
+        "garis-kepala": {"detik": 0.5, "arti": "garis putus-putus muncul setinggi kepala orang dewasa"},
+        "genteng-panas": {"detik": 1.0, "arti": "atap berpendar merah, panah oranye panas turun dari plafon", "terus": true},
+        "lubang-angin": {"detik": 1.0, "arti": "lubang angin di dinding atas ruang tinggi terbuka, panah merah keluar", "butuh": ["panas-naik"], "syarat_isi": {"plafon": ["tinggi", "dua"]}, "terus": true},
+        "sejuk-masuk": {"detik": 1.5, "arti": "panah biru masuk lewat pintu di bagian bawah", "terus": true}
+      }
+    },
     "ruang-primitif": {
       "file": "ruang_primitif.py",
       "cocok_untuk": "ruangan sederhana dengan meja, kursi, dan benda yang bergerak",

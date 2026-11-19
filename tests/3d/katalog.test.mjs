@@ -7,8 +7,8 @@ import {buatMarkdown, FILE_MD} from '../../scripts/3d/katalog-md.mjs';
 const katalog = muatKatalog();
 const daftarSet = Object.entries(katalog.set);
 
-test('katalog memuat keempat set resmi', () => {
-  assert.deepEqual(Object.keys(katalog.set).sort(), ['potongan-keramik', 'potongan-udara', 'ruang-primitif', 'rumah-luar']);
+test('katalog memuat semua set resmi', () => {
+  assert.deepEqual(Object.keys(katalog.set).sort(), ['potongan-keramik', 'potongan-plafon', 'potongan-udara', 'ruang-primitif', 'rumah-luar']);
   assert.equal(katalog.versi, 1);
 });
 
