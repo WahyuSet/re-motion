@@ -1,0 +1,15 @@
+{
+  "slug": "contoh-keramik",
+  "fps": 30,
+  "lebar": 1080,
+  "tinggi": 1920,
+  "klip": [
+    {
+      "nama": "01",
+      "durasi": 5,
+      "set": "potongan-keramik",
+      "langit": "#F3EBDD",
+      "kamera": {"dari": [0.9, -4.4, 1.2], "ke": [0.6, -3.8, 0.9], "lihat": [0, 0, -0.35], "lensa": 20}
+    }
+  ]
+}

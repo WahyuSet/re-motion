@@ -125,6 +125,11 @@ type BaseExplainerScene = {
   bab?: string;
   /** Path gambar latar lokasi hybrid di public/ (contoh: 'latar/token-kos.png') */
   latar?: string;
+  /**
+   * Opsional, hanya kalau diminta: klip video di public/ sebagai latar scene (contoh: render Blender
+   * 'klip/keramik/01.mp4'). Kalau diisi, menggantikan `latar` di layar. Klip harus minimal sepanjang scene.
+   */
+  latarVideo?: string;
 };
 
 export type HookScene = BaseExplainerScene & {

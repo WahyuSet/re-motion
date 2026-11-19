@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Audio, Img, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {linearTiming, springTiming, TransitionSeries} from '@remotion/transitions';
 import {fade} from '@remotion/transitions/fade';
 import {slide} from '@remotion/transitions/slide';
@@ -28,6 +28,14 @@ export {explainerTransitionFrames, getExplainerDuration, prepareExplainerScript}
 
 const FullSceneBackdrop: React.FC<{scene: ExplainerScene; index: number; format: FormatExplainer}> = ({scene, index, format}) => {
   const frame = useCurrentFrame();
+  if (scene.latarVideo) {
+    // Klip (mis. render Blender) sudah punya gerak kamera sendiri, jadi tanpa zoom tambahan.
+    return (
+      <AbsoluteFill style={{zIndex: 0, overflow: 'hidden', pointerEvents: 'none'}}>
+        <OffthreadVideo src={staticFile(scene.latarVideo)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+      </AbsoluteFill>
+    );
+  }
   if (!scene.latar) return null;
   const p = Math.min(1, Math.max(0, frame / Math.max(1, scene.duration)));
   const {scale, geserX} = gerakLatar(index, p, format);
@@ -57,7 +65,7 @@ const renderExplainerScene = (scene: ExplainerScene, fps: number, index: number,
       {scene.type === 'beat' ? <BeatSceneView scene={scene} words={words} /> : null}
       {scene.type === 'stage' ? <StageSceneView scene={scene} words={words} /> : null}
       {scene.type === 'diagram' ? <DiagramSceneView scene={scene} words={words} /> : null}
-      <ExplainerSubtitle words={words} accentColor={scene.accentColor} overPhoto={Boolean(scene.latar)} />
+      <ExplainerSubtitle words={words} accentColor={scene.accentColor} overPhoto={Boolean(scene.latar || scene.latarVideo)} />
     </AbsoluteFill>
   );
 };

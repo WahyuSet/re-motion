@@ -169,6 +169,24 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
       );
     }
 
+    // Opsional: klip video (mis. render Blender) sebagai latar. Hanya dipakai kalau diminta;
+    // naskah tanpa latarVideo dicek persis seperti sebelumnya.
+    if (scene.latarVideo) {
+      if (!/\.(mp4|webm|mov)$/i.test(scene.latarVideo)) {
+        err(where, `latarVideo harus file video (.mp4/.webm/.mov): ${scene.latarVideo}`);
+      } else if (!(await existsPublic(scene.latarVideo))) {
+        err(where, `File latarVideo public/${scene.latarVideo} tidak ditemukan.`);
+      } else if (seenLatar.has(scene.latarVideo)) {
+        warn(
+          where,
+          `latarVideo "${scene.latarVideo}" sudah dipakai di scene ${seenLatar.get(scene.latarVideo)}.`,
+          'Gunakan klip unik per scene sesuai narasi.',
+        );
+      } else {
+        seenLatar.set(scene.latarVideo, i + 1);
+      }
+    }
+
     if (scene.latar) {
       if (!(await existsPublic(scene.latar))) {
         err(where, `File latar public/${scene.latar} tidak ditemukan.`);
@@ -182,7 +200,7 @@ export const validasiExplainer = async (script, slug = 'explainer', opts = {}) =
         seenLatar.set(scene.latar, i + 1);
         if (!short && !legacy) await cekLatarLong(scene.latar, where, lapor);
       }
-    } else if (scene.type !== 'beat') {
+    } else if (!scene.latarVideo && scene.type !== 'beat') {
       err(
         where,
         'Wajib memiliki background lokasi real.',

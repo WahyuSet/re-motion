@@ -1,0 +1,19 @@
+{
+  "slug": "contoh-3d",
+  "fps": 30,
+  "lebar": 1080,
+  "tinggi": 1920,
+  "klip": [
+    {
+      "nama": "01",
+      "durasi": 4,
+      "set": "ruang-primitif",
+      "kamera": {"dari": [2.6, -3.2, 2.4], "ke": [2.0, -2.4, 2.1], "lihat": [-0.6, 1.6, 0.9]},
+      "objek": [
+        {"nama": "bola", "bentuk": "bola", "posisi": [0.8, 0.4, 0.3], "ukuran": [0.6, 0.6, 0.6], "warna": "#F2B134",
+         "gerak": {"posisi_akhir": [0.2, 0.9, 0.3], "putar": [0, 0, 180]}},
+        {"nama": "kardus", "bentuk": "kubus", "posisi": [-1.0, 1.5, 0.95], "ukuran": [0.4, 0.3, 0.3], "warna": "#C48A52"}
+      ]
+    }
+  ]
+}
